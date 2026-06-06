@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Integral Calculus Formula Handbook</title>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+body{
+    font-family:Segoe UI,Arial,sans-serif;
+    background:#f5f7fb;
+    margin:0;
+    color:#222;
+}
+header{
+    background:#0d47a1;
+    color:white;
+    padding:25px;
+    text-align:center;
+}
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+.card{
+    background:white;
+    margin:18px 0;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+h2{
+    color:#0d47a1;
+}
+.formula{
+    background:#f8f9ff;
+    border-left:5px solid #0d47a1;
+    padding:12px;
+    margin:10px 0;
+    overflow-x:auto;
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>Integral Calculus Formula Handbook</h1>
+<p>Engineering Mathematics – Unit I</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2>Double Integrals</h2>
+<div class="formula">$$\iint_R f(x,y)\,dA$$</div>
+<div class="formula">$$\iint_R f(x,y)\,dx\,dy$$</div>
+<div class="formula">$$\iint_R f(x,y)\,dy\,dx$$</div>
+</div>
+
+<div class="card">
+<h2>Jacobian</h2>
+<div class="formula">
+$$
+J=\frac{\partial(u,v)}{\partial(x,y)}
+=\begin{vmatrix}
+\frac{\partial u}{\partial x} & \frac{\partial u}{\partial y}\\
+\frac{\partial v}{\partial x} & \frac{\partial v}{\partial y}
+\end{vmatrix}
+$$
+</div>
+
+<div class="formula">
+$$
+J=\frac{\partial(u,v,w)}{\partial(x,y,z)}
+$$
+</div>
+</div>
+
+<div class="card">
+<h2>Change of Variables</h2>
+<div class="formula">
+$$
+\iint_R f(x,y)\,dxdy
+=\iint_{\bar R}\phi(u,v)\left|J\right|\,dudv
+$$
+</div>
+
+<div class="formula">
+$$
+\iiint_V f(x,y,z)\,dV
+=\iiint_{\bar V}\phi(u,v,w)\left|J\right|\,dudvdw
+$$
+</div>
+</div>
+
+<div class="card">
+<h2>Polar Coordinates</h2>
+<div class="formula">$$x=r\cos\theta,\qquad y=r\sin\theta$$</div>
+<div class="formula">$$dx\,dy=r\,dr\,d\theta$$</div>
+<div class="formula">
+$$
+\iint_R f(x,y)\,dxdy
+=\iint_{\bar R} f(r\cos\theta,r\sin\theta)\,r\,dr\,d\theta
+$$
+</div>
+</div>
+
+<div class="card">
+<h2>Area & Volume</h2>
+<div class="formula">$$A=\iint_R dA$$</div>
+<div class="formula">$$V=\iint_R z\,dA$$</div>
+<div class="formula">
+$$
+f_{avg}=\frac{\iint_R f(x,y)\,dA}{\iint_R dA}
+$$
+</div>
+</div>
+
+<div class="card">
+<h2>Triple Integrals</h2>
+<div class="formula">$$\iiint_V f(x,y,z)\,dV$$</div>
+<div class="formula">$$M=\iiint_V \rho\,dV$$</div>
+</div>
+
+<div class="card">
+<h2>Cylindrical Coordinates</h2>
+<div class="formula">
+$$
+x=\rho\cos\phi,\quad
+y=\rho\sin\phi,\quad
+z=z
+$$
+</div>
+<div class="formula">
+$$
+dV=\rho\,d\rho\,d\phi\,dz
+$$
+</div>
+</div>
+
+<div class="card">
+<h2>Spherical Coordinates</h2>
+<div class="formula">
+$$
+x=r\sin\theta\cos\phi
+$$
+$$
+y=r\sin\theta\sin\phi
+$$
+$$
+z=r\cos\theta
+$$
+</div>
+
+<div class="formula">
+$$
+dV=r^2\sin\theta\,dr\,d\theta\,d\phi
+$$
+</div>
+</div>
+
+<div class="card">
+<h2>Moment of Inertia (Plane Lamina)</h2>
+<div class="formula">$$I_x=\iint_D y^2\rho\,dA$$</div>
+<div class="formula">$$I_y=\iint_D x^2\rho\,dA$$</div>
+<div class="formula">$$I_O=I_x+I_y$$</div>
+</div>
+
+<div class="card">
+<h2>Moment of Inertia (Solid)</h2>
+<div class="formula">$$I_x=\iiint_V (y^2+z^2)\rho\,dV$$</div>
+<div class="formula">$$I_y=\iiint_V (x^2+z^2)\rho\,dV$$</div>
+<div class="formula">$$I_z=\iiint_V (x^2+y^2)\rho\,dV$$</div>
+</div>
+
+<div class="card">
+<h2>Centre of Gravity / Centre of Mass</h2>
+<div class="formula">
+$$
+\bar x=\frac{\iint_D x\rho\,dA}{M},
+\qquad
+\bar y=\frac{\iint_D y\rho\,dA}{M}
+$$
+</div>
+
+<div class="formula">
+$$
+\bar x=\frac{\iiint_V x\rho\,dV}{M},
+\quad
+\bar y=\frac{\iiint_V y\rho\,dV}{M},
+\quad
+\bar z=\frac{\iiint_V z\rho\,dV}{M}
+$$
+</div>
+</div>
+
+</div>
+</body>
+</html>
