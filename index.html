@@ -86,77 +86,19 @@ header p{
     border-radius:8px;
 }
 
+/* DESCRIPTION */
+.desc{
+    margin:6px 0 12px 0;
+    font-size:0.95rem;
+    color:#444;
+}
+
 /* MATHJAX */
 
 .MathJax{
     font-size:1.1em !important;
 }
 
-/* TABLET */
-
-@media (max-width:768px){
-
-    .container{
-        width:94%;
-    }
-
-    .card{
-        padding:18px;
-    }
-
-    .formula{
-        padding:12px;
-    }
-
-    .MathJax{
-        font-size:1em !important;
-    }
-}
-
-/* MOBILE */
-
-@media (max-width:480px){
-
-    header{
-        padding:16px 12px;
-    }
-
-    .container{
-        width:95%;
-        padding:15px 0;
-    }
-
-    .card{
-        padding:15px;
-        border-radius:12px;
-    }
-
-    .card h2{
-        font-size:1.4rem;
-    }
-
-    .formula{
-        padding:10px;
-        margin:10px 0;
-    }
-
-    .MathJax{
-        font-size:0.9em !important;
-    }
-}
-
-/* LARGE DESKTOP */
-
-@media (min-width:1400px){
-
-    .container{
-        max-width:1400px;
-    }
-
-    .MathJax{
-        font-size:1.25em !important;
-    }
-}
 </style>
 </head>
 <body>
@@ -170,13 +112,20 @@ header p{
 
 <div class="card">
 <h2>Double Integrals</h2>
+
 <div class="formula">$$\iint_R f(x,y)\,dA$$</div>
+<p class="desc">General form of double integral over a region R in two variables.</p>
+
 <div class="formula">$$\iint_R f(x,y)\,dx\,dy$$</div>
+<p class="desc">Double integral evaluated by integrating with respect to y first and then x.</p>
+
 <div class="formula">$$\iint_R f(x,y)\,dy\,dx$$</div>
+<p class="desc">Double integral evaluated by integrating with respect to x first and then y.</p>
 </div>
 
 <div class="card">
 <h2>Jacobian</h2>
+
 <div class="formula">
 $$
 J=\frac{\partial(u,v)}{\partial(x,y)}
@@ -186,22 +135,26 @@ J=\frac{\partial(u,v)}{\partial(x,y)}
 \end{vmatrix}
 $$
 </div>
+<p class="desc">Jacobian determinant used for transformation of variables in double integrals.</p>
 
 <div class="formula">
 $$
 J=\frac{\partial(u,v,w)}{\partial(x,y,z)}
 $$
 </div>
+<p class="desc">Jacobian determinant used for transformation of variables in triple integrals.</p>
 </div>
 
 <div class="card">
 <h2>Change of Variables</h2>
+
 <div class="formula">
 $$
 \iint_R f(x,y)\,dxdy
 =\iint_{\bar R}\phi(u,v)\left|J\right|\,dudv
 $$
 </div>
+<p class="desc">Transforms double integral into new variables using Jacobian determinant.</p>
 
 <div class="formula">
 $$
@@ -209,39 +162,57 @@ $$
 =\iiint_{\bar V}\phi(u,v,w)\left|J\right|\,dudvdw
 $$
 </div>
+<p class="desc">Transforms triple integral into new variables using Jacobian determinant.</p>
 </div>
 
 <div class="card">
 <h2>Polar Coordinates</h2>
+
 <div class="formula">$$x=r\cos\theta,\qquad y=r\sin\theta$$</div>
+<p class="desc">Conversion from Cartesian to polar coordinates.</p>
+
 <div class="formula">$$dx\,dy=r\,dr\,d\theta$$</div>
+<p class="desc">Area element transformation in polar coordinates.</p>
+
 <div class="formula">
 $$
 \iint_R f(x,y)\,dxdy
 =\iint_{\bar R} f(r\cos\theta,r\sin\theta)\,r\,dr\,d\theta
 $$
 </div>
+<p class="desc">Double integral expressed in polar coordinate system.</p>
 </div>
 
 <div class="card">
 <h2>Area & Volume</h2>
+
 <div class="formula">$$A=\iint_R dA$$</div>
+<p class="desc">Area of region R using double integration.</p>
+
 <div class="formula">$$V=\iint_R z\,dA$$</div>
+<p class="desc">Volume under a surface over region R.</p>
+
 <div class="formula">
 $$
 f_{avg}=\frac{\iint_R f(x,y)\,dA}{\iint_R dA}
 $$
 </div>
+<p class="desc">Average value of a function over a region.</p>
 </div>
 
 <div class="card">
 <h2>Triple Integrals</h2>
+
 <div class="formula">$$\iiint_V f(x,y,z)\,dV$$</div>
+<p class="desc">Triple integral over a 3D region V.</p>
+
 <div class="formula">$$M=\iiint_V \rho\,dV$$</div>
+<p class="desc">Mass of a solid with density function ρ.</p>
 </div>
 
 <div class="card">
 <h2>Cylindrical Coordinates</h2>
+
 <div class="formula">
 $$
 x=\rho\cos\phi,\quad
@@ -249,15 +220,19 @@ y=\rho\sin\phi,\quad
 z=z
 $$
 </div>
+<p class="desc">Conversion from Cartesian to cylindrical coordinates.</p>
+
 <div class="formula">
 $$
 dV=\rho\,d\rho\,d\phi\,dz
 $$
 </div>
+<p class="desc">Volume element in cylindrical coordinates.</p>
 </div>
 
 <div class="card">
 <h2>Spherical Coordinates</h2>
+
 <div class="formula">
 $$
 x=r\sin\theta\cos\phi
@@ -269,30 +244,45 @@ $$
 z=r\cos\theta
 $$
 </div>
+<p class="desc">Conversion from Cartesian to spherical coordinates.</p>
 
 <div class="formula">
 $$
 dV=r^2\sin\theta\,dr\,d\theta\,d\phi
 $$
 </div>
+<p class="desc">Volume element in spherical coordinates.</p>
 </div>
 
 <div class="card">
 <h2>Moment of Inertia (Plane Lamina)</h2>
+
 <div class="formula">$$I_x=\iint_D y^2\rho\,dA$$</div>
+<p class="desc">Moment of inertia about x-axis for a lamina.</p>
+
 <div class="formula">$$I_y=\iint_D x^2\rho\,dA$$</div>
+<p class="desc">Moment of inertia about y-axis for a lamina.</p>
+
 <div class="formula">$$I_O=I_x+I_y$$</div>
+<p class="desc">Polar moment of inertia about origin.</p>
 </div>
 
 <div class="card">
 <h2>Moment of Inertia (Solid)</h2>
+
 <div class="formula">$$I_x=\iiint_V (y^2+z^2)\rho\,dV$$</div>
+<p class="desc">Moment of inertia about x-axis for a solid body.</p>
+
 <div class="formula">$$I_y=\iiint_V (x^2+z^2)\rho\,dV$$</div>
+<p class="desc">Moment of inertia about y-axis for a solid body.</p>
+
 <div class="formula">$$I_z=\iiint_V (x^2+y^2)\rho\,dV$$</div>
+<p class="desc">Moment of inertia about z-axis for a solid body.</p>
 </div>
 
 <div class="card">
 <h2>Centre of Gravity / Centre of Mass</h2>
+
 <div class="formula">
 $$
 \bar x=\frac{\iint_D x\rho\,dA}{M},
@@ -300,6 +290,7 @@ $$
 \bar y=\frac{\iint_D y\rho\,dA}{M}
 $$
 </div>
+<p class="desc">Coordinates of center of mass for a lamina.</p>
 
 <div class="formula">
 $$
@@ -310,8 +301,8 @@ $$
 \bar z=\frac{\iiint_V z\rho\,dV}{M}
 $$
 </div>
+<p class="desc">Coordinates of center of mass for a 3D solid body.</p>
 </div>
 
-</div>
 </body>
 </html>
