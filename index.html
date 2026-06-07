@@ -3,306 +3,752 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Integral Calculus Formula Handbook</title>
-
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
+<title>Engineering Mathematics II — Study Notes</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']], packages: {'[+]': ['ams']} },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] },
+  startup: { typeset: false }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=JetBrains+Mono:wght@400;600&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
-    *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-body{
-    font-family:'Segoe UI', Arial, sans-serif;
-    background:#f5f7fb;
-    color:#222;
-    line-height:1.6;
-}
-
-/* HEADER */
-
-header{
-    background:#0d47a1;
-    color:white;
-    text-align:center;
-    padding:20px 15px;
-}
-
-header h1{
-    font-size:clamp(1.8rem, 5vw, 3.2rem);
-    line-height:1.15;
-    font-weight:700;
-    margin-bottom:10px;
-}
-
-header p{
-    font-size:clamp(0.9rem, 2vw, 1.2rem);
-    opacity:0.9;
-}
-
-/* MAIN CONTAINER */
-
-.container{
-    width:min(1200px, 95%);
-    margin:auto;
-    padding:20px 0;
-}
-
-/* CARDS */
-
-.card{
-    background:white;
-    margin:18px 0;
-    padding:20px;
-    border-radius:16px;
-    box-shadow:0 4px 15px rgba(0,0,0,0.08);
-    transition:0.3s;
-}
-
-.card:hover{
-    transform:translateY(-3px);
-}
-
-.card h2{
-    color:#0d47a1;
-    margin-bottom:15px;
-    font-size:clamp(1.2rem, 3vw, 2rem);
-}
-
-/* FORMULA BOXES */
-
-.formula{
-    background:#f7f9ff;
-    border-left:5px solid #0d47a1;
-    margin:12px 0;
-    padding:15px;
-    overflow-x:auto;
-    border-radius:8px;
-}
-
-/* DESCRIPTION */
-.desc{
-    margin:6px 0 12px 0;
-    font-size:0.95rem;
-    color:#444;
-}
-
-/* MATHJAX */
-
-.MathJax{
-    font-size:1.1em !important;
-}
-
+:root{--cream:#fdf8f0;--parchment:#f5ead8;--ink:#1a1208;--muted:#6b5740;--border:#ddd0bb;--card:#ffffff;--r:#c0392b;--rb:#fff5f5;--rl:#fde;--b:#1a6fb5;--bb:#f0f7ff;--bl:#ddeeff;--g:#1e8a4c;--gb:#f0fff6;--gl:#d4f4e2;--p:#7730c4;--pb:#f7f0ff;--pl:#ecdeff;--gold:#b8860b;--goldb:#fffbee}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;display:flex;flex-direction:column;font-size:15px}
+header{background:var(--ink);color:var(--cream);padding:20px 36px 16px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:200;box-shadow:0 3px 18px rgba(0,0,0,.3)}
+header .hb{flex:1}
+header h1{font-family:'Playfair Display',serif;font-size:1.55rem;font-weight:900;line-height:1.2;letter-spacing:-.3px}
+header .hs{font-size:.72rem;opacity:.55;letter-spacing:2.5px;text-transform:uppercase;margin-top:2px;font-weight:300}
+.badge{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;background:#d4a017;color:var(--ink);border-radius:5px;padding:4px 9px;white-space:nowrap}
+.tabs{display:flex;background:var(--parchment);border-bottom:2px solid var(--border);overflow-x:auto;padding:0 6px;gap:2px;flex-shrink:0}
+.tab{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:11px 20px;border:none;background:transparent;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.84rem;font-weight:700;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .18s;white-space:nowrap}
+.tab:hover{color:var(--ink);background:rgba(255,255,255,.6)}
+.tab.on{color:var(--ink);background:var(--cream)}
+.tab[data-u="1"].on{border-bottom-color:var(--r)}
+.tab[data-u="2"].on{border-bottom-color:var(--b)}
+.tab[data-u="3"].on{border-bottom-color:var(--g)}
+.tab[data-u="4"].on{border-bottom-color:var(--p)}
+.num{width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-family:'JetBrains Mono',monospace;font-weight:700}
+.tab[data-u="1"] .num{background:var(--rl);color:var(--r)}
+.tab[data-u="2"] .num{background:var(--bl);color:var(--b)}
+.tab[data-u="3"] .num{background:var(--gl);color:var(--g)}
+.tab[data-u="4"] .num{background:var(--pl);color:var(--p)}
+main{display:flex;flex:1;overflow:hidden}
+.sidebar{width:238px;flex-shrink:0;background:var(--parchment);border-right:1px solid var(--border);overflow-y:auto;padding:12px 0 24px}
+.sb-label{font-size:.6rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);padding:10px 16px 4px}
+.sidebar a{display:block;padding:5px 14px 5px 24px;font-size:.79rem;font-weight:500;color:var(--muted);text-decoration:none;border-left:3px solid transparent;transition:all .12s;line-height:1.45}
+.sidebar a:hover{color:var(--ink);background:rgba(255,255,255,.6);border-left-color:var(--border)}
+.sidebar a.on{color:var(--ink);background:#fff;font-weight:700}
+.sidebar a.on[data-u="1"]{border-left-color:var(--r)}
+.sidebar a.on[data-u="2"]{border-left-color:var(--b)}
+.sidebar a.on[data-u="3"]{border-left-color:var(--g)}
+.sidebar a.on[data-u="4"]{border-left-color:var(--p)}
+.content{flex:1;overflow-y:auto;padding:32px 44px 60px}
+.panel{display:none}
+.panel.on{display:block}
+.uhead{font-family:'Playfair Display',serif;font-size:1.85rem;font-weight:900;line-height:1.2;margin-bottom:5px}
+.udesc{font-size:.86rem;color:var(--muted);line-height:1.65;margin-bottom:28px;padding-bottom:16px;border-bottom:1px dashed var(--border)}
+.sec{margin-bottom:44px;animation:up .28s ease both}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.sec-title{font-family:'Playfair Display',serif;font-size:1.28rem;font-weight:700;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid;display:flex;align-items:center;gap:9px}
+[data-u="1"] .sec-title{border-bottom-color:#f4a0a0}
+[data-u="2"] .sec-title{border-bottom-color:#93c5fd}
+[data-u="3"] .sec-title{border-bottom-color:#86efac}
+[data-u="4"] .sec-title{border-bottom-color:#c4b5fd}
+.sico{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:900;flex-shrink:0}
+[data-u="1"] .sico{background:var(--rl);color:var(--r)}
+[data-u="2"] .sico{background:var(--bl);color:var(--b)}
+[data-u="3"] .sico{background:var(--gl);color:var(--g)}
+[data-u="4"] .sico{background:var(--pl);color:var(--p)}
+.sub{margin-bottom:24px}
+.stitle{display:inline-block;font-size:.92rem;font-weight:800;padding:4px 12px;border-radius:20px;margin-bottom:10px}
+[data-u="1"] .stitle{background:var(--rb);color:var(--r)}
+[data-u="2"] .stitle{background:var(--bb);color:var(--b)}
+[data-u="3"] .stitle{background:var(--gb);color:var(--g)}
+[data-u="4"] .stitle{background:var(--pb);color:var(--p)}
+p{font-size:.9rem;line-height:1.72;color:#2a1e0e;margin-bottom:7px}
+.fc{border-radius:10px;border:1.5px solid;padding:14px 18px 10px;margin:10px 0;overflow-x:auto;line-height:2.2;font-size:.95rem}
+.fc.r{border-color:#f4a0a0;background:var(--rb);border-left:4px solid var(--r)}
+.fc.b{border-color:#93c5fd;background:var(--bb);border-left:4px solid var(--b)}
+.fc.g{border-color:#86efac;background:var(--gb);border-left:4px solid var(--g)}
+.fc.p{border-color:#c4b5fd;background:var(--pb);border-left:4px solid var(--p)}
+.fc.go{border-color:#f0d060;background:var(--goldb);border-left:4px solid var(--gold)}
+.fl{display:flex;align-items:baseline;gap:10px;margin:4px 0;flex-wrap:wrap}
+.flab{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.5;white-space:nowrap;min-width:82px}
+.tw{overflow-x:auto;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:.86rem;background:#fff;border-radius:9px;overflow:hidden;border:1px solid var(--border)}
+th{background:var(--ink);color:var(--cream);padding:9px 13px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600}
+td{padding:8px 13px;border-bottom:1px solid var(--border);line-height:2}
+tr:last-child td{border-bottom:none}
+tr:nth-child(even) td{background:#fafaf8}
+.note{border-radius:8px;padding:10px 14px;margin:10px 0;font-size:.87rem;line-height:1.65}
+.note.tip{background:#f0fff5;border:1px solid #a7f3c8}
+.note.info{background:#eff6ff;border:1px solid #bfdbfe}
+ul,ol{padding-left:22px;font-size:.9rem;line-height:1.85;color:#2a1e0e}
+li{margin-bottom:2px}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+@media(max-width:680px){.sidebar{display:none}.content{padding:16px 12px}}
 </style>
 </head>
 <body>
-
 <header>
-<h1>Integral Calculus Formula Handbook</h1>
-<p>Engineering Mathematics – Unit I</p>
+  <div class="hb">
+    <h1>Engineering Mathematics II</h1>
+    <div class="hs">Complete Unit-wise Notes — MathJax LaTeX Formulae</div>
+  </div>
+  <div class="badge">UE25MA141B</div>
 </header>
+<div class="tabs">
+  <button class="tab on" data-u="1" onclick="go(1)"><span class="num">1</span>Integral Calculus</button>
+  <button class="tab" data-u="2" onclick="go(2)"><span class="num">2</span>Probability &amp; Distributions</button>
+  <button class="tab" data-u="3" onclick="go(3)"><span class="num">3</span>Laplace Transforms</button>
+  <button class="tab" data-u="4" onclick="go(4)"><span class="num">4</span>Fourier Series &amp; Transforms</button>
+</div>
+<main>
+<aside class="sidebar" id="sb"></aside>
+<div class="content" id="ca">
 
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<!-- ===== UNIT 1 ===== -->
+<div class="panel on" data-u="1" id="u1">
+<div class="uhead">Unit 1 — Integral Calculus</div>
+<div class="udesc">Double &amp; triple integrals · Jacobian &amp; change of variables · change of order · polar, cylindrical &amp; spherical coordinates · area, volume, mass, centre of mass, moment of inertia</div>
 
-<div class="card">
-<h2>Double Integrals</h2>
+<div class="sec" id="u1s1">
+<div class="sec-title"><span class="sico">∬</span>Double Integral</div>
 
-<div class="formula">$$\iint_R f(x,y)\,dA$$</div>
-<p class="desc">General form of double integral over a region R in two variables.</p>
+<div class="sub" id="u1-def"><div class="stitle">Definition &amp; Fubini's Theorem</div>
+<p>The double integral adds up \(f(x,y)\) over every tiny area tile \(dA\) inside region \(R\).</p>
+<div class="fc r">
+<div class="fl"><span class="flab">Rectangular</span>\(\displaystyle\iint_R f\,dA = \int_a^b\!\int_c^d f(x,y)\,dy\,dx = \int_c^d\!\int_a^b f(x,y)\,dx\,dy\)</div>
+<div class="fl"><span class="flab">Type I</span>\(\displaystyle\iint_R f\,dA = \int_a^b\!\int_{g_1(x)}^{g_2(x)} f(x,y)\,dy\,dx\)</div>
+<div class="fl"><span class="flab">Type II</span>\(\displaystyle\iint_R f\,dA = \int_c^d\!\int_{h_1(y)}^{h_2(y)} f(x,y)\,dx\,dy\)</div>
+</div></div>
 
-<div class="formula">$$\iint_R f(x,y)\,dx\,dy$$</div>
-<p class="desc">Double integral evaluated by integrating with respect to y first and then x.</p>
+<div class="sub" id="u1-props"><div class="stitle">Properties</div>
+<div class="fc r">
+<div class="fl"><span class="flab">Linearity</span>\(\displaystyle\iint_R [f+g]\,dA = \iint_R f\,dA + \iint_R g\,dA\)</div>
+<div class="fl"><span class="flab">Scalar</span>\(\displaystyle\iint_R c\,f\,dA = c\iint_R f\,dA\)</div>
+<div class="fl"><span class="flab">Monotone</span>\(f\le g\;\Rightarrow\;\iint_R f\,dA \le \iint_R g\,dA\)</div>
+</div></div>
 
-<div class="formula">$$\iint_R f(x,y)\,dy\,dx$$</div>
-<p class="desc">Double integral evaluated by integrating with respect to x first and then y.</p>
+<div class="sub" id="u1-apps"><div class="stitle">Applications</div>
+<div class="tw"><table>
+<tr><th>Quantity</th><th>Formula</th></tr>
+<tr><td>Area of \(R\)</td><td>\(\displaystyle A = \iint_R 1\,dA\)</td></tr>
+<tr><td>Volume below \(z=f(x,y)\)</td><td>\(\displaystyle V = \iint_R f(x,y)\,dA\)</td></tr>
+<tr><td>Average value</td><td>\(\displaystyle f_\text{avg} = \dfrac{1}{A(R)}\iint_R f\,dA\)</td></tr>
+<tr><td>Surface area of \(z=f(x,y)\)</td><td>\(\displaystyle SA = \iint_R \sqrt{1+f_x^2+f_y^2}\,dA\)</td></tr>
+<tr><td>Mass (density \(\delta\))</td><td>\(\displaystyle M = \iint_D \delta(x,y)\,dA\)</td></tr>
+<tr><td>Centre of mass \(\bar{x}\)</td><td>\(\displaystyle \bar{x} = \frac{1}{M}\iint_D x\,\delta\,dA\)</td></tr>
+<tr><td>Centre of mass \(\bar{y}\)</td><td>\(\displaystyle \bar{y} = \frac{1}{M}\iint_D y\,\delta\,dA\)</td></tr>
+<tr><td>Area (polar)</td><td>\(\displaystyle A = \iint r\,dr\,d\theta\)</td></tr>
+</table></div></div>
+
+<div class="sub" id="u1-jac"><div class="stitle">Jacobian &amp; Change of Variables (2D)</div>
+<p>Transformation \(x=g(u,v),\; y=h(u,v)\). The Jacobian measures how area scales under this mapping.</p>
+<div class="fc r">
+<div class="fl"><span class="flab">Jacobian</span>\(\displaystyle J(u,v) = \frac{\partial(x,y)}{\partial(u,v)} = \begin{vmatrix}\dfrac{\partial x}{\partial u}&\dfrac{\partial x}{\partial v}\\[8pt]\dfrac{\partial y}{\partial u}&\dfrac{\partial y}{\partial v}\end{vmatrix} = \frac{\partial x}{\partial u}\frac{\partial y}{\partial v}-\frac{\partial x}{\partial v}\frac{\partial y}{\partial u}\)</div>
+<div class="fl"><span class="flab">Change rule</span>\(\displaystyle\iint_R f(x,y)\,dA = \iint_S f\bigl(g(u,v),h(u,v)\bigr)\,|J|\,du\,dv\)</div>
+<div class="fl"><span class="flab">Polar</span>\(x=r\cos\theta,\quad y=r\sin\theta,\quad J=r\)</div>
+<div class="fl"><span class="flab">Polar form</span>\(\displaystyle\iint f(x,y)\,dx\,dy = \iint f(r\cos\theta,\,r\sin\theta)\;r\,dr\,d\theta\)</div>
+<div class="fl"><span class="flab">Property</span>\(J_{(x,y)\to(u,v)}\;\times\; J_{(u,v)\to(x,y)} = 1\)</div>
+</div>
+<div class="note info"><strong>When to use polar:</strong> When the integrand or region involves \(x^2+y^2\), or the region is a circle or sector.</div>
 </div>
 
-<div class="card">
-<h2>Jacobian</h2>
-
-<div class="formula">
-$$
-J=\frac{\partial(u,v)}{\partial(x,y)}
-=\begin{vmatrix}
-\frac{\partial u}{\partial x} & \frac{\partial u}{\partial y}\\
-\frac{\partial v}{\partial x} & \frac{\partial v}{\partial y}
-\end{vmatrix}
-$$
+<div class="sub" id="u1-coi"><div class="stitle">Change of Order of Integration</div>
+<p><strong>Steps:</strong> (1) Sketch region \(R\) using original limits. (2) Re-express limits for the swapped order. (3) Rewrite &amp; integrate.</p>
+<div class="fc r">
+<div class="fl"><span class="flab">Example</span>\(\displaystyle\int_0^a\!\int_x^a f(x,y)\,dy\,dx \;=\; \int_0^a\!\int_0^y f(x,y)\,dx\,dy\)</div>
 </div>
-<p class="desc">Jacobian determinant used for transformation of variables in double integrals.</p>
-
-<div class="formula">
-$$
-J=\frac{\partial(u,v,w)}{\partial(x,y,z)}
-$$
+<div class="note tip"><strong>Tip:</strong> Changing order can turn an impossible inner integral into an easy one!</div>
 </div>
-<p class="desc">Jacobian determinant used for transformation of variables in triple integrals.</p>
 </div>
 
-<div class="card">
-<h2>Change of Variables</h2>
+<div class="sec" id="u1s2">
+<div class="sec-title"><span class="sico">∭</span>Triple Integral</div>
 
-<div class="formula">
-$$
-\iint_R f(x,y)\,dxdy
-=\iint_{\bar R}\phi(u,v)\left|J\right|\,dudv
-$$
+<div class="sub" id="u1-tri"><div class="stitle">Definition &amp; Average Value</div>
+<div class="fc b">
+<div class="fl"><span class="flab">Triple integral</span>\(\displaystyle\iiint_E f(x,y,z)\,dV\)</div>
+<div class="fl"><span class="flab">Average value</span>\(\displaystyle f_\text{avg} = \frac{1}{V(E)}\iiint_E f(x,y,z)\,dV,\quad V(E)=\iiint_E 1\,dV\)</div>
+</div></div>
+
+<div class="sub" id="u1-triapps"><div class="stitle">Applications</div>
+<div class="tw"><table>
+<tr><th>Quantity</th><th>Formula</th></tr>
+<tr><td>Volume</td><td>\(\displaystyle V=\iiint_E 1\,dV\)</td></tr>
+<tr><td>Mass (density \(\rho\))</td><td>\(\displaystyle M=\iiint_Q \rho(x,y,z)\,dV\)</td></tr>
+<tr><td>Moment about \(yz\)-plane</td><td>\(\displaystyle M_{yz}=\iiint x\,\rho\,dV\)</td></tr>
+<tr><td>Moment about \(xz\)-plane</td><td>\(\displaystyle M_{xz}=\iiint y\,\rho\,dV\)</td></tr>
+<tr><td>Moment about \(xy\)-plane</td><td>\(\displaystyle M_{xy}=\iiint z\,\rho\,dV\)</td></tr>
+<tr><td>Centre of mass</td><td>\(\bar{x}=\dfrac{M_{yz}}{M},\quad\bar{y}=\dfrac{M_{xz}}{M},\quad\bar{z}=\dfrac{M_{xy}}{M}\)</td></tr>
+</table></div></div>
+
+<div class="sub" id="u1-cyl"><div class="stitle">Cylindrical Coordinates</div>
+<div class="fc b">
+<div class="fl"><span class="flab">Transform</span>\(x=r\cos\theta,\quad y=r\sin\theta,\quad z=z\)</div>
+<div class="fl"><span class="flab">Volume element</span>\(dV=r\,dr\,d\theta\,dz\)</div>
+<div class="fl"><span class="flab">Integral</span>\(\displaystyle\iiint_E f\,dV = \int\!\!\int\!\!\int f(r\cos\theta,\,r\sin\theta,\,z)\;r\,dr\,d\theta\,dz\)</div>
 </div>
-<p class="desc">Transforms double integral into new variables using Jacobian determinant.</p>
-
-<div class="formula">
-$$
-\iiint_V f(x,y,z)\,dV
-=\iiint_{\bar V}\phi(u,v,w)\left|J\right|\,dudvdw
-$$
-</div>
-<p class="desc">Transforms triple integral into new variables using Jacobian determinant.</p>
-</div>
-
-<div class="card">
-<h2>Polar Coordinates</h2>
-
-<div class="formula">$$x=r\cos\theta,\qquad y=r\sin\theta$$</div>
-<p class="desc">Conversion from Cartesian to polar coordinates.</p>
-
-<div class="formula">$$dx\,dy=r\,dr\,d\theta$$</div>
-<p class="desc">Area element transformation in polar coordinates.</p>
-
-<div class="formula">
-$$
-\iint_R f(x,y)\,dxdy
-=\iint_{\bar R} f(r\cos\theta,r\sin\theta)\,r\,dr\,d\theta
-$$
-</div>
-<p class="desc">Double integral expressed in polar coordinate system.</p>
+<div class="note info"><strong>Use when:</strong> Region is symmetric about the \(z\)-axis — cylinders, cones, paraboloids.</div>
 </div>
 
-<div class="card">
-<h2>Area & Volume</h2>
-
-<div class="formula">$$A=\iint_R dA$$</div>
-<p class="desc">Area of region R using double integration.</p>
-
-<div class="formula">$$V=\iint_R z\,dA$$</div>
-<p class="desc">Volume under a surface over region R.</p>
-
-<div class="formula">
-$$
-f_{avg}=\frac{\iint_R f(x,y)\,dA}{\iint_R dA}
-$$
+<div class="sub" id="u1-sph"><div class="stitle">Spherical Coordinates</div>
+<div class="fc b">
+<div class="fl"><span class="flab">Transform</span>\(x=\rho\sin\varphi\cos\theta,\quad y=\rho\sin\varphi\sin\theta,\quad z=\rho\cos\varphi\)</div>
+<div class="fl"><span class="flab">Relation</span>\(\rho^2=x^2+y^2+z^2\)</div>
+<div class="fl"><span class="flab">Volume element</span>\(dV=\rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta\)</div>
+<div class="fl"><span class="flab">Sphere volume</span>\(\displaystyle V=\int_0^{2\pi}\!\int_0^{\pi}\!\int_0^a\rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta=\tfrac{4}{3}\pi a^3\)</div>
 </div>
-<p class="desc">Average value of a function over a region.</p>
+<div class="note info"><strong>Use when:</strong> Region is bounded by a sphere, or \(x^2+y^2+z^2\) appears in the integrand.</div>
+</div>
 </div>
 
-<div class="card">
-<h2>Triple Integrals</h2>
+<div class="sec" id="u1s3">
+<div class="sec-title"><span class="sico">⚙</span>Moment of Inertia</div>
 
-<div class="formula">$$\iiint_V f(x,y,z)\,dV$$</div>
-<p class="desc">Triple integral over a 3D region V.</p>
+<div class="sub" id="u1-mi2d"><div class="stitle">2D — Planar Lamina</div>
+<div class="fc r">
+<div class="fl"><span class="flab">About \(x\)-axis</span>\(\displaystyle I_x=\iint_D y^2\,\rho(x,y)\,dA\)</div>
+<div class="fl"><span class="flab">About \(y\)-axis</span>\(\displaystyle I_y=\iint_D x^2\,\rho(x,y)\,dA\)</div>
+<div class="fl"><span class="flab">About origin</span>\(\displaystyle I_O=\iint_D(x^2+y^2)\,\rho\,dA=I_x+I_y\)</div>
+</div></div>
 
-<div class="formula">$$M=\iiint_V \rho\,dV$$</div>
-<p class="desc">Mass of a solid with density function ρ.</p>
+<div class="sub" id="u1-mi3d"><div class="stitle">3D — Solid Object</div>
+<div class="fc r">
+<div class="fl"><span class="flab">About \(x\)-axis</span>\(\displaystyle I_x=\iiint_Q(y^2+z^2)\,\rho\,dV\)</div>
+<div class="fl"><span class="flab">About \(y\)-axis</span>\(\displaystyle I_y=\iiint_Q(x^2+z^2)\,\rho\,dV\)</div>
+<div class="fl"><span class="flab">About \(z\)-axis</span>\(\displaystyle I_z=\iiint_Q(x^2+y^2)\,\rho\,dV\)</div>
+</div></div>
+</div>
 </div>
 
-<div class="card">
-<h2>Cylindrical Coordinates</h2>
+<!-- ===== UNIT 2 ===== -->
+<div class="panel" data-u="2" id="u2">
+<div class="uhead">Unit 2 — Probability &amp; Distributions</div>
+<div class="udesc">Probability axioms · random variables · PMF, PDF, CDF · mean &amp; variance · Bernoulli · Binomial · Poisson · Exponential · Normal</div>
 
-<div class="formula">
-$$
-x=\rho\cos\phi,\quad
-y=\rho\sin\phi,\quad
-z=z
-$$
-</div>
-<p class="desc">Conversion from Cartesian to cylindrical coordinates.</p>
+<div class="sec" id="u2s1">
+<div class="sec-title"><span class="sico">🎲</span>Probability Basics</div>
 
-<div class="formula">
-$$
-dV=\rho\,d\rho\,d\phi\,dz
-$$
-</div>
-<p class="desc">Volume element in cylindrical coordinates.</p>
-</div>
+<div class="sub" id="u2-defs"><div class="stitle">Key Definitions</div>
+<ul>
+<li><strong>Sample Space \(S\):</strong> Set of all possible outcomes of an experiment</li>
+<li><strong>Event \(E\):</strong> Any subset of \(S\)</li>
+<li><strong>Mutually exclusive:</strong> \(A\cap B=\emptyset\) — they cannot occur together</li>
+<li><strong>Exhaustive:</strong> \(A\cup B=S\) — together they cover every possibility</li>
+<li><strong>Equally likely:</strong> Every outcome has the same probability</li>
+</ul></div>
 
-<div class="card">
-<h2>Spherical Coordinates</h2>
-
-<div class="formula">
-$$
-x=r\sin\theta\cos\phi
-$$
-$$
-y=r\sin\theta\sin\phi
-$$
-$$
-z=r\cos\theta
-$$
-</div>
-<p class="desc">Conversion from Cartesian to spherical coordinates.</p>
-
-<div class="formula">
-$$
-dV=r^2\sin\theta\,dr\,d\theta\,d\phi
-$$
-</div>
-<p class="desc">Volume element in spherical coordinates.</p>
+<div class="sub" id="u2-axioms"><div class="stitle">Axioms &amp; Key Rules</div>
+<div class="fc b">
+<div class="fl"><span class="flab">Classical</span>\(\displaystyle P(E)=\frac{n(E)}{n(S)}\)</div>
+<div class="fl"><span class="flab">Axiom 1</span>\(0\le P(E)\le 1\)</div>
+<div class="fl"><span class="flab">Axiom 2</span>\(P(S)=1\)</div>
+<div class="fl"><span class="flab">Complement</span>\(P(\bar{E})=1-P(E)\)</div>
+<div class="fl"><span class="flab">Addition</span>\(P(A\cup B)=P(A)+P(B)-P(A\cap B)\)</div>
+<div class="fl"><span class="flab">Mut. excl.</span>\(A\cap B=\emptyset\;\Rightarrow\; P(A\cup B)=P(A)+P(B)\)</div>
+</div></div>
 </div>
 
-<div class="card">
-<h2>Moment of Inertia (Plane Lamina)</h2>
+<div class="sec" id="u2s2">
+<div class="sec-title"><span class="sico">X</span>Random Variables</div>
 
-<div class="formula">$$I_x=\iint_D y^2\rho\,dA$$</div>
-<p class="desc">Moment of inertia about x-axis for a lamina.</p>
+<div class="sub" id="u2-pmf"><div class="stitle">Discrete RV — PMF, CDF, Mean, Variance</div>
+<div class="fc b">
+<div class="fl"><span class="flab">PMF</span>\(p(x)=P(X=x),\quad\displaystyle\sum_x p(x)=1\)</div>
+<div class="fl"><span class="flab">CDF</span>\(\displaystyle F(x)=P(X\le x)=\sum_{x_i\le x}p(x_i)\)</div>
+<div class="fl"><span class="flab">Mean</span>\(\displaystyle\mu=E(X)=\sum_x x\,P(X=x)\)</div>
+<div class="fl"><span class="flab">Variance</span>\(\displaystyle\sigma^2=E(X^2)-[E(X)]^2=\sum_x x^2 P(X=x)-\mu^2\)</div>
+<div class="fl"><span class="flab">Std Dev</span>\(\sigma=\sqrt{\sigma^2}\)</div>
+</div></div>
 
-<div class="formula">$$I_y=\iint_D x^2\rho\,dA$$</div>
-<p class="desc">Moment of inertia about y-axis for a lamina.</p>
+<div class="sub" id="u2-lin"><div class="stitle">Linear Functions — \(Y=aX+b\)</div>
+<div class="fc b">
+<div class="fl"><span class="flab">Mean</span>\(E(aX+b)=a\,E(X)+b\)</div>
+<div class="fl"><span class="flab">Variance</span>\(\operatorname{Var}(aX+b)=a^2\operatorname{Var}(X)\)</div>
+<div class="fl"><span class="flab">Std Dev</span>\(\sigma_{aX+b}=|a|\,\sigma_X\)</div>
+</div></div>
 
-<div class="formula">$$I_O=I_x+I_y$$</div>
-<p class="desc">Polar moment of inertia about origin.</p>
+<div class="sub" id="u2-pdf"><div class="stitle">Continuous RV — PDF, CDF, Mean, Variance</div>
+<div class="fc b">
+<div class="fl"><span class="flab">PDF</span>\(f(x)\ge0,\quad\displaystyle\int_{-\infty}^{\infty}f(x)\,dx=1\)</div>
+<div class="fl"><span class="flab">CDF</span>\(\displaystyle F(x)=\int_{-\infty}^x f(t)\,dt,\quad P(a\le X\le b)=\int_a^b f(x)\,dx\)</div>
+<div class="fl"><span class="flab">Mean</span>\(\displaystyle E(X)=\int_{-\infty}^{\infty}x\,f(x)\,dx\)</div>
+<div class="fl"><span class="flab">Variance</span>\(\displaystyle\operatorname{Var}(X)=\int_{-\infty}^{\infty}x^2 f(x)\,dx-[E(X)]^2\)</div>
+</div></div>
 </div>
 
-<div class="card">
-<h2>Moment of Inertia (Solid)</h2>
+<div class="sec" id="u2s3">
+<div class="sec-title"><span class="sico">📊</span>Probability Distributions</div>
 
-<div class="formula">$$I_x=\iiint_V (y^2+z^2)\rho\,dV$$</div>
-<p class="desc">Moment of inertia about x-axis for a solid body.</p>
+<div class="sub" id="u2-bern"><div class="stitle">Bernoulli Distribution — single trial</div>
+<div class="fc b">
+<div class="fl"><span class="flab">PMF</span>\(P(X=1)=p,\quad P(X=0)=q=1-p\)</div>
+<div class="fl"><span class="flab">Mean</span>\(E(X)=p\)</div>
+<div class="fl"><span class="flab">Variance</span>\(\operatorname{Var}(X)=pq=p(1-p)\)</div>
+</div></div>
 
-<div class="formula">$$I_y=\iiint_V (x^2+z^2)\rho\,dV$$</div>
-<p class="desc">Moment of inertia about y-axis for a solid body.</p>
+<div class="sub" id="u2-bin"><div class="stitle">Binomial Distribution — \(B(n,p)\)</div>
+<p><strong>Conditions:</strong> Fixed \(n\) independent trials, constant probability \(p\), two outcomes per trial.</p>
+<div class="fc b">
+<div class="fl"><span class="flab">PMF</span>\(\displaystyle P(X=r)=\binom{n}{r}p^r q^{n-r},\quad r=0,1,\ldots,n,\quad q=1-p\)</div>
+<div class="fl"><span class="flab">Mean</span>\(\mu=np\)</div>
+<div class="fl"><span class="flab">Variance</span>\(\sigma^2=npq\)</div>
+<div class="fl"><span class="flab">Std Dev</span>\(\sigma=\sqrt{npq}\)</div>
+<div class="fl"><span class="flab">Normalisation</span>\(\displaystyle\sum_{r=0}^n\binom{n}{r}p^r q^{n-r}=(p+q)^n=1\)</div>
+</div></div>
 
-<div class="formula">$$I_z=\iiint_V (x^2+y^2)\rho\,dV$$</div>
-<p class="desc">Moment of inertia about z-axis for a solid body.</p>
+<div class="sub" id="u2-poi"><div class="stitle">Poisson Distribution — \(P(\lambda)\)</div>
+<p><strong>Conditions:</strong> \(n\to\infty,\;p\to0,\;\lambda=np\) finite. Mean = Variance (unique property!).</p>
+<div class="fc b">
+<div class="fl"><span class="flab">PMF</span>\(\displaystyle P(X=x)=\frac{\lambda^x e^{-\lambda}}{x!},\quad x=0,1,2,\ldots\)</div>
+<div class="fl"><span class="flab">Mean</span>\(E(X)=\lambda\)</div>
+<div class="fl"><span class="flab">Variance</span>\(\operatorname{Var}(X)=\lambda\)</div>
+</div></div>
+
+<div class="sub" id="u2-exp"><div class="stitle">Exponential Distribution — \(\operatorname{Exp}(\lambda)\)</div>
+<p>Models waiting time; has the <em>memoryless property</em>.</p>
+<div class="fc b">
+<div class="fl"><span class="flab">PDF</span>\(f(x)=\lambda e^{-\lambda x},\quad x>0\)</div>
+<div class="fl"><span class="flab">CDF</span>\(F(x)=1-e^{-\lambda x},\quad x>0\)</div>
+<div class="fl"><span class="flab">Mean</span>\(\mu=\dfrac{1}{\lambda}\)</div>
+<div class="fl"><span class="flab">Variance</span>\(\sigma^2=\dfrac{1}{\lambda^2}\)</div>
+<div class="fl"><span class="flab">Probabilities</span>\(P(X>x)=e^{-\lambda x},\quad P(a<X<b)=e^{-\lambda a}-e^{-\lambda b}\)</div>
+</div></div>
+
+<div class="sub" id="u2-norm"><div class="stitle">Normal Distribution — \(N(\mu,\sigma^2)\)</div>
+<p>The famous bell curve, symmetric about mean \(\mu\).</p>
+<div class="fc b">
+<div class="fl"><span class="flab">PDF</span>\(\displaystyle f(x)=\frac{1}{\sigma\sqrt{2\pi}}\exp\!\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]\)</div>
+<div class="fl"><span class="flab">Standardise</span>\(\displaystyle Z=\frac{X-\mu}{\sigma}\;\sim\;N(0,1)\)</div>
+<div class="fl"><span class="flab">Std PDF</span>\(\displaystyle\varphi(z)=\frac{1}{\sqrt{2\pi}}e^{-z^2/2}\)</div>
+<div class="fl"><span class="flab">68-95-99 rule</span>\(P(\mu-\sigma\le X\le\mu+\sigma)=68.27\%\)</div>
+<div class="fl"><span class="flab"></span>\(P(\mu-2\sigma\le X\le\mu+2\sigma)=94.45\%\)</div>
+<div class="fl"><span class="flab"></span>\(P(\mu-3\sigma\le X\le\mu+3\sigma)=99.73\%\)</div>
+<div class="fl"><span class="flab">Probability</span>\(\displaystyle P(a\le X\le b)=\Phi\!\left(\frac{b-\mu}{\sigma}\right)-\Phi\!\left(\frac{a-\mu}{\sigma}\right)\)</div>
+</div></div>
+
+<div class="sub" id="u2-sum"><div class="stitle">Distribution Quick Reference</div>
+<div class="tw"><table>
+<tr><th>Distribution</th><th>Type</th><th>Mean</th><th>Variance</th><th>PMF / PDF</th></tr>
+<tr><td>Bernoulli\((p)\)</td><td>Discrete</td><td>\(p\)</td><td>\(pq\)</td><td>\(p^x q^{1-x}\)</td></tr>
+<tr><td>Binomial\((n,p)\)</td><td>Discrete</td><td>\(np\)</td><td>\(npq\)</td><td>\(\binom{n}{r}p^r q^{n-r}\)</td></tr>
+<tr><td>Poisson\((\lambda)\)</td><td>Discrete</td><td>\(\lambda\)</td><td>\(\lambda\)</td><td>\(\dfrac{\lambda^x e^{-\lambda}}{x!}\)</td></tr>
+<tr><td>Exponential\((\lambda)\)</td><td>Continuous</td><td>\(\dfrac{1}{\lambda}\)</td><td>\(\dfrac{1}{\lambda^2}\)</td><td>\(\lambda e^{-\lambda x}\)</td></tr>
+<tr><td>Normal\((\mu,\sigma^2)\)</td><td>Continuous</td><td>\(\mu\)</td><td>\(\sigma^2\)</td><td>\(\dfrac{1}{\sigma\sqrt{2\pi}}e^{-(x-\mu)^2/2\sigma^2}\)</td></tr>
+</table></div></div>
+</div>
 </div>
 
-<div class="card">
-<h2>Centre of Gravity / Centre of Mass</h2>
+<!-- ===== UNIT 3 ===== -->
+<div class="panel" data-u="3" id="u3">
+<div class="uhead">Unit 3 — Laplace Transforms</div>
+<div class="udesc">Definition · standard table · linearity · first shift · scale · multiply by \(t^n\) · L of derivatives &amp; integrals · periodic function · unit step · unit impulse · inverse Laplace · partial fractions · convolution · ODE applications</div>
 
-<div class="formula">
-$$
-\bar x=\frac{\iint_D x\rho\,dA}{M},
-\qquad
-\bar y=\frac{\iint_D y\rho\,dA}{M}
-$$
-</div>
-<p class="desc">Coordinates of center of mass for a lamina.</p>
+<div class="sec" id="u3s1">
+<div class="sec-title"><span class="sico">ℒ</span>Definition &amp; Standard Table</div>
 
-<div class="formula">
-$$
-\bar x=\frac{\iiint_V x\rho\,dV}{M},
-\quad
-\bar y=\frac{\iiint_V y\rho\,dV}{M},
-\quad
-\bar z=\frac{\iiint_V z\rho\,dV}{M}
-$$
+<div class="sub" id="u3-def"><div class="stitle">Definition</div>
+<div class="fc g">
+<div class="fl"><span class="flab">Forward</span>\(\displaystyle\mathcal{L}\{f(t)\}=F(s)=\int_0^{\infty}e^{-st}f(t)\,dt\)</div>
+<div class="fl"><span class="flab">Exists if</span>\(f\) is piecewise continuous AND \(|f(t)|\le M e^{s_0 t}\) (exponential order)</div>
+</div></div>
+
+<div class="sub" id="u3-std"><div class="stitle">Standard Laplace Transform Table</div>
+<div class="tw"><table>
+<tr><th>\(f(t)\)</th><th>\(F(s)=\mathcal{L}\{f(t)\}\)</th><th>Valid for</th></tr>
+<tr><td>\(1\)</td><td>\(\dfrac{1}{s}\)</td><td>\(s>0\)</td></tr>
+<tr><td>\(t\)</td><td>\(\dfrac{1}{s^2}\)</td><td>\(s>0\)</td></tr>
+<tr><td>\(t^n\) (\(n\ge0\) int)</td><td>\(\dfrac{n!}{s^{n+1}}\)</td><td>\(s>0\)</td></tr>
+<tr><td>\(t^n\) (general)</td><td>\(\dfrac{\Gamma(n+1)}{s^{n+1}}\)</td><td>\(s>0\)</td></tr>
+<tr><td>\(e^{at}\)</td><td>\(\dfrac{1}{s-a}\)</td><td>\(s>a\)</td></tr>
+<tr><td>\(e^{-at}\)</td><td>\(\dfrac{1}{s+a}\)</td><td>\(s>-a\)</td></tr>
+<tr><td>\(\sin at\)</td><td>\(\dfrac{a}{s^2+a^2}\)</td><td>\(s>0\)</td></tr>
+<tr><td>\(\cos at\)</td><td>\(\dfrac{s}{s^2+a^2}\)</td><td>\(s>0\)</td></tr>
+<tr><td>\(\sinh at\)</td><td>\(\dfrac{a}{s^2-a^2}\)</td><td>\(s>|a|\)</td></tr>
+<tr><td>\(\cosh at\)</td><td>\(\dfrac{s}{s^2-a^2}\)</td><td>\(s>|a|\)</td></tr>
+<tr><td>\(t\sin at\)</td><td>\(\dfrac{2as}{(s^2+a^2)^2}\)</td><td>\(s>0\)</td></tr>
+<tr><td>\(t\cos at\)</td><td>\(\dfrac{s^2-a^2}{(s^2+a^2)^2}\)</td><td>\(s>0\)</td></tr>
+</table></div>
+<div class="note info"><strong>Gamma function:</strong> \(\Gamma(n)=\displaystyle\int_0^\infty e^{-x}x^{n-1}dx\) &nbsp;|&nbsp; \(\Gamma(n+1)=n!\) (integers) &nbsp;|&nbsp; \(\Gamma\!\left(\tfrac{1}{2}\right)=\sqrt{\pi}\)</div>
 </div>
-<p class="desc">Coordinates of center of mass for a 3D solid body.</p>
 </div>
 
+<div class="sec" id="u3s2">
+<div class="sec-title"><span class="sico">⚡</span>Properties of Laplace Transform</div>
+
+<div class="sub" id="u3-lin"><div class="stitle">Linearity</div>
+<div class="fc g">
+<div class="fl"><span class="flab"></span>\(\mathcal{L}\{a\,f(t)+b\,g(t)\}=a\,F(s)+b\,G(s)\)</div>
+</div></div>
+
+<div class="sub" id="u3-shift"><div class="stitle">First Shift (Frequency Shift)</div>
+<div class="fc g">
+<div class="fl"><span class="flab">Rule</span>\(\mathcal{L}\{e^{at}f(t)\}=F(s-a)\)</div>
+<div class="fl"><span class="flab">\(e^{at}t^n\)</span>\(\displaystyle\mathcal{L}\{e^{at}t^n\}=\frac{n!}{(s-a)^{n+1}}\)</div>
+<div class="fl"><span class="flab">\(e^{at}\sin bt\)</span>\(\displaystyle\mathcal{L}\{e^{at}\sin bt\}=\frac{b}{(s-a)^2+b^2}\)</div>
+<div class="fl"><span class="flab">\(e^{at}\cos bt\)</span>\(\displaystyle\mathcal{L}\{e^{at}\cos bt\}=\frac{s-a}{(s-a)^2+b^2}\)</div>
+<div class="fl"><span class="flab">\(e^{at}\sinh bt\)</span>\(\displaystyle\mathcal{L}\{e^{at}\sinh bt\}=\frac{b}{(s-a)^2-b^2}\)</div>
+<div class="fl"><span class="flab">\(e^{at}\cosh bt\)</span>\(\displaystyle\mathcal{L}\{e^{at}\cosh bt\}=\frac{s-a}{(s-a)^2-b^2}\)</div>
+</div></div>
+
+<div class="sub" id="u3-scale"><div class="stitle">Change of Scale</div>
+<div class="fc g">
+<div class="fl"><span class="flab"></span>\(\displaystyle\mathcal{L}\{f(at)\}=\frac{1}{a}F\!\left(\frac{s}{a}\right)\)</div>
+</div></div>
+
+<div class="sub" id="u3-mult"><div class="stitle">Multiplication by \(t^n\)</div>
+<div class="fc g">
+<div class="fl"><span class="flab">\(n=1\)</span>\(\mathcal{L}\{t\,f(t)\}=-F'(s)\)</div>
+<div class="fl"><span class="flab">General</span>\(\mathcal{L}\{t^n f(t)\}=(-1)^n\dfrac{d^n F}{ds^n}\)</div>
+</div></div>
+
+<div class="sub" id="u3-deriv"><div class="stitle">Laplace of Derivatives</div>
+<div class="fc g">
+<div class="fl"><span class="flab">\(f'(t)\)</span>\(\mathcal{L}\{f'(t)\}=s\,F(s)-f(0)\)</div>
+<div class="fl"><span class="flab">\(f''(t)\)</span>\(\mathcal{L}\{f''(t)\}=s^2 F(s)-s\,f(0)-f'(0)\)</div>
+<div class="fl"><span class="flab">\(f'''(t)\)</span>\(\mathcal{L}\{f'''(t)\}=s^3 F(s)-s^2 f(0)-s\,f'(0)-f''(0)\)</div>
+<div class="fl"><span class="flab">General</span>\(\mathcal{L}\{f^{(n)}(t)\}=s^n F(s)-s^{n-1}f(0)-\cdots-f^{(n-1)}(0)\)</div>
+</div></div>
+
+<div class="sub" id="u3-divt"><div class="stitle">Division by \(t\)</div>
+<div class="fc g">
+<div class="fl"><span class="flab"></span>\(\displaystyle\mathcal{L}\!\left\{\frac{f(t)}{t}\right\}=\int_s^{\infty}F(u)\,du\)</div>
+</div></div>
+
+<div class="sub" id="u3-int"><div class="stitle">Laplace of Integral</div>
+<div class="fc g">
+<div class="fl"><span class="flab"></span>\(\displaystyle\mathcal{L}\!\left\{\int_0^t f(u)\,du\right\}=\frac{F(s)}{s}\)</div>
+</div></div>
+
+<div class="sub" id="u3-per"><div class="stitle">Periodic Function</div>
+<div class="fc g">
+<div class="fl"><span class="flab">Condition</span>\(f(t+T)=f(t)\) for all \(t\)</div>
+<div class="fl"><span class="flab">Formula</span>\(\displaystyle\mathcal{L}\{f(t)\}=\frac{1}{1-e^{-sT}}\int_0^T e^{-st}f(t)\,dt\)</div>
+</div></div>
+
+<div class="sub" id="u3-step"><div class="stitle">Unit Step Function (Heaviside)</div>
+<div class="fc g">
+<div class="fl"><span class="flab">Definition</span>\(\displaystyle u(t-a)=\begin{cases}0&t<a\\1&t\ge a\end{cases}\)</div>
+<div class="fl"><span class="flab">Transform</span>\(\displaystyle\mathcal{L}\{u(t-a)\}=\frac{e^{-as}}{s}\)</div>
+<div class="fl"><span class="flab">2nd Shift</span>\(\mathcal{L}\{f(t-a)\,u(t-a)\}=e^{-as}F(s)\)</div>
+</div></div>
+
+<div class="sub" id="u3-delta"><div class="stitle">Unit Impulse — Dirac Delta \(\delta(t-a)\)</div>
+<div class="fc g">
+<div class="fl"><span class="flab">Properties</span>\(\delta(t-a)=0\;(t\ne a),\quad\displaystyle\int_0^\infty\delta(t-a)\,dt=1\)</div>
+<div class="fl"><span class="flab">Transform</span>\(\mathcal{L}\{\delta(t-a)\}=e^{-as}\)</div>
+<div class="fl"><span class="flab">Sampling</span>\(\displaystyle\int_0^\infty f(t)\,\delta(t-a)\,dt=f(a)\)</div>
+<div class="fl"><span class="flab"></span>\(\mathcal{L}\{f(t)\,\delta(t-a)\}=e^{-as}f(a)\)</div>
+</div></div>
+</div>
+
+<div class="sec" id="u3s3">
+<div class="sec-title"><span class="sico">ℒ⁻¹</span>Inverse Laplace Transform</div>
+
+<div class="sub" id="u3-inv-tbl"><div class="stitle">Inverse Laplace Table</div>
+<div class="tw"><table>
+<tr><th>\(F(s)\)</th><th>\(\mathcal{L}^{-1}\{F(s)\}=f(t)\)</th></tr>
+<tr><td>\(\dfrac{a}{s}\)</td><td>\(a\)</td></tr>
+<tr><td>\(\dfrac{1}{s^n}\) (\(n\ge1\) integer)</td><td>\(\dfrac{t^{n-1}}{(n-1)!}\)</td></tr>
+<tr><td>\(\dfrac{1}{s^n}\) (general)</td><td>\(\dfrac{t^{n-1}}{\Gamma(n)}\)</td></tr>
+<tr><td>\(\dfrac{1}{s-a}\)</td><td>\(e^{at}\)</td></tr>
+<tr><td>\(\dfrac{1}{s+a}\)</td><td>\(e^{-at}\)</td></tr>
+<tr><td>\(\dfrac{s}{s^2+a^2}\)</td><td>\(\cos at\)</td></tr>
+<tr><td>\(\dfrac{a}{s^2+a^2}\)</td><td>\(\sin at\)</td></tr>
+<tr><td>\(\dfrac{s}{s^2-a^2}\)</td><td>\(\cosh at\)</td></tr>
+<tr><td>\(\dfrac{a}{s^2-a^2}\)</td><td>\(\sinh at\)</td></tr>
+<tr><td>\(\dfrac{e^{-as}}{s}\)</td><td>\(u(t-a)\)</td></tr>
+<tr><td>\(e^{-as}F(s)\)</td><td>\(f(t-a)\,u(t-a)\)</td></tr>
+<tr><td>\(\dfrac{s}{(s^2+a^2)^2}\)</td><td>\(\dfrac{t\sin at}{2a}\)</td></tr>
+<tr><td>\(\dfrac{s^2-a^2}{(s^2+a^2)^2}\)</td><td>\(t\cos at\)</td></tr>
+</table></div></div>
+
+<div class="sub" id="u3-inv-shift"><div class="stitle">Inverse — First Shift</div>
+<div class="fc g">
+<div class="fl"><span class="flab">Rule</span>If \(\mathcal{L}^{-1}\{F(s)\}=f(t)\), then \(\mathcal{L}^{-1}\{F(s-a)\}=e^{at}f(t)\)</div>
+</div></div>
+
+<div class="sub" id="u3-inv-mult"><div class="stitle">Inverse of Derivatives &amp; Integrals</div>
+<div class="fc g">
+<div class="fl"><span class="flab">Derivative</span>\(\mathcal{L}^{-1}\{F'(s)\}=-t\,f(t)\)</div>
+<div class="fl"><span class="flab">General</span>\(\mathcal{L}^{-1}\{F^{(n)}(s)\}=(-1)^n t^n f(t)\)</div>
+<div class="fl"><span class="flab">Integral</span>\(\displaystyle\mathcal{L}^{-1}\!\left\{\frac{F(s)}{s}\right\}=\int_0^t f(u)\,du\)</div>
+<div class="fl"><span class="flab">Div by \(t\)</span>\(\displaystyle\mathcal{L}^{-1}\!\left\{\int_s^\infty F(u)\,du\right\}=\frac{f(t)}{t}\)</div>
+</div></div>
+
+<div class="sub" id="u3-inv-log"><div class="stitle">Inverse of Logarithmic Functions</div>
+<p>Key: use \(\mathcal{L}^{-1}\{-F'(s)\}=t\,f(t)\), then divide by \(t\).</p>
+<div class="fc g">
+<div class="fl"><span class="flab">Classic result</span>\(\displaystyle\mathcal{L}^{-1}\!\left\{\ln\frac{s+a}{s+b}\right\}=\frac{e^{-bt}-e^{-at}}{t}\)</div>
+</div></div>
+
+<div class="sub" id="u3-conv"><div class="stitle">Convolution Theorem</div>
+<div class="fc g">
+<div class="fl"><span class="flab">Definition</span>\(\displaystyle(f*g)(t)=\int_0^t f(u)\,g(t-u)\,du\)</div>
+<div class="fl"><span class="flab">Theorem</span>\(\mathcal{L}\{f*g\}=F(s)\cdot G(s)\)</div>
+<div class="fl"><span class="flab">Inverse</span>\(\displaystyle\mathcal{L}^{-1}\{F(s)\,G(s)\}=\int_0^t f(u)\,g(t-u)\,du\)</div>
+<div class="fl"><span class="flab">Properties</span>\(f*g=g*f\;\;\text{(commutative)},\quad(f*g)*h=f*(g*h)\;\;\text{(associative)}\)</div>
+</div></div>
+</div>
+
+<div class="sec" id="u3s4">
+<div class="sec-title"><span class="sico">📐</span>ODE Applications</div>
+<div class="sub" id="u3-ode"><div class="stitle">Working Procedure</div>
+<ol>
+<li>Take \(\mathcal{L}\) of both sides of the ODE, substituting \(y(0),y'(0),\ldots\)</li>
+<li>Solve algebraically for \(Y(s)=\mathcal{L}\{y(t)\}\)</li>
+<li>Take \(\mathcal{L}^{-1}\{Y(s)\}\) to obtain \(y(t)\)</li>
+</ol>
+<div class="fc g" style="margin-top:10px">
+<div class="fl"><span class="flab">Recall</span>\(\mathcal{L}\{y'\}=sY-y(0),\quad\mathcal{L}\{y''\}=s^2Y-s\,y(0)-y'(0)\)</div>
+<div class="fl"><span class="flab">Var. coeff.</span>\(\mathcal{L}\{t\,f(t)\}=-\dfrac{d}{ds}\mathcal{L}\{f(t)\}\)</div>
+</div></div>
+</div>
+</div>
+
+<!-- ===== UNIT 4 ===== -->
+<div class="panel" data-u="4" id="u4">
+<div class="uhead">Unit 4 — Fourier Series &amp; Transforms</div>
+<div class="udesc">Dirichlet's conditions · full-range series (periods \(2\pi\) and \(2l\)) · even/odd functions · half-range series · Parseval's identity · complex Fourier series · Fourier transform &amp; properties · cosine/sine transforms</div>
+
+<div class="sec" id="u4s1">
+<div class="sec-title"><span class="sico">∿</span>Fourier Series — Full Range</div>
+
+<div class="sub" id="u4-diri"><div class="stitle">Dirichlet's Conditions</div>
+<ul>
+<li>\(f(x)\) is periodic and single-valued</li>
+<li>\(f(x)\) is continuous, or has only a <em>finite</em> number of finite discontinuities per period</li>
+<li>\(f(x)\) has a finite number of maxima and minima per period</li>
+</ul></div>
+
+<div class="sub" id="u4-euler"><div class="stitle">Euler Formulae — Period \(2\pi\), Interval \((c,\,c+2\pi)\)</div>
+<div class="fc p">
+<div class="fl"><span class="flab">Series</span>\(\displaystyle f(x)=\frac{a_0}{2}+\sum_{n=1}^{\infty}\bigl[a_n\cos nx+b_n\sin nx\bigr]\)</div>
+<div class="fl"><span class="flab">\(a_0\)</span>\(\displaystyle a_0=\frac{1}{\pi}\int_c^{c+2\pi}f(x)\,dx\)</div>
+<div class="fl"><span class="flab">\(a_n\)</span>\(\displaystyle a_n=\frac{1}{\pi}\int_c^{c+2\pi}f(x)\cos nx\,dx\)</div>
+<div class="fl"><span class="flab">\(b_n\)</span>\(\displaystyle b_n=\frac{1}{\pi}\int_c^{c+2\pi}f(x)\sin nx\,dx\)</div>
+<div class="fl"><span class="flab">At discontinuity</span>\(\displaystyle f(x_0)\;\to\;\frac{f(x_0^-)+f(x_0^+)}{2}\)</div>
+</div></div>
+
+<div class="sub" id="u4-arb"><div class="stitle">Arbitrary Period \(2l\) — Interval \((-l,l)\)</div>
+<div class="fc p">
+<div class="fl"><span class="flab">Series</span>\(\displaystyle f(x)=\frac{a_0}{2}+\sum_{n=1}^{\infty}\!\left[a_n\cos\frac{n\pi x}{l}+b_n\sin\frac{n\pi x}{l}\right]\)</div>
+<div class="fl"><span class="flab">\(a_0\)</span>\(\displaystyle a_0=\frac{1}{l}\int_{-l}^{l}f(x)\,dx\)</div>
+<div class="fl"><span class="flab">\(a_n\)</span>\(\displaystyle a_n=\frac{1}{l}\int_{-l}^{l}f(x)\cos\frac{n\pi x}{l}\,dx\)</div>
+<div class="fl"><span class="flab">\(b_n\)</span>\(\displaystyle b_n=\frac{1}{l}\int_{-l}^{l}f(x)\sin\frac{n\pi x}{l}\,dx\)</div>
+</div></div>
+</div>
+
+<div class="sec" id="u4s2">
+<div class="sec-title"><span class="sico">±</span>Even &amp; Odd Functions</div>
+
+<div class="sub" id="u4-eo-def"><div class="stitle">Definitions &amp; Properties</div>
+<div class="tw"><table>
+<tr><th></th><th>Even: \(f(-x)=f(x)\)</th><th>Odd: \(f(-x)=-f(x)\)</th></tr>
+<tr><td>Graph</td><td>Symmetric about \(y\)-axis</td><td>Symmetric about origin</td></tr>
+<tr><td>\(\int_{-c}^c f\,dx\)</td><td>\(2\displaystyle\int_0^c f\,dx\)</td><td>\(0\)</td></tr>
+<tr><td>Fourier series</td><td>Cosine terms only</td><td>Sine terms only</td></tr>
+<tr><td>Examples</td><td>\(x^2,\;\cos x,\;|x|\)</td><td>\(x,\;x^3,\;\sin x\)</td></tr>
+</table></div></div>
+
+<div class="sub" id="u4-even-fs"><div class="stitle">Even Function in \((-\pi,\pi)\) — Cosine Series</div>
+<div class="fc p">
+<div class="fl"><span class="flab">Series</span>\(\displaystyle f(x)=\frac{a_0}{2}+\sum_{n=1}^{\infty}a_n\cos nx\)</div>
+<div class="fl"><span class="flab">\(a_0\)</span>\(\displaystyle a_0=\frac{2}{\pi}\int_0^{\pi}f(x)\,dx\)</div>
+<div class="fl"><span class="flab">\(a_n\)</span>\(\displaystyle a_n=\frac{2}{\pi}\int_0^{\pi}f(x)\cos nx\,dx,\quad b_n=0\)</div>
+</div></div>
+
+<div class="sub" id="u4-odd-fs"><div class="stitle">Odd Function in \((-\pi,\pi)\) — Sine Series</div>
+<div class="fc p">
+<div class="fl"><span class="flab">Series</span>\(\displaystyle f(x)=\sum_{n=1}^{\infty}b_n\sin nx\)</div>
+<div class="fl"><span class="flab">\(b_n\)</span>\(\displaystyle b_n=\frac{2}{\pi}\int_0^{\pi}f(x)\sin nx\,dx,\quad a_0=a_n=0\)</div>
+</div></div>
+
+<div class="sub" id="u4-eo-l"><div class="stitle">Even / Odd — General Period \((-l,l)\)</div>
+<div class="fc p">
+<div class="fl"><span class="flab">Even \(a_0\)</span>\(\displaystyle a_0=\frac{2}{l}\int_0^l f(x)\,dx\)</div>
+<div class="fl"><span class="flab">Even \(a_n\)</span>\(\displaystyle a_n=\frac{2}{l}\int_0^l f(x)\cos\frac{n\pi x}{l}\,dx\)</div>
+<div class="fl"><span class="flab">Odd \(b_n\)</span>\(\displaystyle b_n=\frac{2}{l}\int_0^l f(x)\sin\frac{n\pi x}{l}\,dx\)</div>
+</div></div>
+</div>
+
+<div class="sec" id="u4s3">
+<div class="sec-title"><span class="sico">½</span>Half Range Fourier Series</div>
+
+<div class="sub" id="u4-hcos"><div class="stitle">Half Range Cosine Series in \((0,l)\) — even extension</div>
+<div class="fc p">
+<div class="fl"><span class="flab">Series</span>\(\displaystyle f(x)=\frac{a_0}{2}+\sum_{n=1}^{\infty}a_n\cos\frac{n\pi x}{l}\)</div>
+<div class="fl"><span class="flab">\(a_0\)</span>\(\displaystyle a_0=\frac{2}{l}\int_0^l f(x)\,dx\)</div>
+<div class="fl"><span class="flab">\(a_n\)</span>\(\displaystyle a_n=\frac{2}{l}\int_0^l f(x)\cos\frac{n\pi x}{l}\,dx\)</div>
+</div></div>
+
+<div class="sub" id="u4-hsin"><div class="stitle">Half Range Sine Series in \((0,l)\) — odd extension</div>
+<div class="fc p">
+<div class="fl"><span class="flab">Series</span>\(\displaystyle f(x)=\sum_{n=1}^{\infty}b_n\sin\frac{n\pi x}{l}\)</div>
+<div class="fl"><span class="flab">\(b_n\)</span>\(\displaystyle b_n=\frac{2}{l}\int_0^l f(x)\sin\frac{n\pi x}{l}\,dx\)</div>
+</div></div>
+</div>
+
+<div class="sec" id="u4s4">
+<div class="sec-title"><span class="sico">📝</span>Useful Identities &amp; Series Deductions</div>
+
+<div class="sub" id="u4-trig"><div class="stitle">Trig Values &amp; Integration Formulas</div>
+<div class="fc p">
+<div class="fl"><span class="flab">Values</span>\(\cos(n\pi)=(-1)^n,\quad\sin(n\pi)=0\)</div>
+<div class="fl"><span class="flab">IBP (Bernoulli)</span>\(\displaystyle\int u\,dv=uv_1-u'v_2+u''v_3-\cdots\)</div>
+<div class="fl"><span class="flab">\(\int e^{ax}\sin bx\)</span>\(\displaystyle\frac{e^{ax}(a\sin bx-b\cos bx)}{a^2+b^2}\)</div>
+<div class="fl"><span class="flab">\(\int e^{ax}\cos bx\)</span>\(\displaystyle\frac{e^{ax}(a\cos bx+b\sin bx)}{a^2+b^2}\)</div>
+</div></div>
+
+<div class="sub" id="u4-series"><div class="stitle">Famous Series from Fourier</div>
+<div class="fc p">
+<div class="fl"><span class="flab">Basel series</span>\(\displaystyle\sum_{n=1}^{\infty}\frac{1}{n^2}=\frac{\pi^2}{6}\)</div>
+<div class="fl"><span class="flab"></span>\(\displaystyle 1-\frac{1}{4}+\frac{1}{9}-\cdots=\frac{\pi^2}{12}\)</div>
+<div class="fl"><span class="flab"></span>\(\displaystyle\sum_{n=1}^{\infty}\frac{1}{n^4}=\frac{\pi^4}{90}\)</div>
+<div class="fl"><span class="flab">Leibniz-type</span>\(\displaystyle 1-\frac{1}{3^3}+\frac{1}{5^3}-\cdots=\frac{\pi^3}{32}\)</div>
+</div></div>
+
+<div class="sub" id="u4-parseval"><div class="stitle">Parseval's Identity</div>
+<div class="fc p">
+<div class="fl"><span class="flab">On \((-\pi,\pi)\)</span>\(\displaystyle\frac{1}{\pi}\int_{-\pi}^{\pi}[f(x)]^2dx=\frac{a_0^2}{2}+\sum_{n=1}^{\infty}(a_n^2+b_n^2)\)</div>
+<div class="fl"><span class="flab">On \((-l,l)\)</span>\(\displaystyle\frac{1}{l}\int_{-l}^{l}[f(x)]^2dx=\frac{a_0^2}{2}+\sum_{n=1}^{\infty}(a_n^2+b_n^2)\)</div>
+</div></div>
+</div>
+
+<div class="sec" id="u4s5">
+<div class="sec-title"><span class="sico">ℂ</span>Complex Fourier Series</div>
+<div class="sub" id="u4-cfs"><div class="stitle">Exponential Form</div>
+<div class="fc p">
+<div class="fl"><span class="flab">Series (period \(2\pi\))</span>\(\displaystyle f(x)=\sum_{n=-\infty}^{\infty}c_n\,e^{inx}\)</div>
+<div class="fl"><span class="flab">Coefficient</span>\(\displaystyle c_n=\frac{1}{2\pi}\int_{-\pi}^{\pi}f(x)\,e^{-inx}\,dx\)</div>
+<div class="fl"><span class="flab">Period \(2l\)</span>\(\displaystyle f(x)=\sum_{n=-\infty}^{\infty}c_n\,e^{in\pi x/l},\quad c_n=\frac{1}{2l}\int_{-l}^{l}f(x)\,e^{-in\pi x/l}\,dx\)</div>
+<div class="fl"><span class="flab">Relation</span>\(c_0=\dfrac{a_0}{2},\quad c_n=\dfrac{a_n-ib_n}{2}\;(n>0),\quad c_{-n}=\dfrac{a_n+ib_n}{2}\)</div>
+</div></div>
+</div>
+
+<div class="sec" id="u4s6">
+<div class="sec-title"><span class="sico">ℱ</span>Fourier Transform</div>
+
+<div class="sub" id="u4-ft-def"><div class="stitle">Definition &amp; Inverse</div>
+<div class="fc go">
+<div class="fl"><span class="flab">Forward FT</span>\(\displaystyle\mathcal{F}\{f(t)\}=F(\omega)=\int_{-\infty}^{\infty}f(t)\,e^{-i\omega t}\,dt\)</div>
+<div class="fl"><span class="flab">Inverse FT</span>\(\displaystyle f(t)=\frac{1}{2\pi}\int_{-\infty}^{\infty}F(\omega)\,e^{i\omega t}\,d\omega\)</div>
+</div></div>
+
+<div class="sub" id="u4-ft-props"><div class="stitle">Properties</div>
+<div class="tw"><table>
+<tr><th>Property</th><th>Formula</th></tr>
+<tr><td>Linearity</td><td>\(\mathcal{F}\{af+bg\}=aF(\omega)+bG(\omega)\)</td></tr>
+<tr><td>Time Shift</td><td>\(\mathcal{F}\{f(t-a)\}=e^{-i\omega a}F(\omega)\)</td></tr>
+<tr><td>Frequency Shift</td><td>\(\mathcal{F}\{e^{iat}f(t)\}=F(\omega-a)\)</td></tr>
+<tr><td>Scaling</td><td>\(\mathcal{F}\{f(at)\}=\dfrac{1}{|a|}F\!\left(\dfrac{\omega}{a}\right)\)</td></tr>
+<tr><td>Time Derivative</td><td>\(\mathcal{F}\{f'(t)\}=i\omega\,F(\omega)\)</td></tr>
+<tr><td>\(n\)-th Derivative</td><td>\(\mathcal{F}\{f^{(n)}(t)\}=(i\omega)^n F(\omega)\)</td></tr>
+<tr><td>Freq. Derivative</td><td>\(\mathcal{F}\{t^n f(t)\}=i^n F^{(n)}(\omega)\)</td></tr>
+<tr><td>Duality</td><td>\(\mathcal{F}\{F(t)\}=2\pi f(-\omega)\)</td></tr>
+<tr><td>Modulation (\(\cos\))</td><td>\(\mathcal{F}\{f\cos\omega_0 t\}=\tfrac{1}{2}[F(\omega+\omega_0)+F(\omega-\omega_0)]\)</td></tr>
+<tr><td>Parseval's</td><td>\(\displaystyle\int_{-\infty}^\infty|f|^2dt=\frac{1}{2\pi}\int_{-\infty}^\infty|F|^2d\omega\)</td></tr>
+</table></div></div>
+
+<div class="sub" id="u4-ft-std"><div class="stitle">Standard Fourier Transforms</div>
+<div class="tw"><table>
+<tr><th>\(f(t)\)</th><th>\(F(\omega)\)</th></tr>
+<tr><td>\(\delta(t)\)</td><td>\(1\)</td></tr>
+<tr><td>\(\delta(t-a)\)</td><td>\(e^{-i\omega a}\)</td></tr>
+<tr><td>\(1\)</td><td>\(2\pi\delta(\omega)\)</td></tr>
+<tr><td>\(e^{iat}\)</td><td>\(2\pi\delta(\omega-a)\)</td></tr>
+<tr><td>\(\cos at\)</td><td>\(\pi[\delta(\omega-a)+\delta(\omega+a)]\)</td></tr>
+<tr><td>\(\sin at\)</td><td>\(i\pi[\delta(\omega+a)-\delta(\omega-a)]\)</td></tr>
+<tr><td>\(e^{-at}u(t),\;a>0\)</td><td>\(\dfrac{1}{a+i\omega}\)</td></tr>
+<tr><td>\(e^{-a|t|},\;a>0\)</td><td>\(\dfrac{2a}{a^2+\omega^2}\)</td></tr>
+<tr><td>Rect pulse \(|t|<T\)</td><td>\(\dfrac{2\sin\omega T}{\omega}\)</td></tr>
+</table></div></div>
+</div>
+
+<div class="sec" id="u4s7">
+<div class="sec-title"><span class="sico">Fc/s</span>Fourier Cosine &amp; Sine Transforms</div>
+
+<div class="sub" id="u4-fct"><div class="stitle">Fourier Cosine Transform</div>
+<div class="fc go">
+<div class="fl"><span class="flab">Forward</span>\(\displaystyle\mathcal{F}_c\{f(t)\}=F_c(\omega)=\int_0^{\infty}f(t)\cos(\omega t)\,dt\)</div>
+<div class="fl"><span class="flab">Inverse</span>\(\displaystyle f(t)=\frac{2}{\pi}\int_0^{\infty}F_c(\omega)\cos(\omega t)\,d\omega\)</div>
+<div class="fl"><span class="flab">Key result</span>\(\displaystyle\mathcal{F}_c\{e^{-at}\}=\frac{a}{a^2+\omega^2}\)</div>
+<div class="fl"><span class="flab">Derivative</span>\(\mathcal{F}_c\{f''(t)\}=-\omega^2 F_c(\omega)-f'(0)\)</div>
+<div class="fl"><span class="flab">Integral</span>\(\displaystyle\int_0^\infty\frac{\cos\omega x}{a^2+\omega^2}d\omega=\frac{\pi}{2a}e^{-ax}\)</div>
+</div></div>
+
+<div class="sub" id="u4-fst"><div class="stitle">Fourier Sine Transform</div>
+<div class="fc go">
+<div class="fl"><span class="flab">Forward</span>\(\displaystyle\mathcal{F}_s\{f(t)\}=F_s(\omega)=\int_0^{\infty}f(t)\sin(\omega t)\,dt\)</div>
+<div class="fl"><span class="flab">Inverse</span>\(\displaystyle f(t)=\frac{2}{\pi}\int_0^{\infty}F_s(\omega)\sin(\omega t)\,d\omega\)</div>
+<div class="fl"><span class="flab">Key result</span>\(\displaystyle\mathcal{F}_s\{e^{-at}\}=\frac{\omega}{a^2+\omega^2}\)</div>
+<div class="fl"><span class="flab"></span>\(\displaystyle\mathcal{F}_s\!\left\{\frac{e^{-at}}{t}\right\}=\arctan\frac{\omega}{a}\)</div>
+<div class="fl"><span class="flab">Derivative</span>\(\mathcal{F}_s\{f''(t)\}=-\omega^2 F_s(\omega)+\omega\,f(0)\)</div>
+<div class="fl"><span class="flab">Integral</span>\(\displaystyle\int_0^\infty\frac{x\sin kx}{a^2+x^2}dx=\frac{\pi}{2}e^{-ak},\quad a,k>0\)</div>
+</div></div>
+</div>
+
+</div><!-- panel u4 -->
+
+</div><!-- content area -->
+</main>
+
+<script>
+const SB={
+1:[{l:"Double Integral",id:"u1s1"},{l:"Definition & Fubini",id:"u1-def"},{l:"Properties",id:"u1-props"},{l:"Applications",id:"u1-apps"},{l:"Jacobian & CoV",id:"u1-jac"},{l:"Change of Order",id:"u1-coi"},{l:"Triple Integral",id:"u1s2"},{l:"Triple Def & Avg",id:"u1-tri"},{l:"Triple Applications",id:"u1-triapps"},{l:"Cylindrical Coords",id:"u1-cyl"},{l:"Spherical Coords",id:"u1-sph"},{l:"Moment of Inertia",id:"u1s3"},{l:"2D Moments",id:"u1-mi2d"},{l:"3D Moments",id:"u1-mi3d"}],
+2:[{l:"Probability Basics",id:"u2s1"},{l:"Key Definitions",id:"u2-defs"},{l:"Axioms & Rules",id:"u2-axioms"},{l:"Random Variables",id:"u2s2"},{l:"Discrete: PMF & CDF",id:"u2-pmf"},{l:"Linear Functions",id:"u2-lin"},{l:"Continuous: PDF & CDF",id:"u2-pdf"},{l:"Distributions",id:"u2s3"},{l:"Bernoulli",id:"u2-bern"},{l:"Binomial",id:"u2-bin"},{l:"Poisson",id:"u2-poi"},{l:"Exponential",id:"u2-exp"},{l:"Normal / Gaussian",id:"u2-norm"},{l:"Summary Table",id:"u2-sum"}],
+3:[{l:"Definition",id:"u3s1"},{l:"Standard Table",id:"u3-std"},{l:"Properties",id:"u3s2"},{l:"Linearity",id:"u3-lin"},{l:"First Shift",id:"u3-shift"},{l:"Change of Scale",id:"u3-scale"},{l:"Multiply by tⁿ",id:"u3-mult"},{l:"L of Derivatives",id:"u3-deriv"},{l:"Division by t",id:"u3-divt"},{l:"L of Integral",id:"u3-int"},{l:"Periodic Function",id:"u3-per"},{l:"Unit Step",id:"u3-step"},{l:"Unit Impulse",id:"u3-delta"},{l:"Inverse Laplace",id:"u3s3"},{l:"Inverse Table",id:"u3-inv-tbl"},{l:"Inv First Shift",id:"u3-inv-shift"},{l:"Inv Deriv/Integral",id:"u3-inv-mult"},{l:"Inv Log/Arctrig",id:"u3-inv-log"},{l:"Convolution",id:"u3-conv"},{l:"ODE Applications",id:"u3s4"}],
+4:[{l:"Fourier Series",id:"u4s1"},{l:"Dirichlet's Cond.",id:"u4-diri"},{l:"Euler Formulae",id:"u4-euler"},{l:"Arbitrary Period 2l",id:"u4-arb"},{l:"Even & Odd",id:"u4s2"},{l:"Even FS",id:"u4-even-fs"},{l:"Odd FS",id:"u4-odd-fs"},{l:"Even/Odd General",id:"u4-eo-l"},{l:"Half Range FS",id:"u4s3"},{l:"Half Range Cosine",id:"u4-hcos"},{l:"Half Range Sine",id:"u4-hsin"},{l:"Useful Identities",id:"u4s4"},{l:"Series Deductions",id:"u4-series"},{l:"Parseval's Identity",id:"u4-parseval"},{l:"Complex FS",id:"u4s5"},{l:"Fourier Transform",id:"u4s6"},{l:"FT Properties",id:"u4-ft-props"},{l:"Standard FT Table",id:"u4-ft-std"},{l:"Cosine/Sine Tr.",id:"u4s7"}]
+};
+let cur=1;
+function buildSB(u){
+  let h=`<div class="sb-label">Unit ${u} — Contents</div>`;
+  SB[u].forEach(it=>h+=`<a href="javascript:void(0)" data-u="${u}" id="sba-${it.id}" onclick="jump('${it.id}')">${it.l}</a>`);
+  document.getElementById('sb').innerHTML=h;
+}
+function go(u){
+  cur=u;
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById('u'+u).classList.add('on');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelector(`.tab[data-u="${u}"]`).classList.add('on');
+  buildSB(u);
+  document.getElementById('ca').scrollTop=0;
+  document.getElementById('sb').scrollTop=0;
+  if(window.MathJax) MathJax.typesetPromise();
+}
+function jump(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  const ca=document.getElementById('ca');
+  ca.scrollTo({top:el.offsetTop-18,behavior:'smooth'});
+  document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('on'));
+  const sa=document.getElementById('sba-'+id);
+  if(sa)sa.classList.add('on');
+}
+document.getElementById('ca').addEventListener('scroll',function(){
+  const items=SB[cur];
+  let active=null;
+  const st=this.scrollTop+80;
+  for(let i=items.length-1;i>=0;i--){
+    const el=document.getElementById(items[i].id);
+    if(el&&el.offsetTop<=st){active=items[i].id;break;}
+  }
+  if(active){
+    document.querySelectorAll('.sidebar a').forEach(a=>{
+      a.classList.toggle('on',a.id==='sba-'+active);
+    });
+  }
+});
+buildSB(1);
+window.addEventListener('load',()=>{if(window.MathJax)MathJax.typesetPromise();});
+</script>
 </body>
 </html>
