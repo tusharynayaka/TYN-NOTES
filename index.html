@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Problem Solving With C – UE25CS151B</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f14;
+    --surface: #14151c;
+    --card: #1a1b24;
+    --border: #2a2b38;
+    --accent: #e8a842;
+    --accent2: #5b8dee;
+    --accent3: #6ee2a0;
+    --text: #d8d9e8;
+    --text-dim: #7a7b96;
+    --text-bright: #f0f1ff;
+    --code-bg: #0a0b10;
+    --keyword: #e57aff;
+    --string: #a8e06e;
+    --comment: #5c6380;
+    --number: #f0b06a;
+    --fn: #61d4f0;
+    --type: #5b8dee;
+    --header-h: 60px;
+    --sidebar-w: 280px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  ::selection { background: rgba(232,168,66,0.3); color: var(--text-bright); }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: var(--header-h);
+    background: rgba(14,15,20,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 20px;
+    gap: 16px;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 15px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .logo span { color: var(--text-dim); font-weight: 400; }
+
+  .header-search {
+    flex: 1; max-width: 400px;
+    display: flex; align-items: center;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0 12px;
+    gap: 8px;
+    transition: border-color 0.2s;
+  }
+  .header-search:focus-within { border-color: var(--accent); }
+  .header-search svg { color: var(--text-dim); flex-shrink: 0; }
+  .header-search input {
+    background: none; border: none; outline: none;
+    color: var(--text-bright); font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; width: 100%; padding: 8px 0;
+  }
+  .header-search input::placeholder { color: var(--text-dim); }
+
+  .search-results-panel {
+    position: absolute; top: calc(var(--header-h) + 4px);
+    left: 50%; transform: translateX(-50%);
+    width: min(700px, 90vw);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    max-height: 400px; overflow-y: auto;
+    display: none; z-index: 200;
+  }
+  .search-results-panel.open { display: block; }
+  .search-result-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .search-result-item:last-child { border-bottom: none; }
+  .search-result-item:hover { background: rgba(232,168,66,0.08); }
+  .sri-topic { font-family: 'Syne',sans-serif; font-size:13px; font-weight:600; color: var(--accent); }
+  .sri-unit { font-size: 11px; color: var(--text-dim); margin-top:2px; font-family:'JetBrains Mono',monospace; }
+  .sri-preview { font-size:13px; color: var(--text-dim); margin-top:4px; }
+  .sri-preview mark { background: rgba(232,168,66,0.25); color: var(--accent); border-radius: 2px; padding: 0 2px; }
+  .search-empty { padding: 24px; text-align:center; color: var(--text-dim); font-size:14px; }
+
+  /* ─── LAYOUT ─── */
+  .layout {
+    display: flex;
+    padding-top: var(--header-h);
+    min-height: 100vh;
+  }
+
+  /* ─── SIDEBAR ─── */
+  aside {
+    width: var(--sidebar-w);
+    flex-shrink: 0;
+    position: fixed;
+    top: var(--header-h); bottom: 0; left: 0;
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+    background: var(--surface);
+    padding: 16px 0;
+  }
+  aside::-webkit-scrollbar { width: 4px; }
+  aside::-webkit-scrollbar-track { background: transparent; }
+  aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .unit-group { margin-bottom: 8px; }
+  .unit-header {
+    padding: 8px 18px;
+    font-family: 'Syne', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-dim);
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .unit-header .unit-pill {
+    background: var(--accent);
+    color: #000;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 9px;
+  }
+  .nav-item {
+    display: block;
+    padding: 7px 18px 7px 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    line-height: 1.4;
+  }
+  .nav-item:hover { color: var(--text-bright); background: rgba(232,168,66,0.06); }
+  .nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(232,168,66,0.08); }
+
+  /* ─── MAIN ─── */
+  main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    max-width: calc(100vw - var(--sidebar-w));
+    padding: 48px 56px;
+  }
+
+  /* ─── UNIT SECTIONS ─── */
+  .unit-section {
+    margin-bottom: 80px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.5s forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .unit-section:nth-child(1) { animation-delay: 0.05s; }
+  .unit-section:nth-child(2) { animation-delay: 0.15s; }
+  .unit-section:nth-child(3) { animation-delay: 0.25s; }
+  .unit-section:nth-child(4) { animation-delay: 0.35s; }
+  .unit-section:nth-child(5) { animation-delay: 0.45s; }
+  .unit-section:nth-child(6) { animation-delay: 0.55s; }
+  .unit-section:nth-child(7) { animation-delay: 0.65s; }
+
+  .unit-banner {
+    display: flex; align-items: center; gap: 20px;
+    padding: 28px 32px;
+    background: linear-gradient(135deg, var(--card) 0%, rgba(91,141,238,0.06) 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 36px;
+    position: relative; overflow: hidden;
+  }
+  .unit-banner::before {
+    content: '';
+    position: absolute; top: 0; left: 0; bottom: 0; width: 4px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent2));
+    border-radius: 4px 0 0 4px;
+  }
+  .unit-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 42px; font-weight: 800;
+    color: var(--accent);
+    opacity: 0.15;
+    line-height: 1;
+  }
+  .unit-meta { flex: 1; }
+  .unit-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 4px;
+  }
+  .unit-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px; font-weight: 700;
+    color: var(--text-bright);
+    line-height: 1.2;
+  }
+  .unit-topic {
+    font-size: 14px; color: var(--text-dim);
+    margin-top: 6px; font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ─── TOPIC SECTIONS ─── */
+  .topic-section { margin-bottom: 48px; }
+  .topic-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px; font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+    scroll-margin-top: 80px;
+  }
+  .topic-title::before {
+    content: '';
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  h3.sub-heading {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px; font-weight: 600;
+    color: var(--accent2);
+    margin: 24px 0 10px;
+  }
+
+  p { margin-bottom: 14px; }
+
+  ul, ol { margin: 12px 0 16px 24px; }
+  li { margin-bottom: 6px; }
+  li strong { color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 0.9em; }
+
+  /* ─── CODE BLOCKS ─── */
+  .code-block {
+    margin: 20px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--code-bg);
+  }
+  .code-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid var(--border);
+  }
+  .code-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .code-actions { display: flex; gap: 8px; align-items: center; }
+  .btn-copy, .btn-run {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 5px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+  .btn-copy {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text-dim);
+  }
+  .btn-copy:hover { border-color: var(--text-dim); color: var(--text-bright); }
+  .btn-copy.copied { border-color: var(--accent3); color: var(--accent3); }
+  .btn-run {
+    background: rgba(232,168,66,0.12);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .btn-run:hover { background: var(--accent); color: #000; }
+
+  pre {
+    padding: 20px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    tab-size: 4;
+  }
+  pre::-webkit-scrollbar { height: 4px; }
+  pre::-webkit-scrollbar-track { background: transparent; }
+  pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* Syntax highlighting classes */
+  .kw { color: var(--keyword); }
+  .str { color: var(--string); }
+  .cmt { color: var(--comment); font-style: italic; }
+  .num { color: var(--number); }
+  .fn { color: var(--fn); }
+  .ty { color: var(--type); }
+  .pp { color: #e06c75; }
+  .op { color: #abb2bf; }
+
+  /* ─── CALLOUTS ─── */
+  .callout {
+    margin: 20px 0;
+    padding: 16px 20px;
+    border-radius: 8px;
+    border-left: 3px solid;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .callout.info { border-color: var(--accent2); background: rgba(91,141,238,0.08); }
+  .callout.warn { border-color: var(--accent); background: rgba(232,168,66,0.08); }
+  .callout.tip { border-color: var(--accent3); background: rgba(110,226,160,0.08); }
+  .callout.danger { border-color: #e06c75; background: rgba(224,108,117,0.08); }
+  .callout-title {
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .callout.info .callout-title { color: var(--accent2); }
+  .callout.warn .callout-title { color: var(--accent); }
+  .callout.tip .callout-title { color: var(--accent3); }
+  .callout.danger .callout-title { color: #e06c75; }
+
+  /* ─── TABLE ─── */
+  .table-wrap { overflow-x: auto; margin: 20px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th {
+    background: var(--card);
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); border: 1px solid var(--border);
+  }
+  td { padding: 9px 14px; border: 1px solid var(--border); color: var(--text); }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+  /* ─── INLINE CODE ─── */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.83em;
+    background: rgba(232,168,66,0.1);
+    color: var(--accent);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  /* ─── COMPILER BUTTON ─── */
+  #compiler-btn {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 24px rgba(232,168,66,0.4);
+    z-index: 150;
+    transition: all 0.2s;
+  }
+  #compiler-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 32px rgba(232,168,66,0.6);
+  }
+  #compiler-btn svg { color: #000; }
+  .compiler-tooltip {
+    position: fixed;
+    bottom: 92px; right: 28px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--accent);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0; transform: translateY(6px);
+    transition: all 0.2s;
+    z-index: 150;
+  }
+  #compiler-btn:hover + .compiler-tooltip { opacity: 1; transform: translateY(0); }
+
+  /* ─── COMPILER MODAL ─── */
+  .compiler-modal {
+    display: none;
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    align-items: center; justify-content: center;
+  }
+  .compiler-modal.open { display: flex; }
+  .compiler-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    width: min(900px, 95vw);
+    max-height: 90vh;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+  }
+  .compiler-titlebar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+  }
+  .compiler-titlebar-left { display: flex; align-items: center; gap: 12px; }
+  .compiler-titlebar h3 {
+    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+    color: var(--text-bright);
+  }
+  .lang-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 600;
+    background: rgba(232,168,66,0.15);
+    color: var(--accent);
+    padding: 2px 8px; border-radius: 4px;
+  }
+  .compiler-close {
+    background: none; border: none; cursor: pointer;
+    color: var(--text-dim); transition: color 0.2s;
+  }
+  .compiler-close:hover { color: var(--text-bright); }
+  .compiler-body { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+  .compiler-editor-wrap { flex: 1; position: relative; min-height: 320px; }
+  #compiler-editor {
+    width: 100%; height: 100%;
+    min-height: 320px;
+    background: var(--code-bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    padding: 16px 20px;
+    border: none; outline: none; resize: none;
+    tab-size: 4;
+    border-bottom: 1px solid var(--border);
+  }
+  .compiler-controls {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid var(--border);
+  }
+  .btn-compile {
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+    background: var(--accent); color: #000;
+    border: none; border-radius: 7px;
+    padding: 8px 18px; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-compile:hover { background: #f0c060; }
+  .btn-compile:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-clear-editor {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--text-dim); border-radius: 6px;
+    padding: 6px 12px; cursor: pointer; transition: all 0.15s;
+  }
+  .btn-clear-editor:hover { border-color: var(--text-dim); color: var(--text-bright); }
+  .compile-status { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); }
+  .compile-status.running { color: var(--accent); }
+  .compile-status.error { color: #e06c75; }
+  .compile-status.ok { color: var(--accent3); }
+  .compiler-output-label {
+    padding: 8px 16px 4px;
+    font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  #compiler-output {
+    min-height: 120px; max-height: 200px;
+    overflow-y: auto;
+    padding: 12px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px; line-height: 1.7;
+    color: var(--accent3);
+    background: var(--code-bg);
+    white-space: pre-wrap;
+  }
+  #compiler-output.has-error { color: #e06c75; }
+  #compiler-output em { color: var(--text-dim); font-style: normal; }
+
+  /* ─── HIGHLIGHT ─── */
+  .highlight { background: rgba(232,168,66,0.25); border-radius: 3px; padding: 0 2px; }
+
+  /* ─── PROGRESS BAR ─── */
+  .progress {
+    position: fixed; top: var(--header-h); left: 0; right: 0; height: 2px;
+    background: var(--border); z-index: 99;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, var(--accent), var(--accent2));
+    width: 0;
+    transition: width 0.1s;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  main::-webkit-scrollbar { width: 6px; }
+  main::-webkit-scrollbar-track { background: transparent; }
+  main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* ─── BACK TO TOP ─── */
+  #back-top {
+    position: fixed; bottom: 28px; left: calc(var(--sidebar-w) + 28px);
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text-dim); font-family:'JetBrains Mono',monospace; font-size:11px;
+    padding: 6px 14px; border-radius: 6px; cursor: pointer;
+    transition: all 0.2s;
+    opacity: 0; pointer-events: none;
+    z-index: 50;
+  }
+  #back-top.visible { opacity: 1; pointer-events: auto; }
+  #back-top:hover { color: var(--accent); border-color: var(--accent); }
+
+  @media (max-width: 900px) {
+    aside { transform: translateX(-100%); transition: transform 0.3s; }
+    main { margin-left: 0; padding: 32px 24px; }
+    #back-top { left: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PROGRESS BAR -->
+<div class="progress"><div class="progress-bar" id="prog"></div></div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">UE25CS151B <span>/ PSC</span></div>
+  <div class="header-search" id="search-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search-input" placeholder="Search topics, keywords, examples…" autocomplete="off">
+  </div>
+  <div id="search-results" class="search-results-panel"></div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside>
+  <div class="unit-group">
+    <div class="unit-header"><span class="unit-pill">U1</span> Problem Solving Fundamentals</div>
+    <a class="nav-item active" href="#intro-c" onclick="setActive(this)">Intro to C & Features</a>
+    <a class="nav-item" href="#gcc" onclick="setActive(this)">GCC & PDLC</a>
+    <a class="nav-item" href="#program-structure" onclick="setActive(this)">Program Structure</a>
+    <a class="nav-item" href="#errors" onclick="setActive(this)">Errors & Warnings</a>
+    <a class="nav-item" href="#identifiers" onclick="setActive(this)">Identifiers & Keywords</a>
+    <a class="nav-item" href="#variables" onclick="setActive(this)">Variables & Data Types</a>
+    <a class="nav-item" href="#literals" onclick="setActive(this)">Literals & Ranges</a>
+    <a class="nav-item" href="#io" onclick="setActive(this)">Input / Output</a>
+    <a class="nav-item" href="#operators" onclick="setActive(this)">Operators</a>
+    <a class="nav-item" href="#expressions" onclick="setActive(this)">Expressions</a>
+    <a class="nav-item" href="#control" onclick="setActive(this)">Control Structures</a>
+    <a class="nav-item" href="#loops" onclick="setActive(this)">Loops (while / for / do-while)</a>
+    <a class="nav-item" href="#selection" onclick="setActive(this)">Selection (if / switch)</a>
+    <a class="nav-item" href="#problems" onclick="setActive(this)">Practice Problems</a>
+    <a class="nav-item" href="#char-io" onclick="setActive(this)">Char I/O & Word Count</a>
+    <a class="nav-item" href="#behaviors" onclick="setActive(this)">Language Behaviors</a>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main>
+
+<!-- ══════════ UNIT 1 BANNER ══════════ -->
+<div class="unit-section">
+  <div class="unit-banner">
+    <div class="unit-num">1</div>
+    <div class="unit-meta">
+      <div class="unit-label">Unit #1 · UE25CS151B</div>
+      <div class="unit-title">Problem Solving Fundamentals</div>
+      <div class="unit-topic">Introduction to C · GCC · Constructs · Operators · Control Structures</div>
+    </div>
+  </div>
+
+  <!-- ── INTRO TO C ── -->
+  <div class="topic-section" id="intro-c">
+    <div class="topic-title">Introduction to C &amp; C Features</div>
+
+    <h3 class="sub-heading">What is a Computer Programming Language (CPL)?</h3>
+    <p>A CPL is an artificial language used to control the behaviour of a machine. Like human languages, CPLs are defined through <strong>syntactic</strong> (structure) and <strong>semantic</strong> (meaning) rules. They allow us to give instructions to a computer in a language it understands and are used to implement algorithms.</p>
+
+    <h3 class="sub-heading">Levels of Programming Language</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Level</th><th>Description</th><th>Examples</th></tr>
+      <tr><td><strong>Low Level</strong></td><td>Binary codes, CPU executes directly. Programmer's responsibility is more.</td><td>Machine Language</td></tr>
+      <tr><td><strong>Middle Level</strong></td><td>Offers basic data structures and arrays; programmers handle operations.</td><td>C, C++</td></tr>
+      <tr><td><strong>High Level</strong></td><td>Programmer concentrates on algorithm; runtime handles details.</td><td>Java, Python, Pascal</td></tr>
+    </table></div>
+
+    <h3 class="sub-heading">Programming Paradigms</h3>
+    <ul>
+      <li><strong>Imperative</strong> – Explicit sequence of commands that update state. Example: Python</li>
+      <li><strong>Declarative</strong> – Specify the result, not how to get it. Example: SQL, LISP</li>
+      <li><strong>Structured</strong> – Clean, goto-free, nested control structures. Example: <em>C Language</em></li>
+      <li><strong>Procedural</strong> – Imperative with procedure calls. Example: <em>C Language</em></li>
+      <li><strong>Functional</strong> – Function calls that avoid global state. Example: Haskell, Scheme</li>
+      <li><strong>Object-Oriented</strong> – Objects with encapsulated state send messages. Example: Java, C++, Python</li>
+      <li><strong>Event-Driven</strong> – Emitters and listeners of asynchronous actions.</li>
+      <li><strong>Logic/Rule-based</strong> – Facts and rules; an engine infers answers.</li>
+    </ul>
+
+    <h3 class="sub-heading">Why Learn C?</h3>
+    <ul>
+      <li>C gives importance to <strong>efficiency</strong> — does exactly what the programmer asks, nothing more.</li>
+      <li>C is <strong>not very safe</strong>; safety is the programmer's responsibility.</li>
+      <li>C is the language of choice for <strong>operating systems, compilers, linkers, loaders, device drivers</strong>.</li>
+      <li>C is the language of choice for <strong>hardware-related software</strong>.</li>
+      <li>C is consistently ranked among the top languages on the <strong>TIOBE Index</strong> (updated monthly).</li>
+    </ul>
+
+    <h3 class="sub-heading">Brief History of C</h3>
+    <ul>
+      <li>1960s: Martin Richards developed <strong>BCPL</strong></li>
+      <li>Ken Thompson enhanced it into <strong>B</strong></li>
+      <li>1969–1973: <strong>Dennis Ritchie</strong> developed C at Bell Labs, closely tied to Unix OS</li>
+      <li>Standardized: <strong>ANSI C (C89)</strong> → C99 → C11 → C17 → C2x</li>
+    </ul>
+
+    <h3 class="sub-heading">Key Features of C</h3>
+    <ul>
+      <li><strong>Simple & Efficient</strong> – Basic syntax, easy to learn, widely used as an introductory language.</li>
+      <li><strong>Fast</strong> – Statically typed and compiler-based (unlike interpreted Python/Java).</li>
+      <li><strong>Portable</strong> – Machine-independent; code runs on various systems with minimal changes.</li>
+      <li><strong>Extensibility</strong> – Easily extend existing programs with new features.</li>
+      <li><strong>Function-Rich Libraries</strong> – Extensive built-in functions; user-defined functions can be added to libraries.</li>
+      <li><strong>Dynamic Memory Management</strong> – <code>malloc()</code>, <code>calloc()</code>, <code>realloc()</code>, <code>free()</code>.</li>
+      <li><strong>Modularity with Structured Language</strong> – Break code into functions stored in libraries for reuse.</li>
+      <li><strong>Mid-Level Language</strong> – Supports both low-level hardware manipulation and high-level programming.</li>
+      <li><strong>Pointers</strong> – Directly interact with memory, arrays, functions, and structures.</li>
+      <li><strong>Recursion</strong> – Functions can call themselves; enables code reusability and backtracking.</li>
+    </ul>
+
+    <h3 class="sub-heading">Applications of C</h3>
+    <ul>
+      <li><strong>Operating Systems</strong> – Unix (original OS written in C), Microsoft Windows, Android, Symbian</li>
+      <li><strong>GUI</strong> – Adobe Photoshop, Adobe Illustrator, Adobe Premiere</li>
+      <li><strong>Embedded Systems</strong> – Device drivers, microcontroller programming</li>
+      <li><strong>Financial Systems</strong> – Bloomberg real-time financial information</li>
+    </ul>
+  </div>
+
+  <!-- ── GCC ── -->
+  <div class="topic-section" id="gcc">
+    <div class="topic-title">Introduction to GCC &amp; Program Development Life Cycle</div>
+
+    <p><strong>GNU C Compiler (GCC)</strong> was originally authored by <strong>Richard Stallman</strong>, founder of the GNU Project (started 1984). First released in 1987 as the first portable ANSI C optimizing compiler released as free software. "GCC" now stands for <strong>GNU Compiler Collection</strong>, supporting C, C++, Fortran, ADA, Java, Objective-C, and more.</p>
+
+    <h3 class="sub-heading">Features of GCC</h3>
+    <ul>
+      <li>Portable — runs on most platforms, produces output for many processor types</li>
+      <li>Supports microcontrollers, DSPs, and 64-bit CPUs</li>
+      <li>Can <strong>cross-compile</strong> — produce executables for a different system than the one running GCC</li>
+      <li>Modular design — new languages and architectures can be added</li>
+      <li>Free software under <strong>GNU GPL</strong></li>
+    </ul>
+
+    <div class="callout info">
+      <div class="callout-title">Installation</div>
+      <strong>Windows:</strong> Install via <code>MinGW</code> — <a href="https://www.youtube.com/watch?v=sXW2VLrQ3Bs" style="color:var(--accent2)">Tutorial Link</a><br>
+      <strong>Linux/macOS:</strong> GCC available by default
+    </div>
+
+    <h3 class="sub-heading">Program Development Life Cycle (PDLC)</h3>
+    <p>Phases: <strong>Editing → Pre-processing → Compilation → Linking → Loading → Execution</strong></p>
+
+    <h3 class="sub-heading">1. Editing</h3>
+    <p>Enter and save the source program. Example: create <code>first.c</code></p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">first.c</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="cmt">// This is a comment — helps readability</span>
+    <span class="fn">printf</span>(<span class="str">"Hello Friends"</span>);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">2. Pre-Processing</h3>
+    <p>Tasks performed: <strong>(a)</strong> Macro substitution, <strong>(b)</strong> Comments stripped off, <strong>(c)</strong> Expansion of included files. The output is called a <em>translation unit</em>.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Pre-processing command</span></div>
+      <pre><span class="cmt"># No file created — output on stdout</span>
+$ gcc <span class="kw">-E</span> first.c</pre>
+    </div>
+    <div class="callout tip"><div class="callout-title">Observation</div>The original comment disappears (stripped). The <code>#include &lt;stdio.h&gt;</code> is replaced by the entire content of stdio.h.</div>
+
+    <h3 class="sub-heading">3. Compilation</h3>
+    <p>Converts source code into machine code (1s and 0s). Output is an <strong>object file</strong> (<code>.o</code>).</p>
+    <div class="code-block"><div class="code-header"><span class="code-title">Compile</span></div>
+    <pre>$ gcc <span class="kw">-c</span> first.c   <span class="cmt"># Creates first.o (object file)</span></pre></div>
+
+    <h3 class="sub-heading">4. Linking</h3>
+    <p>Combines one or more object files into one executable. Resolves external function definitions (e.g., <code>printf</code>). Output is <code>a.out</code> (Linux) or <code>a.exe</code> (Windows).</p>
+    <div class="code-block"><div class="code-header"><span class="code-title">Linking</span></div>
+    <pre>$ gcc first.o              <span class="cmt"># Creates a.out / a.exe</span>
+$ gcc first.o <span class="kw">-o</span> PESU    <span class="cmt"># Output file named PESU</span></pre></div>
+
+    <h3 class="sub-heading">5. Executing</h3>
+    <div class="code-block"><div class="code-header"><span class="code-title">Execute</span></div>
+    <pre><span class="cmt"># Windows</span>
+a.exe       <span class="cmt"># or</span>  PESU
+
+<span class="cmt"># Linux</span>
+./a.out     <span class="cmt"># or</span>  ./PESU</pre></div>
+  </div>
+
+  <!-- ── PROGRAM STRUCTURE ── -->
+  <div class="topic-section" id="program-structure">
+    <div class="topic-title">Characteristics &amp; Program Structure</div>
+
+    <h3 class="sub-heading">Key Characteristics of a C Program</h3>
+    <ul>
+      <li>C is <strong>case-sensitive</strong> — <code>Main</code> ≠ <code>main</code></li>
+      <li><strong>Free format source code</strong> — indentation doesn't affect logic, but should be used for readability</li>
+      <li>Every program has a well-defined entry point: <code>main()</code></li>
+      <li>Pre-processor directives start with <code>#</code></li>
+      <li>Each statement ends with a <strong>semicolon</strong> (<code>;</code>) — acts as statement terminator</li>
+      <li><code>main</code> returns <code>0</code> on success, non-zero on failure (by convention)</li>
+    </ul>
+
+    <h3 class="sub-heading">Program Sections</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Section</th><th>Mandatory?</th><th>Description</th></tr>
+      <tr><td>Documentation</td><td>Optional</td><td>Comments about the code (<code>//</code> or <code>/* */</code>)</td></tr>
+      <tr><td>Link Section</td><td>Usually needed</td><td><code>#include</code> directives for header files</td></tr>
+      <tr><td>Definition Section</td><td>Optional</td><td>Function definitions before calling them</td></tr>
+      <tr><td>Global Declaration</td><td>Optional</td><td>Global variables, function prototypes</td></tr>
+      <tr><td>Main Function</td><td><strong>Mandatory</strong></td><td>Entry point; has declaration + executable parts</td></tr>
+      <tr><td>Sub-program Section</td><td>Optional</td><td>User-defined functions (discussed in Unit 2)</td></tr>
+    </table></div>
+
+    <h3 class="sub-heading">Coding Example — Importance of Return Value in main</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">main.c — return value demo</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="fn">printf</span>(<span class="str">"welcome to main function in C"</span>);
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+<span class="cmt">// echo %ERRORLEVEL%   (Windows)
+// echo $?             (Linux) — should print 0 for success</span></pre>
+    </div>
+
+    <h3 class="sub-heading">Coding Example — C Standards Macro</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">C Standard Version Demo</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="fn">printf</span>(<span class="str">"C standard is %d\n"</span>, __STDC_VERSION__);
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+<span class="cmt">// gcc -std=c99  → Output: 199901
+// gcc -std=c11  → Output: 201112
+// gcc -std=c89  → Compile Error (macro unavailable)</span></pre>
+    </div>
+  </div>
+
+  <!-- ── ERRORS ── -->
+  <div class="topic-section" id="errors">
+    <div class="topic-title">Errors &amp; Warnings in C</div>
+
+    <div class="table-wrap"><table>
+      <tr><th>Error Type</th><th>When</th><th>Object File?</th><th>Executable?</th></tr>
+      <tr><td>Compile Time</td><td>Syntax violations, rules broken</td><td>❌ No</td><td>❌ No</td></tr>
+      <tr><td>Link Time</td><td>Compiled OK, but function definition mismatch</td><td>✅ Yes</td><td>❌ No</td></tr>
+      <tr><td>Run Time</td><td>Compiled & linked OK, fails during execution</td><td>✅ Yes</td><td>✅ Yes (crashes)</td></tr>
+      <tr><td>Logical</td><td>Program runs but wrong output</td><td>✅ Yes</td><td>✅ Yes (wrong result)</td></tr>
+    </table></div>
+
+    <h3 class="sub-heading">Compile Time Error Example</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Compile Error</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="fn">printf</span>(<span class="str">"hello friends)</span>;   <span class="cmt">// ERROR: missing closing " </span>
+    <span class="fn">printf</span>(<span class="str">"%d"</span>, <span class="num">12</span>/<span class="num">2</span>)    <span class="cmt">// ERROR: missing semicolon</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">Link Time Error Example</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Link Error — capital P in Printf</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    Printf(<span class="str">"hello friends"</span>);  <span class="cmt">// Link Error: Printf != printf</span>
+    <span class="fn">printf</span>(<span class="str">"%d"</span>, <span class="num">12</span>/<span class="num">2</span>);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">Run Time Error Example</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Runtime Error — divide by zero</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="fn">printf</span>(<span class="str">"hello friends"</span>);
+    <span class="fn">printf</span>(<span class="str">"%d"</span>, <span class="num">12</span>/<span class="num">0</span>);  <span class="cmt">// Runtime Error: division by zero</span>
+    <span class="fn">printf</span>(<span class="str">"bye friends"</span>);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">Logical Error Example</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Logical Error</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="fn">printf</span>(<span class="str">"%d"</span>, <span class="num">12</span>/<span class="num">21</span>);  <span class="cmt">// Typo: 21 instead of 2 → prints 0</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">Warnings — Why Enable -Wall?</h3>
+    <p>Warnings are diagnostic messages that report <em>potentially erroneous</em> but not immediately illegal code. Always compile with <code>-Wall</code>:</p>
+    <div class="callout warn">
+      <div class="callout-title">Common Warning-triggering Mistakes</div>
+      Forgetting to initialize a variable · Forgetting to return a value from a function · <code>printf</code>/<code>scanf</code> format string mismatches · Function used without prior declaration
+    </div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Warning Example — missing & in scanf</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> a;
+    <span class="fn">printf</span>(<span class="str">"enter the number\n"</span>);
+    <span class="fn">scanf</span>(<span class="str">"%d"</span>, a);      <span class="cmt">// Warning: should be &a (address of a)</span>
+    <span class="fn">printf</span>(<span class="str">"you entered %d\n"</span>, a);
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+<span class="cmt">// Without -Wall: no warning shown, but causes Runtime Error
+// With -Wall:    warning shown at compile time</span></pre>
+    </div>
+  </div>
+
+  <!-- ── IDENTIFIERS ── -->
+  <div class="topic-section" id="identifiers">
+    <div class="topic-title">Identifiers &amp; Keywords</div>
+
+    <h3 class="sub-heading">Tokens in C</h3>
+    <p>A token is any identifier, keyword, variable, constant, string literal, or symbol. For example, <code>printf("HelloFriends");</code> consists of 5 tokens: <code>printf</code>, <code>(</code>, <code>"HelloFriends"</code>, <code>)</code>, <code>;</code></p>
+
+    <h3 class="sub-heading">Identifiers</h3>
+    <p>A name used to identify a variable, function, or user-defined item. Rules:</p>
+    <ul>
+      <li>Starts with a letter (A–Z, a–z) or underscore (<code>_</code>)</li>
+      <li>Followed by zero or more letters, underscores, or digits (0–9)</li>
+      <li>Cannot use punctuation like <code>#</code>, <code>@</code>, <code>%</code></li>
+      <li>Case-sensitive: <code>Manpower</code> ≠ <code>manpower</code></li>
+      <li>Should not exceed 31 characters (some compilers)</li>
+    </ul>
+    <p>Valid examples: <code>_sum</code>, <code>stud_name</code>, <code>a_123</code>, <code>myname50</code>, <code>count123</code></p>
+
+    <h3 class="sub-heading">Keywords (32 in C)</h3>
+    <div class="callout info"><div class="callout-title">Keywords</div>
+    Keywords have special meaning in C and <strong>cannot</strong> be used as variable names. Examples: <code>int</code>, <code>float</code>, <code>char</code>, <code>double</code>, <code>void</code>, <code>return</code>, <code>if</code>, <code>else</code>, <code>while</code>, <code>for</code>, <code>do</code>, <code>switch</code>, <code>case</code>, <code>break</code>, <code>continue</code>, <code>goto</code>, <code>struct</code>, <code>union</code>, <code>typedef</code>, <code>sizeof</code>, <code>extern</code>, <code>static</code>, <code>auto</code>, <code>register</code>, <code>const</code>, <code>volatile</code>, <code>signed</code>, <code>unsigned</code>, <code>short</code>, <code>long</code>, <code>enum</code>, <code>default</code></div>
+  </div>
+
+  <!-- ── VARIABLES & DATA TYPES ── -->
+  <div class="topic-section" id="variables">
+    <div class="topic-title">Variables &amp; Data Types</div>
+
+    <h3 class="sub-heading">Variables</h3>
+    <p>A variable is a named storage area that programs can manipulate. It has a <strong>name</strong>, <strong>value</strong>, <strong>location</strong>, and <strong>type</strong>.</p>
+    <ul>
+      <li><strong>Declaration</strong> – Informs the compiler: name, type, optional initial value. In C, declaration and definition happen together (memory is allocated).</li>
+      <li><strong>Definition</strong> – Memory is allocated. In C, same as declaration (except with <code>extern</code>).</li>
+      <li><strong>Initialization</strong> – Assigning a value at the point of declaration. Uninitialized variables have <em>undefined values</em>.</li>
+    </ul>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Variable Examples</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button></div></div>
+      <pre><span class="ty">int</span> c <span class="op">=</span> <span class="num">100</span>;    <span class="cmt">// Declaration + initialization</span>
+<span class="ty">int</span> d;           <span class="cmt">// Undefined value — assign later</span>
+d <span class="op">=</span> <span class="num">300</span>;         <span class="cmt">// Assignment (assignment is an expression in C)</span>
+<span class="cmt">// int c = 200;  → Error: cannot re-declare in same scope</span>
+<span class="kw">extern</span> <span class="ty">int</span> a;   <span class="cmt">// Declaration only, no memory — discussed in Unit 5</span></pre>
+    </div>
+
+    <h3 class="sub-heading">Data Types</h3>
+    <p>A data type specifies the type of value stored and what operations can be applied. Significance:</p>
+    <ol>
+      <li>Memory allocation</li>
+      <li>Range of values allowed</li>
+      <li>Bound operations</li>
+      <li>Type of data to store</li>
+    </ol>
+    <div class="table-wrap"><table>
+      <tr><th>Category</th><th>Types</th></tr>
+      <tr><td><strong>Primary</strong></td><td><code>int</code>, <code>float</code>, <code>double</code>, <code>char</code>, <code>void</code></td></tr>
+      <tr><td><strong>Secondary (Derived)</strong></td><td>Arrays, Pointers, Structures, Unions</td></tr>
+      <tr><td><strong>Secondary (User-defined)</strong></td><td><code>typedef</code>, <code>enum</code></td></tr>
+    </table></div>
+
+    <h3 class="sub-heading">sizeof Operator</h3>
+    <p>A compile-time unary operator returning the size (in bytes) of a type or variable. Size is <strong>implementation-dependent</strong> — never assume <code>int</code> is 4 bytes!</p>
+    <div class="callout warn"><div class="callout-title">C Standard Size Rule</div>
+    <code>sizeof(short int) ≤ sizeof(int) ≤ sizeof(long int) ≤ sizeof(long long int) ≤ sizeof(float) ≤ sizeof(double) ≤ sizeof(long double)</code></div>
+  </div>
+
+  <!-- ── LITERALS ── -->
+  <div class="topic-section" id="literals">
+    <div class="topic-title">Literals &amp; Value Ranges</div>
+
+    <h3 class="sub-heading">Types of Literals</h3>
+    <div class="table-wrap"><table>
+      <tr><th>Literal</th><th>Description</th><th>Examples</th></tr>
+      <tr><td>Integer</td><td>Decimal, Octal (0-prefix), Hexadecimal (0x-prefix)</td><td><code>65</code>, <code>032</code>, <code>0xFE</code></td></tr>
+      <tr><td>Float</td><td>Decimal or Exponential form</td><td><code>9.5</code>, <code>3.45e12</code></td></tr>
+      <tr><td>Character</td><td>Single character in single quotes</td><td><code>'x'</code>, <code>'\n'</code>, <code>65</code> (='A')</td></tr>
+      <tr><td>String</td><td>Sequence of chars in double quotes (Unit 2)</td><td><code>"Hello"</code></td></tr>
+    </table></div>
+
+    <h3 class="sub-heading">Coding Example — Literals and Ranges</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Literals & limits.h</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="pp">#include</span><span class="str">&lt;limits.h&gt;</span>
+<span class="pp">#include</span><span class="str">&lt;float.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span>    a <span class="op">=</span> <span class="num">8</span>;
+    <span class="ty">char</span>   p <span class="op">=</span> <span class="str">'c'</span>;
+    <span class="ty">double</span> d <span class="op">=</span> <span class="num">89.7</span>;
+    <span class="ty">int</span>    e <span class="op">=</span> <span class="num">0113</span>;   <span class="cmt">// Octal literal</span>
+    <span class="ty">int</span>    h <span class="op">=</span> <span class="num">0xA</span>;    <span class="cmt">// Hex literal → 10</span>
+
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, CHAR_MAX);  <span class="cmt">// Max value of char</span>
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, INT_MAX);   <span class="cmt">// Max value of int</span>
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, INT_MIN);   <span class="cmt">// Min value of int</span>
+    <span class="fn">printf</span>(<span class="str">"%g\n"</span>, DBL_MAX);   <span class="cmt">// Max value of double</span>
+    <span class="fn">printf</span>(<span class="str">"%g\n"</span>, FLT_MAX);   <span class="cmt">// Max value of float</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+  </div>
+
+  <!-- ── I/O ── -->
+  <div class="topic-section" id="io">
+    <div class="topic-title">Input &amp; Output Functions in C</div>
+
+    <h3 class="sub-heading">Formatted Input — scanf</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">scanf syntax</span></div>
+      <pre><span class="ty">int</span> <span class="fn">scanf</span>(<span class="kw">const</span> <span class="ty">char</span> <span class="op">*</span>format, ...);</pre>
+    </div>
+    <ul>
+      <li>Returns <code>&gt;0</code> — items converted/assigned successfully</li>
+      <li>Returns <code>0</code> — no item assigned</li>
+      <li>Returns <code>&lt;0</code> — read error or EOF before any assignment</li>
+    </ul>
+
+    <div class="callout warn"><div class="callout-title">Important Rules</div>
+    Always use <code>&</code> (address operator) with primary type variables in scanf. Avoid escape sequences like <code>\n</code> inside scanf format strings — they cause scanf not to terminate properly.</div>
+
+    <h3 class="sub-heading">Unformatted Input — getchar</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Reading Characters</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">char</span> ch <span class="op">=</span> <span class="str">'p'</span>;
+    <span class="fn">printf</span>(<span class="str">"Ch is %c\n"</span>, ch);   <span class="cmt">// p</span>
+
+    <span class="cmt">/* Reading two chars
+    char x = getchar();
+    char y = getchar();
+    putchar(x);
+    putchar(y); */</span>
+
+    <span class="cmt">// If user enters P&lt;newline&gt;:
+    // x = 'P', y = '\n'
+    // Use fflush(stdin) [Windows] or fpurge(stdin) [Linux]
+    // between two getchar() calls to clear keyboard buffer</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+    <div class="callout info"><div class="callout-title">scanf vs getchar</div>
+    <strong>scanf / printf</strong>: Generic, handles multiple types. <strong>getchar / putchar</strong>: Not generic, reads/writes a single char — more efficient for character I/O.</div>
+  </div>
+
+  <!-- ── OPERATORS ── -->
+  <div class="topic-section" id="operators">
+    <div class="topic-title">Operators in C</div>
+
+    <div class="table-wrap"><table>
+      <tr><th>Category</th><th>Operators</th></tr>
+      <tr><td>Arithmetic</td><td><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code></td></tr>
+      <tr><td>Increment/Decrement</td><td><code>++</code>, <code>--</code> (pre and post)</td></tr>
+      <tr><td>Relational</td><td><code>==</code>, <code>!=</code>, <code>&gt;=</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&lt;</code></td></tr>
+      <tr><td>Logical</td><td><code>&amp;&amp;</code>, <code>||</code>, <code>!</code></td></tr>
+      <tr><td>Bitwise</td><td><code>&amp;</code>, <code>|</code>, <code>^</code>, <code>~</code>, <code>&gt;&gt;</code>, <code>&lt;&lt;</code></td></tr>
+      <tr><td>Assignment</td><td><code>=</code>, <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code></td></tr>
+      <tr><td>Ternary</td><td><code>? :</code></td></tr>
+      <tr><td>Address / Deref</td><td><code>&amp;</code>, <code>*</code></td></tr>
+      <tr><td>Misc</td><td><code>sizeof</code></td></tr>
+    </table></div>
+
+    <h3 class="sub-heading">Arithmetic Operators</h3>
+    <ul>
+      <li>Integer division: <code>25 / 4 = 6</code> (truncated)</li>
+      <li>Mixed types: <code>25.0 / 4 = 6.25</code> (double result)</li>
+      <li><code>%</code> is defined on integral types only</li>
+      <li>No exponentiation operator in C — use <code>pow()</code> from <code>&lt;math.h&gt;</code></li>
+    </ul>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Arithmetic Demo</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="fn">printf</span>(<span class="str">"%d %d %d %d\n"</span>, <span class="num">2</span><span class="op">+</span><span class="num">3</span>, <span class="num">4</span><span class="op">-</span><span class="num">2</span>, <span class="num">4</span><span class="op">*</span><span class="num">2</span>, <span class="num">5</span><span class="op">/</span><span class="num">2</span>);
+    <span class="cmt">// Output: 5 2 8 2</span>
+    <span class="fn">printf</span>(<span class="str">"%d %f %f %f\n"</span>, <span class="num">25</span><span class="op">/</span><span class="num">4</span>, <span class="num">25.0</span><span class="op">/</span><span class="num">4.0</span>, <span class="num">25.0</span><span class="op">/</span><span class="num">4</span>, <span class="num">25</span><span class="op">/</span><span class="num">4.0</span>);
+    <span class="cmt">// Output: 6  6.250000  6.250000  6.250000</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">Increment &amp; Decrement Operators</h3>
+    <ul>
+      <li><strong>Pre (<code>++i</code>)</strong> — increment first, then use the value</li>
+      <li><strong>Post (<code>i++</code>)</strong> — use the value first, then increment</li>
+    </ul>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Pre vs Post Increment</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> a <span class="op">=</span> <span class="num">34</span>, b;
+    b <span class="op">=</span> a<span class="op">++</span>;   <span class="cmt">// b = 34, a becomes 35 (post)</span>
+    <span class="fn">printf</span>(<span class="str">"b=%d a=%d\n"</span>, b, a);
+
+    a <span class="op">=</span> <span class="num">34</span>;
+    b <span class="op">=</span> <span class="op">++</span>a;   <span class="cmt">// a becomes 35, b = 35 (pre)</span>
+    <span class="fn">printf</span>(<span class="str">"b=%d a=%d\n"</span>, b, a);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">Bitwise Operators</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Bitwise Demo</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> a<span class="op">=</span><span class="num">10</span>, b<span class="op">=</span><span class="num">8</span>;
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, a<span class="op">&amp;</span>b);    <span class="cmt">// AND  = 8</span>
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, a<span class="op">|</span>b);    <span class="cmt">// OR   = 10</span>
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, a<span class="op">&lt;&lt;</span><span class="num">2</span>);   <span class="cmt">// Left shift  = 40 (multiply by 4)</span>
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, a<span class="op">&gt;&gt;</span><span class="num">2</span>);   <span class="cmt">// Right shift = 2  (divide by 4)</span>
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, <span class="op">~</span><span class="num">10</span>);     <span class="cmt">// NOT = -11</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+    <h3 class="sub-heading">Useful Bitwise Tricks</h3>
+    <div class="code-block"><div class="code-header"><span class="code-title">Bit Tricks</span></div>
+    <pre><span class="cmt">// Multiply n by 2</span>   n <span class="op">&lt;&lt;</span> <span class="num">1</span>
+<span class="cmt">// Check if n is odd</span> n <span class="op">&amp;</span> <span class="num">1</span>
+<span class="cmt">// Swap a and b (XOR)</span>
+a <span class="op">=</span> a <span class="op">^</span> b;  b <span class="op">=</span> a <span class="op">^</span> b;  a <span class="op">=</span> a <span class="op">^</span> b;
+<span class="cmt">// Check if ith bit in n is set</span>  n <span class="op">&amp;</span> (<span class="num">1</span> <span class="op">&lt;&lt;</span> i)
+<span class="cmt">// Set ith bit</span>   n <span class="op">=</span> n <span class="op">|</span> <span class="num">1</span> <span class="op">&lt;&lt;</span> i
+<span class="cmt">// Clear ith bit</span> n <span class="op">=</span> n <span class="op">&amp;</span> <span class="op">~</span>(<span class="num">1</span> <span class="op">&lt;&lt;</span> i)</pre></div>
+
+    <h3 class="sub-heading">Ternary Operator</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Ternary / Conditional Operator</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> a<span class="op">=</span><span class="num">10</span>, b<span class="op">=</span><span class="num">20</span>;
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, (a<span class="op">&gt;</span>b) <span class="op">?</span> a <span class="op">:</span> b);   <span class="cmt">// 20 (larger of two)</span>
+    (a<span class="op">&gt;</span>b) <span class="op">?</span> <span class="fn">printf</span>(<span class="str">"%d"</span>,a) <span class="op">:</span> <span class="fn">printf</span>(<span class="str">"%d"</span>,b);  <span class="cmt">// 20</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">Sequence Points &amp; Short-circuit Evaluation</h3>
+    <p>Sequence points guarantee all side effects of prior evaluations are complete. Basic sequence points in C: <code>&amp;&amp;</code>, <code>||</code>, <code>?:</code>, <code>,</code>, and the expression of a <code>while</code> loop.</p>
+    <div class="callout danger"><div class="callout-title">Undefined Behavior Warning</div>
+    <code>a + a++</code> is <strong>undefined</strong> — the value of the left <code>a</code> is not defined relative to the increment.<br>
+    <code>b = a * a++</code> is <strong>undefined</strong> — value of leftmost <code>a</code> depends on compiler. Don't write this!</div>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Short-circuit / Sequence Point Demo</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> a <span class="op">=</span> <span class="num">11</span>;
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, a<span class="op">++</span><span class="op">==</span><span class="num">12</span> <span class="op">||</span> a<span class="op">==</span><span class="num">12</span>);  <span class="cmt">// 1 (true)</span>
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, a);                    <span class="cmt">// 12</span>
+    <span class="cmt">// a++ returns 11 (false), but a becomes 12 at ||
+    // Then a==12 is true → overall true</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+  </div>
+
+  <!-- ── EXPRESSIONS ── -->
+  <div class="topic-section" id="expressions">
+    <div class="topic-title">Expressions in C</div>
+
+    <div class="table-wrap"><table>
+      <tr><th>Expression Type</th><th>Description</th><th>Example</th></tr>
+      <tr><td>Infix</td><td>Operator between operands</td><td><code>a = x + y</code></td></tr>
+      <tr><td>Postfix</td><td>Operator after operands</td><td><code>xy+</code></td></tr>
+      <tr><td>Prefix</td><td>Operator before operands</td><td><code>+xy</code></td></tr>
+      <tr><td>Arithmetic</td><td>Uses <code>+ - * /</code></td><td><code>a + b * c</code></td></tr>
+      <tr><td>Relational</td><td>Uses <code>&gt; &lt; == !=</code></td><td><code>a &gt; b</code></td></tr>
+      <tr><td>Logical</td><td>Uses <code>&amp;&amp; || !</code></td><td><code>a &gt; 0 &amp;&amp; b &gt; 0</code></td></tr>
+      <tr><td>Pointer</td><td>Uses <code>&amp;</code></td><td><code>&amp;a</code></td></tr>
+      <tr><td>Bitwise</td><td>Uses <code>&gt;&gt; &lt;&lt; ~ &amp; | ^</code></td><td><code>a &amp; 1</code></td></tr>
+    </table></div>
+    <div class="callout info"><div class="callout-title">Operator Precedence</div>
+    Evaluation of operators follows <strong>precedence</strong> rules. When precedence is equal, <strong>associativity</strong> determines order. See: <a href="http://web.cse.ohio-state.edu/~babic.1/COperatorPrecedenceTable.pdf" style="color:var(--accent2)" target="_blank">C Operator Precedence Table</a></div>
+  </div>
+
+  <!-- ── CONTROL STRUCTURES ── -->
+  <div class="topic-section" id="control">
+    <div class="topic-title">Control Structures Overview</div>
+    <div class="table-wrap"><table>
+      <tr><th>Category</th><th>Statements</th></tr>
+      <tr><td>Looping</td><td><code>while</code>, <code>for</code>, <code>do...while</code></td></tr>
+      <tr><td>Selection</td><td><code>if</code>, <code>if-else</code>, nested <code>if-else</code>, <code>else if</code>, <code>switch</code></td></tr>
+      <tr><td>Unconditional</td><td><code>goto</code>, <code>break</code>, <code>continue</code>, <code>return</code></td></tr>
+    </table></div>
+  </div>
+
+  <!-- ── LOOPS ── -->
+  <div class="topic-section" id="loops">
+    <div class="topic-title">Looping Constructs</div>
+
+    <h3 class="sub-heading">while Loop</h3>
+    <p>Pre-tested loop — body executes 0 or more times. The expression is a sequence point.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">while — Display n to 0 (various versions)</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> n <span class="op">=</span> <span class="num">5</span>;
+
+    <span class="cmt">// Version 3: Recommended — clear + indented + block</span>
+    <span class="kw">while</span>(n)
+    {
+        <span class="fn">printf</span>(<span class="str">"%d "</span>, n);   <span class="cmt">// 5 4 3 2 1</span>
+        n <span class="op">=</span> n <span class="op">-</span> <span class="num">1</span>;
+    }
+
+    <span class="cmt">// Version 4: Post-decrement in loop body</span>
+    n <span class="op">=</span> <span class="num">5</span>;
+    <span class="kw">while</span>(n) <span class="fn">printf</span>(<span class="str">"%d "</span>, n<span class="op">--</span>);   <span class="cmt">// 5 4 3 2 1</span>
+
+    <span class="cmt">// Version 5: Pre-decrement in loop body</span>
+    n <span class="op">=</span> <span class="num">5</span>;
+    <span class="kw">while</span>(n) <span class="fn">printf</span>(<span class="str">"%d "</span>, <span class="op">--</span>n);   <span class="cmt">// 4 3 2 1 0</span>
+
+    <span class="cmt">// Version 6: Post-decrement in condition (sequence point)</span>
+    n <span class="op">=</span> <span class="num">5</span>;
+    <span class="kw">while</span>(n<span class="op">--</span>) <span class="fn">printf</span>(<span class="str">"%d "</span>, n);   <span class="cmt">// 4 3 2 1 0 (n already decremented)</span>
+
+    <span class="cmt">// Version 7: Pre-decrement in condition</span>
+    n <span class="op">=</span> <span class="num">5</span>;
+    <span class="kw">while</span>(<span class="op">--</span>n) <span class="fn">printf</span>(<span class="str">"%d "</span>, n);   <span class="cmt">// 4 3 2 1 (n-1 iterations)</span>
+
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">for Loop</h3>
+    <p>for loop is <strong>isomorphic</strong> with while — same semantics, different style. Best when there is clear initialization, condition, and modification.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">for — Sum 1 to n</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> n <span class="op">=</span> <span class="num">10</span>;
+    <span class="ty">int</span> sum <span class="op">=</span> <span class="num">0</span>;
+    <span class="cmt">// for(init; condition; modification)</span>
+    <span class="kw">for</span>(<span class="ty">int</span> i <span class="op">=</span> <span class="num">1</span>; i <span class="op">&lt;=</span> n; <span class="op">++</span>i)
+    {
+        sum <span class="op">+=</span> i;   <span class="cmt">// sum = sum + i</span>
+    }
+    <span class="fn">printf</span>(<span class="str">"Sum = %d\n"</span>, sum);  <span class="cmt">// 55</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">do...while Loop</h3>
+    <p>Bottom-tested loop — body always executes <strong>at least once</strong>. Useful when you need to perform the action first and then check the condition.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">do-while — Digital Root</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> n <span class="op">=</span> <span class="num">493</span>;
+    <span class="ty">int</span> s;
+    <span class="cmt">// Digital root: keep summing digits until single digit</span>
+    <span class="kw">do</span>
+    {
+        <span class="kw">for</span>(s <span class="op">=</span> <span class="num">0</span>; n; n <span class="op">/=</span> <span class="num">10</span>)
+            s <span class="op">+=</span> n <span class="op">%</span> <span class="num">10</span>;
+        n <span class="op">=</span> s;
+    } <span class="kw">while</span>(s <span class="op">&gt;</span> <span class="num">9</span>);
+
+    <span class="fn">printf</span>(<span class="str">"Digital root = %d\n"</span>, s);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+  </div>
+
+  <!-- ── SELECTION ── -->
+  <div class="topic-section" id="selection">
+    <div class="topic-title">Selection Statements</div>
+
+    <h3 class="sub-heading">if / if-else</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Triangle Classification</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> a, b, c, count <span class="op">=</span> <span class="num">0</span>;
+    <span class="fn">scanf</span>(<span class="str">"%d%d%d"</span>, <span class="op">&amp;</span>a, <span class="op">&amp;</span>b, <span class="op">&amp;</span>c);
+    <span class="kw">if</span>(a <span class="op">==</span> b) <span class="op">++</span>count;
+    <span class="kw">if</span>(b <span class="op">==</span> c) <span class="op">++</span>count;
+    <span class="kw">if</span>(c <span class="op">==</span> a) <span class="op">++</span>count;
+    <span class="cmt">// count 0 = scalene, 3 = equilateral, 1 = isosceles</span>
+
+    <span class="kw">switch</span>(count)
+    {
+        <span class="kw">case</span> <span class="num">0</span>: <span class="fn">printf</span>(<span class="str">"Scalene\n"</span>);       <span class="kw">break</span>;
+        <span class="kw">case</span> <span class="num">1</span>: <span class="fn">printf</span>(<span class="str">"Isosceles\n"</span>);     <span class="kw">break</span>;
+        <span class="kw">case</span> <span class="num">3</span>: <span class="fn">printf</span>(<span class="str">"Equilateral\n"</span>);   <span class="kw">break</span>;
+        <span class="kw">default</span>: <span class="fn">printf</span>(<span class="str">"Invalid\n"</span>);     <span class="kw">break</span>;
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">switch Statement</h3>
+    <p>Use when comparing an <strong>integer/char variable</strong> against <strong>constants</strong> with <strong>equality checks</strong>. The <strong>rule of C: "break if switch"</strong> — without <code>break</code>, execution falls through to next case.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Vowel Check using switch</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">char</span> ch <span class="op">=</span> <span class="fn">getchar</span>();
+    <span class="kw">switch</span>(ch)
+    {
+        <span class="kw">case</span> <span class="str">'a'</span>: <span class="kw">case</span> <span class="str">'A'</span>:
+        <span class="kw">case</span> <span class="str">'e'</span>: <span class="kw">case</span> <span class="str">'E'</span>:
+        <span class="kw">case</span> <span class="str">'i'</span>:
+        <span class="kw">case</span> <span class="str">'o'</span>:
+        <span class="kw">case</span> <span class="str">'u'</span>:
+            <span class="fn">printf</span>(<span class="str">"Vowel\n"</span>); <span class="kw">break</span>;
+        <span class="kw">default</span>:
+            <span class="fn">printf</span>(<span class="str">"Not a vowel\n"</span>);
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">Nested Control Structures — Armstrong Numbers</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Armstrong Numbers 0–999</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> h, t, u, hc, tc, uc, sum, number;
+    <span class="kw">for</span>(h <span class="op">=</span> <span class="num">0</span>; h <span class="op">&lt;</span> <span class="num">10</span>; h<span class="op">++</span>)
+    {
+        hc <span class="op">=</span> h<span class="op">*</span>h<span class="op">*</span>h;  <span class="cmt">// cube of hundreds digit (computed once per h)</span>
+        <span class="kw">for</span>(t <span class="op">=</span> <span class="num">0</span>; t <span class="op">&lt;</span> <span class="num">10</span>; t<span class="op">++</span>)
+        {
+            tc <span class="op">=</span> t<span class="op">*</span>t<span class="op">*</span>t;  <span class="cmt">// computed once per t</span>
+            <span class="kw">for</span>(u <span class="op">=</span> <span class="num">0</span>; u <span class="op">&lt;</span> <span class="num">10</span>; u<span class="op">++</span>)
+            {
+                uc <span class="op">=</span> u<span class="op">*</span>u<span class="op">*</span>u;
+                sum <span class="op">=</span> hc <span class="op">+</span> tc <span class="op">+</span> uc;
+                number <span class="op">=</span> h<span class="op">*</span><span class="num">100</span> <span class="op">+</span> t<span class="op">*</span><span class="num">10</span> <span class="op">+</span> u;
+                <span class="kw">if</span>(number <span class="op">==</span> sum)
+                    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, number);
+            }
+        }
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+<span class="cmt">// Armstrong numbers: 0,1,153,370,371,407</span></pre>
+    </div>
+  </div>
+
+  <!-- ── PRACTICE PROBLEMS ── -->
+  <div class="topic-section" id="problems">
+    <div class="topic-title">Practice Problems &amp; Solutions</div>
+
+    <h3 class="sub-heading">Problem 1 — Tunnel Box Check</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Tunnel Height Check</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> h, w, l;
+    <span class="fn">printf</span>(<span class="str">"Enter length, width, height: "</span>);
+    <span class="fn">scanf</span>(<span class="str">"%d %d %d"</span>, <span class="op">&amp;</span>l, <span class="op">&amp;</span>w, <span class="op">&amp;</span>h);
+    <span class="kw">if</span>(h <span class="op">&gt;=</span> <span class="num">41</span>)
+        <span class="fn">printf</span>(<span class="str">"Can't pass!\n"</span>);
+    <span class="kw">else</span>
+        <span class="fn">printf</span>(<span class="str">"Volume = %d\n"</span>, l<span class="op">*</span>w<span class="op">*</span>h);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">Problem 3 — Divisibility by Sum of Digits</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Sum of Digits Divisibility</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> n, temp, sum <span class="op">=</span> <span class="num">0</span>;
+    <span class="fn">printf</span>(<span class="str">"Enter a number: "</span>);
+    <span class="fn">scanf</span>(<span class="str">"%d"</span>, <span class="op">&amp;</span>n);
+    <span class="kw">if</span>(n <span class="op">&lt;=</span> <span class="num">0</span>) { <span class="fn">printf</span>(<span class="str">"Invalid\n"</span>); <span class="kw">return</span> <span class="num">1</span>; }
+    temp <span class="op">=</span> n;
+    <span class="kw">while</span>(n) { sum <span class="op">+=</span> n <span class="op">%</span> <span class="num">10</span>; n <span class="op">/=</span> <span class="num">10</span>; }
+    <span class="fn">printf</span>((temp <span class="op">%</span> sum <span class="op">==</span> <span class="num">0</span>) <span class="op">?</span> <span class="str">"Divisible\n"</span> <span class="op">:</span> <span class="str">"Not Divisible\n"</span>);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">Problem 4 — Course Admission Eligibility</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Admission Eligibility</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> p, c, m;
+    <span class="fn">scanf</span>(<span class="str">"%d %d %d"</span>, <span class="op">&amp;</span>p, <span class="op">&amp;</span>c, <span class="op">&amp;</span>m);
+    <span class="ty">int</span> total <span class="op">=</span> m <span class="op">+</span> p <span class="op">+</span> c;
+    <span class="ty">int</span> math_phy <span class="op">=</span> m <span class="op">+</span> p;
+    <span class="kw">if</span>(m<span class="op">&gt;=</span><span class="num">65</span> <span class="op">&amp;&amp;</span> p<span class="op">&gt;=</span><span class="num">50</span> <span class="op">&amp;&amp;</span> c<span class="op">&gt;=</span><span class="num">55</span> <span class="op">&amp;&amp;</span> (total<span class="op">&gt;=</span><span class="num">190</span> <span class="op">||</span> math_phy<span class="op">&gt;=</span><span class="num">140</span>))
+        <span class="fn">printf</span>(<span class="str">"Eligible\n"</span>);
+    <span class="kw">else</span>
+        <span class="fn">printf</span>(<span class="str">"Not Eligible\n"</span>);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <h3 class="sub-heading">Problem 5 — Reverse Bits of Integer</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Reverse Bits</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> n, rev_bits <span class="op">=</span> <span class="num">0</span>;
+    <span class="fn">scanf</span>(<span class="str">"%d"</span>, <span class="op">&amp;</span>n);
+    <span class="kw">while</span>(n <span class="op">&gt;</span> <span class="num">0</span>)
+    {
+        rev_bits <span class="op">&lt;&lt;=</span> <span class="num">1</span>;
+        <span class="kw">if</span>(n <span class="op">&amp;</span> <span class="num">1</span>) rev_bits <span class="op">^=</span> <span class="num">1</span>;
+        n <span class="op">&gt;&gt;=</span> <span class="num">1</span>;
+    }
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, rev_bits);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+  </div>
+
+  <!-- ── CHAR I/O WORD COUNT ── -->
+  <div class="topic-section" id="char-io">
+    <div class="topic-title">Single Character I/O &amp; Word Count Problem</div>
+
+    <p>Goal: Simulate the Unix <code>wc</code> command — count <strong>characters</strong>, <strong>words</strong>, and <strong>lines</strong> from user input or a file (using input redirection).</p>
+    <div class="callout info"><div class="callout-title">Input Redirection</div>
+    <code>$ ./a.out &lt; filename</code> — OS opens the file and makes it available as keyboard input to the program.</div>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Reading till EOF</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="cmt">// EOF is a macro in stdio.h with value -1</span>
+    <span class="ty">char</span> ch;
+    <span class="kw">while</span>((ch <span class="op">=</span> <span class="fn">getchar</span>()) <span class="op">!=</span> EOF)
+        <span class="fn">putchar</span>(ch);   <span class="cmt">// Echo everything until EOF</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Word Count — Basic Version</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">char</span> ch;
+    <span class="ty">int</span> nl <span class="op">=</span> <span class="num">0</span>, nw <span class="op">=</span> <span class="num">0</span>, nc <span class="op">=</span> <span class="num">0</span>;
+    <span class="kw">while</span>((ch <span class="op">=</span> <span class="fn">getchar</span>()) <span class="op">!=</span> EOF)
+    {
+        nc<span class="op">++</span>;
+        <span class="kw">if</span>(ch <span class="op">==</span> <span class="str">'\n'</span>) nl<span class="op">++</span>;
+        <span class="kw">if</span>(ch <span class="op">==</span> <span class="str">' '</span> <span class="op">||</span> ch <span class="op">==</span> <span class="str">'\t'</span> <span class="op">||</span> ch <span class="op">==</span> <span class="str">'\n'</span>) nw<span class="op">++</span>;
+    }
+    <span class="fn">printf</span>(<span class="str">"words=%d lines=%d chars=%d\n"</span>, nw, nl, nc);
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+<span class="cmt">// Issue: multiple spaces/newlines each increment word count</span></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">Word Count — Improved (with inword flag)</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run" onclick="runInCompiler(this)">▶ Run</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="ty">int</span> inword <span class="op">=</span> <span class="num">0</span>, nl <span class="op">=</span> <span class="num">0</span>, nw <span class="op">=</span> <span class="num">0</span>, nc <span class="op">=</span> <span class="num">0</span>;
+    <span class="ty">char</span> ch;
+    <span class="kw">while</span>((ch <span class="op">=</span> <span class="fn">getchar</span>()) <span class="op">!=</span> EOF)
+    {
+        nc<span class="op">++</span>;
+        <span class="kw">if</span>(ch <span class="op">==</span> <span class="str">'\n'</span>) nl<span class="op">++</span>;
+        <span class="kw">if</span>(inword <span class="op">&amp;&amp;</span> (ch<span class="op">==</span><span class="str">' '</span> <span class="op">||</span> ch<span class="op">==</span><span class="str">'\n'</span> <span class="op">||</span> ch<span class="op">==</span><span class="str">'\t'</span>))
+        {
+            nw<span class="op">++</span>;
+            inword <span class="op">=</span> <span class="num">0</span>;
+        }
+        <span class="kw">else</span> <span class="kw">if</span>(!(ch<span class="op">==</span><span class="str">' '</span> <span class="op">||</span> ch<span class="op">==</span><span class="str">'\n'</span> <span class="op">||</span> ch<span class="op">==</span><span class="str">'\t'</span>))
+            inword <span class="op">=</span> <span class="num">1</span>;
+    }
+    <span class="fn">printf</span>(<span class="str">"words=%d lines=%d chars=%d\n"</span>, nw, nl, nc);
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+<span class="cmt">// Fixed: multiple spaces/newlines don't inflate word count</span></pre>
+    </div>
+  </div>
+
+  <!-- ── BEHAVIORS ── -->
+  <div class="topic-section" id="behaviors">
+    <div class="topic-title">Language Specifications &amp; Behaviors</div>
+
+    <p>A language specification describes how a compiler/interpreter should react to various inputs. C standards define four types of behavior:</p>
+    <div class="table-wrap"><table>
+      <tr><th>Behavior Type</th><th>Description</th><th>Example</th></tr>
+      <tr><td><strong>Locale-specific</strong></td><td>Depends on C library implementation</td><td>Character classification</td></tr>
+      <tr><td><strong>Unspecified</strong></td><td>Multiple valid behaviors; not required to be consistent</td><td>Order of argument evaluation in <code>printf</code></td></tr>
+      <tr><td><strong>Implementation-defined</strong></td><td>Behavior documented by each compiler</td><td>Size of <code>int</code></td></tr>
+      <tr><td><strong>Undefined</strong></td><td>No requirements — may crash, compile error, or wrong output</td><td>Division by zero, array out-of-bounds</td></tr>
+    </table></div>
+
+    <div class="callout danger"><div class="callout-title">Undefined Behavior</div>
+    The C standard imposes <strong>no requirements</strong> on undefined behavior. The program may fail to compile, crash, generate incorrect results, or coincidentally do what was intended. <strong>Never rely on UB!</strong></div>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-title">C Standard Behavior Demo</span><div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button></div></div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="ty">int</span> <span class="fn">main</span>()
+{
+    <span class="cmt">// printf("%d\n", 5/0);     // Undefined — division by zero</span>
+
+    <span class="cmt">// float a = 23.5;
+    // printf("a is %d\n",a); // Undefined — wrong format spec</span>
+
+    <span class="cmt">// printf("%u %u %u\n", sizeof(int), sizeof(short int), sizeof(float));
+    // → Implementation-defined behavior (sizes vary)</span>
+
+    <span class="ty">int</span> d <span class="op">=</span> <span class="num">10</span>;
+    <span class="fn">printf</span>(<span class="str">"%d %d %d\n"</span>, d<span class="op">++</span>, d<span class="op">++</span> <span class="op">-</span> <span class="op">--</span>d, <span class="op">--</span>d);
+    <span class="cmt">// Unspecified behavior — evaluation order of arguments not defined!</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <div class="callout tip"><div class="callout-title">Standardization Timeline</div>
+    de Jure = legally recognized standard (regardless of reality) · de Facto = exists in reality (regardless of legal recognition) · C: ANSI C89 → C99 → C11 → C17 → C2x</div>
+  </div>
+
+</div><!-- end unit-section -->
+
+</main>
+</div><!-- end layout -->
+
+<!-- ── COMPILER BUTTON ── -->
+<button id="compiler-btn" onclick="openCompiler()" title="Open C Compiler">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="16 18 22 12 16 6"></polyline>
+    <polyline points="8 6 2 12 8 18"></polyline>
+  </svg>
+</button>
+<div class="compiler-tooltip">C Compiler</div>
+
+<!-- ── COMPILER MODAL ── -->
+<div class="compiler-modal" id="compiler-modal" onclick="handleModalClick(event)">
+  <div class="compiler-box" onclick="event.stopPropagation()">
+    <div class="compiler-titlebar">
+      <div class="compiler-titlebar-left">
+        <h3>C Compiler</h3>
+        <span class="lang-badge">C / GCC</span>
+      </div>
+      <button class="compiler-close" onclick="closeCompiler()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="compiler-body">
+      <div class="compiler-editor-wrap">
+        <textarea id="compiler-editor" spellcheck="false" placeholder="Write your C code here…
+&#10;#include &lt;stdio.h&gt;&#10;int main() {&#10;    printf(&quot;Hello, World!\n&quot;);&#10;    return 0;&#10;}"></textarea>
+      </div>
+      <div class="compiler-controls">
+        <button class="btn-compile" id="btn-compile" onclick="compileCode()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Run
+        </button>
+        <button class="btn-clear-editor" onclick="document.getElementById('compiler-editor').value='';document.getElementById('compiler-output').textContent='';setStatus('')">Clear</button>
+        <span class="compile-status" id="compile-status"></span>
+      </div>
+      <div class="compiler-output-label">OUTPUT</div>
+      <div id="compiler-output"><em>Output will appear here after running…</em></div>
+    </div>
+  </div>
+</div>
+
+<!-- BACK TO TOP -->
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Top</button>
+
+<script>
+// ─── SEARCH DATA ───────────────────────────────────────────────────────────
+const searchData = [
+  { id:'intro-c', unit:'Unit 1', topic:'Introduction to C & C Features', text:'CPL programming paradigms levels imperative structured procedural object-oriented why learn C history Dennis Ritchie Bell Labs UNIX features efficient fast portable pointers recursion dynamic memory' },
+  { id:'gcc', unit:'Unit 1', topic:'GCC & Program Development Life Cycle', text:'GNU compiler collection Richard Stallman PDLC editing preprocessing compilation linking loading execution object file a.out GCC flags -c -E -o -Wall' },
+  { id:'program-structure', unit:'Unit 1', topic:'Program Structure & Characteristics', text:'program sections documentation link definition global main subprogram case sensitive free format entry point semicolon return value STDC_VERSION C99 C11' },
+  { id:'errors', unit:'Unit 1', topic:'Errors & Warnings in C', text:'compile time error link time error runtime error logical error warning -Wall syntax error division by zero undefined variable scanf missing ampersand' },
+  { id:'identifiers', unit:'Unit 1', topic:'Identifiers & Keywords', text:'tokens identifier naming rules keywords 32 keywords case sensitive cannot use reserved words underscore letters digits' },
+  { id:'variables', unit:'Unit 1', topic:'Variables & Data Types', text:'variable declaration definition initialization data types int float double char void primary secondary derived sizeof implementation dependent extern' },
+  { id:'literals', unit:'Unit 1', topic:'Literals & Ranges', text:'integer literal octal hexadecimal float exponential character ASCII limits.h float.h INT_MAX INT_MIN CHAR_MAX DBL_MAX FLT_MAX' },
+  { id:'io', unit:'Unit 1', topic:'Input & Output Functions', text:'scanf getchar putchar formatted unformatted printf address operator EOF fflush fpurge buffer keyboard input redirection output redirection' },
+  { id:'operators', unit:'Unit 1', topic:'Operators in C', text:'arithmetic relational logical bitwise assignment ternary unary binary increment decrement pre post short circuit sequence point AND OR XOR NOT shift left right' },
+  { id:'expressions', unit:'Unit 1', topic:'Expressions in C', text:'infix postfix prefix arithmetic relational logical conditional pointer bitwise operator precedence associativity side effects undefined operand evaluation' },
+  { id:'control', unit:'Unit 1', topic:'Control Structures Overview', text:'while for do-while if else switch goto break continue return looping selection unconditional' },
+  { id:'loops', unit:'Unit 1', topic:'Loops — while / for / do-while', text:'while loop for loop do while loop pre-tested post-tested iteration sum of digits Armstrong digital root n to 0 decrement' },
+  { id:'selection', unit:'Unit 1', topic:'Selection Statements — if / switch', text:'if else switch case default break fall through triangle equilateral isosceles scalene vowel Armstrong nested control' },
+  { id:'problems', unit:'Unit 1', topic:'Practice Problems', text:'tunnel box volume bits reverse complex number calculator admission eligibility divisibility switch hex converter bitwise XOR AND' },
+  { id:'char-io', unit:'Unit 1', topic:'Single Char I/O & Word Count', text:'getchar putchar EOF word count character count line count wc unix input redirection inword flag whitespace newline tab' },
+  { id:'behaviors', unit:'Unit 1', topic:'Language Specifications & Behaviors', text:'undefined behavior unspecified implementation-defined locale-specific undefined behavior division by zero integer overflow array bounds C standard de jure de facto' },
+];
+
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+
+function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'); }
+
+function highlight(text, query) {
+  if(!query) return text;
+  const re = new RegExp('(' + escapeRe(query) + ')', 'gi');
+  return text.replace(re, '<mark>$1</mark>');
+}
+
+function doSearch(q) {
+  q = q.trim().toLowerCase();
+  if(!q) { searchResults.innerHTML=''; searchResults.classList.remove('open'); return; }
+  const words = q.split(/\s+/);
+  const scored = searchData.map(item => {
+    const hay = (item.topic + ' ' + item.text).toLowerCase();
+    let score = 0;
+    words.forEach(w => {
+      if(item.topic.toLowerCase().includes(w)) score += 3;
+      if(hay.includes(w)) score += 1;
+    });
+    return { ...item, score };
+  }).filter(x => x.score > 0).sort((a,b) => b.score - a.score);
+
+  if(!scored.length) {
+    searchResults.innerHTML = `<div class="search-empty">No results for "<strong>${q}</strong>"</div>`;
+    searchResults.classList.add('open');
+    return;
+  }
+  searchResults.innerHTML = scored.slice(0,8).map(r => `
+    <div class="search-result-item" onclick="goTo('${r.id}')">
+      <div class="sri-topic">${highlight(r.topic, q)}</div>
+      <div class="sri-unit">${r.unit}</div>
+    </div>`).join('');
+  searchResults.classList.add('open');
+}
+
+searchInput.addEventListener('input', e => doSearch(e.target.value));
+searchInput.addEventListener('keydown', e => {
+  if(e.key === 'Escape') { searchResults.classList.remove('open'); searchInput.blur(); }
+  if(e.key === 'Enter') {
+    const first = searchResults.querySelector('.search-result-item');
+    if(first) first.click();
+  }
+});
+document.addEventListener('click', e => {
+  if(!document.getElementById('search-wrap').contains(e.target))
+    searchResults.classList.remove('open');
+});
+
+function goTo(id) {
+  searchResults.classList.remove('open');
+  searchInput.value = '';
+  const el = document.getElementById(id);
+  if(el) { el.scrollIntoView({ behavior:'smooth', block:'start' }); highlightSection(el); }
+}
+function highlightSection(el) {
+  el.style.transition = 'background 0.3s';
+  el.style.background = 'rgba(232,168,66,0.06)';
+  el.style.borderRadius = '8px';
+  setTimeout(() => { el.style.background = ''; }, 1200);
+}
+
+// ─── SIDEBAR ACTIVE ──────────────────────────────────────────────────────────
+function setActive(el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Scroll-based active nav
+const sections = document.querySelectorAll('[id]');
+const navLinks = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if(window.scrollY >= s.offsetTop - 100) cur = s.id; });
+  navLinks.forEach(n => {
+    n.classList.remove('active');
+    if(n.getAttribute('href') === '#' + cur) n.classList.add('active');
+  });
+  // Back to top
+  document.getElementById('back-top').classList.toggle('visible', window.scrollY > 600);
+  // Progress bar
+  const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('prog').style.width = pct + '%';
+});
+
+// ─── COPY CODE ───────────────────────────────────────────────────────────────
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText.trim()).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
+  });
+}
+
+// ─── RUN IN COMPILER ─────────────────────────────────────────────────────────
+function runInCompiler(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  document.getElementById('compiler-editor').value = pre.innerText.trim();
+  openCompiler();
+  setTimeout(compileCode, 300);
+}
+
+// ─── COMPILER MODAL ──────────────────────────────────────────────────────────
+function openCompiler() { document.getElementById('compiler-modal').classList.add('open'); }
+function closeCompiler() { document.getElementById('compiler-modal').classList.remove('open'); }
+function handleModalClick(e) { if(e.target === document.getElementById('compiler-modal')) closeCompiler(); }
+
+function setStatus(msg, cls='') {
+  const el = document.getElementById('compile-status');
+  el.textContent = msg; el.className = 'compile-status ' + cls;
+}
+
+async function compileCode() {
+  const code = document.getElementById('compiler-editor').value.trim();
+  if(!code) return;
+  const btn = document.getElementById('btn-compile');
+  btn.disabled = true;
+  setStatus('Compiling…', 'running');
+  const out = document.getElementById('compiler-output');
+  out.className = '';
+  out.textContent = '';
+  try {
+    const res = await fetch('https://api.jdoodle.com/v1/execute', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        clientId: 'demo_client',
+        clientSecret: 'demo_secret',
+        script: code,
+        language: 'c',
+        versionIndex: '5'
+      })
+    });
+    // JDoodle will fail in demo; fall back to Godbolt/WandBox
+    throw new Error('fallback');
+  } catch {
+    // Use WandBox as fallback
+    try {
+      const res = await fetch('https://wandbox.org/api/compile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, compiler: 'gcc-12.2.0', options: '-Wall', stdin: '' })
+      });
+      if(!res.ok) throw new Error('Network error');
+      const data = await res.json();
+      const output = (data.program_output || data.compiler_output || '');
+      const err = data.compiler_error || '';
+      if(err) {
+        out.className = 'has-error';
+        out.textContent = err;
+        setStatus('Compile error', 'error');
+      } else {
+        out.textContent = output || '(no output)';
+        setStatus('Success ✓', 'ok');
+      }
+    } catch(e2) {
+      out.className = 'has-error';
+      out.textContent = 'Could not reach compiler service.\n\nTip: Copy your code and try:\n• https://www.onlinegdb.com/online_c_compiler\n• https://godbolt.org\n• https://wandbox.org';
+      setStatus('Network error', 'error');
+    }
+  }
+  btn.disabled = false;
+}
+
+// Keyboard shortcut Ctrl+Enter in editor
+document.getElementById('compiler-editor').addEventListener('keydown', e => {
+  if((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); compileCode(); }
+  if(e.key === 'Tab') {
+    e.preventDefault();
+    const ta = e.target, s = ta.selectionStart, en = ta.selectionEnd;
+    ta.value = ta.value.substring(0,s) + '    ' + ta.value.substring(en);
+    ta.selectionStart = ta.selectionEnd = s + 4;
+  }
+});
+</script>
+</body>
+</html>
