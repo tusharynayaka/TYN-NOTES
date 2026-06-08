@@ -109,6 +109,25 @@
   }
   .header-search input::placeholder { color: var(--text-dim); }
 
+  @media (max-width: 640px) {
+    header { padding: 10px 12px; gap: 10px; }
+    .logo { font-size: 14px; }
+    .header-search { padding: 0 10px; }
+    .nav-toggle { width: 36px; height: 34px; }
+    .theme-switch { order: 4; margin-left: 0; width: 100%; justify-content: flex-end; }
+    .theme-switch label { width: 44px; height: 24px; }
+    .theme-switch .thumb { width: 22px; height: 22px; }
+    .header-search input { font-size: 12px; }
+    .topic-title { font-size: 17px; }
+    h3.sub-heading { font-size: 14px; }
+    .callout { padding: 14px 14px; }
+    .unit-banner { padding: 18px; }
+    .unit-banner .unit-num { font-size: 30px; }
+    .table-wrap { margin: 16px 0; }
+    .code-block { margin: 18px 0; }
+    main { padding: 20px 12px 28px; }
+  }
+
   .theme-switch {
     display: inline-flex;
     align-items: center;
@@ -702,7 +721,25 @@
       z-index: 180;
     }
     .overlay.visible { display: block; }
-    main { margin-left: 0; padding: 32px 18px; }
+    .layout { display: block; }
+    main {
+      margin-left: 0;
+      padding: 24px 14px 32px;
+      width: 100%;
+      max-width: 100%;
+    }
+    .unit-banner,
+    .code-block,
+    .table-wrap,
+    .callout,
+    .compiler-box,
+    .compiler-body,
+    .code-header {
+      width: 100%;
+      max-width: 100%;
+    }
+    pre { min-width: 0; }
+    table { width: 100%; }
     #back-top { left: 18px; }
   }
 </style>
