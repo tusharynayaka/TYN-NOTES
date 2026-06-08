@@ -74,6 +74,7 @@
     flex-wrap: wrap;
     padding: 10px 20px;
     gap: 12px;
+    transition: transform 0.28s cubic-bezier(.2,.9,.3,1), opacity 0.2s ease;
   }
   body.dark header {
     background: rgba(14,15,20,0.95);
@@ -210,6 +211,13 @@
   .nav-toggle .bar:nth-child(1) { top: 10px; }
   .nav-toggle .bar:nth-child(2) { top: 16px; }
   .nav-toggle .bar:nth-child(3) { top: 22px; }
+
+  /* Hide header when scrolling down */
+  header.hidden {
+    transform: translateY(-110%);
+    opacity: 0;
+    pointer-events: none;
+  }
 
   .search-results-panel {
     position: absolute; top: calc(var(--header-h) + 4px);
@@ -650,6 +658,7 @@
   .progress {
     position: fixed; top: var(--header-h); left: 0; right: 0; height: 2px;
     background: var(--border); z-index: 99;
+    transition: transform 0.28s cubic-bezier(.2,.9,.3,1), opacity 0.18s ease;
   }
   .progress-bar {
     height: 100%;
@@ -657,6 +666,9 @@
     width: 0;
     transition: width 0.1s;
   }
+
+  /* hide progress when header is hidden */
+  .progress.hidden { transform: translateY(-120%); opacity: 0; pointer-events: none; }
 
   /* ─── SCROLLBAR ─── */
   main::-webkit-scrollbar { width: 6px; }
@@ -751,7 +763,7 @@
 
 <!-- HEADER -->
 <header>
-  <div class="logo">UE25CS151B <span>/ TYN</span></div>
+  <div class="logo">UE25CS151B <span>/ PSC</span></div>
   <div class="header-search" id="search-wrap">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" id="search-input" placeholder="Search topics, keywords, examples…" autocomplete="off">
@@ -1876,8 +1888,20 @@ if(navOverlay) navOverlay.addEventListener('click', closeNav);
 function updateLayoutPadding() {
   const layout = document.querySelector('.layout');
   const header = document.querySelector('header');
-  if(layout && header) layout.style.paddingTop = `${header.offsetHeight}px`;
-  if(asideNav && header) asideNav.style.top = `${header.offsetHeight}px`;
+  if(layout && header) {
+    if(header.classList.contains('hidden')) {
+      layout.style.paddingTop = `0px`;
+    } else {
+      layout.style.paddingTop = `${header.offsetHeight}px`;
+    }
+  }
+  if(asideNav && header) {
+    if(header.classList.contains('hidden')) {
+      asideNav.style.top = `0px`;
+    } else {
+      asideNav.style.top = `${header.offsetHeight}px`;
+    }
+  }
 }
 window.addEventListener('load', updateLayoutPadding);
 window.addEventListener('resize', updateLayoutPadding);
@@ -1920,6 +1944,9 @@ function setActive(el) {
 // Scroll-based active nav
 const sections = document.querySelectorAll('[id]');
 const navLinks = document.querySelectorAll('.nav-item');
+let _lastScrollY = window.scrollY || 0;
+const _hideThreshold = 80; // pixels scrolled before header can hide
+
 window.addEventListener('scroll', () => {
   let cur = '';
   sections.forEach(s => { if(window.scrollY >= s.offsetTop - 100) cur = s.id; });
@@ -1932,6 +1959,25 @@ window.addEventListener('scroll', () => {
   // Progress bar
   const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
   document.getElementById('prog').style.width = pct + '%';
+
+  // Hide/show header on scroll (mobile-friendly)
+  const headerEl = document.querySelector('header');
+  if(headerEl) {
+    const curY = window.scrollY;
+    const wasHidden = headerEl.classList.contains('hidden');
+    const prog = document.querySelector('.progress');
+    if(curY > _lastScrollY && curY > _hideThreshold) {
+      // scrolling down
+      headerEl.classList.add('hidden');
+      if(prog) prog.classList.add('hidden');
+    } else if(curY < _lastScrollY || curY <= _hideThreshold) {
+      // scrolling up or near top
+      headerEl.classList.remove('hidden');
+      if(prog) prog.classList.remove('hidden');
+    }
+    if(wasHidden !== headerEl.classList.contains('hidden')) updateLayoutPadding();
+    _lastScrollY = curY <= 0 ? 0 : curY;
+  }
 });
 
 // ─── COPY CODE ───────────────────────────────────────────────────────────────
