@@ -7,6 +7,28 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
+    --bg: #f7f8fb;
+    --surface: #ffffff;
+    --card: #f3f4f8;
+    --border: #d9dbe5;
+    --accent: #e8a842;
+    --accent2: #5b8dee;
+    --accent3: #6ee2a0;
+    --text: #252a35;
+    --text-dim: #6c7487;
+    --text-bright: #111827;
+    --code-bg: #eef0f6;
+    --keyword: #b545f6;
+    --string: #1c9a5d;
+    --comment: #7a8397;
+    --number: #d97706;
+    --fn: #0f83be;
+    --type: #2563eb;
+    --header-h: 60px;
+    --sidebar-w: 280px;
+  }
+
+  body.dark {
     --bg: #0e0f14;
     --surface: #14151c;
     --card: #1a1b24;
@@ -24,8 +46,6 @@
     --number: #f0b06a;
     --fn: #61d4f0;
     --type: #5b8dee;
-    --header-h: 60px;
-    --sidebar-w: 280px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -47,11 +67,14 @@
   header {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     height: var(--header-h);
-    background: rgba(14,15,20,0.95);
+    background: rgba(255,255,255,0.9);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
     display: flex; align-items: center; padding: 0 20px;
     gap: 16px;
+  }
+  body.dark header {
+    background: rgba(14,15,20,0.95);
   }
 
   .logo {
@@ -81,6 +104,88 @@
     font-size: 13px; width: 100%; padding: 8px 0;
   }
   .header-search input::placeholder { color: var(--text-dim); }
+
+  .theme-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    order: 2;
+  }
+  .theme-switch .theme-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .theme-switch input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .theme-switch label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 48px;
+    height: 26px;
+    border-radius: 999px;
+    background: rgba(37, 42, 53, 0.08);
+    cursor: pointer;
+    transition: background 0.25s ease;
+    padding: 0;
+  }
+  .theme-switch .thumb {
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    transform: translateX(0);
+    transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+  }
+  .theme-switch input:checked + label {
+    background: linear-gradient(135deg, rgba(110,226,160,0.25), rgba(91,141,238,0.25));
+  }
+  .theme-switch input:checked + label .thumb {
+    transform: translateX(24px);
+    background: #111827;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  }
+  body.dark .theme-switch label {
+    background: rgba(232,168,66,0.12);
+  }
+
+  .nav-toggle {
+    display: none;
+    order: 1;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 40px;
+    height: 34px;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-toggle .bar {
+    position: absolute;
+    width: 22px;
+    height: 2px;
+    background: var(--text-dim);
+    border-radius: 999px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  .nav-toggle .bar:nth-child(1) { top: 10px; }
+  .nav-toggle .bar:nth-child(2) { top: 16px; }
+  .nav-toggle .bar:nth-child(3) { top: 22px; }
 
   .search-results-panel {
     position: absolute; top: calc(var(--header-h) + 4px);
@@ -548,9 +653,33 @@
   #back-top:hover { color: var(--accent); border-color: var(--accent); }
 
   @media (max-width: 900px) {
-    aside { transform: translateX(-100%); transition: transform 0.3s; }
-    main { margin-left: 0; padding: 32px 24px; }
-    #back-top { left: 24px; }
+    header { gap: 12px; padding: 0 14px; }
+    .header-search { max-width: none; flex: 1; }
+    .theme-switch { gap: 8px; }
+    .nav-toggle { display: inline-flex; }
+    aside {
+      position: fixed;
+      top: var(--header-h);
+      left: 0;
+      bottom: 0;
+      width: min(320px, 80vw);
+      transform: translateX(-110%);
+      transition: transform 0.3s ease;
+      z-index: 200;
+      box-shadow: 8px 0 40px rgba(0,0,0,0.2);
+      background: var(--surface);
+    }
+    aside.open { transform: translateX(0); }
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 180;
+    }
+    .overlay.visible { display: block; }
+    main { margin-left: 0; padding: 32px 18px; }
+    #back-top { left: 18px; }
   }
 </style>
 </head>
@@ -566,8 +695,19 @@
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <input type="text" id="search-input" placeholder="Search topics, keywords, examples…" autocomplete="off">
   </div>
+  <div class="theme-switch">
+    <span class="theme-label">Theme</span>
+    <input type="checkbox" id="theme-switch" aria-label="Toggle theme mode">
+    <label for="theme-switch"><span class="thumb"></span></label>
+  </div>
+  <button id="nav-toggle" class="nav-toggle" aria-label="Open contents menu" type="button">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
   <div id="search-results" class="search-results-panel"></div>
 </header>
+<div id="nav-overlay" class="overlay"></div>
 
 <!-- LAYOUT -->
 <div class="layout">
@@ -1657,6 +1797,35 @@ document.addEventListener('click', e => {
     searchResults.classList.remove('open');
 });
 
+// ─── NAV DRAWER ────────────────────────────────────────────────────────────
+const navToggle = document.getElementById('nav-toggle');
+const navOverlay = document.getElementById('nav-overlay');
+const asideNav = document.querySelector('aside');
+function toggleNav() {
+  const open = asideNav.classList.toggle('open');
+  navOverlay.classList.toggle('visible', open);
+}
+function closeNav() {
+  asideNav.classList.remove('open');
+  navOverlay.classList.remove('visible');
+}
+if(navToggle) navToggle.addEventListener('click', toggleNav);
+if(navOverlay) navOverlay.addEventListener('click', closeNav);
+
+// ─── THEME SWITCH ─────────────────────────────────────────────────────────
+const themeToggle = document.getElementById('theme-switch');
+const storedTheme = localStorage.getItem('tyn-theme') || 'light';
+function applyTheme(theme) {
+  document.body.classList.toggle('dark', theme === 'dark');
+  themeToggle.checked = theme === 'dark';
+  localStorage.setItem('tyn-theme', theme);
+}
+applyTheme(storedTheme);
+
+themeToggle.addEventListener('change', () => {
+  applyTheme(themeToggle.checked ? 'dark' : 'light');
+});
+
 function goTo(id) {
   searchResults.classList.remove('open');
   searchInput.value = '';
@@ -1674,6 +1843,7 @@ function highlightSection(el) {
 function setActive(el) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   el.classList.add('active');
+  if(window.innerWidth <= 900) closeNav();
 }
 
 // Scroll-based active nav
