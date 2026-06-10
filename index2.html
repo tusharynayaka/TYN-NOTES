@@ -1,0 +1,2040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UE25CS151B — Unit 3: Text Processing & User Defined Types</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&display=swap');
+
+  :root {
+    --bg:        #0f1117;
+    --bg2:       #161a24;
+    --bg3:       #1c2130;
+    --surface:   #1e2436;
+    --border:    #2a3045;
+    --accent:    #f0a500;
+    --accent2:   #e05c2a;
+    --accent3:   #4fc3f7;
+    --green:     #43d9a2;
+    --purple:    #b39ddb;
+    --text:      #dce3f0;
+    --muted:     #7a88aa;
+    --code-bg:   #0d1117;
+    --sidebar-w: 280px;
+
+    /* unit colors */
+    --u-strings: #f0a500;
+    --u-dmm:     #e05c2a;
+    --u-structs: #43d9a2;
+    --u-misc:    #4fc3f7;
+    --u-ll:      #b39ddb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: var(--sidebar-w);
+    min-width: var(--sidebar-w);
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0;
+    height: 100vh;
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #sidebar-header {
+    padding: 20px 16px 16px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg2);
+    z-index: 1;
+  }
+
+  #sidebar-header .course-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  #sidebar-header h2 {
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+
+  #search-box {
+    margin: 12px 12px 0;
+    position: relative;
+  }
+
+  #search-input {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    padding: 8px 10px 8px 30px;
+    outline: none;
+    transition: border-color .2s;
+  }
+
+  #search-input:focus { border-color: var(--accent); }
+
+  #search-icon {
+    position: absolute;
+    left: 9px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 13px;
+    pointer-events: none;
+  }
+
+  #search-results {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0; right: 0;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    max-height: 280px;
+    overflow-y: auto;
+    z-index: 200;
+    box-shadow: 0 8px 24px rgba(0,0,0,.5);
+  }
+
+  #search-results .sr-item {
+    padding: 8px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  #search-results .sr-item:hover { background: var(--surface); }
+  #search-results .sr-item .sr-unit { font-size: 10px; color: var(--muted); }
+
+  nav { padding: 12px 0 24px; flex: 1; }
+
+  .nav-unit-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 14px 16px 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav-unit-label .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .nav-item {
+    display: block;
+    padding: 6px 16px 6px 28px;
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: all .15s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav-item:hover { color: var(--text); background: rgba(255,255,255,.03); }
+  .nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(240,165,0,.06); }
+
+  /* ── MAIN ── */
+  #main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    max-width: 100%;
+  }
+
+  #topbar {
+    position: sticky;
+    top: 0;
+    background: rgba(15,17,23,.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 90;
+  }
+
+  #topbar-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  #topbar-right { display: flex; align-items: center; gap: 10px; }
+
+  .badge {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* floating compiler button */
+  #compiler-fab {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 4px 20px rgba(240,165,0,.4);
+    z-index: 300;
+    transition: transform .2s, box-shadow .2s;
+    color: #0f1117;
+  }
+
+  #compiler-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 28px rgba(240,165,0,.55);
+  }
+
+  #compiler-fab title-tip {
+    position: absolute;
+    right: 62px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 11px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .2s;
+  }
+
+  /* compiler modal */
+  #compiler-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.7);
+    z-index: 400;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #compiler-modal.open { display: flex; }
+
+  #compiler-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    width: min(780px, 96vw);
+    height: min(600px, 90vh);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,.7);
+  }
+
+  #compiler-titlebar {
+    background: var(--bg3);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #compiler-titlebar span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  #compiler-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 18px;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  #compiler-close:hover { color: var(--text); }
+
+  #compiler-editor {
+    flex: 1;
+    resize: none;
+    background: var(--code-bg);
+    color: var(--green);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 16px;
+    border: none;
+    outline: none;
+    line-height: 1.6;
+    overflow-y: auto;
+  }
+
+  #compiler-actions {
+    padding: 10px 16px;
+    background: var(--bg3);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  #run-btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    color: #0f1117;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+
+  #run-btn:hover { opacity: .88; }
+
+  #open-wandbox {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  #compiler-output {
+    background: var(--code-bg);
+    color: #aef;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 12px 16px;
+    max-height: 140px;
+    overflow-y: auto;
+    border-top: 1px solid var(--border);
+    display: none;
+    white-space: pre-wrap;
+  }
+
+  /* ── CONTENT ── */
+  .content-wrap {
+    padding: 48px 48px 80px;
+    max-width: 960px;
+  }
+
+  /* unit hero */
+  .unit-hero {
+    margin-bottom: 48px;
+    padding: 32px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--bg2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .unit-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: .12;
+    pointer-events: none;
+  }
+
+  .unit-hero.u-strings::before { background: var(--u-strings); }
+  .unit-hero.u-dmm::before    { background: var(--u-dmm); }
+  .unit-hero.u-structs::before { background: var(--u-structs); }
+  .unit-hero.u-misc::before   { background: var(--u-misc); }
+  .unit-hero.u-ll::before     { background: var(--u-ll); }
+
+  .unit-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .unit-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .unit-subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.6;
+  }
+
+  .unit-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+
+  .unit-tag {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* section */
+  .section {
+    margin-bottom: 44px;
+  }
+
+  .section-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title .s-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .sub-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 24px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sub-title::before {
+    content: '';
+    width: 3px; height: 16px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .sub-title.c-strings::before  { background: var(--u-strings); }
+  .sub-title.c-dmm::before      { background: var(--u-dmm); }
+  .sub-title.c-structs::before  { background: var(--u-structs); }
+  .sub-title.c-misc::before     { background: var(--u-misc); }
+  .sub-title.c-ll::before       { background: var(--u-ll); }
+
+  p { margin-bottom: 12px; color: var(--text); }
+
+  /* info boxes */
+  .info-box {
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 16px 0;
+    font-size: 14px;
+    border-left: 3px solid;
+  }
+
+  .info-box.note   { background: rgba(79,195,247,.07); border-color: var(--accent3); color: #b3e5fc; }
+  .info-box.warn   { background: rgba(240,165,0,.07);  border-color: var(--accent);  color: #ffe082; }
+  .info-box.tip    { background: rgba(67,217,162,.07); border-color: var(--green);   color: #a7ffeb; }
+  .info-box.danger { background: rgba(224,92,42,.07);  border-color: var(--accent2); color: #ffccbc; }
+
+  .info-box strong { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+
+  /* code block */
+  .code-wrap {
+    position: relative;
+    margin: 16px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .code-header {
+    background: var(--bg3);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .code-lang {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  .code-label { font-size: 11px; color: var(--muted); }
+
+  .code-actions { display: flex; gap: 6px; }
+
+  .btn-copy, .btn-run-code {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all .15s;
+  }
+
+  .btn-copy:hover   { color: var(--text); border-color: var(--accent3); }
+  .btn-run-code:hover { color: var(--green); border-color: var(--green); }
+
+  pre {
+    background: var(--code-bg);
+    padding: 16px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.65;
+    color: #e0e0e0;
+    margin: 0;
+  }
+
+  /* syntax highlight classes (manual) */
+  .kw   { color: #c792ea; }
+  .fn   { color: #82aaff; }
+  .str  { color: #c3e88d; }
+  .num  { color: #f78c6c; }
+  .cm   { color: #546e7a; font-style: italic; }
+  .inc  { color: #80cbc4; }
+  .type { color: #ffcb6b; }
+  .ptr  { color: #f07178; }
+
+  /* comparison table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 16px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  th {
+    background: var(--surface);
+    color: var(--accent);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .05em;
+  }
+
+  td {
+    padding: 9px 14px;
+    border-top: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td { background: rgba(255,255,255,.02); }
+
+  /* lists */
+  ul, ol {
+    padding-left: 22px;
+    margin-bottom: 12px;
+  }
+
+  li { margin-bottom: 5px; }
+
+  /* function table */
+  .fn-table td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--green); }
+
+  /* collapsible */
+  .collapsible-btn {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 14px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2px;
+    transition: background .15s;
+  }
+
+  .collapsible-btn:hover { background: var(--bg3); }
+  .collapsible-btn .arrow { transition: transform .2s; color: var(--muted); }
+  .collapsible-btn.open .arrow { transform: rotate(90deg); }
+
+  .collapsible-content {
+    display: none;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 16px;
+    background: var(--bg2);
+    margin-bottom: 10px;
+  }
+
+  /* pdf viewer link */
+  .pdf-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 16px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    margin: 8px 4px 8px 0;
+    transition: border-color .2s;
+  }
+
+  .pdf-link:hover { border-color: var(--accent); color: var(--accent); }
+  .pdf-link .pdf-icon { font-size: 18px; }
+
+  /* horizontal rule */
+  hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+  /* anchor offset */
+  .anchor { scroll-margin-top: 70px; }
+
+  /* highlight text */
+  mark { background: rgba(240,165,0,.22); color: var(--accent); border-radius: 3px; padding: 1px 4px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    #sidebar { width: 100%; height: auto; position: relative; }
+    #main { margin-left: 0; }
+    .content-wrap { padding: 24px 20px 60px; }
+    #topbar { padding: 0 20px; }
+    .unit-title { font-size: 22px; }
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* copy feedback */
+  .copied-toast {
+    position: fixed;
+    bottom: 90px;
+    right: 30px;
+    background: var(--green);
+    color: #0f1117;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity .3s;
+    pointer-events: none;
+    z-index: 500;
+  }
+
+  .copied-toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside id="sidebar">
+  <div id="sidebar-header">
+    <div class="course-tag">UE25CS151B — PESU</div>
+    <h2>Problem Solving with C<br>Unit 3 Notes</h2>
+  </div>
+  <div id="search-box">
+    <span id="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="Search topics…" autocomplete="off">
+    <div id="search-results"></div>
+  </div>
+  <nav>
+    <!-- Section 1: Strings -->
+    <div class="nav-unit-label" style="color:var(--u-strings)">
+      <span class="dot" style="background:var(--u-strings)"></span>Strings in C
+    </div>
+    <a class="nav-item" href="#text-processing">Text Processing</a>
+    <a class="nav-item" href="#strings-intro">String Basics</a>
+    <a class="nav-item" href="#string-init">Initialization</a>
+    <a class="nav-item" href="#string-io">Read &amp; Display</a>
+    <a class="nav-item" href="#pointers-strings">Pointers vs Strings</a>
+    <a class="nav-item" href="#string-functions">string.h Functions</a>
+    <a class="nav-item" href="#user-defined-fns">User-Defined Fns</a>
+    <a class="nav-item" href="#string-pitfalls">Common Pitfalls</a>
+    <a class="nav-item" href="#cla">Command Line Args</a>
+
+    <!-- Section 2: DMM -->
+    <div class="nav-unit-label" style="color:var(--u-dmm)">
+      <span class="dot" style="background:var(--u-dmm)"></span>Dynamic Memory
+    </div>
+    <a class="nav-item" href="#dmm-intro">Memory Layout</a>
+    <a class="nav-item" href="#malloc">malloc()</a>
+    <a class="nav-item" href="#calloc">calloc()</a>
+    <a class="nav-item" href="#realloc">realloc()</a>
+    <a class="nav-item" href="#free">free()</a>
+    <a class="nav-item" href="#dmm-errors">DMM Errors</a>
+    <a class="nav-item" href="#dmm-best">Best Practices</a>
+
+    <!-- Section 3: Structures -->
+    <div class="nav-unit-label" style="color:var(--u-structs)">
+      <span class="dot" style="background:var(--u-structs)"></span>Structures
+    </div>
+    <a class="nav-item" href="#struct-intro">Introduction</a>
+    <a class="nav-item" href="#struct-access">Accessing Members</a>
+    <a class="nav-item" href="#struct-memory">Memory &amp; Padding</a>
+    <a class="nav-item" href="#typedef">typedef</a>
+    <a class="nav-item" href="#nested-struct">Nested Structures</a>
+    <a class="nav-item" href="#struct-functions">Structs &amp; Functions</a>
+    <a class="nav-item" href="#array-structs">Array of Structures</a>
+    <a class="nav-item" href="#bitfields">Bit Fields</a>
+
+    <!-- Section 4: Misc Types -->
+    <div class="nav-unit-label" style="color:var(--u-misc)">
+      <span class="dot" style="background:var(--u-misc)"></span>User Defined Types
+    </div>
+    <a class="nav-item" href="#unions">Unions</a>
+    <a class="nav-item" href="#union-vs-struct">Union vs Struct</a>
+    <a class="nav-item" href="#enums">Enumerations</a>
+
+    <!-- Section 5: Linked List -->
+    <div class="nav-unit-label" style="color:var(--u-ll)">
+      <span class="dot" style="background:var(--u-ll)"></span>Linked Lists &amp; Queue
+    </div>
+    <a class="nav-item" href="#self-ref">Self-Referential Struct</a>
+    <a class="nav-item" href="#linked-list">Singly Linked List</a>
+    <a class="nav-item" href="#priority-queue">Priority Queue</a>
+  </nav>
+</aside>
+
+<!-- TOP BAR -->
+<div id="main">
+<div id="topbar">
+  <span id="topbar-title">Unit 3 — Text Processing &amp; User Defined Types</span>
+  <div id="topbar-right">
+    <span class="badge">Feb – May 2025</span>
+    <span class="badge">Dept. CSE, PESU</span>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content-wrap">
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 1: STRINGS                          -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <div class="unit-hero u-strings anchor" id="text-processing">
+    <div class="unit-eyebrow" style="color:var(--u-strings)">Module 1</div>
+    <div class="unit-title">Text Processing &amp; Strings in C</div>
+    <div class="unit-subtitle">Character arrays, string functions from string.h, command-line arguments, pointers and strings.</div>
+    <div class="unit-tags">
+      <span class="unit-tag">char arrays</span>
+      <span class="unit-tag">string.h</span>
+      <span class="unit-tag">scanf / printf</span>
+      <span class="unit-tag">CLA</span>
+      <span class="unit-tag">pointers</span>
+    </div>
+    <div style="margin-top:18px; display:flex; gap:10px; flex-wrap:wrap;">
+      <span style="font-size:12px; color:var(--muted);">📄 Source PDFs:</span>
+      <a class="pdf-link" href="https://drive.google.com/file/d/1Ipo2F0WwK59RWDNQ6aSxmC6J8TMIxdNe/view?usp=drive_link" target="_blank"><span class="pdf-icon">📄</span>Strings Intro</a>
+      <a class="pdf-link" href="https://drive.google.com/file/d/1Ipo2F0WwK59RWDNQ6aSxmC6J8TMIxdNe/view?usp=drive_link" target="_blank"><span class="pdf-icon">📄</span>String Functions</a>
+      <a class="pdf-link" href="https://drive.google.com/file/d/1Ipo2F0WwK59RWDNQ6aSxmC6J8TMIxdNe/view?usp=drive_link" target="_blank"><span class="pdf-icon">📄</span>String Pitfalls</a>
+      <a class="pdf-link" href="https://drive.google.com/file/d/1Ipo2F0WwK59RWDNQ6aSxmC6J8TMIxdNe/view?usp=drive_link" target="_blank"><span class="pdf-icon">📄</span>CLA</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title anchor" id="strings-intro">
+      <span class="s-icon" style="background:rgba(240,165,0,.15); color:var(--u-strings);">📝</span>
+      What is Text Processing?
+    </div>
+    <p>Text processing refers to the <mark>Analysis, Manipulation, and Generation of text</mark>. In C, it means working with character arrays and standard library functions. C has <strong>no built-in string type</strong>.</p>
+
+    <div class="sub-title c-strings">Key Tasks of Text Processing</div>
+    <table>
+      <tr><th>Task</th><th>Description</th><th>Example</th></tr>
+      <tr><td>Tokenization</td><td>Breaking text into words/chars</td><td>"I love pizza." → ["I","love","pizza","."]</td></tr>
+      <tr><td>Normalization</td><td>Lowercase, remove punctuation</td><td>"Hello!" → "hello"</td></tr>
+      <tr><td>Stop Word Removal</td><td>Remove common words</td><td>Remove "is", "the", "and"</td></tr>
+      <tr><td>Stemming</td><td>Reduce to root form</td><td>"running","ran" → "run"</td></tr>
+      <tr><td>POS Tagging</td><td>Identify grammar roles</td><td>noun, verb, adjective…</td></tr>
+      <tr><td>NER</td><td>Detect names of people/places</td><td>"Barack Obama" → person, "Hawaii" → location</td></tr>
+    </table>
+
+    <div class="sub-title c-strings">String Definition in C</div>
+    <p>A string in C is an <strong>array of characters terminated with '\0'</strong> (NULL). ASCII value of NULL = 0. Each character = 1 byte.</p>
+    <div class="info-box note"><strong>Key Rule</strong>When the compiler sees text in double quotes, it automatically appends '\0' at the end. Without '\0', C cannot know where the string ends.</div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-lang">C</span><span class="code-label">String definition examples</span>
+        <div class="code-actions">
+          <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+          <button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button>
+        </div>
+      </div>
+      <pre><span class="kw">char</span> ch = <span class="str">'x'</span>;          <span class="cm">// character constant — single quotes</span>
+<span class="kw">char</span> ch[] = <span class="str">"x"</span>;        <span class="cm">// string constant — double quotes, 2 bytes ('x' + '\0')</span>
+
+<span class="kw">char</span> a1[10];             <span class="cm">// 10 bytes, garbage values — sizeof(a1) = 10</span>
+<span class="kw">char</span> a2[] = <span class="str">"atma"</span>;     <span class="cm">// 5 bytes: 'a','t','m','a','\0'</span>
+<span class="kw">char</span> a3[10] = <span class="str">"atma"</span>;   <span class="cm">// 10 bytes, remaining 6 filled with '\0'</span>
+<span class="kw">char</span> a4[] = <span class="str">"at\0ma"</span>;   <span class="cm">// 6 bytes — print only "at" (stops at first '\0')</span>
+<span class="kw">char</span> a5[] = <span class="str">"atma\\0"</span>;  <span class="cm">// 7 bytes — "atma\0" printed as is</span></pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="string-init">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(240,165,0,.15); color:var(--u-strings);">⚙️</span>
+      Initialization Rules
+    </div>
+    <ul>
+      <li><strong>Size not specified:</strong> compiler counts elements and allocates exactly those bytes.</li>
+      <li><strong>Size specified:</strong> unused locations filled with '\0' (partial initialization).</li>
+      <li><strong>Hard-coded char arrays:</strong> programmer must manually add '\0' at end.</li>
+    </ul>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">All initialization variants</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="cm">/* sizeof shown for 32-bit GCC */</span>
+<span class="kw">char</span> a2[] = {<span class="str">'a'</span>,<span class="str">'t'</span>,<span class="str">'m'</span>,<span class="str">'a'</span>};        <span class="cm">// sizeof = 4, NO '\0' → unsafe to print</span>
+<span class="kw">char</span> a3[] = <span class="str">"atma"</span>;               <span class="cm">// sizeof = 5, safe to print</span>
+<span class="kw">char</span> a4[10] = {<span class="str">'a'</span>,<span class="str">'t'</span>,<span class="str">'m'</span>,<span class="str">'a'</span>};  <span class="cm">// sizeof = 10, partial init → safe</span>
+<span class="kw">char</span> a5[10] = <span class="str">"atma"</span>;             <span class="cm">// sizeof = 10, safe</span>
+<span class="kw">char</span> a7[] = {<span class="str">'a'</span>,<span class="str">'t'</span>,<span class="str">'m'</span>,<span class="str">'a'</span>,<span class="str">'\0'</span>,<span class="str">'t'</span>,<span class="str">'r'</span>,<span class="str">'i'</span>,<span class="str">'s'</span>,<span class="str">'h'</span>,<span class="str">'a'</span>,<span class="str">'\0'</span>};
+<span class="cm">// sizeof = 12, prints only "atma" (stops at first '\0')</span></pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="string-io">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(240,165,0,.15); color:var(--u-strings);">📥</span>
+      Reading &amp; Displaying Strings
+    </div>
+    <p>Use <mark>%s</mark> format specifier with scanf/printf.</p>
+    <div class="info-box warn"><strong>Important</strong>scanf with %s stops at whitespace. Use <code>%[^\n]s</code> to read entire line including spaces.</div>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">scanf/printf variants</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="kw">char</span> str3[100];
+<span class="fn">scanf</span>(<span class="str">"%s"</span>, str3);          <span class="cm">// reads until whitespace → only first word</span>
+
+<span class="kw">char</span> str4[100], str5[100];
+<span class="fn">scanf</span>(<span class="str">"%s %s"</span>, str4, str5);  <span class="cm">// reads two words separated by space</span>
+
+<span class="kw">char</span> str6[100];
+<span class="fn">scanf</span>(<span class="str">"%[^\n]s"</span>, str6);       <span class="cm">// reads entire line (stops at newline)</span>
+
+<span class="kw">char</span> str7[100];
+<span class="fn">scanf</span>(<span class="str">"%[abcd]s"</span>, str7);      <span class="cm">// only chars a,b,c,d allowed; stops at others</span>
+<span class="fn">scanf</span>(<span class="str">"%[^abcd]s"</span>, str7);     <span class="cm">// stops when a,b,c,d encountered</span>
+
+<span class="cm">/* Loop-based printing */</span>
+<span class="kw">int</span> i = 0;
+<span class="kw">while</span>(str3[i] != <span class="str">'\0'</span>) { <span class="fn">printf</span>(<span class="str">"%c"</span>, str3[i]); i++; }</pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="pointers-strings">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(240,165,0,.15); color:var(--u-strings);">🔗</span>
+      Pointers vs Strings
+    </div>
+    <table>
+      <tr><th>Feature</th><th>char array</th><th>char pointer</th></tr>
+      <tr><td>Storage</td><td>Stack segment</td><td>Pointer on stack, string in code segment (read-only)</td></tr>
+      <tr><td>Modify chars</td><td>✅ Yes</td><td>❌ Undefined behavior (read-only)</td></tr>
+      <tr><td>Increment name</td><td>❌ Compile error (constant pointer)</td><td>✅ Yes (p++)</td></tr>
+      <tr><td>sizeof</td><td>Actual size including '\0'</td><td>Size of pointer (4 or 8 bytes)</td></tr>
+    </table>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">Pointer vs array demos</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="cm">/* char pointer — string in READ-ONLY code segment */</span>
+<span class="kw">char</span> *p1 = <span class="str">"pesu"</span>;
+<span class="fn">printf</span>(<span class="str">"%s"</span>, p1);    <span class="cm">// pesu</span>
+p1++;                  <span class="cm">// pointer can move</span>
+<span class="fn">printf</span>(<span class="str">"%s"</span>, p1);    <span class="cm">// esu</span>
+p1[1] = <span class="str">'S'</span>;         <span class="cm">// UNDEFINED BEHAVIOR — trying to modify read-only</span>
+
+<span class="cm">/* char array — string in STACK */</span>
+<span class="kw">char</span> p2[] = <span class="str">"pesu"</span>;
+p2[1] = <span class="str">'E'</span>;          <span class="cm">// OK — pEsu</span>
+<span class="fn">printf</span>(<span class="str">"%s"</span>, p2);    <span class="cm">// pEsu</span>
+<span class="cm">// p2++;              // COMPILE ERROR — array is a constant pointer</span></pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="string-functions">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(240,165,0,.15); color:var(--u-strings);">📚</span>
+      string.h Functions
+    </div>
+    <p>Include <code>&lt;string.h&gt;</code>. Provides ~25 string and memory functions.</p>
+    <table class="fn-table">
+      <tr><th>Function</th><th>Description</th><th>Returns</th></tr>
+      <tr><td>strlen(str)</td><td>Number of chars (excl. '\0')</td><td>size_t length</td></tr>
+      <tr><td>strcpy(dest,src)</td><td>Copy src → dest (incl. '\0')</td><td>Pointer to dest</td></tr>
+      <tr><td>strncpy(dest,src,n)</td><td>Copy at most n chars</td><td>Pointer to dest (may not null-terminate!)</td></tr>
+      <tr><td>strcat(dest,src)</td><td>Append src to dest</td><td>Pointer to dest</td></tr>
+      <tr><td>strncat(dest,src,n)</td><td>Append at most n chars</td><td>Pointer to dest</td></tr>
+      <tr><td>strcmp(s1,s2)</td><td>Compare strings</td><td>0 if equal, &lt;0 if s1&lt;s2, &gt;0 if s1&gt;s2</td></tr>
+      <tr><td>strncmp(s1,s2,n)</td><td>Compare n chars</td><td>Same as strcmp</td></tr>
+      <tr><td>strchr(str,ch)</td><td>First occurrence of ch</td><td>Pointer or NULL</td></tr>
+      <tr><td>strrchr(str,ch)</td><td>Last occurrence of ch</td><td>Pointer or NULL</td></tr>
+      <tr><td>strstr(hay,needle)</td><td>Find substring</td><td>Pointer or NULL</td></tr>
+      <tr><td>strtok(str,delim)</td><td>Tokenize string</td><td>Pointer to token or NULL</td></tr>
+    </table>
+    <div class="info-box warn"><strong>Thread Safety</strong>strtok() is NOT thread-safe (maintains internal state). Use strtok_r() in multi-threaded programs.</div>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">Demo of all string.h functions</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="inc">#include &lt;stdio.h&gt;</span>
+<span class="inc">#include &lt;string.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">char</span> str1[100] = <span class="str">"Hello"</span>;
+    <span class="kw">char</span> str2[] = <span class="str">"World"</span>;
+    <span class="kw">char</span> str3[100], str4[100];
+
+    <span class="fn">printf</span>(<span class="str">"Length of str1: %lu\n"</span>, <span class="fn">strlen</span>(str1));      <span class="cm">// 5</span>
+
+    <span class="fn">strcpy</span>(str3, str1);
+    <span class="fn">printf</span>(<span class="str">"After strcpy: %s\n"</span>, str3);               <span class="cm">// Hello</span>
+
+    <span class="fn">strncpy</span>(str4, str2, 3); str4[3] = <span class="str">'\0'</span>;
+    <span class="fn">printf</span>(<span class="str">"After strncpy: %s\n"</span>, str4);              <span class="cm">// Wor</span>
+
+    <span class="fn">strcat</span>(str1, <span class="str">" "</span>); <span class="fn">strcat</span>(str1, str2);
+    <span class="fn">printf</span>(<span class="str">"After strcat: %s\n"</span>, str1);               <span class="cm">// Hello World</span>
+
+    <span class="fn">strncat</span>(str3, str2, 3);
+    <span class="fn">printf</span>(<span class="str">"After strncat: %s\n"</span>, str3);              <span class="cm">// HelloWor</span>
+
+    <span class="fn">printf</span>(<span class="str">"strcmp: %d\n"</span>, <span class="fn">strcmp</span>(<span class="str">"abc"</span>, <span class="str">"abd"</span>));     <span class="cm">// -1</span>
+    <span class="fn">printf</span>(<span class="str">"strncmp: %d\n"</span>, <span class="fn">strncmp</span>(<span class="str">"abc"</span>, <span class="str">"abd"</span>, 2)); <span class="cm">// 0</span>
+
+    <span class="kw">char</span> *ptr = <span class="fn">strchr</span>(str1, <span class="str">'W'</span>);
+    <span class="kw">if</span>(ptr) <span class="fn">printf</span>(<span class="str">"'W' at index: %ld\n"</span>, ptr - str1); <span class="cm">// 6</span>
+
+    <span class="kw">char</span> fruits[] = <span class="str">"apple,banana,grape"</span>;
+    <span class="kw">char</span> *token = <span class="fn">strtok</span>(fruits, <span class="str">","</span>);
+    <span class="kw">while</span>(token != <span class="num">NULL</span>) {
+        <span class="fn">printf</span>(<span class="str">"Token: %s\n"</span>, token);
+        token = <span class="fn">strtok</span>(<span class="num">NULL</span>, <span class="str">","</span>);
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="user-defined-fns">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(240,165,0,.15); color:var(--u-strings);">🛠️</span>
+      User-Defined String Functions
+    </div>
+    <button class="collapsible-btn" onclick="toggleCollapse(this)">my_strlen — 6 Versions <span class="arrow">▶</span></button>
+    <div class="collapsible-content">
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">All 6 versions of strlen</span>
+          <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+        </div>
+        <pre><span class="cm">/* V1: Array indexing */</span>
+<span class="kw">int</span> <span class="fn">my_strlen</span>(<span class="kw">char</span> str[]) {
+    <span class="kw">int</span> i = 0;
+    <span class="kw">while</span>(str[i] != <span class="str">'\0'</span>) { ++i; }
+    <span class="kw">return</span> i;
+}
+
+<span class="cm">/* V2: Pointer increment */</span>
+<span class="kw">int</span> <span class="fn">my_strlen</span>(<span class="kw">char</span> *str) {
+    <span class="kw">int</span> i = 0;
+    <span class="kw">while</span>(*str) { i++; str++; }
+    <span class="kw">return</span> i;
+}
+
+<span class="cm">/* V3: Recursion + pre-increment */</span>
+<span class="kw">int</span> <span class="fn">my_strlen</span>(<span class="kw">char</span> *str) {
+    <span class="kw">if</span>(!(*str)) <span class="kw">return</span> 0;
+    <span class="kw">else return</span> 1 + <span class="fn">my_strlen</span>(++str);
+}
+
+<span class="cm">/* V4: Recursion, no pointer change */</span>
+<span class="kw">int</span> <span class="fn">my_strlen</span>(<span class="kw">char</span> *str) {
+    <span class="kw">if</span>(!(*str)) <span class="kw">return</span> 0;
+    <span class="kw">else return</span> 1 + <span class="fn">my_strlen</span>(str + 1);
+}
+
+<span class="cm">/* V5: Recursion + post-increment (careful: infinite loop risk if used wrongly) */</span>
+<span class="kw">int</span> <span class="fn">my_strlen</span>(<span class="kw">char</span> *str) {
+    <span class="kw">if</span>(!(*str)) <span class="kw">return</span> 0;
+    <span class="kw">else return</span> 1 + <span class="fn">my_strlen</span>(str++);
+}
+
+<span class="cm">/* V6: Pointer arithmetic */</span>
+<span class="kw">int</span> <span class="fn">my_strlen</span>(<span class="kw">char</span> *str) {
+    <span class="kw">char</span> *copy = str;
+    <span class="kw">while</span>(*copy) { copy++; }
+    <span class="kw">return</span> copy - str;   <span class="cm">// pointer subtraction = length</span>
+}</pre>
+      </div>
+    </div>
+
+    <button class="collapsible-btn" onclick="toggleCollapse(this)">my_strcpy, my_strcmp, my_strchr, my_strcat <span class="arrow">▶</span></button>
+    <div class="collapsible-content">
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">C</span><span class="code-label">User-defined string functions</span>
+          <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+        </div>
+        <pre><span class="cm">/* my_strcpy — V4 (most concise) */</span>
+<span class="kw">void</span> <span class="fn">my_strcpy</span>(<span class="kw">char</span> *b, <span class="kw">char</span> *a) {
+    <span class="kw">while</span>(*b++ = *a++);   <span class="cm">// copies char by char including '\0'</span>
+}
+
+<span class="cm">/* my_strcmp */</span>
+<span class="kw">int</span> <span class="fn">my_strcmp</span>(<span class="kw">char</span> *a, <span class="kw">char</span> *b) {
+    <span class="kw">for</span>(;*b && *a && *b == *a; a++, b++);
+    <span class="kw">return</span> *a - *b;  <span class="cm">// 0 = equal, <0 = a<b, >0 = a>b</span>
+}
+
+<span class="cm">/* my_strchr — find first occurrence */</span>
+<span class="kw">char</span>* <span class="fn">my_strchr</span>(<span class="kw">char</span> *a, <span class="kw">char</span> c) {
+    <span class="kw">while</span>(*a && *a != c) { a++; }
+    <span class="kw">return</span> !(*a) ? <span class="num">NULL</span> : a;
+}
+
+<span class="cm">/* my_strcat */</span>
+<span class="kw">void</span> <span class="fn">my_strcat</span>(<span class="kw">char</span> *a, <span class="kw">char</span> *b) {
+    <span class="kw">while</span>(*a) { a++; }           <span class="cm">// go to end of a</span>
+    <span class="kw">while</span>(*b) { *a = *b; a++; b++; }  <span class="cm">// copy b</span>
+    *a = <span class="str">'\0'</span>;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="section anchor" id="string-pitfalls">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(240,165,0,.15); color:var(--u-strings);">⚠️</span>
+      Common String Pitfalls &amp; Best Practices
+    </div>
+    <table>
+      <tr><th>Error</th><th>Example</th><th>Fix</th></tr>
+      <tr><td>Buffer Overflow</td><td><code>char dest[5]; strcpy(dest,"Hello World!");</code></td><td>Make buffer large enough; use strncpy</td></tr>
+      <tr><td>Missing '\0'</td><td><code>char d[5]; strncpy(d,"Hello",5);</code></td><td>Manually: <code>d[sizeof(d)-1]='\0';</code></td></tr>
+      <tr><td>No '\0' before strlen</td><td><code>char arr[5]={'H','e','l','l','o'}; strlen(arr);</code></td><td>Use double-quoted init: <code>"Hello"</code></td></tr>
+      <tr><td>Uninitialized pointer</td><td><code>char *str; strcpy(str,"Hi");</code></td><td><code>char *str = malloc(20);</code></td></tr>
+    </table>
+    <div class="info-box tip"><strong>Best Practices Summary</strong>1. Always include space for '\0'. 2. Prefer strncpy/strncat/snprintf. 3. Manually add '\0' if needed. 4. Check buffer size before copy. 5. Initialize pointers before use. 6. Use free() after malloc. 7. Validate strings before strlen. 8. Use memmove for overlapping buffers.</div>
+  </div>
+
+  <div class="section anchor" id="cla">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(240,165,0,.15); color:var(--u-strings);">💻</span>
+      Command Line Arguments (CLA)
+    </div>
+    <p>Values passed to a program from the terminal when it runs. Allow dynamic, flexible input without hardcoding.</p>
+    <div class="info-box note"><strong>Signature</strong><code>int main(int argc, char *argv[])</code> — argc = argument count (≥1, includes program name). argv[0] = program name. argv[1]…argv[argc-1] = actual args. All args are strings → convert with atoi(), atof().</div>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">CLA Examples</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="inc">#include &lt;stdio.h&gt;</span>
+<span class="inc">#include &lt;stdlib.h&gt;</span>
+
+<span class="cm">/* Example 1: print all args */</span>
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">int</span> argc, <span class="kw">char</span> *argv[]) {
+    <span class="kw">for</span>(<span class="kw">int</span> i = 0; i &lt; argc; i++)
+        <span class="fn">printf</span>(<span class="str">"Arg %d: %s\n"</span>, i, argv[i]);
+    <span class="kw">return</span> 0;
+}
+<span class="cm">/* Run: ./a.exe sindhu r pai  → 4 args */</span>
+
+<span class="cm">/* Example 2: sum of integer args */</span>
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">int</span> argc, <span class="kw">char</span> *argv[]) {
+    <span class="kw">int</span> sum = 0;
+    <span class="kw">for</span>(<span class="kw">int</span> i = 1; i &lt; argc; i++)
+        sum += <span class="fn">atoi</span>(argv[i]);   <span class="cm">// converts string → int</span>
+    <span class="fn">printf</span>(<span class="str">"Sum = %d\n"</span>, sum);
+    <span class="kw">return</span> 0;
+}
+<span class="cm">/* Run: ./a.exe 3 4 9 → Sum = 16 */</span></pre>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 2: DYNAMIC MEMORY MANAGEMENT        -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <div class="unit-hero u-dmm anchor" id="dmm-intro">
+    <div class="unit-eyebrow" style="color:var(--u-dmm)">Module 2</div>
+    <div class="unit-title">Dynamic Memory Management</div>
+    <div class="unit-subtitle">malloc, calloc, realloc, free — heap allocation, memory segments, and common errors.</div>
+    <div class="unit-tags">
+      <span class="unit-tag">heap</span><span class="unit-tag">malloc</span><span class="unit-tag">calloc</span><span class="unit-tag">realloc</span><span class="unit-tag">free</span><span class="unit-tag">dangling ptr</span>
+    </div>
+    <div style="margin-top:18px;"><span style="font-size:12px; color:var(--muted);">📄 Source PDF included in combined unit 3 PDF above</span></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(224,92,42,.15); color:var(--u-dmm);">🗂️</span>
+      Memory Layout of a C Program
+    </div>
+    <table>
+      <tr><th>Segment</th><th>Contents</th><th>Notes</th></tr>
+      <tr><td><strong>Text</strong></td><td>Compiled machine code</td><td>Read-only; shared for frequent programs</td></tr>
+      <tr><td><strong>Initialized Data</strong></td><td>Global/static vars with initial values</td><td>Read-only area + read-write area</td></tr>
+      <tr><td><strong>BSS (Uninitialized)</strong></td><td>Global/static vars initialized to 0 or no explicit init</td><td>Zeroed before execution</td></tr>
+      <tr><td><strong>Heap</strong></td><td>Dynamic allocation (malloc/calloc)</td><td>Grows upward; shared by all libs</td></tr>
+      <tr><td><strong>Stack</strong></td><td>Local variables, function args, return addresses</td><td>Grows downward; LIFO; recursive calls added here</td></tr>
+    </table>
+    <div class="info-box note"><strong>Note</strong>Stack and heap are at opposite ends of virtual address space. VLA (Variable Length Array) is risky — no check for memory unavailability and may crash silently.</div>
+  </div>
+
+  <div class="section anchor" id="malloc">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(224,92,42,.15); color:var(--u-dmm);">➕</span>
+      malloc()
+    </div>
+    <p><strong>Prototype:</strong> <code>void *malloc(size_t size);</code></p>
+    <p>Allocates the specified number of bytes on heap. Does <strong>NOT</strong> initialize — contains garbage values. Returns NULL on failure.</p>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">malloc examples</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="inc">#include &lt;stdio.h&gt;</span>
+<span class="inc">#include &lt;stdlib.h&gt;</span>
+
+<span class="cm">/* Single integer */</span>
+<span class="kw">int</span> *p = (<span class="kw">int</span>*)<span class="fn">malloc</span>(<span class="kw">sizeof</span>(<span class="kw">int</span>));
+*p = 10;
+<span class="fn">printf</span>(<span class="str">"p = %d\n"</span>, *p);  <span class="cm">// 10</span>
+
+<span class="cm">/* Array of n integers */</span>
+<span class="kw">int</span> n = 5;
+<span class="kw">int</span> *x = (<span class="kw">int</span>*)<span class="fn">malloc</span>(n * <span class="kw">sizeof</span>(<span class="kw">int</span>));
+<span class="kw">if</span>(x == <span class="num">NULL</span>) { <span class="fn">printf</span>(<span class="str">"Allocation failed!\n"</span>); <span class="kw">return</span> 1; }
+<span class="kw">for</span>(<span class="kw">int</span> i = 0; i &lt; n; i++) <span class="fn">scanf</span>(<span class="str">"%d"</span>, &amp;x[i]);
+<span class="kw">for</span>(<span class="kw">int</span> i = 0; i &lt; n; i++) <span class="fn">printf</span>(<span class="str">"%d\t"</span>, *(x+i));
+<span class="fn">free</span>(x);</pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="calloc">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(224,92,42,.15); color:var(--u-dmm);">0️⃣</span>
+      calloc()
+    </div>
+    <p><strong>Prototype:</strong> <code>void *calloc(size_t nmemb, size_t size);</code></p>
+    <p>Allocates memory for <code>nmemb</code> elements of <code>size</code> bytes each and <strong>initializes all to zero</strong>. Returns NULL on failure.</p>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">malloc vs calloc</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="kw">int</span> *a = (<span class="kw">int</span>*)<span class="fn">malloc</span>(5 * <span class="kw">sizeof</span>(<span class="kw">int</span>));  <span class="cm">// garbage values</span>
+<span class="kw">int</span> *b = (<span class="kw">int</span>*)<span class="fn">calloc</span>(5, <span class="kw">sizeof</span>(<span class="kw">int</span>));  <span class="cm">// all zeros: 0 0 0 0 0</span></pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="realloc">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(224,92,42,.15); color:var(--u-dmm);">🔄</span>
+      realloc()
+    </div>
+    <p><strong>Prototype:</strong> <code>void *realloc(void *ptr, size_t size);</code></p>
+    <p>Resizes a previously allocated block. Preserves existing data (up to new size). Returns NULL on failure (<strong>original block untouched</strong>).</p>
+    <div class="info-box warn"><strong>Special Cases</strong>If ptr is NULL → behaves like malloc(size). If size = 0 → behaves like free(ptr). If realloc moves the block, old pointer becomes dangling!</div>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">realloc demo</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="kw">int</span> *p = (<span class="kw">int</span>*)<span class="fn">malloc</span>(3 * <span class="kw">sizeof</span>(<span class="kw">int</span>));
+<span class="cm">/* ... fill p[0]=33, p[1]=22, p[2]=15 ... */</span>
+
+<span class="kw">int</span> new_size = 10;
+<span class="kw">int</span> *temp = (<span class="kw">int</span>*)<span class="fn">realloc</span>(p, new_size * <span class="kw">sizeof</span>(<span class="kw">int</span>));
+<span class="kw">if</span>(temp == <span class="num">NULL</span>) {
+    <span class="fn">printf</span>(<span class="str">"realloc failed — original still valid\n"</span>);
+} <span class="kw">else</span> {
+    p = temp;  <span class="cm">// safe to reassign only after NULL check</span>
+    <span class="cm">/* new size > old: extra slots have garbage */</span>
+    <span class="cm">/* new size < old: data beyond new size is lost */</span>
+}</pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="free">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(224,92,42,.15); color:var(--u-dmm);">🗑️</span>
+      free()
+    </div>
+    <p>Deallocates heap memory. The OS uses <strong>bookkeeping info</strong> stored at allocation time to know how many bytes to release. After free(), the pointer becomes a <mark>dangling pointer</mark> — set it to NULL.</p>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">free usage</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="kw">int</span> *x = (<span class="kw">int</span>*)<span class="fn">malloc</span>(<span class="kw">sizeof</span>(<span class="kw">int</span>));
+*x = 10;
+<span class="fn">free</span>(x);
+x = <span class="num">NULL</span>;  <span class="cm">// best practice — avoid dangling pointer</span>
+<span class="cm">// free(NULL) is safe — does nothing</span></pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="dmm-errors">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(224,92,42,.15); color:var(--u-dmm);">🐛</span>
+      Common DMM Errors
+    </div>
+    <table>
+      <tr><th>Error</th><th>Description</th><th>Fix</th></tr>
+      <tr><td>Dangling Pointer</td><td>Pointer to freed/moved memory</td><td>Set pointer = NULL after free</td></tr>
+      <tr><td>NULL Pointer</td><td>Dereferencing NULL → guaranteed crash</td><td>Always check malloc return before use</td></tr>
+      <tr><td>Memory Leak</td><td>Allocated memory with no pointer → garbage</td><td>Always free before reassigning pointer</td></tr>
+      <tr><td>Double Free</td><td>free() on already-freed memory → undefined</td><td>Set to NULL after free; free(NULL) is safe</td></tr>
+      <tr><td>Memory Overrun</td><td>Write beyond allocated bounds</td><td>Check index bounds always</td></tr>
+      <tr><td>Invalid Free</td><td>free() on stack/non-malloc'd memory</td><td>Only free heap-allocated memory</td></tr>
+    </table>
+    <div class="info-box danger"><strong>Double Free Warning</strong>DO NOT attempt double free. It may corrupt the memory manager, cause crashes, or alter execution flow in unpredictable ways.</div>
+  </div>
+
+  <div class="section anchor" id="dmm-best">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(224,92,42,.15); color:var(--u-dmm);">✅</span>
+      DMM Best Practices
+    </div>
+    <ul>
+      <li>Always check returned pointer ≠ NULL before using.</li>
+      <li>Use calloc for zero-initialized arrays instead of malloc + manual init.</li>
+      <li>Free all allocated memory when no longer needed.</li>
+      <li>Set pointer to NULL after free to avoid dangling ptr.</li>
+      <li>Store realloc result in temp pointer, check NULL, then assign.</li>
+      <li>Use <code>n * sizeof(type)</code> — never just <code>n</code>.</li>
+      <li>Every malloc/calloc/realloc must have exactly one matching free.</li>
+    </ul>
+  </div>
+
+  <hr>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 3: STRUCTURES                       -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <div class="unit-hero u-structs anchor" id="struct-intro">
+    <div class="unit-eyebrow" style="color:var(--u-structs)">Module 3</div>
+    <div class="unit-title">Structures in C</div>
+    <div class="unit-subtitle">User-defined types, memory layout, typedef, nested structures, arrays of structures, bit fields, structs with functions.</div>
+    <div class="unit-tags">
+      <span class="unit-tag">struct</span><span class="unit-tag">typedef</span><span class="unit-tag">nested</span><span class="unit-tag">array of structs</span><span class="unit-tag">bit fields</span><span class="unit-tag">padding</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(67,217,162,.15); color:var(--u-structs);">📦</span>
+      Why Structures?
+    </div>
+    <p>A <strong>structure</strong> is a user-defined data type that groups variables of <em>different types</em> under a single name. Without structures, you'd need separate arrays for each field (error-prone implicit relationships).</p>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">Structure syntax &amp; examples</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="cm">/* Declaration (blueprint only — no memory allocated here) */</span>
+<span class="kw">struct</span> <span class="type">student</span> {
+    <span class="kw">int</span>  roll_no;
+    <span class="kw">char</span> name[20];
+    <span class="kw">int</span>  marks;
+};
+
+<span class="cm">/* Variable declaration — memory allocated now */</span>
+<span class="kw">struct</span> <span class="type">student</span> s1;       <span class="cm">// stack allocation</span>
+<span class="kw">struct</span> <span class="type">student</span> *s2;      <span class="cm">// pointer — only pointer memory allocated</span>
+
+<span class="cm">/* Assignment */</span>
+s1.roll_no = 101;
+s1.marks   = 87;
+<span class="fn">strcpy</span>(s1.name, <span class="str">"Rahul"</span>);
+
+<span class="cm">/* Initialization at declaration */</span>
+<span class="kw">struct</span> <span class="type">student</span> s2 = {44, <span class="str">"abc"</span>, 100};
+<span class="kw">struct</span> <span class="type">student</span> s3 = {44, <span class="str">"abc"</span>};          <span class="cm">// partial → marks = 0</span>
+<span class="kw">struct</span> <span class="type">student</span> s4 = {.name=<span class="str">"abc"</span>, .roll_no=44}; <span class="cm">// designated (C99+)</span></pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="struct-access">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(67,217,162,.15); color:var(--u-structs);">🎯</span>
+      Accessing Members — Dot &amp; Arrow Operators
+    </div>
+    <table>
+      <tr><th>Operator</th><th>Used with</th><th>Syntax</th></tr>
+      <tr><td>. (dot)</td><td>Structure variable</td><td>s1.roll_no</td></tr>
+      <tr><td>-&gt; (arrow)</td><td>Pointer to structure</td><td>s2-&gt;roll_no &nbsp;(same as (*s2).roll_no)</td></tr>
+    </table>
+    <div class="info-box tip"><strong>Member-wise Copy</strong>Structures of the same type are assignment-compatible: <code>s2 = s1</code> copies each member individually. They do NOT point to the same memory.</div>
+  </div>
+
+  <div class="section anchor" id="struct-memory">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(67,217,162,.15); color:var(--u-structs);">💾</span>
+      Memory Allocation &amp; Padding
+    </div>
+    <p>Processor architecture mandates alignment. On a 32-bit GCC machine, the word size is 4 bytes. The compiler may add padding to align members.</p>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">Padding examples (32-bit GCC)</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="kw">struct</span> test  { <span class="kw">int</span> i; <span class="kw">char</span> j; };          <span class="cm">// 8 bytes (4+4 with padding)</span>
+<span class="kw">struct</span> test1 { <span class="kw">char</span> j; <span class="kw">int</span> i; };          <span class="cm">// 8 bytes (4+4 with padding)</span>
+<span class="kw">struct</span> test2 { <span class="kw">char</span> k; <span class="kw">char</span> j; <span class="kw">int</span> i; }; <span class="cm">// 8 bytes (4+4)</span>
+<span class="kw">struct</span> test3 { <span class="kw">int</span> i; <span class="kw">char</span> k; <span class="kw">int</span> j; }; <span class="cm">// 12 bytes (4+4+4)</span>
+
+<span class="cm">/* #pragma pack — control padding */</span>
+<span class="inc">#pragma pack(1)   </span><span class="cm">// no padding — tightly packed</span>
+<span class="kw">struct</span> PackedStruct { <span class="kw">char</span> a; <span class="kw">int</span> b; };   <span class="cm">// 5 bytes (not 8)</span>
+<span class="inc">#pragma pack()    </span><span class="cm">// restore default</span></pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="typedef">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(67,217,162,.15); color:var(--u-structs);">🏷️</span>
+      typedef
+    </div>
+    <p><code>typedef</code> gives a type a new alias. Most useful with structs to avoid typing <code>struct</code> repeatedly.</p>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">typedef examples</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="kw">typedef int</span> age;          <span class="cm">// age is now another name for int</span>
+age a = 80;
+
+<span class="cm">/* V1: typedef after struct */</span>
+<span class="kw">struct</span> <span class="type">player</span> { <span class="kw">int</span> id; <span class="kw">char</span> name[20]; };
+<span class="kw">typedef struct</span> <span class="type">player</span> player_t;
+player_t p1;
+
+<span class="cm">/* V2: typedef inline */</span>
+<span class="kw">typedef struct</span> <span class="type">player</span> { <span class="kw">int</span> id; <span class="kw">char</span> name[20]; } player_t;
+player_t p1;
+
+<span class="cm">/* Array typedef */</span>
+<span class="kw">typedef int</span> c[10];  <span class="cm">// c is a name for "array of 10 ints"</span>
+c arr;</pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="nested-struct">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(67,217,162,.15); color:var(--u-structs);">🪆</span>
+      Nested Structures
+    </div>
+    <table>
+      <tr><th>Type</th><th>Description</th><th>Reusable?</th></tr>
+      <tr><td>A. Named inside another</td><td>One named struct as member of another</td><td>Yes</td></tr>
+      <tr><td>B. Anonymous inside another</td><td>Inner struct defined inline, no tag</td><td>No (one-time use)</td></tr>
+      <tr><td>C. Pointer to nested</td><td>Pointer to struct as member (dynamic)</td><td>Yes + dynamic memory</td></tr>
+    </table>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">Nested structure examples</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="cm">/* A: Named nested */</span>
+<span class="kw">struct</span> <span class="type">Date</span> { <span class="kw">int</span> day, month, year; };
+<span class="kw">struct</span> <span class="type">Student</span> { <span class="kw">int</span> roll_no; <span class="kw">struct</span> <span class="type">Date</span> dob; };
+
+<span class="kw">struct</span> <span class="type">Student</span> s1;
+s1.dob.day = 31; s1.dob.month = 1; s1.dob.year = 2025;
+
+<span class="cm">/* C: Pointer to nested (dynamic) */</span>
+<span class="kw">struct</span> <span class="type">Student2</span> { <span class="kw">int</span> roll_no; <span class="kw">struct</span> <span class="type">Date</span> *dob; };
+<span class="kw">struct</span> <span class="type">Student2</span> s2;
+s2.dob = <span class="fn">malloc</span>(<span class="kw">sizeof</span>(<span class="kw">struct</span> <span class="type">Date</span>));
+(s2.dob)-&gt;day = 31;</pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="struct-functions">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(67,217,162,.15); color:var(--u-structs);">⚙️</span>
+      Structures &amp; Functions
+    </div>
+    <div class="info-box warn"><strong>Pass by Value</strong>In C, structs are always passed by value (member-wise copy). To modify a struct inside a function, pass a pointer to it.</div>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">Pass by value vs pointer</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="kw">struct</span> <span class="type">Player</span> { <span class="kw">int</span> id; <span class="kw">char</span> name[20]; };
+
+<span class="cm">/* read — needs pointer to modify original */</span>
+<span class="kw">void</span> <span class="fn">read</span>(<span class="kw">struct</span> <span class="type">Player</span> *p1) {
+    <span class="fn">scanf</span>(<span class="str">"%d"</span>, &amp;(p1-&gt;id));
+    <span class="fn">scanf</span>(<span class="str">"%[^\n]s"</span>, p1-&gt;name);
+}
+
+<span class="cm">/* disp — pointer to const: read-only, efficient (no copy) */</span>
+<span class="kw">void</span> <span class="fn">disp</span>(<span class="kw">const struct</span> <span class="type">Player</span> *p1) {
+    <span class="fn">printf</span>(<span class="str">"%d %s\n"</span>, p1-&gt;id, p1-&gt;name);
+}
+
+<span class="cm">/* return struct from function */</span>
+<span class="kw">struct</span> <span class="type">Player</span> <span class="fn">modify</span>(<span class="kw">struct</span> <span class="type">Player</span> p) {
+    <span class="fn">strcpy</span>(p.name, <span class="str">"Sourav"</span>);
+    <span class="kw">return</span> p;  <span class="cm">// returned as temp copy, assigned to p1 in caller</span>
+}</pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="array-structs">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(67,217,162,.15); color:var(--u-structs);">🗃️</span>
+      Array of Structures
+    </div>
+    <p>A collection of structure variables in <strong>contiguous memory</strong>. Perfect for managing multiple records.</p>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">Array of structures — full example</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="inc">#include &lt;stdio.h&gt;</span>
+<span class="inc">#include &lt;string.h&gt;</span>
+
+<span class="kw">struct</span> <span class="type">Student</span> { <span class="kw">int</span> roll_no; <span class="kw">char</span> name[50]; <span class="kw">float</span> marks; };
+
+<span class="kw">void</span> <span class="fn">read</span>(<span class="kw">struct</span> <span class="type">Student</span> *s, <span class="kw">int</span> n) {
+    <span class="kw">for</span>(<span class="kw">int</span> i = 0; i &lt; n; i++) {
+        <span class="fn">scanf</span>(<span class="str">"%d"</span>, &amp;s[i].roll_no);
+        <span class="fn">scanf</span>(<span class="str">" %[^\n]"</span>, s[i].name);
+        <span class="fn">scanf</span>(<span class="str">"%f"</span>, &amp;s[i].marks);
+    }
+}
+
+<span class="kw">void</span> <span class="fn">display</span>(<span class="kw">struct</span> <span class="type">Student</span> *s, <span class="kw">int</span> n) {
+    <span class="kw">for</span>(<span class="kw">int</span> i = 0; i &lt; n; i++)
+        <span class="fn">printf</span>(<span class="str">"%d  %s  %.2f\n"</span>, s[i].roll_no, s[i].name, s[i].marks);
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">struct</span> <span class="type">Student</span> s[100];
+    <span class="kw">int</span> n; <span class="fn">scanf</span>(<span class="str">"%d"</span>, &amp;n);
+    <span class="fn">read</span>(s, n);   <span class="cm">// array degenerates to pointer</span>
+    <span class="fn">display</span>(s, n);
+    <span class="kw">return</span> 0;
+}
+
+<span class="cm">/* Pointer to array of structs */</span>
+<span class="kw">struct</span> <span class="type">Student</span> *ptr = s;
+<span class="cm">// ptr++ moves by sizeof(struct Student) bytes</span>
+<span class="fn">printf</span>(<span class="str">"%d"</span>, (ptr+2)-&gt;roll_no);  <span class="cm">// third student's roll no</span></pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="bitfields">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(67,217,162,.15); color:var(--u-structs);">🧩</span>
+      Bit Fields
+    </div>
+    <p>Allow specifying the exact number of <strong>bits</strong> (not bytes) for structure members. Essential for embedded systems and hardware registers.</p>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">Bit field examples</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="kw">struct</span> <span class="type">Flags</span> {
+    <span class="kw">unsigned int</span> isVisible : 1;  <span class="cm">// 1 bit → 0 or 1</span>
+    <span class="kw">unsigned int</span> isEnabled : 1;  <span class="cm">// 1 bit → 0 or 1</span>
+    <span class="kw">unsigned int</span> errorCode : 3;  <span class="cm">// 3 bits → 0–7</span>
+};  <span class="cm">// total 5 bits; max 1 byte vs 12 bytes without bit fields!</span>
+
+<span class="kw">struct</span> <span class="type">Status</span> {
+    <span class="kw">int</span> bin1 : 4;               <span class="cm">// signed 4-bit: -8 to +7</span>
+    <span class="kw">unsigned int</span> bin2 : 2;      <span class="cm">// unsigned 2-bit: 0–3</span>
+};
+
+<span class="cm">/* Unnamed bit field for padding */</span>
+<span class="kw">struct</span> example {
+    <span class="kw">unsigned int</span> a : 3;
+    <span class="kw">unsigned int</span>   : 2;  <span class="cm">// 2 unnamed padding bits</span>
+    <span class="kw">unsigned int</span> b : 4;
+};
+
+<span class="cm">/* Zero-width forces alignment to next word boundary */</span>
+<span class="kw">struct</span> s { <span class="kw">int</span> x:4; <span class="kw">int</span> :0; <span class="kw">unsigned int</span> y:2; };
+<span class="cm">// size = 8 bytes (not 4) because :0 forces new word</span>
+
+<span class="cm">/* Invalid: cannot take address of bit field, no arrays, no pointers */</span>
+<span class="cm">// int a[5] : 3;   → ERROR</span>
+<span class="cm">// int *ptr : 4;   → ERROR</span></pre>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 4: UNIONS & ENUMS                   -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <div class="unit-hero u-misc anchor" id="unions">
+    <div class="unit-eyebrow" style="color:var(--u-misc)">Module 4</div>
+    <div class="unit-title">Unions &amp; Enumerations</div>
+    <div class="unit-subtitle">Memory-sharing with union, and symbolic integer constants with enum.</div>
+    <div class="unit-tags">
+      <span class="unit-tag">union</span><span class="unit-tag">enum</span><span class="unit-tag">memory sharing</span><span class="unit-tag">named constants</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(79,195,247,.15); color:var(--u-misc);">🤝</span>
+      Unions
+    </div>
+    <p>A union is a user-defined type where <strong>all members share the same memory location</strong>. At any time, only one member holds a valid value. Size = size of largest member.</p>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">Union fundamentals</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="kw">union</span> <span class="type">car</span> {
+    <span class="kw">char</span> name[10];   <span class="cm">// 10 bytes</span>
+    <span class="kw">float</span> price;     <span class="cm">// 4 bytes</span>
+};
+<span class="cm">// sizeof(union car) = 10 (largest member)</span>
+
+<span class="kw">union</span> <span class="type">car</span> c;
+<span class="fn">strcpy</span>(c.name, <span class="str">"Benz"</span>);
+<span class="fn">printf</span>(<span class="str">"%s\n"</span>, c.name);  <span class="cm">// Benz ✅</span>
+c.price = 4000000.00;
+<span class="fn">printf</span>(<span class="str">"%f\n"</span>, c.price);  <span class="cm">// 4000000.00 ✅</span>
+<span class="fn">printf</span>(<span class="str">"%s\n"</span>, c.name);   <span class="cm">// CORRUPTED ❌ (price overwrote name)</span>
+
+<span class="cm">/* All fields have offset 0 */</span>
+<span class="fn">printf</span>(<span class="str">"%lu\n"</span>, <span class="fn">offsetof</span>(<span class="kw">union</span> <span class="type">A</span>, y));  <span class="cm">// 0 for union</span>
+<span class="fn">printf</span>(<span class="str">"%lu\n"</span>, <span class="fn">offsetof</span>(<span class="kw">struct</span> <span class="type">B</span>, y)); <span class="cm">// 4 for struct</span></pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="union-vs-struct">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(79,195,247,.15); color:var(--u-misc);">⚖️</span>
+      Union vs Structure
+    </div>
+    <table>
+      <tr><th>Feature</th><th>struct</th><th>union</th></tr>
+      <tr><td>Memory per variable</td><td>Sum of all members (+ padding)</td><td>Size of largest member</td></tr>
+      <tr><td>Member storage</td><td>Each member has unique location</td><td>All members share same location</td></tr>
+      <tr><td>Address of members</td><td>Ascending (different offsets)</td><td>All same (offset 0)</td></tr>
+      <tr><td>Access at one time</td><td>All members simultaneously</td><td>Only one member valid at a time</td></tr>
+      <tr><td>Modify one, affect others?</td><td>No</td><td>Yes</td></tr>
+    </table>
+    <div class="info-box tip"><strong>Use Case</strong>Unions save memory when data members are mutually exclusive — e.g., a student can be identified by name OR roll number but not both needed at once.</div>
+  </div>
+
+  <div class="section anchor" id="enums">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(79,195,247,.15); color:var(--u-misc);">🔢</span>
+      Enumerations (enum)
+    </div>
+    <p>Enum provides a set of <strong>named integer constants</strong> to replace magic numbers. Starts at 0 by default, increments by 1. Values are not stored in memory — they're compile-time symbols.</p>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">Enum examples</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="kw">enum</span> <span class="type">months</span> { jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec };
+<span class="cm">// jan=0, feb=1, ... dec=11</span>
+
+<span class="kw">enum</span> <span class="type">day</span> { sunday=1, monday, tuesday=5, wednesday, thursday=10, friday, saturday };
+<span class="cm">// 1, 2, 5, 6, 10, 11, 12</span>
+
+<span class="kw">enum</span> <span class="type">State</span> { Working=1, Failed=0, Freezed=0 };
+<span class="cm">// Multiple names can share same value</span>
+
+<span class="cm">/* Use in switch to print symbol name */</span>
+<span class="kw">void</span> <span class="fn">printing</span>(<span class="kw">enum</span> <span class="type">example1</span> e1) {
+    <span class="kw">switch</span>(e1) {
+        <span class="kw">case</span> abc: <span class="fn">printf</span>(<span class="str">"abc"</span>); <span class="kw">break</span>;
+        <span class="kw">case</span> bef: <span class="fn">printf</span>(<span class="str">"bef"</span>); <span class="kw">break</span>;
+        <span class="kw">default</span>:  <span class="fn">printf</span>(<span class="str">"not found"</span>);
+    }
+}
+
+<span class="cm">/* Design flags — values outside range allowed in C (not Java) */</span>
+<span class="kw">enum</span> <span class="type">design_flags</span> { bold=1, italics=4, underline=8 };
+<span class="kw">int</span> df = italics | bold;  <span class="cm">// 5 — not defined in enum, but valid in C</span>
+<span class="kw">if</span>(df &amp; bold)    <span class="fn">printf</span>(<span class="str">"bold\n"</span>);
+<span class="kw">if</span>(df &amp; italics) <span class="fn">printf</span>(<span class="str">"italics\n"</span>);</pre>
+    </div>
+    <div class="info-box note"><strong>Enum Rules</strong>Constants must be unique in scope. Cannot take address of enum constants. Cannot modify constant values (mar++ = error). Enum variables can be changed. No string printing — use switch. Enum constants must be integer constants (not 3.5 or "hello").</div>
+  </div>
+
+  <hr>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECTION 5: LINKED LIST & PRIORITY QUEUE     -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <div class="unit-hero u-ll anchor" id="self-ref">
+    <div class="unit-eyebrow" style="color:var(--u-ll)">Module 5</div>
+    <div class="unit-title">Linked Lists &amp; Priority Queue</div>
+    <div class="unit-subtitle">Self-referential structures, singly linked lists (insert/traverse/delete), and priority queues.</div>
+    <div class="unit-tags">
+      <span class="unit-tag">self-ref struct</span><span class="unit-tag">singly LL</span><span class="unit-tag">doubly LL</span><span class="unit-tag">circular LL</span><span class="unit-tag">priority queue</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(179,157,219,.15); color:var(--u-ll);">🔁</span>
+      Self-Referential Structures
+    </div>
+    <p>A structure that contains a <strong>pointer to itself</strong> as a data member. The pointer's size is fixed at compile time (4 or 8 bytes), so the compiler can determine the struct's total size.</p>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">Self-referential struct demos</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="cm">/* Cannot have variable of same struct type inside */</span>
+<span class="cm">// struct A { int a; struct A a1; };  → COMPILE ERROR</span>
+
+<span class="cm">/* CAN have pointer to same type */</span>
+<span class="kw">struct</span> <span class="type">Sample</span> { <span class="kw">int</span> a; <span class="kw">struct</span> <span class="type">Sample</span> *p; };
+
+<span class="kw">struct</span> <span class="type">Sample</span> s;
+s.a = 100;
+s.p = &amp;s;               <span class="cm">// points to itself</span>
+<span class="fn">printf</span>(<span class="str">"%d %d %d\n"</span>, s.a, s.p-&gt;a, s.p-&gt;p-&gt;a);
+<span class="cm">// 100 100 100 — all same node</span>
+
+<span class="cm">/* Node template for linked list */</span>
+<span class="kw">struct</span> <span class="type">Node</span> { <span class="kw">int</span> data; <span class="kw">struct</span> <span class="type">Node</span> *next; };</pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="linked-list">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(179,157,219,.15); color:var(--u-ll);">🔗</span>
+      Singly Linked List
+    </div>
+    <p>A chain of nodes in non-contiguous memory, logically connected by pointers. <strong>Sequential access only</strong> — no random access. Insertion/deletion at any position requires no element shifting.</p>
+    <table>
+      <tr><th>Type</th><th>Description</th></tr>
+      <tr><td>Singly Linked List</td><td>Each node → next node. Last node → NULL.</td></tr>
+      <tr><td>Doubly Linked List</td><td>Each node → next &amp; previous. Two pointers per node.</td></tr>
+      <tr><td>Circular Linked List</td><td>Last node → first node (forms a cycle).</td></tr>
+    </table>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">Singly linked list — create, display, free</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="inc">#include &lt;stdio.h&gt;</span>
+<span class="inc">#include &lt;stdlib.h&gt;</span>
+
+<span class="kw">struct</span> <span class="type">node</span> { <span class="kw">int</span> info; <span class="kw">struct</span> <span class="type">node</span> *link; };
+<span class="kw">typedef struct</span> <span class="type">node</span> NODE_T;
+
+<span class="cm">/* Display all nodes */</span>
+<span class="kw">void</span> <span class="fn">display</span>(NODE_T *q) {
+    <span class="kw">while</span>(q != <span class="num">NULL</span>) {
+        <span class="fn">printf</span>(<span class="str">"%d\t"</span>, q-&gt;info);
+        q = q-&gt;link;
+    }
+}
+
+<span class="cm">/* Free all nodes */</span>
+<span class="kw">void</span> <span class="fn">freelist</span>(NODE_T *q) {
+    NODE_T *r;
+    <span class="kw">while</span>(q != <span class="num">NULL</span>) {
+        <span class="fn">printf</span>(<span class="str">"\n%d deleted"</span>, q-&gt;info);
+        r = q-&gt;link;  <span class="cm">// save next before freeing current</span>
+        <span class="fn">free</span>(q);
+        q = r;
+    }
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    NODE_T *s = (NODE_T*)<span class="fn">malloc</span>(<span class="kw">sizeof</span>(NODE_T));
+    s-&gt;info = 100;
+    s-&gt;link = (NODE_T*)<span class="fn">malloc</span>(<span class="kw">sizeof</span>(NODE_T));
+    s-&gt;link-&gt;info = 200;
+    s-&gt;link-&gt;link = (NODE_T*)<span class="fn">malloc</span>(<span class="kw">sizeof</span>(NODE_T));
+    s-&gt;link-&gt;link-&gt;info = 300;
+    s-&gt;link-&gt;link-&gt;link = <span class="num">NULL</span>;
+
+    <span class="fn">display</span>(s);   <span class="cm">// 100  200  300</span>
+    <span class="fn">freelist</span>(s);  <span class="cm">// 100 deleted  200 deleted  300 deleted</span>
+    s = <span class="num">NULL</span>;     <span class="cm">// avoid dangling pointer</span>
+    <span class="kw">return</span> 0;
+}</pre>
+    </div>
+  </div>
+
+  <div class="section anchor" id="priority-queue">
+    <div class="section-title">
+      <span class="s-icon" style="background:rgba(179,157,219,.15); color:var(--u-ll);">⚡</span>
+      Priority Queue
+    </div>
+    <p>A queue where each element has an associated <strong>priority</strong>. Higher-priority elements are served first (regardless of order of insertion).</p>
+    <table>
+      <tr><th>Operation</th><th>Queue</th><th>Priority Queue</th></tr>
+      <tr><td>Insert (enqueue)</td><td>Add to rear</td><td>Add with priority</td></tr>
+      <tr><td>Remove (dequeue)</td><td>Remove from front</td><td>Remove highest-priority element</td></tr>
+      <tr><td>Order</td><td>FIFO</td><td>By priority (then FIFO for ties)</td></tr>
+    </table>
+
+    <div class="sub-title c-ll">Types of Priority Queue</div>
+    <ul>
+      <li><strong>Ascending Priority Queue:</strong> Smallest number = highest priority.</li>
+      <li><strong>Descending Priority Queue:</strong> Largest number = highest priority.</li>
+    </ul>
+
+    <div class="sub-title c-ll">Implementations</div>
+    <table>
+      <tr><th>Method</th><th>Enqueue</th><th>Dequeue</th></tr>
+      <tr><td>Unordered Array</td><td>O(1)</td><td>O(n) — scan all</td></tr>
+      <tr><td>Ordered Array</td><td>O(n) — insert in order</td><td>O(1)</td></tr>
+      <tr><td>Unordered Linked List</td><td>O(1)</td><td>O(n)</td></tr>
+      <tr><td>Ordered Linked List</td><td>O(n)</td><td>O(1)</td></tr>
+      <tr><td>Heap</td><td>O(log n)</td><td>O(log n) — optimal!</td></tr>
+    </table>
+
+    <div class="sub-title c-ll">Applications</div>
+    <ul>
+      <li>Dijkstra's Shortest Path Algorithm</li>
+      <li>Prim's Minimum Spanning Tree</li>
+      <li>Data Compression (Huffman Coding)</li>
+      <li>Artificial Intelligence (A* search)</li>
+      <li>Heap Sort</li>
+      <li>OS Task Scheduling</li>
+    </ul>
+
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-lang">C</span><span class="code-label">Priority Queue using ordered linked list</span>
+        <div class="code-actions"><button class="btn-copy" onclick="copyCode(this)">Copy</button><button class="btn-run-code" onclick="openCompiler(this)">▶ Run</button></div>
+      </div>
+      <pre><span class="inc">#include &lt;stdio.h&gt;</span>
+<span class="inc">#include &lt;stdlib.h&gt;</span>
+
+<span class="kw">typedef struct</span> <span class="type">node</span> {
+    <span class="kw">int</span> data;
+    <span class="kw">int</span> priority;
+    <span class="kw">struct</span> <span class="type">node</span> *next;
+} PQ_Node;
+
+PQ_Node *head = <span class="num">NULL</span>;
+
+<span class="cm">/* Enqueue: insert by descending priority */</span>
+<span class="kw">void</span> <span class="fn">enqueue</span>(<span class="kw">int</span> data, <span class="kw">int</span> priority) {
+    PQ_Node *newNode = (PQ_Node*)<span class="fn">malloc</span>(<span class="kw">sizeof</span>(PQ_Node));
+    newNode-&gt;data = data;
+    newNode-&gt;priority = priority;
+    newNode-&gt;next = <span class="num">NULL</span>;
+
+    <span class="kw">if</span>(head == <span class="num">NULL</span> || head-&gt;priority &lt; priority) {
+        newNode-&gt;next = head;
+        head = newNode;
+    } <span class="kw">else</span> {
+        PQ_Node *curr = head;
+        <span class="kw">while</span>(curr-&gt;next &amp;&amp; curr-&gt;next-&gt;priority &gt;= priority)
+            curr = curr-&gt;next;
+        newNode-&gt;next = curr-&gt;next;
+        curr-&gt;next = newNode;
+    }
+}
+
+<span class="cm">/* Dequeue: remove highest priority (front) */</span>
+<span class="kw">int</span> <span class="fn">dequeue</span>() {
+    <span class="kw">if</span>(head == <span class="num">NULL</span>) { <span class="fn">printf</span>(<span class="str">"Queue empty!\n"</span>); <span class="kw">return</span> -1; }
+    PQ_Node *temp = head;
+    <span class="kw">int</span> val = temp-&gt;data;
+    head = head-&gt;next;
+    <span class="fn">free</span>(temp);
+    <span class="kw">return</span> val;
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">enqueue</span>(10, 2);
+    <span class="fn">enqueue</span>(20, 5);  <span class="cm">// highest priority</span>
+    <span class="fn">enqueue</span>(30, 1);
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, <span class="fn">dequeue</span>());  <span class="cm">// 20 (priority 5)</span>
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, <span class="fn">dequeue</span>());  <span class="cm">// 10 (priority 2)</span>
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, <span class="fn">dequeue</span>());  <span class="cm">// 30 (priority 1)</span>
+    <span class="kw">return</span> 0;
+}</pre>
+    </div>
+  </div>
+
+</div><!-- content-wrap -->
+</div><!-- main -->
+
+<!-- FLOATING COMPILER BUTTON -->
+<button id="compiler-fab" onclick="openCompilerModal()" title="Open C Compiler">
+  ⚡
+</button>
+
+<!-- COMPILER MODAL -->
+<div id="compiler-modal">
+  <div id="compiler-box">
+    <div id="compiler-titlebar">
+      <span>⚡ C Compiler — WandBox</span>
+      <button id="compiler-close" onclick="closeCompilerModal()">✕</button>
+    </div>
+    <textarea id="compiler-editor" placeholder="Write your C code here…">
+#include <stdio.h>
+int main() {
+    printf("Hello from PESU C Notes!\n");
+    printf("UE25CS151B - Unit 3\n");
+    return 0;
+}
+</textarea>
+    <div id="compiler-output"></div>
+    <div id="compiler-actions">
+      <button id="run-btn" onclick="runCode()">▶ Run Code</button>
+      <a id="open-wandbox" href="https://wandbox.org" target="_blank">🔗 Open WandBox</a>
+      <span style="font-size:11px; color:var(--muted); margin-left:auto;">Powered by WandBox API</span>
+    </div>
+  </div>
+</div>
+
+<!-- COPY TOAST -->
+<div class="copied-toast" id="copy-toast">Copied!</div>
+
+<script>
+// ── Search ──
+const searchIndex = [];
+
+// Build search index from headings and sub-titles
+document.querySelectorAll('.section-title, .sub-title, h1, h2').forEach(el => {
+  const anchor = el.closest('.anchor') || el.parentElement.closest('.anchor');
+  const id = anchor ? anchor.id : null;
+  if(id && el.textContent.trim()) {
+    searchIndex.push({ text: el.textContent.trim(), id, unit: getUnit(id) });
+  }
+});
+
+// Also add nav items
+document.querySelectorAll('.nav-item').forEach(a => {
+  const href = a.getAttribute('href').replace('#','');
+  const text = a.textContent.trim();
+  const unit = getUnit(href);
+  if(!searchIndex.find(x=>x.id===href)) searchIndex.push({ text, id: href, unit });
+});
+
+function getUnit(id) {
+  if(['text-processing','strings-intro','string-init','string-io','pointers-strings','string-functions','user-defined-fns','string-pitfalls','cla'].includes(id)) return 'Strings';
+  if(['dmm-intro','malloc','calloc','realloc','free','dmm-errors','dmm-best'].includes(id)) return 'Memory Mgmt';
+  if(['struct-intro','struct-access','struct-memory','typedef','nested-struct','struct-functions','array-structs','bitfields'].includes(id)) return 'Structures';
+  if(['unions','union-vs-struct','enums'].includes(id)) return 'Unions/Enums';
+  return 'Linked List';
+}
+
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+
+searchInput.addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  searchResults.innerHTML = '';
+  if(!q) { searchResults.style.display='none'; return; }
+
+  const matches = searchIndex.filter(item => item.text.toLowerCase().includes(q)).slice(0,10);
+  if(!matches.length) { searchResults.style.display='none'; return; }
+
+  matches.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'sr-item';
+    div.innerHTML = `${item.text}<br><span class="sr-unit">${item.unit}</span>`;
+    div.onclick = () => {
+      document.getElementById(item.id)?.scrollIntoView({behavior:'smooth'});
+      searchResults.style.display='none';
+      searchInput.value='';
+    };
+    searchResults.appendChild(div);
+  });
+  searchResults.style.display='block';
+});
+
+document.addEventListener('click', e => {
+  if(!e.target.closest('#search-box')) searchResults.style.display='none';
+});
+
+// ── Active nav highlight ──
+const navItems = document.querySelectorAll('.nav-item');
+const anchors  = document.querySelectorAll('.anchor');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      navItems.forEach(a => a.classList.remove('active'));
+      const link = document.querySelector(`.nav-item[href="#${entry.target.id}"]`);
+      if(link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -75% 0px' });
+
+anchors.forEach(a => observer.observe(a));
+
+// ── Collapsible ──
+function toggleCollapse(btn) {
+  btn.classList.toggle('open');
+  const content = btn.nextElementSibling;
+  content.style.display = content.style.display === 'block' ? 'none' : 'block';
+}
+
+// ── Copy code ──
+function copyCode(btn) {
+  const pre = btn.closest('.code-wrap').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    const toast = document.getElementById('copy-toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1800);
+  });
+}
+
+// ── Compiler Modal ──
+function openCompilerModal() {
+  document.getElementById('compiler-modal').classList.add('open');
+}
+
+function closeCompilerModal() {
+  document.getElementById('compiler-modal').classList.remove('open');
+}
+
+function openCompiler(btn) {
+  const pre = btn.closest('.code-wrap').querySelector('pre');
+  document.getElementById('compiler-editor').value = pre.innerText;
+  openCompilerModal();
+}
+
+document.getElementById('compiler-modal').addEventListener('click', function(e) {
+  if(e.target === this) closeCompilerModal();
+});
+
+async function runCode() {
+  const code = document.getElementById('compiler-editor').value;
+  const output = document.getElementById('compiler-output');
+  const btn = document.getElementById('run-btn');
+
+  btn.textContent = '⏳ Running…';
+  btn.disabled = true;
+  output.style.display = 'block';
+  output.textContent = 'Compiling and running…';
+
+  try {
+    const res = await fetch('https://wandbox.org/api/compile.json', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        compiler: 'gcc-13.2.0',
+        code: code,
+        options: 'warning',
+        stdin: '',
+        'compiler-option-raw': '-O0 -Wall'
+      })
+    });
+    const data = await res.json();
+    let result = '';
+    if(data.compiler_error) result += '🔴 Compiler Error:\n' + data.compiler_error + '\n';
+    if(data.program_output) result += '✅ Output:\n' + data.program_output;
+    if(data.program_error)  result += '⚠️ Runtime Error:\n' + data.program_error;
+    if(!result) result = '✅ Program ran with no output.';
+    output.textContent = result;
+  } catch(err) {
+    output.textContent = '❌ Network error — try opening WandBox directly.';
+  }
+
+  btn.textContent = '▶ Run Code';
+  btn.disabled = false;
+}
+
+// Escape key closes modal
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') closeCompilerModal();
+});
+</script>
+</body>
+</html>
