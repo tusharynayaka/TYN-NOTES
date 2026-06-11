@@ -564,7 +564,7 @@ tr:nth-child(even) td { background: var(--bg2); }
         <input id="header-search" type="search" placeholder="Search notes…" aria-label="Search notes" autocomplete="off">
         <div id="search-results" role="listbox"></div>
       </div>
-      <button id="theme-toggle" aria-label="Toggle theme">🌙 Dark</button>
+      <button id="theme-toggle" aria-label="Toggle theme">Dark</button>
     </header>
 
     <!-- MAIN -->
@@ -1985,7 +1985,7 @@ window.addEventListener('scroll', handleScroll, { passive: true });
 const themeBtn = document.getElementById('theme-toggle');
 function applyTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
-  themeBtn.textContent = t === 'dark' ? '☀️ Light' : '🌙 Dark';
+  themeBtn.textContent = t === 'dark' ? 'Light' : 'Dark';
   localStorage.setItem('theme', t);
 }
 applyTheme(localStorage.getItem('theme') || 'light');
