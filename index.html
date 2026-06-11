@@ -1,0 +1,2105 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electronic Principles and Devices – Unit 1 Notes</title>
+<script>
+// Apply theme before render to avoid flash
+(function(){
+  const t = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)'], ['$','$']], displayMath: [['\\[','\\]'], ['$$','$$']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<style>
+/* ── CSS Variables ── */
+:root {
+  --sidebar-w: 280px;
+  --header-h: 52px;
+  --bg: #ffffff;
+  --bg2: #f7f7f8;
+  --bg3: #efefef;
+  --border: #e2e2e5;
+  --text: #1a1a1a;
+  --text2: #555;
+  --text3: #888;
+  --accent: #2563eb;
+  --accent-light: #eff6ff;
+  --code-bg: #f4f4f5;
+  --code-border: #ddd;
+  --sidebar-bg: #f7f7f8;
+  --sidebar-border: #e2e2e5;
+  --shadow: 0 1px 4px rgba(0,0,0,.08);
+  --radius: 6px;
+  --transition: .18s ease;
+}
+[data-theme="dark"] {
+  --bg: #1a1a1a;
+  --bg2: #222222;
+  --bg3: #2a2a2a;
+  --border: #333;
+  --text: #e8e8e8;
+  --text2: #aaa;
+  --text3: #666;
+  --accent: #60a5fa;
+  --accent-light: #1e2a3a;
+  --code-bg: #252525;
+  --code-border: #383838;
+  --sidebar-bg: #1e1e1e;
+  --sidebar-border: #333;
+  --shadow: 0 1px 4px rgba(0,0,0,.3);
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  transition: background var(--transition), color var(--transition);
+  overflow-x: hidden;
+}
+
+/* ── Reading Progress ── */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  width: 0%;
+  background: var(--accent);
+  z-index: 9999;
+  transition: width .1s linear;
+}
+
+/* ── Layout ── */
+#app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ── */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-w);
+  height: 100vh;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transition: transform var(--transition), background var(--transition);
+  overflow: hidden;
+}
+#sidebar-logo {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+#sidebar-logo .logo-title {
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  line-height: 1.2;
+}
+#sidebar-logo .logo-sub {
+  font-size: .72rem;
+  color: var(--text3);
+  margin-top: 2px;
+}
+#sidebar-search-wrap {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+#sidebar-search {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+  font-size: .82rem;
+  outline: none;
+  transition: border-color var(--transition), background var(--transition);
+}
+#sidebar-search:focus { border-color: var(--accent); }
+#sidebar-search::placeholder { color: var(--text3); }
+
+#sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0 16px;
+}
+#sidebar-nav::-webkit-scrollbar { width: 4px; }
+#sidebar-nav::-webkit-scrollbar-thumb { background: var(--bg3); border-radius: 4px; }
+
+.nav-section { margin-bottom: 2px; }
+.nav-section-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--text2);
+  text-align: left;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  transition: color var(--transition);
+}
+.nav-section-toggle:hover { color: var(--text); }
+.nav-arrow {
+  font-size: .65rem;
+  transition: transform .2s;
+  margin-left: auto;
+  color: var(--text3);
+}
+.nav-section.open .nav-arrow { transform: rotate(90deg); }
+.nav-children { display: none; padding-left: 8px; }
+.nav-section.open .nav-children { display: block; }
+.nav-item {
+  display: block;
+  width: 100%;
+  padding: 5px 12px 5px 14px;
+  background: none;
+  border: none;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  font-size: .79rem;
+  color: var(--text2);
+  text-align: left;
+  line-height: 1.4;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+  text-decoration: none;
+}
+.nav-item:hover { color: var(--text); background: var(--bg3); }
+.nav-item.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-light);
+  font-weight: 500;
+}
+.nav-sub-item {
+  padding-left: 24px;
+  font-size: .76rem;
+  color: var(--text3);
+}
+.nav-sub-item:hover { color: var(--text2); }
+.nav-sub-item.active { color: var(--accent); border-left-color: var(--accent); }
+
+/* ── Overlay (mobile) ── */
+#overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 999;
+}
+
+/* ── Content Area ── */
+#content-area {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+#header {
+  position: sticky;
+  top: 0;
+  height: var(--header-h);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 12px;
+  z-index: 800;
+  transition: transform .25s ease, background var(--transition);
+  flex-shrink: 0;
+}
+#header.hidden { transform: translateY(-100%); }
+#header-title {
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--text2);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Header search */
+#header-search-wrap {
+  position: relative;
+  flex: 1;
+  max-width: 340px;
+}
+#header-search {
+  width: 100%;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg2);
+  color: var(--text);
+  font-size: .82rem;
+  outline: none;
+  transition: border-color var(--transition), background var(--transition);
+}
+#header-search:focus { border-color: var(--accent); background: var(--bg); }
+#header-search::placeholder { color: var(--text3); }
+#search-results {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0; right: 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  max-height: 360px;
+  overflow-y: auto;
+  z-index: 9000;
+  display: none;
+}
+#search-results.show { display: block; }
+.search-result {
+  padding: 9px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+.search-result:last-child { border-bottom: none; }
+.search-result:hover { background: var(--bg2); }
+.sr-title { font-size: .82rem; font-weight: 600; color: var(--text); }
+.sr-unit { font-size: .72rem; color: var(--accent); margin-bottom: 2px; }
+.sr-preview { font-size: .75rem; color: var(--text3); line-height: 1.4; }
+.sr-highlight { background: rgba(37,99,235,.2); color: var(--accent); border-radius: 2px; padding: 0 2px; }
+.no-results { padding: 14px; text-align: center; color: var(--text3); font-size: .82rem; }
+
+/* Theme toggle */
+#theme-toggle {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: .78rem;
+  color: var(--text2);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  transition: background var(--transition);
+}
+#theme-toggle:hover { background: var(--border); }
+
+/* Mobile menu button */
+#menu-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 5px 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+/* ── Main Content ── */
+#main {
+  flex: 1;
+  padding: 36px 48px 80px;
+  max-width: 900px;
+  width: 100%;
+}
+
+/* Typography */
+#main h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: var(--text);
+  line-height: 1.3;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 10px;
+}
+#main h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 42px 0 12px;
+  color: var(--text);
+  border-left: 4px solid var(--accent);
+  padding-left: 12px;
+}
+#main h3 {
+  font-size: 1.12rem;
+  font-weight: 600;
+  margin: 28px 0 10px;
+  color: var(--text);
+}
+#main h4 {
+  font-size: .96rem;
+  font-weight: 600;
+  margin: 20px 0 8px;
+  color: var(--text2);
+}
+#main p {
+  margin-bottom: 14px;
+  color: var(--text);
+}
+#main ul, #main ol {
+  margin: 10px 0 16px 22px;
+}
+#main li { margin-bottom: 5px; color: var(--text); }
+#main strong { color: var(--text); }
+#main em { color: var(--text2); }
+#main blockquote {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-light);
+  padding: 10px 16px;
+  margin: 16px 0;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  color: var(--text2);
+  font-style: italic;
+}
+
+/* Definition boxes */
+.def-box {
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin: 14px 0;
+}
+.def-box strong { color: var(--accent); }
+
+/* Info box */
+.info-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin: 14px 0;
+}
+.note-box {
+  background: #fffbeb;
+  border: 1px solid #f59e0b;
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin: 14px 0;
+}
+[data-theme="dark"] .note-box { background: #2a2200; border-color: #78350f; }
+
+/* Formula blocks */
+.formula-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  margin: 16px 0;
+  overflow-x: auto;
+  text-align: center;
+  font-size: 1.05rem;
+}
+
+/* Tables */
+.table-wrap { overflow-x: auto; margin: 16px 0; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .85rem;
+}
+th {
+  background: var(--bg3);
+  color: var(--text);
+  font-weight: 600;
+  padding: 9px 14px;
+  text-align: left;
+  border: 1px solid var(--border);
+}
+td {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: top;
+}
+tr:nth-child(even) td { background: var(--bg2); }
+
+/* Questions */
+.q-section { margin: 28px 0; }
+.q-label {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding: 3px 10px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+}
+.q-item {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  margin-bottom: 10px;
+}
+.q-item p { margin: 0 0 6px; }
+.solution {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+  color: var(--text2);
+  font-size: .9rem;
+}
+.solution strong { color: var(--accent); }
+
+/* Section divider */
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 36px 0;
+}
+
+/* ── Back to Top ── */
+#back-top {
+  position: fixed;
+  bottom: 28px;
+  right: 24px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#back-top.show { opacity: 1; pointer-events: auto; }
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  #main { padding: 28px 24px 60px; }
+}
+@media (max-width: 768px) {
+  #sidebar {
+    transform: translateX(-100%);
+  }
+  #sidebar.open {
+    transform: translateX(0);
+  }
+  #overlay.show { display: block; }
+  #content-area { margin-left: 0; }
+  #menu-btn { display: flex; }
+  #main { padding: 20px 16px 60px; }
+  #main h1 { font-size: 1.45rem; }
+  #main h2 { font-size: 1.15rem; }
+  #header-search-wrap { max-width: 200px; }
+}
+@media (min-width: 1400px) {
+  #main { max-width: 960px; padding: 40px 60px 80px; }
+}
+
+/* Print */
+@media print {
+  #sidebar, #header, #back-top, #progress-bar { display: none !important; }
+  #content-area { margin-left: 0 !important; }
+  #main { padding: 0 !important; max-width: 100% !important; }
+}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<div id="app">
+  <!-- SIDEBAR -->
+  <aside id="sidebar" aria-label="Navigation">
+    <div id="sidebar-logo">
+      <div class="logo-title">Electronic Principles &amp; Devices</div>
+      <div class="logo-sub">PES University · Unit 1 Notes</div>
+    </div>
+    <div id="sidebar-search-wrap">
+      <input id="sidebar-search" type="search" placeholder="Filter topics…" aria-label="Filter navigation">
+    </div>
+    <nav id="sidebar-nav" aria-label="Table of contents"></nav>
+  </aside>
+
+  <div id="overlay"></div>
+
+  <!-- CONTENT AREA -->
+  <div id="content-area">
+    <!-- HEADER -->
+    <header id="header">
+      <button id="menu-btn" aria-label="Open menu">☰</button>
+      <span id="header-title">Electronic Principles and Devices</span>
+      <div id="header-search-wrap">
+        <input id="header-search" type="search" placeholder="Search notes…" aria-label="Search notes" autocomplete="off">
+        <div id="search-results" role="listbox"></div>
+      </div>
+      <button id="theme-toggle" aria-label="Toggle theme">🌙 Dark</button>
+    </header>
+
+    <!-- MAIN -->
+    <main id="main">
+
+      <!-- UNIT 1 -->
+      <h1 id="unit1">Unit 1 — Electronic Principles and Devices</h1>
+      <p>Course: Electronic Principles and Devices (UE20EC101) &nbsp;|&nbsp; PES University</p>
+
+      <hr class="section-divider">
+
+      <!-- ─── 1. Intro to Semiconductors ─── -->
+      <h2 id="intro-semiconductor">1. An Introduction to Semiconductor</h2>
+
+      <div class="def-box">
+        <strong>Semiconductor:</strong> A special class of elements having a conductivity between that of a good conductor and that of an insulator.
+      </div>
+
+      <p>The three semiconductors used most frequently in the construction of electronic devices are <strong>Ge (Germanium)</strong>, <strong>Si (Silicon)</strong>, and <strong>GaAs (Gallium Arsenide)</strong>.</p>
+
+      <h3 id="atomic-structure">1.1 Atomic Structure</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Element</th><th>Atomic Number</th><th>Electronic Configuration</th></tr>
+          <tr><td>Silicon (Si)</td><td>14</td><td>1s² 2s² 2p⁶ 3s² 3p²</td></tr>
+          <tr><td>Germanium (Ge)</td><td>32</td><td>1s² 2s² 2p⁶ 3s² 3p⁶ 3d¹⁰ 4s² 4p²</td></tr>
+        </table>
+      </div>
+      <p>Both silicon and germanium have <strong>four valence electrons</strong> in their outermost shell. Silicon atoms form a crystal lattice by sharing these electrons with neighboring atoms (covalent bonding).</p>
+
+      <h3 id="energy-bands">1.2 Energy Bands</h3>
+      <p>Electrons in atoms occupy discrete energy levels. When atoms are brought together in a solid, these discrete levels broaden into <strong>energy bands</strong>. The key bands are:</p>
+      <ul>
+        <li><strong>Valence Band:</strong> The outermost shell occupied by valence electrons (bound to atoms).</li>
+        <li><strong>Conduction Band:</strong> The band where electrons are free to move and establish conduction.</li>
+        <li><strong>Energy Gap (E<sub>g</sub>):</strong> The gap between valence and conduction bands.</li>
+      </ul>
+
+      <div class="table-wrap">
+        <table>
+          <tr><th>Material</th><th>Classification</th><th>Energy Gap (E<sub>g</sub>)</th><th>Behavior</th></tr>
+          <tr><td>Insulator</td><td>Insulator</td><td>&gt; 5 eV</td><td>Valence electrons cannot reach conduction band</td></tr>
+          <tr><td>Germanium (Ge)</td><td>Semiconductor</td><td>0.67 eV</td><td>Small gap; electrons can jump with thermal energy</td></tr>
+          <tr><td>Silicon (Si)</td><td>Semiconductor</td><td>1.1 eV</td><td>Small gap; electrons can jump with thermal energy</td></tr>
+          <tr><td>GaAs</td><td>Semiconductor</td><td>1.43 eV</td><td>Small gap; electrons can jump with thermal energy</td></tr>
+          <tr><td>Conductor</td><td>Conductor</td><td>0 (overlap)</td><td>Valence and conduction bands overlap</td></tr>
+        </table>
+      </div>
+
+      <h3 id="intrinsic-extrinsic">1.3 Intrinsic vs. Extrinsic Semiconductors</h3>
+      <div class="def-box">
+        <strong>Intrinsic Semiconductor:</strong> A semiconductor material that has been carefully refined to reduce the number of impurities to a very low level — essentially as pure as can be made available through modern technology.
+      </div>
+      <div class="def-box">
+        <strong>Extrinsic Semiconductor:</strong> A semiconductor material that has been subjected to the doping process is called an <em>extrinsic material</em>.
+      </div>
+      <p>In pure (intrinsic) silicon, each Si atom shares its 4 valence electrons with 4 neighbors, forming covalent bonds. This creates a complete valence shell for each atom, leaving no free carriers at 0 K.</p>
+
+      <h3 id="n-type">1.4 N-Type Semiconductor</h3>
+      <p>An <strong>n-type material</strong> is created by introducing impurity elements that have <strong>five valence electrons (pentavalent)</strong>, such as:</p>
+      <ul>
+        <li>Antimony (Sb)</li>
+        <li>Arsenic (As)</li>
+        <li>Phosphorus (P)</li>
+      </ul>
+      <p>When a pentavalent atom replaces a silicon atom in the lattice, four of its five valence electrons form covalent bonds with neighboring Si atoms. The <strong>fifth electron is free</strong> to move through the lattice, contributing to electrical conduction.</p>
+      <div class="def-box">
+        <strong>Donor Atoms:</strong> Diffused impurities with five valence electrons are called <em>donor atoms</em> because they "donate" a free electron to the material.
+      </div>
+      <div class="info-box">
+        In n-type material:
+        <ul>
+          <li><strong>Majority carriers:</strong> Electrons (negative)</li>
+          <li><strong>Minority carriers:</strong> Holes (positive)</li>
+          <li>Donor ions (positive) are fixed in the lattice</li>
+        </ul>
+      </div>
+
+      <h3 id="p-type">1.5 P-Type Semiconductor</h3>
+      <p>The <strong>p-type material</strong> is formed by doping a pure germanium or silicon crystal with impurity atoms having <strong>three valence electrons (trivalent)</strong>. The elements most frequently used are:</p>
+      <ul>
+        <li>Boron (B)</li>
+        <li>Gallium (Ga)</li>
+        <li>Indium (In)</li>
+      </ul>
+      <p>When a trivalent atom is placed in the silicon lattice, it can only form three covalent bonds. The fourth bond position has a <strong>void (hole)</strong> — a missing electron that acts as a positive charge carrier.</p>
+      <div class="def-box">
+        <strong>Acceptor Atoms:</strong> The diffused impurities with three valence electrons are called <em>acceptor atoms</em> because they "accept" an electron from the lattice, creating a hole.
+      </div>
+      <div class="info-box">
+        In p-type material:
+        <ul>
+          <li><strong>Majority carriers:</strong> Holes (positive)</li>
+          <li><strong>Minority carriers:</strong> Electrons (negative)</li>
+          <li>Acceptor ions (negative) are fixed in the lattice</li>
+        </ul>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- ─── 2. Semiconductor Diode ─── -->
+      <h2 id="semiconductor-diode">2. An Introduction to the Semiconductor Diode</h2>
+
+      <div class="def-box">
+        <strong>Diode:</strong> A two-electrode (two-terminal) device. We can construct our first solid-state electronic device — the semiconductor diode — by sandwiching p-type and n-type material together to form a depletion region between the two. It is a fabrication of one material with a majority carrier of electrons joined to one with a majority carrier of holes.
+      </div>
+
+      <h3 id="biasing">2.1 Biasing of Diodes</h3>
+      <ul>
+        <li><strong>Forward Bias:</strong> A material type connected to the same polarity terminal of the voltage source (p-type to positive, n-type to negative).</li>
+        <li><strong>Reverse Bias:</strong> A material type connected to the opposite polarity terminal of the voltage source (p-type to negative, n-type to positive).</li>
+      </ul>
+
+      <h3 id="no-bias">2.2 No-Bias Condition</h3>
+      <p>At the instant the two materials are "joined," the electrons and the holes in the region of the junction will combine, resulting in a lack of free carriers in the region near the junction.</p>
+      <p>The only particles remaining in this region are the positive and negative ions after the free carriers have been absorbed.</p>
+      <div class="def-box">
+        <strong>Depletion Region:</strong> This region of uncovered positive and negative ions is called the depletion region due to the "depletion" of free carriers in the region.
+      </div>
+      <div class="info-box">
+        <strong>Key fact:</strong> In the absence of an applied bias across a semiconductor diode, the net flow of charge in one direction is zero.
+        (\( I_D = 0 \text{ mA}, \; V_D = 0 \text{ V} \))
+      </div>
+
+      <h3 id="forward-bias">2.3 Forward-Bias Condition</h3>
+      <p>A forward-bias or "on" condition is established by applying the <strong>positive potential to the p-type material</strong> and the <strong>negative potential to the n-type material</strong>.</p>
+      <p>The application of a forward-bias potential \(V_D\) will "pressure" electrons in the n-type material and holes in the p-type material to recombine with the ions near the boundary and <strong>reduce the width of the depletion region</strong>.</p>
+      <div class="info-box">
+        The current that exists under forward-bias conditions is called the <strong>forward-bias current</strong> and is represented by \(I_D\):
+        \[ I_D = I_{\text{majority}} - I_s \]
+      </div>
+
+      <h3 id="reverse-bias">2.4 Reverse-Bias Condition</h3>
+      <p>When a P-N junction is reverse-biased, the number of uncovered positive ions in the depletion region of the n-type material will increase due to the large number of free electrons drawn to the positive potential of the applied voltage. For similar reasons, the number of uncovered negative ions will increase in the p-type material.</p>
+      <p>The net effect is a <strong>widening of the depletion region</strong>. This widening will establish too great a barrier for the majority carriers to overcome, effectively reducing the majority carrier flow to zero.</p>
+      <div class="info-box">
+        The current that exists under reverse-bias conditions is called the <strong>reverse saturation current</strong> and is represented by \(I_s\).
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- ─── 3. Diode Characteristics ─── -->
+      <h2 id="diode-characteristics">3. Semiconductor Diode's Characteristics &amp; Parameters</h2>
+
+      <p>From the characteristics curve of a semiconductor diode, the following regions and parameters are observed:</p>
+
+      <h3 id="forward-params">3.1 Forward Bias Parameters</h3>
+      <ul>
+        <li><strong>Knee Voltage (V<sub>F</sub>):</strong> The forward voltage at which the diode begins to conduct significantly.
+          <ul>
+            <li>Silicon (Si): ~0.7 V</li>
+            <li>Germanium (Ge): ~0.3 V</li>
+          </ul>
+        </li>
+        <li><strong>Forward Current Rating:</strong> Maximum allowable forward current.</li>
+        <li><strong>Maximum Power Dissipation:</strong> P = V<sub>D</sub> × I<sub>D</sub></li>
+      </ul>
+
+      <h3 id="reverse-params">3.2 Reverse Bias Parameters</h3>
+      <ul>
+        <li><strong>Reverse Saturation Current (I<sub>s</sub>):</strong> Very small current due to minority carriers.</li>
+        <li><strong>Breakdown Voltage (V<sub>BR</sub>):</strong> Reverse voltage at which large reverse current flows.</li>
+        <li><strong>Peak Inverse Voltage (PIV) Rating:</strong> Maximum reverse voltage the diode can withstand.</li>
+      </ul>
+
+      <hr class="section-divider">
+
+      <!-- ─── 4. Shockley's Equation ─── -->
+      <h2 id="shockley">4. Diode's Current Expression — Shockley's Current Equation</h2>
+
+      <p>Shockley's Equation — also called the <strong>diode equation</strong> — helps us determine the current at a given temperature knowing the diode voltage and saturation current.</p>
+
+      <div class="formula-block">
+        \[ I_D = I_S \left( e^{\frac{qV_D}{nkT}} - 1 \right) \]
+      </div>
+
+      <h3 id="shockley-params">4.1 Variables and Constants</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Symbol</th><th>Meaning</th><th>Value / Unit</th></tr>
+          <tr><td>\(I_D\)</td><td>Diode current</td><td>Amperes (A)</td></tr>
+          <tr><td>\(V_D\)</td><td>Diode voltage</td><td>Volts (V)</td></tr>
+          <tr><td>\(I_S\)</td><td>Reverse saturation current</td><td>Amperes (A)</td></tr>
+          <tr><td>\(q\)</td><td>Charge of electron</td><td>1.6 × 10⁻¹⁹ C</td></tr>
+          <tr><td>\(n\)</td><td>Ideality factor</td><td>1 (Si, Ge — indirect); 2 (GaAs, InP — direct)</td></tr>
+          <tr><td>\(k\)</td><td>Boltzmann's constant</td><td>1.38 × 10⁻²³ J/K</td></tr>
+          <tr><td>\(T\)</td><td>Temperature</td><td>Kelvin (K)</td></tr>
+          <tr><td>\(V_T = kT/q\)</td><td>Thermal voltage</td><td>≈ 25.9 mV at 300 K (room temp)</td></tr>
+        </table>
+      </div>
+
+      <h3 id="shockley-cases">4.2 Special Cases</h3>
+      <ul>
+        <li><strong>When \(V_D\) is negative (Reverse bias):</strong>
+          <div class="formula-block">\[ I_D \approx -I_S \]</div>
+        </li>
+        <li><strong>When \(V_D\) is positive (Forward bias):</strong>
+          <div class="formula-block">\[ I_D \approx I_S \, e^{\frac{qV_D}{nkT}} \]</div>
+        </li>
+      </ul>
+
+      <h3 id="thermal-voltage">4.3 Thermal Voltage</h3>
+      <div class="formula-block">
+        \[ V_T = \frac{kT}{q} = \frac{T}{11600} \text{ (V)} \]
+      </div>
+      <p>At room temperature (T = 300 K): \(V_T \approx 25.9 \text{ mV} \approx 26 \text{ mV}\)</p>
+
+      <hr class="section-divider">
+
+      <!-- ─── 5. Numericals on Shockley ─── -->
+      <h2 id="numericals-shockley">5. Numericals on Diode's Current Equations</h2>
+
+      <div class="q-section">
+        <div class="q-item">
+          <div class="q-label">Example 1.1</div>
+          <p><strong>Q:</strong> At a temperature of 27°C (common temperature for components in an enclosed operating system), determine the thermal voltage \(V_T\).</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <div class="formula-block">
+              \[ T = 273 + °C = 273 + 27 = 300 \text{ K} \]
+              \[ V_T = \frac{kT_K}{q} = \frac{(1.38 \times 10^{-23} \text{ J/K})(300 \text{ K})}{1.6 \times 10^{-19} \text{ C}} \]
+              \[ = 25.875 \text{ mV} \approx 26 \text{ mV} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Q. No 1</div>
+          <p><strong>Q:</strong> Calculate the thermal voltage when the temperature is 25°C.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>Thermal voltage \(V_T = kT/q\). This can be reduced to \(V_T = T/11600\) because \(q/k = 11600\).</p>
+            <div class="formula-block">
+              \[ V_T = \frac{298}{11600} = 0.0257 \text{ V} = 25.7 \text{ mV} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Q. No 2</div>
+          <p><strong>Q:</strong> Calculate the forward bias current of a Si diode when forward bias voltage of 0.4 V is applied, the reverse saturation current is 1.17×10⁻⁹ A and the thermal voltage is 25.2 mV.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>\(I_D = I_s(e^{V_D/\eta V_T} - 1)\), where \(I_s\) = reverse saturation current, \(\eta\) = ideality factor, \(V_T\) = thermal voltage, \(V_D\) = applied voltage.</p>
+            <p>Since ideality factor is not mentioned, take \(\eta = 1\).</p>
+            <p>Given: \(I_s = 1.17 \times 10^{-9} \text{ A}\), \(V_T = 0.0252 \text{ V}\), \(\eta = 1\), \(V_D = 0.4 \text{ V}\)</p>
+            <div class="formula-block">
+              \[ I_D = 1.17 \times 10^{-9} \times (e^{0.4/0.0252} - 1) = 9.156 \text{ mA} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Q. No 3</div>
+          <p><strong>Q:</strong> Given a diode current of 8 mA and η = 1, find the reverse saturation current (I<sub>s</sub>) if the applied voltage is 0.5 V and the room temperature is 25°C.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>Given: \(I_D = 8 \text{ mA}\), \(\eta = 1\), \(V_D = 0.5 \text{ V}\), \(T = 25°C = 298 \text{ K}\)</p>
+            <div class="formula-block">
+              \[ V_T = \frac{kT_K}{q} = \frac{(1.38 \times 10^{-23})(298)}{1.6 \times 10^{-19}} = 25.70 \text{ mV} \]
+              \[ 8 \text{ mA} = I_s(e^{(0.5)/(1)(25.70 \text{ mV})} - 1) = I_s(2.8 \times 10^8) \]
+              \[ I_s = \frac{8 \text{ mA}}{2.8 \times 10^8} = 28.57 \text{ pA} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Q. No 4</div>
+          <p><strong>Q:</strong> Calculate the applied voltage \(V_D\), if diode current is 6 mA, Thermal Voltage is 26 mV, Ideality factor is 1, and Reverse saturation current is 1 nA.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>Given: \(I_D = 6 \text{ mA}\), \(V_T = 26 \text{ mV}\), \(\eta = 1\), \(I_S = 1 \text{ nA}\)</p>
+            <div class="formula-block">
+              \[ I_D = I_s(e^{V_D/\eta V_T} - 1) \]
+              \[ 6 \text{ mA} = 1 \text{ nA}(e^{V_D/(1)(26 \text{ mV})} - 1) \]
+              \[ 6 \times 10^6 = e^{V_D/26 \text{ mV}} - 1 \]
+              \[ e^{V_D/26 \text{ mV}} = 6 \times 10^6 + 1 \approx 6 \times 10^6 \]
+              \[ \ln_e(e^{V_D/26 \text{ mV}}) = \ln_e(6 \times 10^6) \]
+              \[ \frac{V_D}{26 \text{ mV}} = 15.61 \]
+              \[ V_D = 15.61 \times 26 \text{ mV} \approx 0.41 \text{ V} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Q. No 5</div>
+          <p><strong>Q:</strong> Consider a silicon diode with η = 1.2. Find change in voltage if the current changes from 0.1 mA to 10 mA.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>Equation for diode current: \(I = I_0 \times (e^{V/\eta V_T} - 1)\)</p>
+            <p>Given: \(\eta = 1.2\), \(I_2 = 10 \text{ mA}\), \(I_1 = 0.1 \text{ mA}\), \(V_T = 0.026 \text{ V}\)</p>
+            <div class="formula-block">
+              \[ \Delta V = \eta V_T \ln\left(\frac{I_2}{I_1}\right) = 1.2 \times 0.026 \times \ln\left(10 \times \frac{10^{-3}}{0.1 \times 10^{-3}}\right) = 0.143 \text{ V} \]
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- ─── 6. Comparison Ge Si GaAs ─── -->
+      <h2 id="comparison-diodes">6. Comparison of Diode Characteristics of Ge, Si, and GaAs</h2>
+
+      <div class="table-wrap">
+        <table>
+          <tr><th>Parameter</th><th>Germanium (Ge)</th><th>Silicon (Si)</th><th>GaAs</th></tr>
+          <tr><td>Knee Voltage (V<sub>K</sub>)</td><td>~0.3 V</td><td>~0.7 V</td><td>~1.0–1.2 V</td></tr>
+          <tr><td>Reverse Saturation Current (I<sub>s</sub>)</td><td>~1 μA (highest)</td><td>~10 pA</td><td>~5 pA (lowest)</td></tr>
+          <tr><td>Breakdown Voltage (V<sub>BV</sub>)</td><td>Lower</td><td>Medium</td><td>Higher (~100 V)</td></tr>
+          <tr><td>Energy Gap</td><td>0.67 eV</td><td>1.1 eV</td><td>1.43 eV</td></tr>
+          <tr><td>Temperature sensitivity</td><td>Highest</td><td>Medium</td><td>Lowest</td></tr>
+        </table>
+      </div>
+
+      <p>From the characteristics curve: as the forward voltage increases, initially very little current flows until the knee voltage is reached, after which current rises rapidly. In reverse bias, only a very small saturation current flows until breakdown voltage is reached.</p>
+
+      <hr class="section-divider">
+
+      <!-- ─── 7. Breakdown ─── -->
+      <h2 id="breakdown">7. Types of Diode Breakdown</h2>
+
+      <h3 id="avalanche">7.1 Avalanche Breakdown</h3>
+      <p>In the <strong>reverse bias condition</strong>, as the voltage increases, the free charge carriers obtain velocity and associated kinetic energy and release additional carriers through <strong>collision with other atomic structures</strong>.</p>
+      <p>Hence covalent bonds are broken and electron–hole pairs are generated. These charge carriers acquire energy from the applied potential and produce more and more free charge carriers. This cumulative process is called <strong>Avalanche multiplication</strong> or ionization process.</p>
+      <div class="info-box">
+        Avalanche breakdown is observed in diodes with <strong>Zener breakdown voltage V<sub>z</sub> &gt; 8 V</strong>.
+      </div>
+
+      <h3 id="zener-breakdown">7.2 Zener Breakdown</h3>
+      <p>Zener breakdown occurs when both P and N type material are <strong>heavily doped</strong> in a semiconductor diode. Hence the depletion layer region is narrowed down.</p>
+      <p>When a small reverse bias voltage is applied across a diode, a very strong electric field is produced. Due to this electric field, covalent bonds break and produce a large number of free charge carriers.</p>
+      <div class="info-box">
+        Zener breakdown is observed in diodes with <strong>Zener breakdown voltage V<sub>z</sub> of 5 to 8 V</strong>.
+      </div>
+
+      <h3 id="breakdown-comparison">7.3 Comparison: Zener vs. Avalanche Breakdown</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>#</th><th>Zener Breakdown</th><th>Avalanche Breakdown</th></tr>
+          <tr>
+            <td>01</td>
+            <td>The process in which the electrons move across the barrier from the valence band of p-type material to the conduction band of n-type material is known as Zener breakdown.</td>
+            <td>The process of applying high voltage and increasing the free electrons or electric current in semiconductors and insulating materials is called an avalanche breakdown.</td>
+          </tr>
+          <tr>
+            <td>02</td>
+            <td>This is observed in Zener diodes having a Zener breakdown voltage V<sub>z</sub> of 5 to 8 volts.</td>
+            <td>This is observed in Zener diode having a Zener breakdown voltage V<sub>z</sub> greater than 8 volts.</td>
+          </tr>
+          <tr>
+            <td>03</td>
+            <td>The valence electrons are pulled into conduction due to the high electric field in the narrow depletion region.</td>
+            <td>The valence electrons are pushed to conduction due to the energy imparted by accelerated electrons, which gain their velocity due to their collision with other atoms.</td>
+          </tr>
+          <tr>
+            <td>04</td>
+            <td>The increase in temperature <strong>decreases</strong> the breakdown voltage.</td>
+            <td>The increase in temperature <strong>increases</strong> the breakdown voltage.</td>
+          </tr>
+          <tr>
+            <td>05</td>
+            <td>The VI characteristics of a Zener breakdown has a <strong>sharp</strong> curve.</td>
+            <td>The VI characteristic curve of the avalanche breakdown is <strong>not as sharp</strong> as the Zener breakdown.</td>
+          </tr>
+          <tr>
+            <td>06</td>
+            <td>It occurs in diodes that are <strong>highly doped</strong>.</td>
+            <td>It occurs in diodes that are <strong>lightly doped</strong>.</td>
+          </tr>
+        </table>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- ─── 8. Temperature Effects ─── -->
+      <h2 id="temperature-effects">8. Temperature Effects on V-I Characteristics of a Diode</h2>
+
+      <ul>
+        <li>The effect of variation in temperature across a semiconductor diode is observed both in the forward as well as in reverse characteristics.</li>
+        <li>Rise in temperature generates more electron-hole pairs, thus conductivity increases and current increases.</li>
+        <li>PN junction diode parameters like <strong>reverse saturation current</strong>, <strong>bias current</strong>, <strong>reverse breakdown voltage</strong>, and <strong>barrier voltage</strong> are dependent on temperature.</li>
+        <li>Increase in the temperature increases carrier concentration. As a result:
+          <ul>
+            <li>Knee voltage <strong>decreases</strong></li>
+            <li>Breakdown voltage <strong>increases</strong></li>
+            <li>Reverse saturation current <strong>increases</strong></li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3 id="temp-forward">8.1 Under Forward Bias</h3>
+      <div class="info-box">
+        Barrier voltage is dependent on temperature — it <strong>decreases by 2.5 mV/°C</strong> rise in temperature for both Germanium and Silicon.
+      </div>
+
+      <h3 id="temp-reverse">8.2 Under Reverse Bias</h3>
+      <div class="info-box">
+        Reverse saturation current (I<sub>S</sub>) of diode increases with increase in temperature. The rise is <strong>7%/°C</strong> for both Germanium &amp; Silicon and approximately <strong>doubles for every 10°C</strong> rise in temperature. Reverse breakdown voltage (V<sub>R</sub>) also increases as the temperature increases.
+      </div>
+
+      <h3 id="temp-summary">8.3 Summary Rules</h3>
+      <ol>
+        <li>The reverse saturation current I<sub>s</sub> will <strong>double in magnitude for every 10°C increase</strong> in temperature.</li>
+        <li>The Knee voltage shifts to the left at a rate of <strong>2.5 mV per degree centigrade</strong> increase in temperature.</li>
+      </ol>
+
+      <h3 id="temp-numericals">8.4 Temperature Effects: Numericals</h3>
+
+      <div class="q-section">
+        <div class="q-item">
+          <div class="q-label">Example</div>
+          <p><strong>Q:</strong> The reverse saturation current of silicon diode at 20°C is 0.1 µA. Determine its value if the temperature is increased by 40°C.</p>
+          <div class="solution">
+            <strong>ANS:</strong>
+            <div class="formula-block">
+              \[ \text{Given: At } T = 20°C, I_s = 0.1\ \mu\text{A} \]
+              \[ T = 30°C: I_s = 0.2\ \mu\text{A} \]
+              \[ T = 40°C: I_s = 0.4\ \mu\text{A} \]
+              \[ T = 50°C: I_s = 0.8\ \mu\text{A} \]
+              \[ T = 60°C: I_s = 1.6\ \mu\text{A} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Q No 1</div>
+          <p><strong>Q:</strong> The knee voltage of a Si diode is 0.7 V and its reverse saturation current is 20 nA at 25°C. Determine these values at 40°C.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>Knee voltage shifts left at a rate of 2.5 mV per centigrade degree increase in temperature.</p>
+            <p>Change in temperature = 40°C − 25°C = 15°C</p>
+            <div class="formula-block">
+              \[ \Delta V_K = 2.5 \text{ mV} \times 15 = 0.0375 \text{ V} \]
+              \[ V_K \text{ at } 40°C = 0.7 - 0.0375 = 0.6625 \text{ V} \]
+            </div>
+            <p>Reverse Saturation Current doubles for every 10°C rise in Temperature:</p>
+            <div class="formula-block">
+              \[ I_S \text{ at } 40°C = 2^{(40-25)/10} \times 20 \text{ nA} = 2^{1.5} \times 20 \text{ nA} = 2.82 \times 20 \text{ nA} = 56.56 \text{ nA} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Q No 2</div>
+          <p><strong>Q:</strong> The reverse saturation current of a Germanium diode is 200 µA at room temperature of 27°C. Calculate the current in forward biased condition, if forward biased voltage is 0.2 V at room temperature. If temperature is increased by 30°C, calculate the reverse saturation current and the forward current for the same forward voltage at new temperature.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <div class="formula-block">
+              \[ V_T = kT/q = 25.9 \text{ mV} \]
+              \[ I_D = I_s \times (e^{V_D/\eta V_T} - 1) = 200\ \mu\text{A} \times e^{0.2/0.0259} = 0.451 \text{ A} \]
+            </div>
+            <p>New temperature = 27 + 30 = 57°C:</p>
+            <div class="formula-block">
+              \[ I_s = 200\ \mu \times 2^3 = 1600\ \mu\text{A} \]
+              \[ V_T \text{ at } 57°C = 28.4 \text{ mV} \]
+              \[ I_D \text{ at } 57°C = 1.83 \text{ A} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Q No 3</div>
+          <p><strong>Q:</strong> A Ge diode has a reverse saturation current of 5 µA at temperature 300 K. Find diode current at 40°C when forward bias voltage is 0.27 V.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>Given I<sub>s</sub> at 27°C is 5 µA.</p>
+            <div class="formula-block">
+              \[ I_s \text{ at } 40°C = 5\ \mu \times 2^{(40-27)/10} = 5\ \mu \times 2.462 = 12.31\ \mu\text{A} \]
+              \[ V_T \text{ at } 40°C = kT/q = 26.9 \text{ mV} \]
+              \[ I_D = I_s \times (e^{V_D/\eta V_T} - 1) = 12.31\ \mu\text{A} \times e^{V_D/\eta V_T} = 281.49 \text{ mA} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Q No 4</div>
+          <p><strong>Q:</strong> The reverse saturation current of a Si diode is 2 pA at 27°C. Determine the forward biased voltage across the diode at 57°C, if the forward current through the diode at 57°C is 50 mA.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>Reverse saturation current doubles for every 10°C rise in temperature.</p>
+            <div class="formula-block">
+              \[ I_s \text{ at } 27°C = 2 \text{ pA} \]
+              \[ I_s \text{ at } 37°C = 4 \text{ pA} \]
+              \[ I_s \text{ at } 47°C = 8 \text{ pA} \]
+              \[ I_s \text{ at } 57°C = 16 \text{ pA} \]
+              \[ V_T \text{ at } 57°C = k \times 330/q = 28.42 \text{ mV} \]
+              \[ I_D = I_s \times (e^{V_D/\eta V_T} - 1) = 50 \text{ mA} \]
+              \[ \frac{50}{16} = e^{V_D/\eta V_T} \Rightarrow \ln(50/16) = \frac{V_D}{28.42 \text{ mV}} \]
+              \[ V_D = 0.686 \text{ V at } 57°C \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Q No 5</div>
+          <p><strong>Q:</strong> The reverse saturation current of a Germanium diode is 100 µA at room temperature of 28°C. Calculate the current in forward biased condition, if forward biased voltage is 0.3 V at room temperature. If temperature is increased by 25°C, calculate the reverse saturation current and the forward current for the same forward voltage at new temperature.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <div class="formula-block">
+              \[ V_T = kT/q = 25.9 \text{ mV} \]
+              \[ I_D = I_s \times (e^{V_D/\eta V_T} - 1) \]
+            </div>
+            <p>New temperature = 28 + 25 = 53°C:</p>
+            <div class="formula-block">
+              \[ I_s = 100\ \mu \times 2^{2.5} = 565.68\ \mu\text{A} \]
+              \[ V_T \text{ at } 53°C = 28.117 \text{ mV} \]
+              \[ I_D \text{ at } 53°C = 24.31 \text{ A} \]
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- ─── 9. Ideal vs Practical ─── -->
+      <h2 id="ideal-practical">9. Ideal and Practical Diode Characteristics</h2>
+
+      <h3 id="ideal-diode">9.1 Ideal Diode</h3>
+      <div class="def-box">
+        <strong>Ideal Diode:</strong> When an ideal diode is forward biased, it offers <strong>no resistance</strong> and acts like a <strong>closed switch</strong>. Likewise, the ideal diode under reverse bias offers <strong>infinite resistance</strong> and acts like an <strong>open switch</strong>.
+      </div>
+      <p>Characteristics: \(V_d = 0\) V when forward biased, \(I_D = 0\) A when reverse biased.</p>
+
+      <h3 id="practical-diode">9.2 Practical Diode</h3>
+      <div class="def-box">
+        <strong>Practical Diode:</strong> A diode which is said to be forward biased, it starts conducting at the knee voltage (V<sub>K</sub>). Under reverse bias no current flows due to majority charges. Hence a practical diode is considered to be an open switch (minority charge current is ignored).
+        For Si: \(V_K = 0.7 \text{ V}\); For Ge: \(V_K = 0.3 \text{ V}\)
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- ─── 10. Diode Resistances ─── -->
+      <h2 id="diode-resistances">10. Diode Resistances</h2>
+
+      <p>An actual diode offers a very small resistance (not zero) when forward biased — called <strong>forward resistance</strong>. Whereas, it offers a very high resistance (not infinite) when reverse biased — called <strong>reverse resistance</strong>.</p>
+      <p>The type of applied voltage or signal defines the following resistance levels:</p>
+      <ol>
+        <li>DC or Static Resistance</li>
+        <li>AC or Dynamic Resistance</li>
+        <li>Average AC Resistance</li>
+      </ol>
+
+      <h3 id="dc-resistance">10.1 DC or Static Resistance (R<sub>D</sub>)</h3>
+      <p>The application of a DC voltage to a circuit containing a semiconductor diode will result in an operating point on the semiconductor diode characteristic curve. Finding the corresponding levels of V<sub>D</sub> and I<sub>D</sub> at a particular operating point gives the DC resistance.</p>
+      <div class="formula-block">
+        \[ R_D = \frac{V_D}{I_D} \]
+      </div>
+      <div class="info-box">
+        Typical DC resistance of a diode:
+        <ul>
+          <li>Forward bias: 10 Ω to 80 Ω</li>
+          <li>Reverse bias: 10 MΩ</li>
+        </ul>
+      </div>
+
+      <h3 id="ac-resistance">10.2 AC or Dynamic Resistance (r<sub>d</sub>)</h3>
+      <p>The application of a small AC voltage to a circuit containing a semiconductor diode offers AC resistance. A straight line drawn tangent to the curve through the Q-point will define a particular change in voltage and current, which determines the AC or dynamic resistance for this region of the diode characteristics.</p>
+      <div class="formula-block">
+        \[ r_d = \frac{\Delta V_d}{\Delta I_d} = \frac{26 \text{ mV}}{I_D} \text{ (ohms)} \]
+      </div>
+      <p>Including bulk resistance:</p>
+      <div class="formula-block">
+        \[ r'_d = \frac{26 \text{ mV}}{I_D} + r_B \text{ (ohms)} \]
+      </div>
+      <p>where \(r_B\) is bulk or body resistance.</p>
+      <div class="info-box">
+        Typically, the AC resistance of a diode in the active region will range from <strong>1 Ω to 100 Ω</strong>.
+      </div>
+
+      <h3 id="avg-ac-resistance">10.3 Average AC Resistance (r<sub>av</sub>)</h3>
+      <p>If the applied input signal is sufficiently large to produce a broad swing, the resistance determined by a straight line drawn between the two intersections established by the maximum and minimum values of input voltage is called the <strong>Average AC Resistance</strong>.</p>
+      <div class="formula-block">
+        \[ r_{av} = \frac{\Delta V_d}{\Delta I_d}\bigg|_{\text{pt. to pt.}} \]
+      </div>
+
+      <h3 id="resistance-summary">10.4 Summary of Resistances</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Type</th><th>Equation</th><th>Special Characteristics</th><th>Graphical Determination</th></tr>
+          <tr><td>DC or Static</td><td>\(R_D = V_D / I_D\)</td><td>Defined as a point on the characteristics</td><td>Q-point with \(V_D\) and \(I_D\)</td></tr>
+          <tr><td>AC or Dynamic</td><td>\(r_d = \Delta V_d / \Delta I_d = 26 \text{ mV} / I_D\)</td><td>Defined by a tangent line at the Q-point</td><td>Slope of tangent at Q-point</td></tr>
+          <tr><td>Average AC</td><td>\(r_{av} = \Delta V_d / \Delta I_d\) (pt. to pt.)</td><td>Defined by a straight line between limits of operation</td><td>Slope of chord between two operating points</td></tr>
+        </table>
+      </div>
+
+      <h3 id="resistance-numericals">10.5 Diode Resistance: Numericals</h3>
+
+      <div class="q-section">
+        <div class="q-item">
+          <div class="q-label">Q No 1</div>
+          <p><strong>Q:</strong> For the characteristics of the given figure:
+            (a) Determine the AC resistance at I<sub>D</sub> = 2 mA.
+            (b) Determine the AC resistance at I<sub>D</sub> = 25 mA.
+            (c) Compare the results of parts (a) and (b) to the DC resistances at each current level.
+          </p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p><strong>(a)</strong></p>
+            <div class="formula-block">
+              \[ \Delta I_d = 4 \text{ mA} - 0 \text{ mA} = 4 \text{ mA} \]
+              \[ \Delta V_d = 0.76 \text{ V} - 0.65 \text{ V} = 0.11 \text{ V} \]
+              \[ r_d = \frac{0.11 \text{ V}}{4 \text{ mA}} = 27.5\ \Omega \]
+            </div>
+            <p><strong>(b)</strong></p>
+            <div class="formula-block">
+              \[ \Delta I_d = 30 \text{ mA} - 20 \text{ mA} = 10 \text{ mA} \]
+              \[ \Delta V_d = 0.8 \text{ V} - 0.78 \text{ V} = 0.02 \text{ V} \]
+              \[ r_d = \frac{0.02 \text{ V}}{10 \text{ mA}} = 2\ \Omega \]
+            </div>
+            <p><strong>(c)</strong></p>
+            <div class="formula-block">
+              \[ R_D = \frac{V_D}{I_D} = \frac{0.7 \text{ V}}{2 \text{ mA}} = 350\ \Omega \]
+              \[ R_D = \frac{V_D}{I_D} = \frac{0.79 \text{ V}}{25 \text{ mA}} = 31.62\ \Omega \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Q No 2 — Derivation</div>
+          <p><strong>Q:</strong> Derivation of an expression for AC or Dynamic Resistance.</p>
+          <div class="solution">
+            <strong>Solution:</strong> The derivative of a function at a point is equal to the slope of the tangent line drawn at that point.
+            <div class="formula-block">
+              \[ \frac{d}{dV_D}(I_D) = \frac{d}{dV}[I_s(e^{kV_D/T_K} - 1)] \]
+              \[ \frac{dI_D}{dV_D} = \frac{k}{T_K}(I_D + I_s) \approx \frac{k}{T_K} I_D \]
+              \[ \text{With } k = \frac{11600}{\eta}, \quad T_K = 25 + 273 = 298° \]
+              \[ \frac{k}{T_K} = \frac{11600}{298} \approx 38.93 \]
+              \[ \frac{dI_D}{dV_D} = 38.93 I_D \]
+              \[ \frac{dV_D}{dI_D} = \frac{0.026}{I_D} \]
+              \[ \boxed{r_d = \frac{26 \text{ mV}}{I_D}} \text{ (Ge, Si)} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Q No 3</div>
+          <p><strong>Q:</strong> Calculate the DC and AC resistance for the diode at a forward current of 10 mA and also compare their magnitudes.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <div class="formula-block">
+              \[ I_D = 10 \text{ mA}, \quad V_D = 0.76 \text{ V} \]
+              \[ R_{DC} = \frac{V_D}{I_D} = \frac{0.76 \text{ V}}{10 \text{ mA}} = 76\ \Omega \]
+              \[ r_d = \frac{\Delta V_d}{\Delta I_d} = \frac{0.85 \text{ V} - 0.72 \text{ V}}{15 \text{ mA} - 5 \text{ mA}} = \frac{0.13 \text{ V}}{10 \text{ mA}} = 13\ \Omega \]
+              \[ R_{DC} \gg r_d \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Q No 4</div>
+          <p><strong>Q:</strong> Find the piecewise-linear equivalent circuit for the diode shown. Use a straight line segment that intersects the horizontal axis at 0.7 V and best approximates the curve for the region greater than 0.7 V.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>Using the best approximation to the curve beyond \(V_D = 0.7 \text{ V}\):</p>
+            <div class="formula-block">
+              \[ r_{av} = \frac{\Delta V_d}{\Delta I_d} \approx \frac{0.8 \text{ V} - 0.7 \text{ V}}{25 \text{ mA} - 0 \text{ mA}} = \frac{0.1 \text{ V}}{25 \text{ mA}} = 4\ \Omega \]
+            </div>
+            <p>The piecewise-linear equivalent circuit: a 0.7 V battery in series with a 4 Ω resistor and an ideal diode.</p>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Q No 5</div>
+          <p><strong>Q:</strong> Determine the DC resistance levels for the diode at (a) I<sub>D</sub> = 2 mA, (b) I<sub>D</sub> = 20 mA, (c) V<sub>D</sub> = −10 V.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <div class="formula-block">
+              \[ \text{(a) At } I_D = 2 \text{ mA}, V_D = 0.5 \text{ V}: \quad R_D = \frac{0.5 \text{ V}}{2 \text{ mA}} = 250\ \Omega \]
+              \[ \text{(b) At } I_D = 20 \text{ mA}, V_D = 0.8 \text{ V}: \quad R_D = \frac{0.8 \text{ V}}{20 \text{ mA}} = 40\ \Omega \]
+              \[ \text{(c) At } V_D = -10 \text{ V}, I_D = -I_s = -1\ \mu\text{A}: \quad R_D = \frac{10 \text{ V}}{1\ \mu\text{A}} = 10\ \text{M}\Omega \]
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- ─── 11. Diode Approximations ─── -->
+      <h2 id="diode-approximations">11. Diode Equivalent Circuits / Diode Approximations</h2>
+
+      <div class="def-box">
+        <strong>Diode Approximation:</strong> A mathematical method used to approximate the nonlinear behavior of real diodes to enable calculations and circuit analysis.
+      </div>
+
+      <p>There are three different approximations used to analyze diode circuits:</p>
+      <ol>
+        <li>Piecewise-Linear Equivalent Circuit</li>
+        <li>Simplified Diode Characteristics</li>
+        <li>Ideal Diode Characteristics</li>
+      </ol>
+
+      <h3 id="piecewise-linear">11.1 Piecewise-Linear Equivalent Circuit</h3>
+      <ul>
+        <li><strong>Under forward-bias:</strong> The diode behaves as a practical voltage source with magnitude equal to the knee voltage, in series with the diode's average AC resistance. Formula: \(V_d = V_B + I_d \times R_B\) where \(V_B\) = Knee voltage.</li>
+        <li><strong>Under reverse-bias:</strong> The diode is an open switch and no current flows through it.</li>
+        <li>Characteristics resemble closely to that of a practical diode.</li>
+      </ul>
+      <div class="note-box">
+        Note: V<sub>B</sub> = Knee voltage
+      </div>
+
+      <h3 id="simplified-diode">11.2 Simplified Diode Characteristics</h3>
+      <ul>
+        <li><strong>Under forward-bias:</strong> The diode turns ON when a voltage of V<sub>K</sub> or V<sub>B</sub> is applied across it. It turns off if the applied voltage is less than V<sub>K</sub>. Thus, the diode is represented by a voltage of V<sub>K</sub> in series with a closed switch. Therefore, \(V_d = V_B\).</li>
+        <li><strong>Under reverse bias:</strong> It is an open switch.</li>
+      </ul>
+      <div class="note-box">
+        For Si: V<sub>B</sub> = 0.7 V; For Ge: V<sub>B</sub> = 0.3 V
+      </div>
+
+      <h3 id="ideal-diode-char">11.3 Ideal Diode Characteristics</h3>
+      <ul>
+        <li>The diode is considered as a <strong>closed switch with zero voltage drop</strong> when forward-biased (\(V_d = 0\)).</li>
+        <li>It acts as an <strong>open switch with zero current</strong> when reverse biased.</li>
+      </ul>
+
+      <hr class="section-divider">
+
+      <!-- ─── 12. Series Diode Configuration ─── -->
+      <h2 id="series-diode">12. Series Diode Configuration with a Resistor</h2>
+
+      <p>It's assumed that the forward resistance of the diode is usually so small compared to the other series elements of the network that it can be ignored.</p>
+      <p>In general, a diode is in the <strong>"on" state</strong> if the current established by the applied sources is such that its direction matches that of the arrow in the diode symbol and the applied voltage across diode (V<sub>D</sub>) is:</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Diode Type</th><th>Minimum V<sub>D</sub> to Turn ON</th></tr>
+          <tr><td>Silicon Diode</td><td>V<sub>D</sub> ≥ 0.7 V</td></tr>
+          <tr><td>Germanium Diode</td><td>V<sub>D</sub> ≥ 0.3 V</td></tr>
+          <tr><td>Gallium Arsenide (GaAs)</td><td>V<sub>D</sub> ≥ 1.2 V</td></tr>
+        </table>
+      </div>
+
+      <h3 id="series-forward">12.1 Forward Bias Analysis (Using Simplified Equivalent)</h3>
+      <div class="formula-block">
+        \[ V_D = 0.7 \text{ V} \quad (\text{or } V_D = E \text{ if } E < 0.7 \text{ V}) \]
+        \[ V_R = E - V_D \]
+        \[ I_D = I_R = I_T = V_R / R \]
+      </div>
+
+      <h3 id="series-reverse">12.2 Reverse Bias Analysis</h3>
+      <div class="formula-block">
+        \[ V_D = E; \quad V_R = 0 \text{ V}; \quad I_D = 0 \text{ A} \]
+      </div>
+
+      <h3 id="series-problems">12.3 Solved Problems — Series &amp; Parallel Diode Configurations</h3>
+
+      <div class="q-section">
+        <div class="q-item">
+          <div class="q-label">Problem 1</div>
+          <p><strong>Q:</strong> Determine V<sub>out</sub> and I<sub>d</sub> for the given series diode circuit. Assume the LED Voltage as 1.8 V. (Si diode in series with red LED, E = +12 V, R = 680 Ω)</p>
+          <div class="solution">
+            <strong>Solution:</strong> Re-draw the circuit based on simplified diode's configuration:
+            <div class="formula-block">
+              \[ V_o = E - V_{K_1} - V_{K_2} = 12 \text{ V} - 0.7 \text{ V} - 1.8 \text{ V} = 9.5 \text{ V} \]
+              \[ I_D = I_R = \frac{V_R}{R} = \frac{V_o}{R} = \frac{9.5 \text{ V}}{680\ \Omega} = 13.97 \text{ mA} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Problem 2 — Parallel</div>
+          <p><strong>Q:</strong> Determine V<sub>o</sub>, I<sub>1</sub>, I<sub>D1</sub>, and I<sub>D2</sub> for the parallel diode configuration. (E = 10 V, R = 0.33 kΩ, D<sub>1</sub> and D<sub>2</sub> are Si diodes in parallel)</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <div class="formula-block">
+              \[ V_o = 0.7 \text{ V} \]
+              \[ I_1 = \frac{V_R}{R} = \frac{E - V_D}{R} = \frac{10 \text{ V} - 0.7 \text{ V}}{0.33 \text{ k}\Omega} = 28.18 \text{ mA} \]
+              \[ I_{D_1} = I_{D_2} = \frac{I_1}{2} = \frac{28.18 \text{ mA}}{2} = 14.09 \text{ mA} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Problem 3 — Series-Parallel</div>
+          <p><strong>Q:</strong> Determine I<sub>1</sub>, I<sub>2</sub>, and I<sub>D2</sub> for the series-parallel diode configuration. (E = 20 V, D<sub>1</sub> = Si in series, D<sub>2</sub> = Si in parallel branch, R<sub>1</sub> = 3.3 kΩ, R<sub>2</sub> = 5.6 kΩ)</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <div class="formula-block">
+              \[ -V_2 + E - V_{T_1} - V_{T_2} = 0 \]
+              \[ V_2 = E - V_{T_1} - V_{T_2} = 20 \text{ V} - 0.7 \text{ V} - 0.7 \text{ V} = 18.6 \text{ V} \]
+              \[ I_2 = \frac{V_2}{R_2} = \frac{18.6 \text{ V}}{5.6 \text{ k}\Omega} = 3.32 \text{ mA} \]
+              \[ I_1 = \frac{V_{T_2}}{R_1} = \frac{0.7 \text{ V}}{3.3 \text{ k}\Omega} = 0.212 \text{ mA} \]
+              \[ I_{D_2} = I_2 - I_1 = 3.32 \text{ mA} - 0.212 \text{ mA} = 3.108 \text{ mA} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Problem 4</div>
+          <p><strong>Q:</strong> Determine V<sub>out</sub> and I<sub>d</sub> for the series diode circuit (same as Problem 1, repeated for clarity). Si diode + red LED (1.8 V), E = +12 V, R = 680 Ω.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <div class="formula-block">
+              \[ V_o = E - V_{K_1} - V_{K_2} = 12 \text{ V} - 0.7 \text{ V} - 1.8 \text{ V} = 9.5 \text{ V} \]
+              \[ I_D = I_R = \frac{V_o}{R} = \frac{9.5 \text{ V}}{680\ \Omega} = 13.97 \text{ mA} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Problem 5</div>
+          <p><strong>Q:</strong> Determine I<sub>D</sub>, V<sub>D2</sub> and V<sub>o</sub>. (Two Si diodes in series — D<sub>1</sub> forward, D<sub>2</sub> reversed, R = 5.6 kΩ, E = +12 V)</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>D<sub>2</sub> is reverse biased → open circuit → I = 0 A.</p>
+            <div class="formula-block">
+              \[ V_o = I_R R = I_D R = (0 \text{ A}) R = 0 \text{ V} \]
+              \[ E - V_{D_1} - V_{D_2} - V_o = 0 \]
+              \[ V_{D_2} = E - V_{D_1} - V_o = 12 \text{ V} - 0 - 0 = 12 \text{ V} \]
+              \[ V_o = 0 \text{ V} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Problem 6</div>
+          <p><strong>Q:</strong> Determine I, V<sub>1</sub>, V<sub>2</sub> and V<sub>0</sub>. (E<sub>1</sub> = 10 V, R<sub>1</sub> = 4.7 kΩ, Si diode, R<sub>2</sub> = 2.2 kΩ, E<sub>2</sub> = −5 V)</p>
+          <div class="solution">
+            <strong>Solution:</strong> Diode is forward biased.
+            <div class="formula-block">
+              \[ I = \frac{E_1 + E_2 - V_D}{R_1 + R_2} = \frac{10 \text{ V} + 5 \text{ V} - 0.7 \text{ V}}{4.7 \text{ k}\Omega + 2.2 \text{ k}\Omega} = \frac{14.3 \text{ V}}{6.9 \text{ k}\Omega} \approx 2.07 \text{ mA} \]
+              \[ V_1 = IR_1 = (2.07 \text{ mA})(4.7 \text{ k}\Omega) = 9.73 \text{ V} \]
+              \[ V_2 = IR_2 = (2.07 \text{ mA})(2.2 \text{ k}\Omega) = 4.55 \text{ V} \]
+              \[ -E_2 + V_2 - V_o = 0 \Rightarrow V_o = V_2 - E_2 = 4.55 \text{ V} - 5 \text{ V} = -0.45 \text{ V} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Problem 7</div>
+          <p><strong>Q:</strong> Determine the current I for each of the configurations shown.</p>
+          <div class="solution">
+            <strong>Solutions:</strong>
+            <div class="formula-block">
+              \[ \text{(a) } I = 0 \text{ mA} \quad \text{(diode reverse-biased)} \]
+              \[ \text{(b) } V_{20\Omega} = 20 \text{ V} - 0.7 \text{ V} = 19.3 \text{ V} \]
+              \[ I(20\Omega) = \frac{19.3 \text{ V}}{20\Omega} = 0.965 \text{ A}; \quad I(10\Omega) = \frac{19.3 \text{ V}}{10\Omega} = 1.93 \text{ A} \]
+              \[ I = I(10\Omega) + I(20\Omega) = 2.895 \text{ A} \]
+              \[ \text{(c) } I = \frac{10 \text{ V}}{10\Omega} = 1 \text{ A} \quad \text{(center branch open)} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Problem 8</div>
+          <p><strong>Q:</strong> Determine V<sub>0</sub> and I<sub>D</sub> for the networks.</p>
+          <div class="solution">
+            <strong>Solutions:</strong>
+            <div class="formula-block">
+              \[ \text{(a) Diode forward-biased, KVL (CW): } -5 \text{ V} + 0.7 \text{ V} - V_o = 0 \]
+              \[ V_o = -4.3 \text{ V} \]
+              \[ I_R = I_D = \frac{|V_o|}{R} = \frac{4.3 \text{ V}}{2.2 \text{ k}\Omega} = 1.955 \text{ mA} \]
+              \[ \text{(b) } I_D = \frac{8 \text{ V} + 6 \text{ V} - 0.7 \text{ V}}{1.2 \text{ k}\Omega + 4.7 \text{ k}\Omega} = 2.25 \text{ mA} \]
+              \[ V_o = 8 \text{ V} - (2.25 \text{ mA})(1.2 \text{ k}\Omega) = 5.3 \text{ V} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Problem 9</div>
+          <p><strong>Q:</strong> Determine the level of V<sub>0</sub> for each network.</p>
+          <div class="solution">
+            <strong>Solutions:</strong>
+            <div class="formula-block">
+              \[ \text{(a) } V_o = \frac{10 \text{ k}\Omega(12 \text{ V} - 0.7 \text{ V} - 0.3 \text{ V})}{2 \text{ k}\Omega + 10 \text{ k}\Omega} = 9.17 \text{ V} \]
+              \[ \text{(b) Diode forward-biased: } I_D = \frac{20 \text{ V} + 20 \text{ V} - 0.7 \text{ V}}{6.8 \text{ k}\Omega} = 5.78 \text{ mA} \]
+              \[ \text{KVL (CW): } +V_o - 0.7 \text{ V} + 20 \text{ V} = 0 \Rightarrow V_o = -19.3 \text{ V} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Problem 10</div>
+          <p><strong>Q:</strong> Determine V<sub>01</sub> and V<sub>02</sub> for the circuits.</p>
+          <div class="solution">
+            <strong>Solutions:</strong>
+            <div class="formula-block">
+              \[ \text{(a) } V_{o_1} = 12 \text{ V} - 0.7 \text{ V} = 11.3 \text{ V}; \quad V_{o_2} = 1.2 \text{ V} \]
+              \[ \text{(b) } V_{o_1} = 0 \text{ V}; \quad V_{o_2} = 0 \text{ V} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Problem 11</div>
+          <p><strong>Q:</strong> Determine I for the parallel diode configuration. (E<sub>1</sub> = 20 V, R = 2.2 kΩ, E<sub>2</sub> = 4 V, two Si diodes in parallel)</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <div class="formula-block">
+              \[ I = \frac{E_1 - E_2 - V_D}{R} = \frac{20 \text{ V} - 4 \text{ V} - 0.7 \text{ V}}{2.2 \text{ k}\Omega} \approx 6.95 \text{ mA} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Problem 13</div>
+          <p><strong>Q:</strong> Determine I<sub>D</sub> and V<sub>0</sub> for the circuits shown.</p>
+          <div class="solution">
+            <strong>Solutions:</strong>
+            <div class="formula-block">
+              \[ \text{(a) Both diodes forward-biased. Si turns on first at 0.7 V:} \]
+              \[ I_R = \frac{12 \text{ V} - 0.7 \text{ V}}{4.7 \text{ k}\Omega} = 2.4 \text{ mA} \]
+              \[ I_D = I_R = 2.4 \text{ mA}; \quad V_o = 12 \text{ V} - 0.7 \text{ V} = 11.3 \text{ V} \]
+              \[ \text{(b) Right diode forward-biased:} \]
+              \[ I_D = \frac{20 \text{ V} + 4 \text{ V} - 0.7 \text{ V}}{2.2 \text{ k}\Omega} = 10.59 \text{ mA} \]
+              \[ V_o = 20 \text{ V} - 0.7 \text{ V} = 19.3 \text{ V} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Problem 14</div>
+          <p><strong>Q:</strong> Determine I and V<sub>0</sub> for the circuits shown.</p>
+          <div class="solution">
+            <strong>Solutions:</strong>
+            <div class="formula-block">
+              \[ \text{(a) Si diode "on" preventing GaAs diode from turning "on":} \]
+              \[ I = \frac{1 \text{ V} - 0.7 \text{ V}}{1 \text{ k}\Omega} = \frac{0.3 \text{ V}}{1 \text{ k}\Omega} = 0.3 \text{ mA} \]
+              \[ V_o = 1 \text{ V} - 0.7 \text{ V} = 0.3 \text{ V} \]
+              \[ \text{(b) } I = \frac{16 \text{ V} - 0.7 \text{ V} - 0.7 \text{ V} + 4 \text{ V}}{4.7 \text{ k}\Omega} = \frac{18.6 \text{ V}}{4.7 \text{ k}\Omega} = 3.96 \text{ mA} \]
+              \[ V_o = 16 \text{ V} - 0.7 \text{ V} - 0.7 \text{ V} = 14.6 \text{ V} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Problem 15</div>
+          <p><strong>Q:</strong> Determine I, V<sub>01</sub> and V<sub>02</sub>. (E = 20 V, R<sub>1</sub> = 1 kΩ, R<sub>2</sub> = 0.47 kΩ, two Si diodes)</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>Both diodes forward-biased:</p>
+            <div class="formula-block">
+              \[ V_{o_1} = 0.7 \text{ V}, \quad V_{o_2} = 0.7 \text{ V} \]
+              \[ I_{1\text{k}\Omega} = \frac{20 \text{ V} - 0.7 \text{ V}}{1 \text{ k}\Omega} = \frac{19.3 \text{ V}}{1 \text{ k}\Omega} = 19.3 \text{ mA} \]
+              \[ I_{0.47\text{k}\Omega} = 0 \text{ mA} \quad (\text{no current path through 0.47 k}\Omega\text{ branch}) \]
+              \[ I = I_{1\text{k}\Omega} - I_{0.47\text{k}\Omega} = 19.3 \text{ mA} - 0 \text{ mA} = 19.3 \text{ mA} \]
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- ─── 13. Logical Operations ─── -->
+      <h2 id="logical-operations">13. Logical Operations</h2>
+
+      <div class="def-box">
+        <strong>Logical Operation:</strong> It is an operation that acts on binary numbers to produce a result according to the Laws of Boolean Logic.
+      </div>
+
+      <div class="def-box">
+        <strong>Logic Gate:</strong> A basic building block of digital circuits. A logic gate is considered as a device that has the ability to produce one output level with the combinations of input levels. Example: AND, OR and NOT functions.
+      </div>
+
+      <ul>
+        <li>Logic gates are implemented by using diodes, transistors, and by other several devices.</li>
+        <li>Hence logic gates can also be considered as electronic circuits.</li>
+        <li>The logic gates obtained by Diode are called <strong>Diode Resistor Logic (DRL)</strong>.</li>
+        <li>Inputs and outputs of logic gates are in two levels which are termed as HIGH and LOW, or TRUE and FALSE, or ON and OFF, or simply <strong>1 and 0</strong>.</li>
+      </ul>
+
+      <div class="def-box">
+        <strong>Truth Table:</strong> For all logic gates, a table with all combinations is listed out. The combination of the input variables and the corresponding output is termed as "TRUTH TABLE". It explains how the logic circuit output responds to various combinations of logic levels at the inputs.
+      </div>
+
+      <h3 id="and-gate">13.1 AND Gate</h3>
+      <p>An AND gate may have two or more inputs but produces only one output. AND gate produces an output of logic 1 state when <strong>all of its inputs</strong> are in logic 1 state, and produces an output of logic 0 state if any of its inputs are in logic 0 state.</p>
+      <p>Boolean expression: \(Y = A \cdot B\)</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>A</th><th>B</th><th>Y = A·B</th></tr>
+          <tr><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td></tr>
+        </table>
+      </div>
+
+      <h3 id="or-gate">13.2 OR Gate</h3>
+      <p>An OR gate may have two or more inputs but produces only one output. OR gate produces an output of logic 1 state even if <strong>any of its inputs</strong> is in logic 1 state, and produces an output of logic 0 state if all of its inputs are in logic 0 state.</p>
+      <p>Boolean expression: \(Y = A + B\)</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>A</th><th>B</th><th>Y = A+B</th></tr>
+          <tr><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td></tr>
+        </table>
+      </div>
+
+      <h3 id="or-diode">13.3 OR Operation Illustrated using Diode</h3>
+      <p>In the OR gate using diodes (D<sub>1</sub> and D<sub>2</sub> Si type, R = 1 kΩ):</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>A (V1)</th><th>B (V2)</th><th>Y (V<sub>o</sub>)</th></tr>
+          <tr><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>10 V</td><td>9.3 V</td></tr>
+          <tr><td>10 V</td><td>0</td><td>9.3 V</td></tr>
+          <tr><td>10 V</td><td>10 V</td><td>9.3 V</td></tr>
+        </table>
+      </div>
+
+      <h3 id="and-diode">13.4 AND Operation Illustrated using Diode</h3>
+      <p>In the AND gate using diodes (D<sub>1</sub> and D<sub>2</sub> Si type, R = 1 kΩ, supply = 10 V):</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>A (V1)</th><th>B (V2)</th><th>Y (V<sub>o</sub>)</th></tr>
+          <tr><td>0</td><td>0</td><td>0.7 V</td></tr>
+          <tr><td>0</td><td>10 V</td><td>0.7 V</td></tr>
+          <tr><td>10 V</td><td>0</td><td>0.7 V</td></tr>
+          <tr><td>10 V</td><td>10 V</td><td>10 V</td></tr>
+        </table>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- ─── 14. Clippers ─── -->
+      <h2 id="clippers">14. Clippers</h2>
+
+      <h3 id="clippers-classification">14.1 Classification of Clippers</h3>
+      <ul>
+        <li>Clippers
+          <ul>
+            <li>Series
+              <ul>
+                <li>Unbiased Series</li>
+                <li>Biased Series</li>
+              </ul>
+            </li>
+            <li>Parallel
+              <ul>
+                <li>Unbiased Parallel</li>
+                <li>Biased Parallel</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3 id="series-clippers">14.2 Series Clippers</h3>
+      <p>The <strong>series configuration</strong> is defined as one where the <strong>diode is in series with the load</strong>. The response of the series configuration to a variety of alternating waveforms is well defined. There are no boundaries on the type of signals that can be applied to a clipper.</p>
+
+      <h4 id="biased-series-clipper">14.2.1 Biased Series Clipper</h4>
+      <p>Fig. 2 shows the series clipper with DC supply. This configuration is called as <strong>biased series clipper</strong>. The addition of a DC supply to the network can have a pronounced effect on the analysis of the series clipper configuration. The DC supply can be in the leg between the supply and output or in the branch parallel to the output. The output response is not as obvious because the DC supply can aid or work against the source voltage.</p>
+
+      <p><strong>General instructions for analysis:</strong></p>
+      <ol>
+        <li><strong>Take careful note</strong> of where the output voltage is defined.</li>
+        <li><strong>Try to develop an overall sense</strong> of the response by simply noting how the input supply affects the conventional current direction through the diode.</li>
+        <li><strong>Determine the "transition voltage"</strong> that will result in a change of state for the diode from the "OFF" to the "ON" state. Note the substitution of the short-circuit equivalent for the ideal diode, and the fact that the voltage across the resistor is 0 V because the diode current is 0 mA. The result is \(v_i - V = 0\) or \(v_i = V\) is the applied (transition) voltage.</li>
+        <li><strong>It is often helpful to draw the output waveform</strong> directly below the applied voltage using the same scales for the horizontal axis and the vertical axis.</li>
+      </ol>
+
+      <p>For the "ON" region:</p>
+      <div class="formula-block">\[ v_o = v_i - V \]</div>
+      <p>For the "OFF" region (diode open circuit, I<sub>D</sub> = 0 mA):</p>
+      <div class="formula-block">\[ v_o = 0 \text{ V} \]</div>
+      <p>For the "ON" condition, output voltage when input has peak value:</p>
+      <div class="formula-block">\[ v_{o\text{peak}} = V_m - V \]</div>
+
+      <div class="q-section">
+        <div class="q-item">
+          <div class="q-label">Example 1 — Biased Series Clipper</div>
+          <p><strong>Q:</strong> Determine the output waveform for the sinusoidal input of Fig. 7. (V<sub>m</sub> = 20 V, V = 5 V, R in series, Si diode)</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p><strong>Step 1:</strong> The output is directly across the resistor R.</p>
+            <p><strong>Step 2:</strong> The positive region of v<sub>i</sub> and the DC supply are both working in the same direction to turn the diode "ON". The result is that we can safely assume the diode is in the "on" state for the entire range of positive voltages for v<sub>i</sub>. Once the supply goes negative, it would have to exceed the DC supply voltage of 5 V before it could turn the diode "OFF".</p>
+            <p><strong>Step 3:</strong> The transition model is substituted and we find that the transition from one state to the other will occur when:
+              \[ v_i + 5 \text{ V} = 0 \text{ V} \Rightarrow v_i = -5 \text{ V} \]
+            </p>
+            <p><strong>Step 4:</strong> A horizontal line is drawn through the applied voltage at the transition level (−5 V). For voltages less than −5 V the diode is in the open-circuit state and the output is 0 V. For conditions when the diode is on, using KVL:
+              \[ v_o = v_i + 5 \text{ V} \]
+            </p>
+            <p>Peak output: \(v_o = 20 \text{ V} + 5 \text{ V} = 25 \text{ V}\)</p>
+            <div class="note-box">
+              Note: The analysis of clipper networks with square-wave inputs is actually easier than with sinusoidal inputs because only two levels have to be considered.
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Example 2 — Square Wave Input</div>
+          <p><strong>Q:</strong> Find the output voltage for the network examined in Example 1, if the applied signal is a square wave: +20 V (0→T/2), −10 V (T/2→T).</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>For v<sub>i</sub> = 20 V (0→T/2): Diode "ON".</p>
+            <div class="formula-block">\[ v_o = 20 \text{ V} + 5 \text{ V} = 25 \text{ V} \]</div>
+            <p>For v<sub>i</sub> = −10 V (T/2→T): Diode "OFF".</p>
+            <div class="formula-block">\[ v_o = i_R R = (0)R = 0 \text{ V} \]</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 id="parallel-clippers">14.3 Parallel Clippers</h3>
+      <p>In parallel clippers, the <strong>diode is connected in parallel with the load</strong>. The analysis of parallel configurations is very similar to that of series configurations. The simplest parallel clipper has the diode in parallel with the output resistor.</p>
+      <p>The response to various waveforms shows that the clipper passes the negative portions of the signal while clipping the positive (or vice versa, depending on diode orientation).</p>
+
+      <h4 id="biased-parallel-clipper">14.3.1 Biased Parallel Clipper</h4>
+      <div class="q-section">
+        <div class="q-item">
+          <div class="q-label">Example 3 — Biased Parallel Clipper (Ideal Diode)</div>
+          <p><strong>Q:</strong> Determine v<sub>o</sub> for the network (triangular wave, V<sub>m</sub> = 16 V, V = 4 V battery with reversed diode).</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <ul>
+              <li>When the diode is in its short-circuit "ON" state, the output voltage will be directly across the 4-V DC supply. <strong>When the diode is "ON" the output will be 4 V.</strong></li>
+              <li>When the diode is an open circuit "OFF" state, the current through the series network will be 0 mA and the voltage drop across the resistor will be 0 V. That will result in \(v_o = v_i\).</li>
+            </ul>
+            <p>Transition level: Substituting the short-circuit equivalent and remembering the diode current is 0 mA at the instant of transition: \(v_i = 4 \text{ V}\).</p>
+            <p>Therefore:</p>
+            <div class="formula-block">
+              \[ \text{For } v_i \geq 4 \text{ V}: \quad v_o = v_i \]
+              \[ \text{For } v_i \leq 4 \text{ V}: \quad v_o = 4 \text{ V} \]
+            </div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Example 4 — With Silicon Diode (V<sub>K</sub> = 0.7 V)</div>
+          <p><strong>Q:</strong> Repeat Example 3, using a silicon diode with V<sub>K</sub> = 0.7 V.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>Determine Transition voltage — Using the condition i<sub>d</sub> = 0 A at v<sub>d</sub> = V<sub>D</sub> = 0.7 V and applying KVL:</p>
+            <div class="formula-block">
+              \[ v_i + V_K - V = 0 \Rightarrow v_i = V - V_K = 4 \text{ V} - 0.7 \text{ V} = 3.3 \text{ V} \]
+            </div>
+            <ul>
+              <li>Diode will be "OFF" for v<sub>i</sub> &gt; 3.3 V: \(v_o = v_i\)</li>
+              <li>Diode will be "ON" for v<sub>i</sub> &lt; 3.3 V: \(v_o = 4 \text{ V} - 0.7 \text{ V} = 3.3 \text{ V}\)</li>
+            </ul>
+            <p>Note: The only effect of V<sub>K</sub> was to drop the transition level from 4 V to 3.3 V.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 id="clipper-summary">14.4 Summary — Simple Clippers (Ideal Diodes)</h3>
+      <h4>Simple Series Clippers</h4>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Type</th><th>Diode Orientation</th><th>Effect</th></tr>
+          <tr><td>Positive Series Clipper</td><td>Anode to input, cathode to R</td><td>Clips positive half; only negative passes</td></tr>
+          <tr><td>Negative Series Clipper</td><td>Cathode to input, anode to R</td><td>Clips negative half; only positive passes</td></tr>
+        </table>
+      </div>
+
+      <h4>Biased Series Clippers (Ideal Diodes)</h4>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Config</th><th>Output Characteristics</th></tr>
+          <tr><td>Positive Biased Series</td><td>Output: 0 for \(v_i > -V\); shifts negative region to \(-(V_m + V)\)</td></tr>
+          <tr><td>Negative Biased Series</td><td>Output: 0 for \(v_i < V\); passes \((V_m - V)\) in positive region</td></tr>
+        </table>
+      </div>
+
+      <h4>Simple Parallel Clippers (Ideal Diodes)</h4>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Type</th><th>Effect</th></tr>
+          <tr><td>Positive Parallel Clipper</td><td>Clips positive region; negative passes unchanged</td></tr>
+          <tr><td>Negative Parallel Clipper</td><td>Clips negative region; positive passes unchanged</td></tr>
+        </table>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- ─── 15. Clampers ─── -->
+      <h2 id="clampers">15. Clampers</h2>
+
+      <div class="def-box">
+        <strong>Clamper:</strong> A circuit with a diode, resistor, and capacitor that <strong>shifts a waveform to a new DC level</strong> without altering its shape. Also known as a <strong>DC restorer</strong>.
+      </div>
+
+      <ul>
+        <li>Clamping networks have a <strong>capacitor connected directly from input</strong>.</li>
+        <li>A <strong>resistive element connected in parallel</strong> with the output signal.</li>
+        <li>The diode is also in parallel with the output signal but may or may not have a series DC supply as an added element.</li>
+      </ul>
+
+      <h3 id="clamper-analysis">15.1 Steps Used for Analysis</h3>
+      <ol>
+        <li><strong>Step 1:</strong> Examine the response of the portion of the input signal that will forward bias the diode. For a clamper with diode pointing downward, the diode is forward biased during the positive portion of the signal. The short-circuit equivalent for the diode results in \(V_o = 0 \text{ V}\) for \(t = 0\) to \(T/2\).</li>
+        <li><strong>Step 2:</strong> During the on period of the diode, assume that the capacitor will charge up instantaneously to a voltage level determined by the surrounding network.</li>
+        <li><strong>Step 3:</strong> Assume the capacitor retains its voltage while the diode is "off."</li>
+        <li><strong>Step 4:</strong> Track the position and polarity of v<sub>o</sub> to ensure correct levels. When the input turns negative, the network appears with the diode as an open circuit and voltage stored across the capacitor.</li>
+        <li><strong>Step 5:</strong> Check that the total swing of the output matches that of the input.</li>
+      </ol>
+
+      <h3 id="clamper-numericals">15.2 Clamper Numericals</h3>
+
+      <div class="q-section">
+        <div class="q-item">
+          <div class="q-label">Example 1 — Clamper</div>
+          <p><strong>Q:</strong> Determine V<sub>o</sub> for the network shown, for the input indicated in Fig. 1.1. (f = 1000 Hz, v<sub>i</sub> = square wave: +10 V (t<sub>1</sub>→t<sub>2</sub>), −20 V (t<sub>2</sub>→t<sub>3</sub>); C = 1 μF, R = 100 kΩ, V = 5 V battery)</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>Note: f = 1000 Hz ⟹ Time period T = 1 ms.</p>
+            <p><strong>Step 1:</strong> For t<sub>1</sub>→t<sub>2</sub> of v<sub>i</sub>, since the diode is in its short-circuit state. The network appears as shown in Fig. 1.2.</p>
+            <p><strong>Step 2:</strong> The output is across R (also directly across the 5-V battery). So, \(v_o = 5 \text{ V}\). Applying KVL around the input loop: \(-20 \text{ V} + V_C - 5 \text{ V} = 0 \Rightarrow V_C = 25 \text{ V}\). The capacitor charges to 25 V.</p>
+            <p><strong>Step 3:</strong> For the period t<sub>2</sub>→t<sub>3</sub> the network will appear as in Fig. 1.3 with the diode as open circuit. Applying KVL around the outside loop:</p>
+            <div class="formula-block">
+              \[ +10 \text{ V} + 25 \text{ V} - v_o = 0 \Rightarrow v_o = 35 \text{ V} \]
+            </div>
+            <p><strong>Step 4:</strong> Time constant: \(\zeta = RC = (100 \text{ k}\Omega)(0.1\ \mu\text{F}) = 0.01 \text{ s} = 10 \text{ ms}\). Total discharge time: \(5\zeta = 50 \text{ ms}\).</p>
+            <p><strong>Step 5:</strong> The output swing of 30 V matches the input swing. Output: \(v_o = 35 \text{ V}\) (t<sub>1</sub>→t<sub>2</sub> period), \(v_o = 5 \text{ V}\) (t<sub>2</sub>→t<sub>3</sub> period).</p>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-label">Example 2 — With Silicon Diode (V<sub>K</sub> = 0.7 V)</div>
+          <p><strong>Q:</strong> Repeat Example 1, using a silicon diode with V<sub>k</sub> = 0.7 V.</p>
+          <div class="solution">
+            <strong>Solution:</strong>
+            <p>For the short-circuit state, v<sub>o</sub> is determined by KVL in the output section as:</p>
+            <div class="formula-block">
+              \[ +5 \text{ V} - 0.7 \text{ V} - v_o = 0 \Rightarrow v_o = 4.3 \text{ V} \]
+            </div>
+            <p>For the input section, KVL results in:</p>
+            <div class="formula-block">
+              \[ -20 \text{ V} + V_C + 0.7 \text{ V} - 5 \text{ V} = 0 \Rightarrow V_C = 24.3 \text{ V} \]
+            </div>
+            <p>For the period t<sub>2</sub>→t<sub>3</sub>, the network will appear with only the voltage across the capacitor changed. Applying KVL:</p>
+            <div class="formula-block">
+              \[ +10 \text{ V} + 24.3 \text{ V} - v_o = 0 \Rightarrow v_o = 34.3 \text{ V} \]
+            </div>
+            <p>The resulting output verifies the statement that the input and output swings are the same (30 V swing).</p>
+          </div>
+        </div>
+      </div>
+
+      <h3 id="clamping-networks-table">15.3 Summary of Clamping Networks</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Circuit Configuration</th><th>Diode Orientation</th><th>Battery</th><th>Output Effect</th></tr>
+          <tr><td>Negative Clamper</td><td>Pointing down (cathode up)</td><td>None</td><td>Shifts waveform downward; top clamped to 0 V</td></tr>
+          <tr><td>Positive Clamper</td><td>Pointing up (anode up)</td><td>None</td><td>Shifts waveform upward; bottom clamped to 0 V</td></tr>
+          <tr><td>Biased Positive Clamper</td><td>Pointing up</td><td>V<sub>1</sub> in series</td><td>Bottom clamped to −V<sub>1</sub></td></tr>
+        </table>
+      </div>
+
+      <hr class="section-divider">
+      <p style="text-align:center; color:var(--text3); font-size:.82rem;">End of Unit 1 — Electronic Principles and Devices · PES University</p>
+
+    </main>
+  </div><!-- end content-area -->
+</div><!-- end app -->
+
+<button id="back-top" aria-label="Back to top">↑</button>
+
+<script>
+// ── Navigation data ──
+const navData = [
+  { id: 'unit1', label: 'Unit 1 Overview', children: [] },
+  { id: 'intro-semiconductor', label: '1. Intro to Semiconductor', children: [
+    { id: 'atomic-structure', label: 'Atomic Structure' },
+    { id: 'energy-bands', label: 'Energy Bands' },
+    { id: 'intrinsic-extrinsic', label: 'Intrinsic vs Extrinsic' },
+    { id: 'n-type', label: 'N-Type Semiconductor' },
+    { id: 'p-type', label: 'P-Type Semiconductor' },
+  ]},
+  { id: 'semiconductor-diode', label: '2. Semiconductor Diode', children: [
+    { id: 'biasing', label: 'Biasing of Diodes' },
+    { id: 'no-bias', label: 'No-Bias Condition' },
+    { id: 'forward-bias', label: 'Forward-Bias Condition' },
+    { id: 'reverse-bias', label: 'Reverse-Bias Condition' },
+  ]},
+  { id: 'diode-characteristics', label: '3. Diode Characteristics', children: [
+    { id: 'forward-params', label: 'Forward Bias Params' },
+    { id: 'reverse-params', label: 'Reverse Bias Params' },
+  ]},
+  { id: 'shockley', label: "4. Shockley's Equation", children: [
+    { id: 'shockley-params', label: 'Variables & Constants' },
+    { id: 'shockley-cases', label: 'Special Cases' },
+    { id: 'thermal-voltage', label: 'Thermal Voltage' },
+  ]},
+  { id: 'numericals-shockley', label: '5. Numericals — Current Eqns', children: [] },
+  { id: 'comparison-diodes', label: '6. Comparison Ge, Si, GaAs', children: [] },
+  { id: 'breakdown', label: '7. Types of Breakdown', children: [
+    { id: 'avalanche', label: 'Avalanche Breakdown' },
+    { id: 'zener-breakdown', label: 'Zener Breakdown' },
+    { id: 'breakdown-comparison', label: 'Comparison Table' },
+  ]},
+  { id: 'temperature-effects', label: '8. Temperature Effects', children: [
+    { id: 'temp-forward', label: 'Forward Bias Effects' },
+    { id: 'temp-reverse', label: 'Reverse Bias Effects' },
+    { id: 'temp-summary', label: 'Summary Rules' },
+    { id: 'temp-numericals', label: 'Temperature Numericals' },
+  ]},
+  { id: 'ideal-practical', label: '9. Ideal vs Practical Diode', children: [
+    { id: 'ideal-diode', label: 'Ideal Diode' },
+    { id: 'practical-diode', label: 'Practical Diode' },
+  ]},
+  { id: 'diode-resistances', label: '10. Diode Resistances', children: [
+    { id: 'dc-resistance', label: 'DC / Static Resistance' },
+    { id: 'ac-resistance', label: 'AC / Dynamic Resistance' },
+    { id: 'avg-ac-resistance', label: 'Average AC Resistance' },
+    { id: 'resistance-summary', label: 'Summary Table' },
+    { id: 'resistance-numericals', label: 'Resistance Numericals' },
+  ]},
+  { id: 'diode-approximations', label: '11. Diode Approximations', children: [
+    { id: 'piecewise-linear', label: 'Piecewise-Linear' },
+    { id: 'simplified-diode', label: 'Simplified' },
+    { id: 'ideal-diode-char', label: 'Ideal' },
+  ]},
+  { id: 'series-diode', label: '12. Series Diode Config', children: [
+    { id: 'series-forward', label: 'Forward Bias Analysis' },
+    { id: 'series-reverse', label: 'Reverse Bias Analysis' },
+    { id: 'series-problems', label: 'Solved Problems' },
+  ]},
+  { id: 'logical-operations', label: '13. Logical Operations', children: [
+    { id: 'and-gate', label: 'AND Gate' },
+    { id: 'or-gate', label: 'OR Gate' },
+    { id: 'or-diode', label: 'OR — Diode Implementation' },
+    { id: 'and-diode', label: 'AND — Diode Implementation' },
+  ]},
+  { id: 'clippers', label: '14. Clippers', children: [
+    { id: 'clippers-classification', label: 'Classification' },
+    { id: 'series-clippers', label: 'Series Clippers' },
+    { id: 'parallel-clippers', label: 'Parallel Clippers' },
+    { id: 'clipper-summary', label: 'Summary Table' },
+  ]},
+  { id: 'clampers', label: '15. Clampers', children: [
+    { id: 'clamper-analysis', label: 'Steps for Analysis' },
+    { id: 'clamper-numericals', label: 'Clamper Numericals' },
+    { id: 'clamping-networks-table', label: 'Summary Table' },
+  ]},
+];
+
+// ── Build nav ──
+const navEl = document.getElementById('sidebar-nav');
+function buildNav(data) {
+  data.forEach(item => {
+    const section = document.createElement('div');
+    section.className = 'nav-section';
+    section.dataset.id = item.id;
+    const hasChildren = item.children && item.children.length > 0;
+    const toggle = document.createElement('button');
+    toggle.className = 'nav-item nav-section-toggle';
+    toggle.dataset.target = item.id;
+    toggle.innerHTML = item.label + (hasChildren ? '<span class="nav-arrow">▶</span>' : '');
+    toggle.addEventListener('click', () => {
+      if (hasChildren) {
+        section.classList.toggle('open');
+      }
+      scrollToSection(item.id);
+    });
+    section.appendChild(toggle);
+    if (hasChildren) {
+      const children = document.createElement('div');
+      children.className = 'nav-children';
+      item.children.forEach(child => {
+        const childBtn = document.createElement('button');
+        childBtn.className = 'nav-item nav-sub-item';
+        childBtn.dataset.target = child.id;
+        childBtn.textContent = child.label;
+        childBtn.addEventListener('click', () => scrollToSection(child.id));
+        children.appendChild(childBtn);
+      });
+      section.appendChild(children);
+    }
+    navEl.appendChild(section);
+  });
+}
+buildNav(navData);
+
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    closeSidebar();
+  }
+}
+
+// ── Scroll spy ──
+const allHeadings = document.querySelectorAll('#main h1, #main h2, #main h3, #main h4');
+const allNavBtns = document.querySelectorAll('.nav-item[data-target]');
+
+function updateActiveNav() {
+  let currentId = '';
+  const scrollTop = window.scrollY + 80;
+  allHeadings.forEach(h => {
+    if (h.offsetTop <= scrollTop) currentId = h.id;
+  });
+  allNavBtns.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.target === currentId);
+    if (btn.dataset.target === currentId) {
+      const section = btn.closest('.nav-section');
+      if (section && !section.classList.contains('open')) {
+        section.classList.add('open');
+      }
+    }
+  });
+}
+
+// ── Reading progress ──
+const progressBar = document.getElementById('progress-bar');
+function updateProgress() {
+  const d = document.documentElement;
+  const pct = (window.scrollY / (d.scrollHeight - d.clientHeight)) * 100;
+  progressBar.style.width = Math.min(pct, 100) + '%';
+}
+
+// ── Header hide on scroll ──
+const header = document.getElementById('header');
+let lastScroll = 0;
+function handleScroll() {
+  const y = window.scrollY;
+  header.classList.toggle('hidden', y > lastScroll && y > 100);
+  lastScroll = Math.max(0, y);
+  updateProgress();
+  updateActiveNav();
+  document.getElementById('back-top').classList.toggle('show', y > 300);
+}
+window.addEventListener('scroll', handleScroll, { passive: true });
+
+// ── Theme ──
+const themeBtn = document.getElementById('theme-toggle');
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  themeBtn.textContent = t === 'dark' ? '☀️ Light' : '🌙 Dark';
+  localStorage.setItem('theme', t);
+}
+applyTheme(localStorage.getItem('theme') || 'light');
+themeBtn.addEventListener('click', () => {
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+
+// ── Mobile sidebar ──
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const menuBtn = document.getElementById('menu-btn');
+function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('show'); }
+function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+menuBtn.addEventListener('click', openSidebar);
+overlay.addEventListener('click', closeSidebar);
+
+// ── Sidebar filter ──
+const sidebarSearch = document.getElementById('sidebar-search');
+sidebarSearch.addEventListener('input', () => {
+  const q = sidebarSearch.value.toLowerCase();
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    const match = btn.textContent.toLowerCase().includes(q);
+    btn.style.display = match ? '' : 'none';
+    if (match && q) {
+      const s = btn.closest('.nav-section');
+      if (s) s.classList.add('open');
+    }
+  });
+  if (!q) document.querySelectorAll('.nav-item').forEach(b => b.style.display = '');
+});
+
+// ── Search Engine ──
+const searchInput = document.getElementById('header-search');
+const searchResults = document.getElementById('search-results');
+
+// Build search index
+const searchIndex = [];
+allHeadings.forEach(h => {
+  // Get surrounding text content
+  let content = '';
+  let el = h.nextElementSibling;
+  let count = 0;
+  while (el && count < 4) {
+    if (el.tagName && ['H1','H2','H3','H4'].includes(el.tagName)) break;
+    content += el.textContent + ' ';
+    el = el.nextElementSibling;
+    count++;
+  }
+  // Find unit
+  let unit = 'Unit 1';
+  const sect = h.closest('[id]');
+  searchIndex.push({
+    id: h.id,
+    title: h.textContent.trim(),
+    content: content.trim(),
+    tag: h.tagName,
+    unit: unit
+  });
+});
+
+function highlight(text, query) {
+  if (!query) return text;
+  const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return text.replace(re, '<span class="sr-highlight">$1</span>');
+}
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim();
+  if (!q) { searchResults.classList.remove('show'); searchResults.innerHTML = ''; return; }
+  const keywords = q.toLowerCase().split(/\s+/);
+  const results = searchIndex.filter(item => {
+    const text = (item.title + ' ' + item.content).toLowerCase();
+    return keywords.every(k => text.includes(k));
+  }).slice(0, 8);
+
+  if (!results.length) {
+    searchResults.innerHTML = '<div class="no-results">No results found.</div>';
+  } else {
+    searchResults.innerHTML = results.map(r => `
+      <div class="search-result" data-id="${r.id}">
+        <div class="sr-unit">${r.unit} · ${r.tag}</div>
+        <div class="sr-title">${highlight(r.title.substring(0, 80), q)}</div>
+        <div class="sr-preview">${highlight(r.content.substring(0, 120), q)}…</div>
+      </div>`).join('');
+  }
+  searchResults.classList.add('show');
+
+  searchResults.querySelectorAll('.search-result').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.dataset.id;
+      searchResults.classList.remove('show');
+      searchInput.value = '';
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        target.style.background = 'var(--accent-light)';
+        setTimeout(() => target.style.background = '', 1500);
+      }
+    });
+  });
+});
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#header-search-wrap')) searchResults.classList.remove('show');
+});
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { searchResults.classList.remove('show'); searchInput.blur(); }
+});
+
+// ── Back to top ──
+document.getElementById('back-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+// ── Open first section on load ──
+document.querySelectorAll('.nav-section')[0]?.classList.add('open');
+</script>
+</body>
+</html>
