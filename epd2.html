@@ -1,0 +1,2202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electronic Principles and Devices – Unit 2: Diode Applications</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)'],['$','$']], displayMath: [['\\[','\\]'],['$$','$$']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js" crossorigin="anonymous"></script>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg2: #f8f9fa;
+  --bg3: #f0f2f5;
+  --sidebar-bg: #1e2330;
+  --sidebar-text: #c9d1e0;
+  --sidebar-active: #4e9af1;
+  --sidebar-hover: #2a3147;
+  --text: #1a1d23;
+  --text2: #4a5568;
+  --text3: #718096;
+  --accent: #1a4a8a;
+  --accent2: #c0392b;
+  --border: #e2e8f0;
+  --code-bg: #f7f8fa;
+  --code-border: #dde1e7;
+  --header-bg: #ffffffee;
+  --progress-color: #4e9af1;
+  --formula-bg: #f0f4ff;
+  --formula-border: #bed0f7;
+  --table-header: #1e2330;
+  --table-header-text: #ffffff;
+  --table-odd: #f8f9fa;
+  --note-bg: #fffbf0;
+  --note-border: #f6ad55;
+  --sidebar-width: 280px;
+  --header-height: 52px;
+}
+[data-theme="dark"] {
+  --bg: #0f1117;
+  --bg2: #161b27;
+  --bg3: #1a2035;
+  --sidebar-bg: #0d1018;
+  --sidebar-text: #8b95aa;
+  --sidebar-active: #4e9af1;
+  --sidebar-hover: #1a2035;
+  --text: #e2e8f0;
+  --text2: #a0aec0;
+  --text3: #718096;
+  --accent: #63a0f4;
+  --accent2: #e05a4e;
+  --border: #2d3748;
+  --code-bg: #161b27;
+  --code-border: #2d3748;
+  --header-bg: #0f1117ee;
+  --formula-bg: #131929;
+  --formula-border: #2a3e6a;
+  --table-header: #1a2540;
+  --table-header-text: #e2e8f0;
+  --table-odd: #131826;
+  --note-bg: #1a1700;
+  --note-border: #d69e2e;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  min-height: 100vh;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* SIDEBAR */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--sidebar-bg);
+  display: flex;
+  flex-direction: column;
+  z-index: 200;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+#sidebar-logo {
+  padding: 18px 16px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+#sidebar-logo .logo-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
+}
+#sidebar-logo .logo-sub {
+  font-size: 11px;
+  color: var(--sidebar-text);
+  margin-top: 2px;
+}
+#sidebar-search-wrap {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+  position: relative;
+}
+#sidebar-search {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 7px 10px 7px 30px;
+  color: var(--sidebar-text);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+#sidebar-search:focus { border-color: var(--sidebar-active); }
+#sidebar-search::placeholder { color: rgba(255,255,255,0.3); }
+.search-icon {
+  position: absolute;
+  left: 22px; top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.4;
+  pointer-events: none;
+  font-size: 13px;
+}
+#search-results-dropdown {
+  position: absolute;
+  top: 100%; left: 12px; right: 12px;
+  background: #1a2035;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 500;
+  display: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+.search-result-item {
+  padding: 9px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.15s;
+}
+.search-result-item:hover { background: rgba(78,154,241,0.15); }
+.search-result-item:last-child { border-bottom: none; }
+.sri-title { font-size: 12px; color: #e2e8f0; font-weight: 600; }
+.sri-section { font-size: 10px; color: var(--sidebar-text); margin-top: 2px; }
+.sri-preview { font-size: 11px; color: var(--sidebar-text); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+mark { background: rgba(78,154,241,0.4); color: inherit; border-radius: 2px; }
+#sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+#sidebar-nav::-webkit-scrollbar { width: 4px; }
+#sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+#sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+.nav-section { margin-bottom: 2px; }
+.nav-section-title {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  cursor: pointer;
+  transition: color 0.15s;
+  user-select: none;
+}
+.nav-section-title:hover { color: rgba(255,255,255,0.8); }
+.nav-section-title .chevron {
+  font-size: 9px;
+  transition: transform 0.2s;
+}
+.nav-section-title.open .chevron { transform: rotate(90deg); }
+.nav-children { display: none; }
+.nav-children.open { display: block; }
+.nav-item {
+  display: block;
+  padding: 5px 16px 5px 24px;
+  font-size: 12px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  border-radius: 0;
+  line-height: 1.4;
+  position: relative;
+}
+.nav-item:hover { color: #fff; background: var(--sidebar-hover); }
+.nav-item.active {
+  color: var(--sidebar-active);
+  background: rgba(78,154,241,0.1);
+  font-weight: 600;
+}
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--sidebar-active);
+  border-radius: 0 2px 2px 0;
+}
+.nav-sub-item {
+  display: block;
+  padding: 4px 16px 4px 34px;
+  font-size: 11.5px;
+  color: rgba(139,149,170,0.8);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+  line-height: 1.4;
+}
+.nav-sub-item:hover { color: #fff; background: var(--sidebar-hover); }
+.nav-sub-item.active { color: var(--sidebar-active); }
+
+/* HEADER */
+#header {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-width);
+  right: 0;
+  height: var(--header-height);
+  background: var(--header-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  z-index: 100;
+  transition: top 0.25s ease, background 0.2s;
+  gap: 12px;
+}
+#header.hidden { top: calc(-1 * var(--header-height)); }
+#header-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-width);
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--sidebar-active), #7c3aed);
+  z-index: 300;
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 0.1s linear;
+}
+.header-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  color: var(--text2);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  display: flex; align-items: center; gap: 5px;
+}
+.header-btn:hover { background: var(--bg3); color: var(--text); }
+#mobile-menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 20px;
+  padding: 4px;
+}
+
+/* MAIN */
+#main {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  padding-top: var(--header-height);
+  min-width: 0;
+}
+#content {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 40px 80px;
+}
+
+/* TYPOGRAPHY */
+h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1.2;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid var(--accent);
+}
+h2 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 40px;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+  scroll-margin-top: 70px;
+}
+h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent2);
+  margin-top: 28px;
+  margin-bottom: 10px;
+  scroll-margin-top: 70px;
+}
+h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 20px;
+  margin-bottom: 8px;
+  scroll-margin-top: 70px;
+}
+p {
+  line-height: 1.75;
+  color: var(--text2);
+  margin-bottom: 14px;
+  font-size: 15px;
+}
+ul, ol {
+  padding-left: 22px;
+  margin-bottom: 14px;
+}
+li {
+  line-height: 1.75;
+  color: var(--text2);
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+strong { color: var(--text); }
+
+/* FORMULA BLOCKS */
+.formula-block {
+  background: var(--formula-bg);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px;
+  margin: 16px 0;
+  overflow-x: auto;
+  font-size: 1.05em;
+}
+.formula-inline { font-style: italic; }
+
+/* TABLES */
+.table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 8px; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+thead tr { background: var(--table-header); color: var(--table-header-text); }
+thead th { padding: 10px 14px; text-align: left; font-weight: 600; }
+tbody tr:nth-child(odd) { background: var(--table-odd); }
+tbody tr:nth-child(even) { background: var(--bg); }
+tbody td { padding: 9px 14px; color: var(--text2); border-bottom: 1px solid var(--border); }
+tbody tr:last-child td { border-bottom: none; }
+
+/* CODE */
+.code-block-wrap {
+  position: relative;
+  margin: 14px 0;
+}
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: 8px;
+  padding: 16px;
+  overflow-x: auto;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text);
+}
+.copy-btn {
+  position: absolute;
+  top: 8px; right: 8px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 3px 9px;
+  font-size: 11px;
+  cursor: pointer;
+  color: var(--text3);
+  transition: all 0.15s;
+}
+.copy-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* SECTION / COLLAPSIBLE */
+.section-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.section-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+.section-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  cursor: pointer;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  user-select: none;
+}
+.section-card-header h3 { margin: 0; color: var(--text); font-size: 1rem; }
+.section-card-header .toggle-icon {
+  font-size: 14px;
+  color: var(--text3);
+  transition: transform 0.2s;
+}
+.section-card-header.open .toggle-icon { transform: rotate(180deg); }
+.section-card-body {
+  padding: 20px;
+  display: none;
+}
+.section-card-body.open { display: block; }
+
+/* NOTE BOX */
+.note-box {
+  background: var(--note-bg);
+  border-left: 4px solid var(--note-border);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  margin: 14px 0;
+  font-size: 14px;
+  color: var(--text2);
+}
+.note-box strong { color: var(--text); }
+
+/* NUMERIC / PROBLEM BLOCKS */
+.problem-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+.problem-block .problem-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--accent2);
+  margin-bottom: 8px;
+}
+.solution-block {
+  background: var(--formula-bg);
+  border: 1px solid var(--formula-border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 12px 0 16px;
+}
+.solution-block .solution-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+/* DIAGRAM ASCII / DESCRIPTION */
+.diagram-desc {
+  background: var(--bg3);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 13.5px;
+  color: var(--text2);
+  font-style: italic;
+}
+.diagram-desc strong { font-style: normal; color: var(--text); }
+
+/* BACK TO TOP */
+#back-to-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 40px; height: 40px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 150;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: opacity 0.2s, transform 0.2s;
+}
+#back-to-top:hover { transform: translateY(-2px); }
+#back-to-top.show { display: flex; }
+
+/* OVERLAY */
+#overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 150;
+}
+
+/* UNIT BADGE */
+.unit-badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+.unit-badge.unit2 { background: var(--accent2); }
+
+/* CASE LABEL */
+.case-label {
+  display: inline-block;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  :root { --sidebar-width: 0px; }
+  #sidebar {
+    width: 280px;
+    transform: translateX(-100%);
+  }
+  #sidebar.open {
+    transform: translateX(0);
+  }
+  #overlay.open { display: block; }
+  #header { left: 0; }
+  #progress-bar { left: 0; }
+  #mobile-menu-btn { display: flex; }
+  #content { padding: 24px 20px 60px; }
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.25rem; }
+}
+@media (min-width: 769px) {
+  #mobile-menu-btn { display: none !important; }
+}
+@media print {
+  #sidebar, #header, #back-to-top, #progress-bar { display: none !important; }
+  #main { margin-left: 0 !important; }
+  #content { max-width: 100%; padding: 0; }
+  .section-card-body { display: block !important; }
+}
+
+/* HIGHLIGHT */
+.search-highlight { background: rgba(246,173,85,0.4); border-radius: 2px; }
+
+/* COLLAPSIBLE SECTIONS */
+details { margin: 12px 0; }
+details summary { cursor: pointer; font-weight: 600; color: var(--text); padding: 8px 12px; background: var(--bg3); border-radius: 6px; list-style: none; display: flex; align-items: center; gap: 8px; }
+details summary::before { content: '▶'; font-size: 10px; transition: transform 0.2s; }
+details[open] summary::before { transform: rotate(90deg); }
+details > *:not(summary) { padding: 12px 12px 4px; }
+</style>
+</head>
+<body>
+
+<div id="overlay" onclick="closeSidebar()"></div>
+
+<nav id="sidebar" aria-label="Navigation">
+  <div id="sidebar-logo">
+    <div class="logo-title">Electronic Principles &amp; Devices</div>
+    <div class="logo-sub">PES University — ECE Department</div>
+  </div>
+  <div id="sidebar-search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="sidebar-search" placeholder="Search topics, formulas…" autocomplete="off" aria-label="Search notes">
+    <div id="search-results-dropdown"></div>
+  </div>
+  <div id="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-section-title open" onclick="toggleSection(this)">
+        Unit 2 — Diode Applications <span class="chevron">▶</span>
+      </div>
+      <div class="nav-children open">
+        <a class="nav-item" onclick="scrollTo('regulated-power-supply')">Regulated Power Supply</a>
+        <a class="nav-sub-item" onclick="scrollTo('rectifier-overview')">Rectifier Types</a>
+        <a class="nav-item" onclick="scrollTo('hwr')">Half Wave Rectifier (HWR)</a>
+        <a class="nav-sub-item" onclick="scrollTo('hwr-ideal')">Ideal Diode</a>
+        <a class="nav-sub-item" onclick="scrollTo('hwr-nonideal')">Non-Ideal Diode</a>
+        <a class="nav-sub-item" onclick="scrollTo('hwr-avg')">Average V &amp; I</a>
+        <a class="nav-sub-item" onclick="scrollTo('hwr-rms')">RMS V &amp; I</a>
+        <a class="nav-sub-item" onclick="scrollTo('hwr-nonideal-avgrms')">Non-Ideal Avg &amp; RMS</a>
+        <a class="nav-sub-item" onclick="scrollTo('hwr-ripple')">Ripple Factor</a>
+        <a class="nav-sub-item" onclick="scrollTo('hwr-piv')">PIV</a>
+        <a class="nav-sub-item" onclick="scrollTo('hwr-numericals')">Numericals</a>
+        <a class="nav-item" onclick="scrollTo('fwr')">Full Wave Rectifier (FWR)</a>
+        <a class="nav-sub-item" onclick="scrollTo('ct-ideal')">Centre Tap — Ideal</a>
+        <a class="nav-sub-item" onclick="scrollTo('ct-piv')">Centre Tap PIV</a>
+        <a class="nav-sub-item" onclick="scrollTo('ct-nonideal')">Centre Tap — Non-Ideal</a>
+        <a class="nav-sub-item" onclick="scrollTo('bridge-ideal')">Bridge — Ideal</a>
+        <a class="nav-sub-item" onclick="scrollTo('bridge-nonideal')">Bridge — Non-Ideal</a>
+        <a class="nav-sub-item" onclick="scrollTo('bridge-piv')">Bridge PIV</a>
+        <a class="nav-sub-item" onclick="scrollTo('fwr-avg')">FWR Avg V &amp; I</a>
+        <a class="nav-sub-item" onclick="scrollTo('fwr-rms')">FWR RMS V &amp; I</a>
+        <a class="nav-sub-item" onclick="scrollTo('ct-nonideal-avgrms')">CT Non-Ideal Avg &amp; RMS</a>
+        <a class="nav-sub-item" onclick="scrollTo('bridge-nonideal-avgrms')">Bridge Non-Ideal Avg &amp; RMS</a>
+        <a class="nav-sub-item" onclick="scrollTo('fwr-ripple')">FWR Ripple Factor</a>
+        <a class="nav-sub-item" onclick="scrollTo('comparison-table')">Comparison Table</a>
+        <a class="nav-sub-item" onclick="scrollTo('ct-vs-bridge')">CT vs Bridge</a>
+        <a class="nav-sub-item" onclick="scrollTo('ideal-vs-nonideal-vdc')">Ideal vs Non-Ideal VDC</a>
+        <a class="nav-sub-item" onclick="scrollTo('fwr-numericals')">FWR Numericals</a>
+        <a class="nav-item" onclick="scrollTo('filter')">Shunt Capacitor Filter</a>
+        <a class="nav-sub-item" onclick="scrollTo('filter-fwr')">FWR with C Filter</a>
+        <a class="nav-sub-item" onclick="scrollTo('filter-working')">Working</a>
+        <a class="nav-sub-item" onclick="scrollTo('filter-waveform')">Output Waveform</a>
+        <a class="nav-sub-item" onclick="scrollTo('filter-ripple-expr')">Ripple Factor Expression</a>
+        <a class="nav-sub-item" onclick="scrollTo('filter-hwr')">HWR C Filter</a>
+        <a class="nav-sub-item" onclick="scrollTo('filter-numericals')">Filter Numericals</a>
+        <a class="nav-item" onclick="scrollTo('zener')">Zener Diode</a>
+        <a class="nav-sub-item" onclick="scrollTo('zener-char')">Characteristics</a>
+        <a class="nav-sub-item" onclick="scrollTo('zener-regulator')">Voltage Regulator</a>
+        <a class="nav-sub-item" onclick="scrollTo('case1')">Case 1: Fixed Vi, Fixed RL</a>
+        <a class="nav-sub-item" onclick="scrollTo('case2')">Case 2: Fixed Vi, Variable RL</a>
+        <a class="nav-sub-item" onclick="scrollTo('case3')">Case 3: Variable Vi, Fixed RL</a>
+        <a class="nav-sub-item" onclick="scrollTo('case4')">Case 4: Variable Vi &amp; RL</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div id="progress-bar"></div>
+
+<header id="header">
+  <button id="mobile-menu-btn" onclick="openSidebar()" aria-label="Open menu">☰</button>
+  <div id="header-title">Unit 2: Diode Applications</div>
+  <button class="header-btn" onclick="toggleTheme()">🌙 Theme</button>
+  <button class="header-btn" onclick="window.print()">🖨 Print</button>
+</header>
+
+<main id="main">
+<div id="content">
+
+<!-- ============================================================ -->
+<!-- PAGE TITLE -->
+<!-- ============================================================ -->
+<span class="unit-badge">Electronic Principles and Devices</span>
+<h1>Unit 2: Diode Applications</h1>
+<p><strong>Department of Electronics and Communication</strong> — PES University</p>
+
+<!-- ============================================================ -->
+<!-- REGULATED POWER SUPPLY -->
+<!-- ============================================================ -->
+<h2 id="regulated-power-supply">Regulated Power Supply</h2>
+
+<p>Power supplies are designed for a dedicated load and environment. But sometimes main supply voltage, load, and surrounding temperature keep changing, altering the component parameters and hence changing the output voltage.</p>
+<p>If the power supply output voltage changes, chances are it may cross these current thresholds, which are undesirable for electronic devices that work within power limits.</p>
+<p>Regulated power supply converts an alternating current signal to a constant signal.</p>
+
+<div class="diagram-desc">
+  <strong>Fig 1: Block diagram of regulated power supply</strong><br>
+  120 V rms → <strong>Transformer</strong> → <strong>Rectifier</strong> → <strong>Filter</strong> → <strong>IC Regulator</strong> → <strong>Load</strong><br>
+  (Each stage progressively smooths the signal: sinusoidal AC → half-wave/full-wave DC → ripple-reduced DC → constant regulated DC)
+</div>
+
+<h3>Block Diagram Components</h3>
+<ul>
+  <li><strong>Transformer:</strong> The output sinusoidal voltage is either step-up or step-down from the input sinusoidal voltage value.</li>
+  <li><strong>Rectifier:</strong> Converts an alternating current into a direct one by allowing the current to flow through it in one direction only.</li>
+  <li><strong>Filter:</strong> Removes the AC ripples from the DC signal obtained from the rectifier.</li>
+  <li><strong>Regulator:</strong> Converts DC voltage into a lower constant voltage.</li>
+</ul>
+
+<!-- ============================================================ -->
+<!-- RECTIFIER OVERVIEW -->
+<!-- ============================================================ -->
+<h2 id="rectifier-overview">Rectifier</h2>
+
+<div class="diagram-desc">
+  <strong>Rectifier Classification:</strong><br>
+  Rectifier<br>
+  ├── Half Wave Rectifier<br>
+  └── Full Wave Rectifier<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;├── Centre Tapped Full Wave Rectifier<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;└── Bridge Rectifier
+</div>
+
+<!-- ============================================================ -->
+<!-- HALF WAVE RECTIFIER -->
+<!-- ============================================================ -->
+<h2 id="hwr">Half Wave Rectifier (HWR)</h2>
+
+<h3 id="hwr-ideal">HWR – Ideal Diode</h3>
+
+<p>The input waveform is \(v_i = V_m \sin \omega t\). The HWR circuit consists of a diode in series with a load resistor \(R_L\).</p>
+
+<h4>Positive Half Cycle:</h4>
+<p>Conduction region \(0 \to T/2\). The diode is forward biased.</p>
+<div class="formula-block">
+\[ I_m = \frac{V_m}{R_L}, \quad V_o = V_m \]
+</div>
+
+<h4>Negative Half Cycle:</h4>
+<p>Non-conduction region \(T/2 \to T\). The diode is reverse biased.</p>
+<div class="formula-block">
+\[ I = 0, \quad V_o = 0 \]
+</div>
+
+<div class="diagram-desc">
+  <strong>Input Waveform:</strong> Sinusoidal signal \(v_i = V_m \sin\omega t\). Peak at \(V_m\), negative trough at \(-V_m\).<br>
+  <strong>Output Waveform:</strong> Only the positive half-cycles appear; output is zero during negative half. \(V_{dc} = 0.318\,V_m\).
+</div>
+
+<h3 id="hwr-nonideal">HWR – Non-Ideal Diode</h3>
+
+<p>For a silicon diode with knee voltage \(V_k = 0.7\,\text{V}\), the diode only conducts when \(v_i > V_k\). The output is offset by \(V_k\).</p>
+
+<div class="formula-block">
+\[ V_{o\,\max} = V_m - V_k \]
+\[ I_{o\,\max} = \frac{V_m - V_k}{R_L} \]
+</div>
+
+<div class="diagram-desc">
+  <strong>Effect of \(V_k\) on half-wave rectified signal:</strong> The output is shifted downward by \(V_k\). The conduction starts slightly later in the positive cycle and the peak output is reduced by the diode drop.
+</div>
+
+<!-- ============================================================ -->
+<!-- HWR AVERAGE -->
+<!-- ============================================================ -->
+<h3 id="hwr-avg">Average Voltage / Current for HWR – Ideal Diode</h3>
+
+<div class="formula-block">
+\[
+V_{dc} = \frac{1}{2\pi} \int_0^{2\pi} V_m \sin\omega t\, d\omega t
+= \frac{1}{2\pi} \int_0^{\pi} V_m \sin\omega t\, d\omega t
+= \frac{V_m}{2\pi} \left[-\cos\omega t\right]_0^{\pi}
+= \frac{V_m}{\pi}
+\]
+</div>
+
+<div class="formula-block">
+\[
+\boxed{V_{dc} = \frac{V_m}{\pi} = 0.318\,V_m \quad (\text{half-wave})}
+\]
+\[
+I_{dc} = \frac{V_{dc}}{R_L} = \frac{V_m}{\pi R_L} = \frac{I_m}{\pi}
+\]
+</div>
+
+<!-- ============================================================ -->
+<!-- HWR RMS -->
+<!-- ============================================================ -->
+<h3 id="hwr-rms">RMS Voltage / Current for HWR – Ideal Diode</h3>
+
+<div class="formula-block">
+\[
+V_{rms} = \left[\frac{1}{2\pi}\int_0^{2\pi}(V_m\sin\omega t)^2\,d\omega t\right]^{1/2}
+= \left[\frac{V_m^2}{2\pi}\int_0^{\pi}\sin^2\omega t\,d\omega t\right]^{1/2}
+= \left[\frac{V_m^2}{2\pi}\int_0^{\pi}\frac{1-\cos 2\omega t}{2}\,d\omega t\right]^{1/2}
+\]
+\[
+V_{rms} = \left[\frac{V_m^2}{2\pi}\left(\frac{\omega t}{2} - \frac{\sin 2\omega t}{2}\right)_0^{\pi}\right]^{1/2} = \frac{V_m}{2}
+\]
+\[
+I_{rms} = \frac{V_{rms}}{R_L} = \frac{V_m}{2R_L} = \frac{I_m}{2}
+\]
+</div>
+
+<!-- ============================================================ -->
+<!-- HWR NON-IDEAL AVG/RMS -->
+<!-- ============================================================ -->
+<h3 id="hwr-nonideal-avgrms">Average &amp; RMS Voltage/Current for HWR – Non-Ideal Diode</h3>
+
+<div class="formula-block">
+\[
+V_{dc} = \frac{V_m - V_k}{\pi}
+\]
+\[
+I_{dc} = \frac{V_{dc}}{R_L} = \frac{V_m - V_k}{\pi R_L} = \frac{I_m}{\pi}
+\quad \text{where } I_m = \frac{V_m - V_k}{R_L}
+\]
+\[
+V_{rms} = \frac{V_m - V_k}{2}
+\]
+\[
+I_{rms} = \frac{V_{rms}}{R_L} = \frac{V_m - V_k}{2R_L} = \frac{I_m}{2}
+\quad \text{where } I_m = \frac{V_m - V_k}{R_L}
+\]
+</div>
+
+<!-- ============================================================ -->
+<!-- HWR RIPPLE FACTOR -->
+<!-- ============================================================ -->
+<h3 id="hwr-ripple">Ripple Factor of HWR</h3>
+
+<p><strong>Ripple Factor</strong> is a measure of purity of the dc output of a rectifier and can be defined as:</p>
+
+<div class="formula-block">
+\[
+r = \frac{\text{rms value of the ac component of the output}}{\text{average or dc value of the output}}
+\]
+\[
+\text{Ripple Factor } (\gamma_{HWR}) = \frac{V'_{rms}}{V_{dc}} = \frac{\sqrt{V_{rms}^2 - V_{dc}^2}}{V_{dc}}
+= \sqrt{\left(\frac{V_{rms}}{V_{dc}}\right)^2 - 1} = \sqrt{\left(\frac{V_m/2}{V_m/\pi}\right)^2 - 1}
+\]
+\[
+V'_{rms} = \left[V_{rms}^2 - V_{dc}^2\right]^{1/2} = \left[\left(\frac{V_m}{2}\right)^2 - \left(\frac{V_m}{\pi}\right)^2\right]^{1/2} = 0.385\,V_m
+\]
+\[
+\therefore \text{Ripple factor} = 1.21
+\]
+</div>
+
+<!-- ============================================================ -->
+<!-- HWR PIV -->
+<!-- ============================================================ -->
+<h3 id="hwr-piv">Half Wave Rectifier PIV – Ideal &amp; Non-Ideal Diode</h3>
+
+<p><strong>Peak Inverse Voltage (PIV)</strong> or <strong>Peak Reverse Voltage (PRV)</strong> — (For both Ideal &amp; Non-Ideal) is the maximum reverse biased voltage (\(V_m\)) the diode can withstand without entering the breakdown region.</p>
+
+<p>During the negative half cycle, \(I = 0\), so \(V_o = IR = (0)R = 0\,\text{V}\). The full source voltage appears across the reverse-biased diode.</p>
+
+<div class="formula-block">
+\[
+\boxed{\text{PIV rating} \geq V_m \quad \text{(half-wave rectifier)}}
+\]
+</div>
+
+<!-- ============================================================ -->
+<!-- HWR NUMERICALS -->
+<!-- ============================================================ -->
+<h2 id="hwr-numericals">Numericals on HWR</h2>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 1a</div>
+  <p>Assuming an ideal diode, sketch \(V_i\), \(V_d\), and \(i_d\) for the half-wave rectifier. The input is a sinusoidal waveform with a frequency of 60 Hz. The circuit has a load resistor of 2.2 kΩ and \(V_{dc} = 2\,\text{V}\).</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p>Given \(V_{dc} = 0.318\,V_m\):</p>
+  \[ V_m = \frac{V_{dc}}{0.318} = \frac{2\,\text{V}}{0.318} = 6.28\,\text{V} \]
+  \[ I_m = \frac{V_m}{R} = \frac{6.28\,\text{V}}{2.2\,\text{k}\Omega} = 2.85\,\text{mA} \]
+  <p><strong>Waveform sketches:</strong></p>
+  <ul>
+    <li>\(v_i\): Sinusoidal, peak = 6.28 V, trough = −6.28 V.</li>
+    <li>\(v_d\): During positive half: \(V_d = 0\,\text{V}\). During negative half: \(V_d = V_i\) (diode is reverse biased, so \(V_d\) swings to −6.28 V).</li>
+    <li>\(i_d\): Half-wave, peak = 2.85 mA, zero during negative half.</li>
+  </ul>
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 1b</div>
+  <p>Assuming a silicon diode (\(V_k = 0.7\,\text{V}\)), sketch \(v_i\), \(v_d\), and \(i_d\) for the half-wave rectifier. The input is a sinusoidal waveform with a frequency of 60 Hz. \(V_{dc} = 2\,\text{V}\), load resistor = 2.2 kΩ.</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p>Using \(V_{dc} \cong 0.318(V_m - V_k)\):</p>
+  \[ 2\,\text{V} = 0.318(V_m - 0.7\,\text{V}) \]
+  \[ \text{Solving: } V_m = 6.98\,\text{V} \]
+  <p>Output peak: \(V_{R,\,peak} = V_m - V_k = 6.98 - 0.7 = 6.28\,\text{V}\)</p>
+  \[ I_m = \frac{6.28\,\text{V}}{2.2\,\text{k}\Omega} = 2.85\,\text{mA} \]
+  <ul>
+    <li>\(v_i\): Sinusoidal, peak = 6.98 V.</li>
+    <li>\(v_d\): Positive half: flat at 0.7 V during conduction. Negative half: goes to −6.98 V.</li>
+    <li>\(v_R\): Half-wave, peak = 6.28 V.</li>
+    <li>\(i_R (= i_d)\): Half-wave, peak = 2.85 mA.</li>
+  </ul>
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 2</div>
+  <p>(a) Given \(P_{max} = 14\,\text{mW}\) for each diode shown (silicon), determine the maximum current rating of each diode (using the approximate equivalent model).<br>
+  (b) Determine \(I_{max}\) for \(V_{i\,max} = 160\,\text{V}\). (Two diodes in parallel: 4.7 kΩ ∥ 56 kΩ load.)<br>
+  (c) Determine the current through each diode at \(V_{i\,max}\) using the results of part (b).<br>
+  (d) If only one diode were present, determine the diode current and compare it to the maximum rating.</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p>(a)</p>
+  \[ P_{max} = 14\,\text{mW} = (0.7\,\text{V})\,I_D \implies I_D = \frac{14\,\text{mW}}{0.7\,\text{V}} = 20\,\text{mA} \]
+  <p>(b)</p>
+  \[ 4.7\,\text{k}\Omega \,\|\, 56\,\text{k}\Omega = 4.34\,\text{k}\Omega \]
+  \[ V_R = 160\,\text{V} - 0.7\,\text{V} = 159.3\,\text{V} \]
+  \[ I_{max} = \frac{159.3\,\text{V}}{4.34\,\text{k}\Omega} = 36.71\,\text{mA} \]
+  <p>(c)</p>
+  \[ I_{diode} = \frac{I_{max}}{2} = \frac{36.71\,\text{mA}}{2} = 18.36\,\text{mA} \quad (I_D = 20\,\text{mA} > 18.36\,\text{mA}) \]
+  <p>(d)</p>
+  \[ I_{diode} = 36.71\,\text{mA} \gg I_{max} = 20\,\text{mA} \quad \textbf{Total damage} \]
+</div>
+
+<!-- ============================================================ -->
+<!-- FULL WAVE RECTIFIER -->
+<!-- ============================================================ -->
+<h2 id="fwr">Full Wave Rectifier (FWR)</h2>
+
+<h3 id="ct-ideal">Full Wave Rectifier: Centre Tap (Ideal Diode)</h3>
+
+<p>A centre-tap transformer with turns ratio 1:2 provides two equal secondary voltages \(V_{AC}\) and \(V_{CB}\), each equal to \(V_i\), with \(V_{AB} = 2V_i\). Two diodes \(D_1\) and \(D_2\) conduct on alternating half-cycles.</p>
+
+<div class="diagram-desc">
+  <strong>Circuit Description:</strong> 1:2 centre-tap transformer. Terminal A connects through \(D_1\), terminal B through \(D_2\), centre tap (CT) is the ground reference. Load R is connected from the diode junction to CT.<br>
+  <strong>Waveforms:</strong> \(V_{AC}\) or \(V_{CB}\) is a standard sine wave (peak \(V_m\)). \(V_{AB} = 2V_i\) has peak \(2V_m\).
+</div>
+
+<h4>Positive Half Cycle:</h4>
+<p>Diode \(D_1\) conducts; \(D_2\) is reverse-biased.</p>
+<div class="formula-block">
+\[ V_o = V_m, \quad I_o = \frac{V_m}{R_L} \]
+</div>
+
+<h4>Negative Half Cycle:</h4>
+<p>Diode \(D_2\) conducts; \(D_1\) is reverse-biased.</p>
+<div class="formula-block">
+\[ V_o = V_m, \quad I_m = \frac{V_m}{R_L} \]
+</div>
+
+<p>Both half-cycles produce a positive output, giving a full-wave rectified signal with \(V_{dc} = 0.636\,V_m\).</p>
+
+<h3 id="ct-piv">Full Wave Rectifier PIV – Centre Tap (Ideal Diode)</h3>
+
+<p>When one diode is conducting, the other is reverse-biased. The voltage across the non-conducting diode equals the secondary voltage plus the output voltage.</p>
+
+<div class="formula-block">
+\[ \text{PIV} = V_{secondary} + V_R = V_m + V_m \]
+\[ \boxed{\text{PIV} \geq 2V_m \quad \text{(CT transformer, full-wave rectifier)}} \]
+</div>
+
+<h3 id="ct-nonideal">Full Wave Rectifier: Centre Tap (Non-Ideal Diode)</h3>
+
+<h4>Negative Half Cycle:</h4>
+<div class="formula-block">
+\[ V_{o\,max} = V_m - V_k, \quad I_{o\,max} = \frac{V_m - V_k}{R_L} \]
+</div>
+
+<p><strong>PIV for Non-Ideal Diode:</strong></p>
+<div class="formula-block">
+\[
+\text{PIV} - V_m + V_k - V_m = 0
+\implies \text{PIV} - 2V_m + V_k = 0
+\implies \text{PIV} = 2V_m - V_k
+\]
+\[ \text{Non-Ideal diode: } \text{PIV} \geq 2V_m - V_k \]
+</div>
+
+<h3 id="bridge-ideal">Full Wave Rectifier: Bridge Rectifier (Ideal Diode)</h3>
+
+<p>Four diodes (\(D_1\), \(D_2\), \(D_3\), \(D_4\)) arranged in a bridge configuration. Load R is connected across the central nodes.</p>
+
+<div class="diagram-desc">
+  <strong>Bridge Rectifier Circuit:</strong> Four diodes in a diamond arrangement. \(D_1\) and \(D_4\) conduct on positive half-cycle; \(D_2\) and \(D_3\) conduct on negative half-cycle. Current always flows in the same direction through the load R.
+</div>
+
+<h4>Positive Half Cycle:</h4>
+<p>\(D_3\) "on", \(D_4\) "on"; \(D_1\) "off", \(D_2\) "off".</p>
+<div class="formula-block">
+\[ V_o = V_m, \quad I_o = \frac{V_m}{R_L} \]
+</div>
+
+<h4>Negative Half Cycle:</h4>
+<p>\(D_1\) "on", \(D_2\) "on"; \(D_3\) "off", \(D_4\) "off".</p>
+<div class="formula-block">
+\[ V_o = V_m, \quad I_o = \frac{V_m}{R_L} \]
+</div>
+
+<div class="diagram-desc">
+  <strong>Input Waveform:</strong> Sinusoidal, peak \(V_m\), trough \(-V_m\).<br>
+  <strong>Output Waveform:</strong> Full-wave rectified, all positive, peak \(V_m\), \(V_{dc} = 0.636\,V_m\).
+</div>
+
+<h3 id="bridge-nonideal">Full Wave Rectifier: Bridge Rectifier (Non-Ideal Diode)</h3>
+
+<p>With two diodes conducting per half-cycle, each dropping \(V_T = 0.7\,\text{V}\):</p>
+
+<div class="formula-block">
+\[
+v_i - V_T - v_o - V_T = 0
+\implies v_o = v_i - 2V_T
+\implies V_{o\,max} = V_m - 2V_T
+\]
+\[
+\boxed{V_{dc} \cong 0.636(V_m - 2V_T)}
+\]
+</div>
+
+<h3 id="bridge-piv">Full Wave Rectifier PIV: Bridge Rectifier (Ideal &amp; Non-Ideal)</h3>
+
+<h4>Ideal Diode:</h4>
+<div class="formula-block">
+\[
+\text{PIV} - V_m = 0 \implies \text{PIV} = V_m
+\]
+\[ \boxed{\text{PIV} \geq V_m \quad \text{(full-wave bridge rectifier)}} \]
+</div>
+
+<h4>Non-Ideal Diode:</h4>
+<div class="formula-block">
+\[
+\text{PIV} - V_k - V_o = 0
+\implies \text{PIV} - V_k - V_m + 2V_k = 0
+\implies \text{PIV} + V_k - V_m = 0
+\implies \text{PIV} = V_m - V_k
+\]
+\[ \text{Non-Ideal diode: } \text{PIV} \geq V_m - V_k \]
+</div>
+
+<!-- ============================================================ -->
+<!-- FWR AVERAGE/RMS -->
+<!-- ============================================================ -->
+<h3 id="fwr-avg">Determining Average Voltage/Current for FWR (Ideal Diode)</h3>
+
+<div class="formula-block">
+\[
+V_{dc} = \frac{1}{\pi}\int_0^{\pi} V_m \sin\omega t\, d\omega t
+= \frac{V_m}{\pi}\left[-\cos\omega t\right]_0^{\pi}
+= \frac{2V_m}{\pi}
+\]
+\[
+I_{dc} = \frac{V_{dc}}{R} = \frac{2V_m}{\pi R} = \frac{2I_m}{\pi}
+\]
+</div>
+
+<h3 id="fwr-rms">Determining RMS Voltage/Current for FWR (Ideal Diode)</h3>
+
+<div class="formula-block">
+\[
+V_{rms} = \left[\frac{1}{\pi}\int_0^{\pi}(V_m\sin\omega t)^2\,d\omega t\right]^{1/2}
+= \left[\frac{V_m^2}{\pi}\int_0^{\pi}\frac{1-\cos 2\omega t}{2}\,d\omega t\right]^{1/2}
+\]
+\[
+= \left[\frac{V_m^2}{2\pi}\int_0^{\pi}(1-\cos 2\omega t)\,d\omega t\right]^{1/2}
+= \left[\frac{V_m^2}{2\pi}\left(\omega t - \frac{\sin 2\omega t}{2}\right)_0^{\pi}\right]^{1/2}
+= \left[\frac{V_m^2}{2\pi}(\pi - 0)\right]^{1/2} = \frac{V_m}{\sqrt{2}}
+\]
+\[
+I_{rms} = \frac{V_{rms}}{R} = \frac{V_m}{\sqrt{2}\,R} = \frac{I_m}{\sqrt{2}}
+\]
+</div>
+
+<h3 id="ct-nonideal-avgrms">Average &amp; RMS Voltage/Current for Centre Tap Rectifier – Non-Ideal Diode</h3>
+
+<div class="formula-block">
+\[
+V_{dc} = \frac{2(V_m - V_k)}{\pi}
+\]
+\[
+I_{dc} = \frac{V_{dc}}{R_L} = \frac{2(V_m - V_k)}{\pi R_L} = 2\frac{I_m}{\pi}
+\quad \left(I_m = \frac{V_m - V_k}{R_L}\right)
+\]
+\[
+V_{rms} = \frac{V_m - V_k}{\sqrt{2}}
+\]
+\[
+I_{rms} = \frac{V_{rms}}{R_L} = \frac{V_m - V_k}{\sqrt{2}\,R_L} = \frac{I_m}{\sqrt{2}}
+\quad \left(I_m = \frac{V_m - V_k}{R_L}\right)
+\]
+</div>
+
+<h3 id="bridge-nonideal-avgrms">Average &amp; RMS Voltage/Current for Bridge Rectifier – Non-Ideal Diode</h3>
+
+<div class="formula-block">
+\[
+V_{dc} = \frac{2(V_m - 2V_k)}{\pi}
+\]
+\[
+I_{dc} = \frac{V_{dc}}{R_L} = \frac{2(V_m - 2V_k)}{\pi R_L} = 2\frac{I_m}{\pi}
+\quad \left(I_m = \frac{V_m - 2V_k}{R_L}\right)
+\]
+\[
+V_{rms} = \frac{V_m - 2V_k}{\sqrt{2}}
+\]
+\[
+I_{rms} = \frac{V_{rms}}{R_L} = \frac{V_m - 2V_k}{\sqrt{2}\,R_L} = \frac{I_m}{\sqrt{2}}
+\quad \left(I_m = \frac{V_m - 2V_k}{R_L}\right)
+\]
+</div>
+
+<!-- ============================================================ -->
+<!-- FWR RIPPLE -->
+<!-- ============================================================ -->
+<h3 id="fwr-ripple">Ripple Factor of FWR</h3>
+
+<p>Ripple Factor is a measure of purity of the dc output of a rectifier and can be defined as:</p>
+<div class="formula-block">
+\[
+r = \frac{\text{rms value of the ac component of the output}}{\text{average or dc value of the output}}
+\]
+\[
+\text{Ripple Factor } (\gamma_{FWR}) = \frac{V'_{rms}}{V_{dc}} = \sqrt{\left(\frac{V_{rms}}{V_{dc}}\right)^2 - 1} = \sqrt{\left(\frac{V_m/\sqrt{2}}{2V_m/\pi}\right)^2 - 1}
+\]
+\[
+V'^I_{rms} = \sqrt{V_{rms}^2 - V_{dc}^2} = \sqrt{\left(\frac{V_m}{\sqrt{2}}\right)^2 - \left(\frac{2V_m}{\pi}\right)^2} = 0.307\,V_m
+\]
+\[ \therefore \text{Ripple factor} = 0.48 \]
+</div>
+
+<!-- ============================================================ -->
+<!-- COMPARISON TABLE -->
+<!-- ============================================================ -->
+<h2 id="comparison-table">Comparison Table for HWR &amp; FWR</h2>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr>
+      <th>Measure</th>
+      <th>HWR Ideal</th>
+      <th>HWR Practical</th>
+      <th>CT-Ideal</th>
+      <th>CT-Practical</th>
+      <th>Bridge-Ideal</th>
+      <th>Bridge-Practical</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>\(I_{dc}\)</td>
+      <td>\(\dfrac{I_m}{\pi}\)</td>
+      <td>\(\dfrac{I_m}{\pi}\)</td>
+      <td>\(\dfrac{2I_m}{\pi}\)</td>
+      <td>\(\dfrac{2I_m}{\pi}\)</td>
+      <td>\(\dfrac{2I_m}{\pi}\)</td>
+      <td>\(\dfrac{2I_m}{\pi}\)</td>
+    </tr>
+    <tr>
+      <td>\(V_{dc}\)</td>
+      <td>\(\dfrac{V_m}{\pi}\)</td>
+      <td>\(\dfrac{V_m - V_k}{\pi}\)</td>
+      <td>\(\dfrac{2V_m}{\pi}\)</td>
+      <td>\(\dfrac{2(V_m-V_k)}{\pi}\)</td>
+      <td>\(\dfrac{2V_m}{\pi}\)</td>
+      <td>\(\dfrac{2(V_m-2V_k)}{\pi}\)</td>
+    </tr>
+    <tr>
+      <td>\(I_{rms}\)</td>
+      <td>\(\dfrac{I_m}{2}\)</td>
+      <td>\(\dfrac{I_m}{2}\)</td>
+      <td>\(\dfrac{I_m}{\sqrt{2}}\)</td>
+      <td>\(\dfrac{I_m}{\sqrt{2}}\)</td>
+      <td>\(\dfrac{I_m}{\sqrt{2}}\)</td>
+      <td>\(\dfrac{I_m}{\sqrt{2}}\)</td>
+    </tr>
+    <tr>
+      <td>\(V_{rms}\)</td>
+      <td>\(\dfrac{V_m}{2}\)</td>
+      <td>\(\dfrac{V_m - V_k}{2}\)</td>
+      <td>\(\dfrac{V_m}{\sqrt{2}}\)</td>
+      <td>\(\dfrac{V_m - V_k}{\sqrt{2}}\)</td>
+      <td>\(\dfrac{V_m}{\sqrt{2}}\)</td>
+      <td>\(\dfrac{V_m - 2V_k}{\sqrt{2}}\)</td>
+    </tr>
+    <tr>
+      <td>PIV</td>
+      <td>\(V_m\)</td>
+      <td>\(V_m\)</td>
+      <td>\(2V_m\)</td>
+      <td>\(2V_m - V_k\)</td>
+      <td>\(V_m\)</td>
+      <td>\(V_m - V_k\)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ============================================================ -->
+<!-- CT VS BRIDGE -->
+<!-- ============================================================ -->
+<h2 id="ct-vs-bridge">Differences Between Centre Tap &amp; Bridge FWR</h2>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr>
+      <th>Sl No.</th>
+      <th>Bridge-FWR</th>
+      <th>CT-FWR</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>Lesser PIV</td><td>Comparatively higher PIV</td></tr>
+    <tr><td>2</td><td>Centre tap transformer not required</td><td>Centre tap transformer required</td></tr>
+    <tr><td>3</td><td>Uniform input for both half cycles</td><td>Difficult to balance both the half cycles due to CT</td></tr>
+    <tr><td>4</td><td>4 diodes are required</td><td>2 diodes are required</td></tr>
+    <tr><td>5</td><td>More voltage drop due to two diodes in the path</td><td>Comparatively less voltage drop due to only one diode in the path</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ============================================================ -->
+<!-- IDEAL VS NON-IDEAL VDC -->
+<!-- ============================================================ -->
+<h2 id="ideal-vs-nonideal-vdc">Differences Between Ideal \(V_{DC}\) and Non-Ideal \(V_{DC}\)</h2>
+
+<div class="table-wrap">
+<table>
+  <thead>
+    <tr>
+      <th>Rectifier</th>
+      <th>Ideal \(V_{DC}\)</th>
+      <th>Non-Ideal \(V_{DC}\)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Half Wave Rectifier</td>
+      <td>\(V_{DC} = 0.318\,V_m\)</td>
+      <td>\(V_{DC} = 0.318\,V_m - 0.7\)</td>
+    </tr>
+    <tr>
+      <td>Bridge Rectifier</td>
+      <td>\(V_{DC} = 0.636\,V_m\)</td>
+      <td>\(V_{DC} = 0.636\,V_m - 2(0.7\,\text{V})\)</td>
+    </tr>
+    <tr>
+      <td>Center-Tapped Transformer Rectifier</td>
+      <td>\(V_{DC} = 0.636\,V_m\)</td>
+      <td>\(V_{DC} = 0.636\,V_m - 0.7\,\text{V}\)</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ============================================================ -->
+<!-- FWR NUMERICALS -->
+<!-- ============================================================ -->
+<h2 id="fwr-numericals">Numericals on Full Wave Rectifier: Bridge Rectifier</h2>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 1</div>
+  <p>Determine the output waveform for the network and calculate the output dc level. Given: \(v_i\) peak = 10 V. Bridge rectifier with \(R_1 = 2\,\text{k}\Omega\), \(R_2 = 2\,\text{k}\Omega\), \(R_3 = 2\,\text{k}\Omega\). Output \(v_o\) is across \(R_3\).</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p>Using Voltage Divider Rule:</p>
+  \[
+  V_{o\,max} = \frac{2}{4}\,V_{i\,max} = \frac{2}{4}(10\,\text{V}) = 5\,\text{V}
+  \]
+  \[
+  V_0 = \frac{V_i R_1}{R_1 + R_2} = \frac{10(2\,\text{k})}{2\,\text{k} + 2\,\text{k}} = 5\,\text{V}
+  \]
+  <p>The output is full-wave rectified with peak = 5 V.</p>
+  \[ V_{dc} = 0.636(5\,\text{V}) = 3.18\,\text{V} \]
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 2 — Sketch \(v_o\)</div>
+  <p>Sketch \(v_o\) for the network with ideal diodes, \(v_i\) peak = 170 V, \(-170\,\text{V}\), load resistors = 2.2 kΩ each in the bridge arms.</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p><strong>Positive pulse of \(v_i\):</strong> Top left diode "off", bottom left diode "on".</p>
+  \[
+  2.2\,\text{k}\Omega \,\|\, 2.2\,\text{k}\Omega = 1.1\,\text{k}\Omega
+  \]
+  \[
+  V_{o_{peak}} = \frac{1.1\,\text{k}\Omega(170\,\text{V})}{1.1\,\text{k}\Omega + 2.2\,\text{k}\Omega} = 56.67\,\text{V}
+  \]
+  <p><strong>Negative pulse of \(v_i\):</strong> Top left diode "on", bottom left diode "off".</p>
+  \[
+  V_{o_{peak}} = \frac{1.1\,\text{k}\Omega(170\,\text{V})}{1.1\,\text{k}\Omega + 2.2\,\text{k}\Omega} = 56.67\,\text{V}
+  \]
+  \[ V_{dc} = 0.636(56.67\,\text{V}) = 36.04\,\text{V} \]
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 3</div>
+  <p>Determine \(V_o\) and the required PIV rating of each diode for the configuration. In addition, determine the maximum current through each diode. Given: \(v_i\) peak = 100 V, \(R_L = 2.2\,\text{k}\Omega\), ideal diodes in special bridge orientation.</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p><strong>For positive cycle — Path: ABDCEF</strong></p>
+  <p>Applying KVL: \(V_i + V_0 = 0 \implies V_0 = -V_i\)</p>
+  <p><strong>For negative cycle — Path: FEDCBA</strong></p>
+  <p>Output waveform: inverted full-wave, peak = −100 V (negative-going full wave).</p>
+  \[ \text{PIV} = 100\,\text{V} \]
+  \[ I_{max} = \frac{100\,\text{V}}{2.2\,\text{k}\Omega} = 45.45\,\text{mA} \]
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 4</div>
+  <p>Sketch \(V_o\) for the network and determine the dc voltage available. Given: \(v_i\) peak = 100 V, ideal diodes, bridge with \(R_2 = R_3 = 2.2\,\text{k}\Omega\) in the bridge, \(R_{load} = 2.2\,\text{k}\Omega\).</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p><strong>Positive half-cycle of \(v_i\) — Network redrawn:</strong></p>
+  <p>Voltage-divider rule:</p>
+  \[
+  V_{o_{max}} = \frac{2.2\,\text{k}\Omega(V_{i_{max}})}{2.2\,\text{k}\Omega + 2.2\,\text{k}\Omega} = \frac{1}{2}(V_{i_{max}}) = \frac{1}{2}(100\,\text{V}) = 50\,\text{V}
+  \]
+  <p><strong>Negative half-cycle of \(v_i\):</strong></p>
+  \[
+  V_{o_{max}} = \frac{2.2\,\text{k}\Omega(V_{i_{max}})}{2.2\,\text{k}\Omega + 2.2\,\text{k}\Omega} = \frac{1}{2}(100\,\text{V}) = 50\,\text{V}
+  \]
+  \[ V_{dc} = 0.636\,V_m = 0.636(50\,\text{V}) = 31.8\,\text{V} \]
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 5</div>
+  <p>A full-wave bridge rectifier with a 120-V rms sinusoidal input has a load resistor of 1 kΩ.<br>
+  (a) If silicon diodes are employed, what is the dc voltage available at the load?<br>
+  (b) Determine the required PIV rating of each diode.<br>
+  (c) Find the maximum current through each diode during conduction.<br>
+  (d) What is the required power rating of each diode?</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p>(a)</p>
+  \[
+  V_m = \sqrt{2}(120\,\text{V}) = 169.7\,\text{V}
+  \]
+  \[
+  V_{L_m} = V_{i_m} - 2V_D = 169.7\,\text{V} - 2(0.7\,\text{V}) = 169.7 - 1.4 = 168.3\,\text{V}
+  \]
+  \[ V_{dc} = 0.636(168.3\,\text{V}) = 107.04\,\text{V} \]
+  <p>(b)</p>
+  \[ \text{PIV}: V_m - V_k = 169.7 - 0.7 = 169\,\text{V} \]
+  <p>(c)</p>
+  \[ I_D(\max) = \frac{V_{L_m}}{R_L} = \frac{168.3\,\text{V}}{1\,\text{k}\Omega} = 168.3\,\text{mA} \]
+  <p>(d)</p>
+  \[ P_{max} = V_D I_D = (0.7\,\text{V})(168.3\,\text{mA}) = 117.81\,\text{mW} \]
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 6</div>
+  <p>The input to a bridge rectifier is given through a 10:1 transformer from a supply of 230 Sin 314t. If \(R_L = 500\,\Omega\). Determine: DC load voltage, RMS load voltage, PIV across diodes, DC power delivered to the load.</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p>The primary voltage of transformer, \(V_1 = 230\,\sin 314t\).</p>
+  <p>Transformer turns ratio: \(\dfrac{N_1}{N_2} = \dfrac{10}{1}\)</p>
+  <p>The secondary voltage of transformer:</p>
+  \[
+  V_2 = \frac{N_2}{N_1}\,V_1 = \frac{1}{10}(230\,\sin 314t) = 23\,\sin 314t
+  \]
+  \[ V_2 = V_m\,\sin\omega t = 23\,\sin 314t \implies V_m = 23\,\text{V} \]
+  \[
+  \text{DC load voltage:}\quad V_{dc} = \frac{2V_m}{\pi} = \frac{2 \times 23}{\pi} = 14.64\,\text{V}
+  \]
+  \[
+  \text{RMS load voltage:}\quad V_{rms} = \frac{V_m}{\sqrt{2}} = \frac{23}{\sqrt{2}} = 16.26\,\text{V}
+  \]
+  \[
+  \text{PIV across diodes: PIV} \geq V_m \geq 23\,\text{V}
+  \]
+  \[
+  \text{DC power delivered to load:}\quad P_{dc} = I_{dc}^2 \times R_L = \frac{V_{dc}^2}{R_L} = \frac{(14.64)^2}{500} = 0.428\,\text{W}
+  \]
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 7</div>
+  <p>In a two diode FWR using Si diodes, the RMS voltage across each half of the transformer secondary is 100 V. The load resistance is 975 Ω. Find (i) Average current (ii) Average output voltage (iii) PIV of diode.</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Answer</div>
+  \[ V_{dc} = 89.57\,\text{V}, \quad I_{dc} = 91.8\,\text{mA}, \quad \text{PIV} = 282.1\,\text{V} \]
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 8</div>
+  <p>A Bridge rectifier with ideal diodes has an ac source of RMS value 220 V, 50 Hz connected to the primary of transformer. If the load resistance is 200 Ω and turns ratio of transformer is 4:1, find the dc output voltage, dc output current.</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Answer</div>
+  \[ V_{dc} = 49.6\,\text{V}, \quad I_{dc} = 248\,\text{mA} \]
+</div>
+
+<!-- ============================================================ -->
+<!-- SHUNT CAPACITOR FILTER -->
+<!-- ============================================================ -->
+<h2 id="filter">Shunt Capacitor Filter</h2>
+
+<p>Filter is a circuit which converts pulsating DC to smooth DC. Since the reactance of capacitor and inductor depends on frequency, by connecting a capacitor in parallel with the load or by connecting an inductor in series with the load, the ac ripple present at the output of a rectifier can be reduced.</p>
+
+<div class="diagram-desc">
+  <strong>Basic Capacitor Filter (Fig 15.3):</strong><br>
+  AC input → Rectifier circuit → [Capacitor C in parallel with DC load \(R_L\)] → Output<br>
+  The capacitor filters the ripple from the rectifier output, providing a smoother DC voltage to the load.
+</div>
+
+<h3 id="filter-fwr">FWR with Shunt Capacitor Filter</h3>
+
+<div class="diagram-desc">
+  <strong>FWR with Shunt Capacitor Filter Circuit:</strong><br>
+  230 V, 50 Hz AC Supply → Centre-tap transformer → \(D_1\) (from terminal A) and \(D_2\) (from terminal B) → Junction point X → Capacitor C in parallel with \(R_L\) → Output \(V_o\) → Return to centre tap Y.<br>
+  Input: \(V_i = V_m \sin\omega t\) for each secondary half.
+</div>
+
+<h3 id="filter-working">Working</h3>
+
+<p>During positive half cycle the diode D1 is forward biased in centre tap full wave rectifier and diode D1 and D2 are forward biased in bridge rectifier. Hence the capacitor C will charge from 0 V towards the peak value of input \(V_m\). When input voltage \(V_i\) reaches \(V_m\) the charge on capacitor will also be equal to \(V_m\), hence the diodes will turn off (since both anode and cathode of diodes will be at same potential). Now the capacitor starts discharging through the load \(R_L\), if the load is very light (load resistance is very high and load current is low) the capacitor will discharge by a small amount, by that time next half cycle charges the capacitor back to \(V_m\). Thus the output voltage remains almost constant.</p>
+
+<h3 id="filter-waveform">Capacitor Filter — Output Voltage Waveform</h3>
+
+<div class="diagram-desc">
+  <strong>Output voltage waveform with capacitor filter:</strong><br>
+  The waveform shows the capacitor charging up to \(V_m\) during time \(T_1\) (diodes conducting), then discharging slightly during time \(T_2\) (diodes off). Peak-to-peak ripple voltage \((V_r)_{p-p}\) is marked. Average DC level \(V_{dc}\) is close to \(V_m\). Period of the rectified waveform is \(T/2\) for a full-wave rectifier.
+</div>
+
+<ul>
+  <li><strong>Time T1:</strong> The time during which diodes of the full-wave rectifier conduct, charging the capacitor up to the peak rectifier voltage \(V_m\).</li>
+  <li><strong>Time T2:</strong> The time interval during which the rectifier voltage drops below the peak voltage, and the capacitor discharges through the load.</li>
+  <li>Since the charge–discharge cycle occurs for each half-cycle for a full-wave rectifier, the period of the rectified waveform is \(T/2\).</li>
+</ul>
+
+<h3 id="filter-ripple-expr">Expression for Ripple Factor — Shunt Capacitor Filter (FWR)</h3>
+
+<div class="formula-block">
+\[
+\gamma = \frac{1}{4\sqrt{3}\,f\,C\,R_L}
+\]
+Where:
+\begin{align}
+f &\to \text{Frequency of input AC signal}\\
+C &\to \text{Filter capacitor used}\\
+R_L &\to \text{Load resistance}
+\end{align}
+\[
+\gamma \propto \frac{1}{f} \cdot \frac{1}{C} \cdot \frac{1}{R_L}
+\]
+</div>
+
+<p>Since ripple is inversely proportional to frequency, capacitor and load resistance, the ripple can be minimized by using high value of C. (\(R_L\) and \(f\) are not in designer's hand.)</p>
+
+<div class="formula-block">
+\[
+\gamma = \frac{V_{r(rms)}}{V_{dc}}, \quad V_{r(rms)} = \frac{I_{DC}}{4\sqrt{3}\,fc}
+\]
+\[
+V_{dc} = V_m - \frac{I_{DC}}{4\,fc}
+\]
+</div>
+
+<div class="diagram-desc">
+  <strong>Shunt Capacitor Filter for Bridge Rectifier Circuit:</strong><br>
+  230 V, 50 Hz AC → Transformer → Bridge (D4, D1, D3, D2) → X → Capacitor C in parallel with \(R_L\) → Output \(V_o\) → Y.<br>
+  Waveform: Without capacitor — pulsating full-wave. With capacitor — ripple is greatly reduced, output stays close to \(V_m\) with small ripple (C charges / C discharges shown on waveform).
+</div>
+
+<ul>
+  <li>AC components fluctuate with respect to time while the DC components remain constant with respect to time.</li>
+  <li>So the AC components present in the pulsating DC is an unwanted signal.</li>
+</ul>
+
+<h3 id="filter-hwr">Shunt Capacitor Filter for Half-Wave Rectifier</h3>
+
+<p>Capacitor C is connected in shunt/parallel with load resistor \(R_L\).</p>
+
+<div class="diagram-desc">
+  <strong>HWR with C Filter Circuit:</strong><br>
+  AC Input → Transformer → Diode D → Resistor R (series) → Smoothing Capacitor C (in parallel) → Output.<br>
+  <strong>AC Input Waveform:</strong> Sinusoidal, ±\(V_{max}\).<br>
+  <strong>Resultant Output Waveform:</strong> C charges on positive peaks, C discharges between peaks, output is smoother than without capacitor.<br>
+  <strong>Path of components:</strong> AC component (high frequency) flows through C; DC component (low frequency) flows through \(R_L\).
+</div>
+
+<p><strong>Ripple Factor for Capacitor Filter of a Half Wave Rectifier is given by:</strong></p>
+
+<div class="formula-block">
+\[
+\text{Ripple Factor for a capacitor filter (HWR)} = \frac{1}{2\sqrt{3}\,f\,C\,R_L}
+\]
+\[
+f\text{ – Frequency of AC input Signal}, \quad R_L\text{ – Value of Load resistor}, \quad C\text{ – Capacitance of the Shunt Capacitor}
+\]
+\[
+\gamma = \frac{V_{r(rms)}}{V_{dc}}, \quad V_{r(rms)} = \frac{I_{DC}}{2\sqrt{3}\,fc}
+\]
+\[
+V_{dc} = V_m - \frac{I_{DC}}{2\,fc}
+\]
+</div>
+
+<!-- ============================================================ -->
+<!-- FILTER NUMERICALS -->
+<!-- ============================================================ -->
+<h2 id="filter-numericals">Numericals on Shunt Capacitor Filter</h2>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 1</div>
+  <p>A full wave rectifier with C filter is supplying a load of 500 Ω. If the ripple factor should not exceed 10%, find the value of capacitor required. Assume input AC signal frequency is 50 Hz. What is the new value of ripple if capacitor of 500 μF is connected across the load?</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p>Given \(\gamma = 10\% = 0.1\) and \(R_L = 500\,\Omega\):</p>
+  \[
+  \gamma = \frac{1}{4\sqrt{3}\,f\,C\,R_L}
+  \implies C = \frac{1}{4\sqrt{3}\,f\,\gamma\,R_L} = \frac{1}{4\sqrt{3} \times 50 \times 0.1 \times 500} = 57.73\,\mu\text{F}
+  \]
+  <p>If a capacitor of 500 μF is used, the ripple factor is:</p>
+  \[
+  \gamma = \frac{1}{4\sqrt{3}\,f\,C\,R_L} = \frac{1}{4\sqrt{3} \times 50 \times 500 \times 10^{-6} \times 500} = 0.0115
+  \]
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 2</div>
+  <p>In a full wave rectifier with C filter the output DC voltage is 10 V and load current is 10 mA. Calculate the value of capacitance required such that the output DC voltage will have ripple ≤ 0.001.</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  \[
+  R_L = \frac{V_{dc}}{I_{dc}} = \frac{10}{10\,\text{m}} = 1\,\text{k}\Omega
+  \]
+  <p>Assume frequency of input AC signal, \(f = 50\,\text{Hz}\).</p>
+  \[
+  \gamma = \frac{1}{4\sqrt{3}\,f\,C\,R_L}
+  \implies C = \frac{1}{4\sqrt{3}\,f\,\gamma\,R_L} = \frac{1}{4\sqrt{3} \times 50 \times 0.001 \times 1 \times 10^3} = 2886\,\mu\text{F}
+  \]
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 3</div>
+  <p>Calculate the RMS value of the ripple voltage for the FWR in a 100 μF Capacitor connected to a load drawing 50 mA of current. What is the dc voltage at the output if the peak rectified output voltage is 30 V and frequency is 50 Hz. Also find the ripple factor.</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p>Given: \(I_{dc} = 50\,\text{mA}\), \(f = 50\,\text{Hz}\), \(C = 100\,\mu\text{F}\), \(V_m = 30\,\text{V}\).</p>
+  \[
+  V_{r(rms)} = \frac{I_{DC}}{4\sqrt{3}\,fc} = \frac{50\times10^{-3}}{4\sqrt{3}\times50\times100\times10^{-6}}
+  \]
+  <p>Therefore \(V_{rms} = 1.4\,\text{V}\).</p>
+  \[
+  V_{dc} = V_m - \frac{I_{DC}}{4\,fc} = 30 - \frac{50\times10^{-3}}{4\times50\times100\times10^{-6}}
+  \]
+  <p>Therefore \(V_{dc} = 27.5\,\text{V}\).</p>
+  \[
+  \gamma = \frac{V_{r(rms)}}{V_{dc}} = \frac{1.4}{27.5}
+  \]
+  <p>Ripple factor = 0.05.</p>
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 4</div>
+  <p>A Half wave rectifier with C filter is supplying a resistive load of 500 Ω. If the load ripple content should not exceed 10% find the value of C required.</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p>For a Half wave rectifier with C filter:</p>
+  \[
+  \text{Ripple Factor} = \frac{1}{2\sqrt{3}\,f\,C\,R_L}
+  \]
+  \[
+  0.10 = \frac{1}{2\sqrt{3} \times 50 \times C \times 500}
+  \implies C = 0.115\,\text{mF}
+  \]
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 5</div>
+  <p>A 100 μF capacitor when used as a filter has 15 V rms across it with a load resistor of 2.5 kΩ. If the filter is full wave and supply frequency is 50 Hz, what is the percentage of ripple factor in the output?</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p>For a full wave rectifier with C filter:</p>
+  \[
+  \text{Ripple factor, } \gamma = \frac{1}{4\sqrt{3}\,f\,C\,R_L}
+  = \frac{1}{4\sqrt{3} \times 50 \times 100 \times 10^{-6} \times 2.5 \times 10^{3}} = 0.01154
+  \]
+  <p>So, ripple factor is <strong>1.154%</strong>.</p>
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 6</div>
+  <p>A full wave rectifier uses a capacitor filter with 500 μF capacitor and provides a load current of 200 mA at 8% ripple. Calculate the dc voltage and the value of peak rectified voltage.</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p>The ripple factor for Full Wave Rectifier with C filter: \(\gamma = \dfrac{1}{4\sqrt{3}\,f\,C\,R_L}\). Substituting \(R_L = V_{dc}/I_{dc}\):</p>
+  \[
+  \gamma = \frac{I_{dc}}{4\sqrt{3}\,f\,C\,V_{dc}}
+  \]
+  <p>After re-arranging:</p>
+  \[
+  V_{DC} = \frac{200 \times 10^{-3}}{4\sqrt{3} \times 50 \times 500 \times 10^{-6} \times 0.08} = 14.43\,\text{V}
+  \]
+  \[
+  V_m = V_{dc} + \frac{I_{dc}}{4fc} = 14.43 + \frac{200\times10^{-3}}{4\times50\times500\times10^{-6}} = 14.43 + 2 = 16.43\,\text{V}
+  \]
+  \[ V_m = 16.43\,\text{V} \]
+</div>
+
+<!-- ============================================================ -->
+<!-- ZENER DIODE -->
+<!-- ============================================================ -->
+<h2 id="zener">Unit II: Zener Diode</h2>
+
+<ul>
+  <li><strong>Heavily Doped PN-Junction Device</strong> Specially Designed to operate under breakdown region.</li>
+  <li>Zener Diode under <strong>forward Bias condition</strong> works like a normal semiconductor diode.</li>
+  <li>Zener Diode under <strong>reverse bias condition</strong> acts like Voltage regulator.</li>
+</ul>
+
+<p>Zener diodes are usually heavily doped diodes hence the depletion layer is very narrow. When the reverse voltage across the junction is increased the electric field across the depletion layer becomes high so that electrons are pulled out of covalent bonds resulting in a sudden rise in current which is known as <strong>zener breakdown</strong>.</p>
+
+<h3 id="zener-char">Zener Diode Characteristics</h3>
+
+<div class="diagram-desc">
+  <strong>Structure of Zener Diode:</strong> P-type | N-type with depletion region. Heavily doped (\(p^+\) | \(n^+\)). Negative ions on P-side, positive ions on N-side in depletion region.<br><br>
+  <strong>Symbol of Zener Diode:</strong> Like a regular diode but with bent ends on the cathode bar (the black colour ring denotes the negative terminal of the Zener diode). Circuit symbol: P→N with bent cathode.<br><br>
+  <strong>V-I Characteristics of Zener Diode:</strong><br>
+  — In <em>Forward Bias Condition</em>: Behaves like a normal diode; current increases rapidly above cut-in voltage (~0.7 V for Si).<br>
+  — In <em>Reverse Bias Condition</em>: Small reverse current (\(I_o\)) until breakdown at \(-V_Z\); then current rises sharply (zener breakdown region). The voltage remains nearly constant at \(V_Z\) for a wide range of currents from \(I_{Z(min)}\) to \(I_{Z(max)}\). This is the "Constant Zener Voltage" region.
+</div>
+
+<div class="diagram-desc">
+  <strong>Graph showing equivalent circuit in each of the regions:</strong><br>
+  — Forward bias above 0.7 V: Equivalent to a 0.7 V voltage source with small series resistance \(r_Z\).<br>
+  — Reverse bias before breakdown: Equivalent to open circuit (very small leakage \(I_R = 10\,\mu\text{A}\)).<br>
+  — Breakdown region (at \(V_Z\)): Equivalent to a \(V_Z\) voltage source with small dynamic resistance \(r_Z = \Delta V_Z / \Delta I_Z\). At test current \(I_{ZT} = 12.5\,\text{mA}\), \(r_Z = 8.5\,\Omega\). Maximum current \(I_{ZM} = 32\,\text{mA}\).
+</div>
+
+<h3 id="zener-regulator">Zener Diode as Voltage Regulator</h3>
+
+<p><strong>Conditions required to operate Zener Diode as Voltage Regulator:</strong></p>
+<ul>
+  <li>Zener Diode should be in Reverse Biased Condition.</li>
+  <li>\(V_{in}\) should be Greater than \(V_Z\).</li>
+  <li>\(I_Z\) should be greater than \(I_{Zmin}\).</li>
+  <li>\(I_Z\) should be less than or equal to \(I_{Zmax}\).</li>
+</ul>
+
+<div class="diagram-desc">
+  <strong>Zener Voltage Regulator Circuit:</strong><br>
+  \(V_i\) (variable input) → Series resistor R → Node → Zener diode \(V_Z\) (in parallel) → Ground.<br>
+  Load \(R_L\) in parallel with Zener. \(I_Z\) flows through Zener, \(I_L\) flows through \(R_L\), \(I_R = I_Z + I_L\) flows through R.
+</div>
+
+<p><strong>Different operating conditions of Zener Regulator:</strong></p>
+<ol>
+  <li>Fixed quantities (\(V_i\) and R are fixed)</li>
+  <li>Fixed supply voltage and a variable load (Fixed \(V_i\) and variable \(R_L\))</li>
+  <li>Fixed load and a variable supply (Fixed \(R_L\) and Variable \(V_i\))</li>
+  <li>Variable Supply and Variable Load (Variable \(V_i\) and Variable \(R_L\))</li>
+</ol>
+
+<!-- CASE 1 -->
+<h3 id="case1">CASE-1: Fixed \(V_i\) and Fixed \(R_L\) Voltage Regulator</h3>
+
+<p>The analysis can fundamentally be broken down into two steps.</p>
+
+<p><strong>1. Determine the state of the Zener diode</strong> by removing it from the network and calculating the voltage across the resulting open circuit:</p>
+<div class="formula-block">
+\[
+V = V_L = \frac{R_L\,V_i}{R + R_L}
+\]
+</div>
+<ul>
+  <li>If \(V \geq V_Z\), the Zener diode is on, and the appropriate equivalent model can be substituted.</li>
+  <li>If \(V < V_Z\), the diode is off, and the open-circuit equivalence is substituted.</li>
+</ul>
+
+<p><strong>Conclusion:</strong></p>
+<p>If the Zener diode is in the "on" state, the voltage across the diode is not V volts. The Zener diode will turn on as soon as the voltage across the Zener diode is \(V_Z\) volts. It will then "lock in" at this level and never reach the higher level of V volts.</p>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 1 — Zener Regulator</div>
+  <p>For the Zener diode network: \(V_i = 16\,\text{V}\), \(R = 1\,\text{k}\Omega\), \(V_Z = 10\,\text{V}\), \(P_{ZM} = 30\,\text{mW}\).<br>
+  (i) Determine \(V_L\), \(V_R\), \(I_Z\), and \(P_Z\) with \(R_L = 1.2\,\text{k}\Omega\).<br>
+  (ii) Repeat part (a) with \(R_L = 3\,\text{k}\Omega\).</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution (i)</div>
+  \[
+  V = \frac{R_L V_i}{R + R_L} = \frac{1.2\,\text{k}\Omega(16\,\text{V})}{1\,\text{k}\Omega + 1.2\,\text{k}\Omega} = 8.73\,\text{V}
+  \]
+  <p>Since \(V = 8.73\,\text{V} < V_Z = 10\,\text{V}\), the Zener diode is <strong>OFF</strong>.</p>
+  \[
+  V_L = V = 8.73\,\text{V}
+  \]
+  \[
+  V_R = V_i - V_L = 16\,\text{V} - 8.73\,\text{V} = 7.27\,\text{V}
+  \]
+  \[ I_Z = 0\,\text{A}, \quad P_Z = V_Z I_Z = V_Z(0\,\text{A}) = 0\,\text{W} \]
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution (ii)</div>
+  \[
+  V = \frac{R_L V_i}{R + R_L} = \frac{3\,\text{k}\Omega(16\,\text{V})}{1\,\text{k}\Omega + 3\,\text{k}\Omega} = 12\,\text{V}
+  \]
+  <p>Since \(V = 12\,\text{V} > V_Z = 10\,\text{V}\), the Zener diode is <strong>ON</strong>.</p>
+  \[
+  V_L = V_Z = 10\,\text{V}, \quad V_R = V_i - V_L = 16 - 10 = 6\,\text{V}
+  \]
+  \[
+  I_L = \frac{V_L}{R_L} = \frac{10\,\text{V}}{3\,\text{k}\Omega} = 3.33\,\text{mA}
+  \]
+  \[
+  I_R = \frac{V_R}{R} = \frac{6\,\text{V}}{1\,\text{k}\Omega} = 6\,\text{mA}
+  \]
+  \[ I_Z = I_R - I_L = 6\,\text{mA} - 3.33\,\text{mA} = 2.67\,\text{mA} \]
+  <p>The power dissipated is:</p>
+  \[ P_Z = V_Z I_Z = (10\,\text{V})(2.67\,\text{mA}) = 26.7\,\text{mW} \]
+  <p>which is less than the specified \(P_{ZM} = 30\,\text{mW}\). ✓</p>
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 2 — Zener Regulator</div>
+  <p>Given: 20 V supply, \(R_S = 220\,\Omega\), \(V_Z = 10\,\text{V}\), \(P_{Z_{max}} = 400\,\text{mW}\).<br>
+  (a) Determine \(V_L\), \(I_L\), \(I_Z\), and \(I_R\) if \(R_L = 180\,\Omega\).<br>
+  (b) Repeat part (a) if \(R_L = 470\,\Omega\).</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution (a)</div>
+  <p>In the absence of the Zener diode:</p>
+  \[ V_L = \frac{180\,\Omega(20\,\text{V})}{180\,\Omega + 220\,\Omega} = 9\,\text{V} \]
+  <p>\(V_L = 9\,\text{V} < V_Z = 10\,\text{V}\) and diode non-conducting.</p>
+  \[ \text{Therefore, } I_L = I_R = \frac{20\,\text{V}}{220\,\Omega + 180\,\Omega} = 50\,\text{mA} \]
+  <p>with \(I_Z = 0\,\text{mA}\) and \(V_L = 9\,\text{V}\).</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution (b)</div>
+  <p>In the absence of the Zener diode:</p>
+  \[ V_L = \frac{470\,\Omega(20\,\text{V})}{470\,\Omega + 220\,\Omega} = 13.62\,\text{V} \]
+  <p>\(V_L = 13.62\,\text{V} > V_Z = 10\,\text{V}\) and Zener diode "on".</p>
+  \[ \text{Therefore, } V_L = 10\,\text{V} \text{ and } V_{R_S} = 10\,\text{V} \]
+  \[ I_{R_S} = V_{R_S}/R_S = 10\,\text{V}/220\,\Omega = 45.45\,\text{mA} \]
+  \[ I_L = V_L/R_L = 10\,\text{V}/470\,\Omega = 21.28\,\text{mA} \]
+  \[ I_Z = I_{R_S} - I_L = 45.45\,\text{mA} - 21.28\,\text{mA} = 24.17\,\text{mA} \]
+</div>
+
+<!-- CASE 2 -->
+<h3 id="case2">CASE-2: Fixed Supply Voltage and a Variable Load</h3>
+
+<p>Conditions for \(R_L\) to keep the Zener current \(I_Z\) in the operating limit: \(I_{Zmin} \leq I_Z < I_{Zmax}\).</p>
+
+<h4>Condition for \(R_{L\,min}\):</h4>
+<div class="formula-block">
+\[
+I_L = I_R - I_Z, \quad R_L = \frac{V_Z}{I_L} \quad (R_L \text{ is Minimum when } I_L \text{ is Maximum})
+\]
+\[
+I_{Lmax} = I_R - I_{Zmin} \quad \text{where } I_R = \frac{V_i - V_Z}{R}
+\]
+\[
+R_{Lmin} = \frac{V_Z}{I_{Lmax}}
+\]
+\text{If } I_{Zmin} = 0 \text{ then } I_{Lmax} = I_R \text{, hence: }
+\[
+R_{Lmin} = \frac{V_Z}{I_R} = \frac{V_Z\,R}{V_i - V_Z}
+\]
+</div>
+
+<h4>Condition for \(R_{L\,max}\):</h4>
+<div class="formula-block">
+\[
+R_L \text{ is Maximum when } I_L \text{ is Minimum}
+\]
+\[
+I_{Lmin} = I_R - I_{Zmax} \quad \text{where } I_R = \frac{V_i - V_Z}{R} \text{ and } I_{Zmax} = \frac{P_{ZM}}{V_Z}
+\]
+\[
+R_{Lmax} = \frac{V_Z}{I_{Lmin}}
+\]
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 3 — Variable Load</div>
+  <p>For the network: \(V_i = 50\,\text{V}\), \(R = 1\,\text{k}\Omega\), \(V_Z = 10\,\text{V}\), \(I_{ZM} = 32\,\text{mA}\).<br>
+  (i) Determine the range of \(R_L\) and \(I_L\) that will result in \(V_{RL}\) being maintained at 10 V. Given \(I_{Zmin} = 1\,\text{mA}\).<br>
+  (ii) Determine the maximum wattage rating of the diode.</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  <p>(i)</p>
+  \[
+  I_R = \frac{V_i - V_Z}{R} = \frac{50 - 10}{1\,\text{k}\Omega} = 40\,\text{mA}
+  \]
+  \[
+  I_{Lmax} = I_R - I_{Zmin} = 40\,\text{mA} - 1\,\text{mA} = 39\,\text{mA}
+  \]
+  \[
+  I_{Lmin} = I_R - I_{Zmax} = 40\,\text{mA} - 32\,\text{mA} = 8\,\text{mA}
+  \]
+  \[
+  R_{Lmax} = \frac{V_Z}{I_{Lmin}} = \frac{10}{8\,\text{mA}} = 1.25\,\text{k}\Omega
+  \]
+  \[
+  R_{Lmin} = \frac{V_Z}{I_{Lmax}} = \frac{10}{39\,\text{mA}} = 256.41\,\Omega
+  \]
+  <p>(ii)</p>
+  \[ P_{Zmax} = V_Z \times I_{Zmax} = 10 \times 32\,\text{mA} = 320\,\text{mW} \]
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 4 — Variable Load</div>
+  <p>Determine the value of \(R_L\) that will establish maximum power conditions for the Zener diode. Determine the minimum value of \(R_L\) to ensure that the Zener diode is in the "on" state. Given: 20 V supply, \(R_S = 220\,\Omega\), \(V_Z = 10\,\text{V}\), \(P_{Z_{max}} = 400\,\text{mW}\).</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  \[
+  P_{Z_{max}} = 400\,\text{mW} = V_Z I_Z = (10\,\text{V})(I_Z) \implies I_Z = \frac{400\,\text{mW}}{10\,\text{V}} = 40\,\text{mA}
+  \]
+  \[
+  I_{R_S} = \frac{V_i - V_Z}{R_S} = \frac{20 - 10}{220} = 45.45\,\text{mA}
+  \]
+  \[
+  I_{L_{min}} = I_{R_S} - I_{Z_{max}} = 45.45\,\text{mA} - 40\,\text{mA} = 5.45\,\text{mA}
+  \]
+  \[
+  R_L = \frac{V_L}{I_{L_{min}}} = \frac{10\,\text{V}}{5.45\,\text{mA}} = 1{,}834.86\,\Omega
+  \]
+  <p>Large \(R_L\) reduces \(I_L\) and forces more of \(I_{R_S}\) to pass through Zener diode.</p>
+  <p>If \(I_{Zmin} = 0\) then \(I_{Lmax} = I_R\), hence:</p>
+  \[
+  R_{Lmin} = \frac{V_Z}{I_R} = \frac{V_Z\,R}{V_i - V_Z}
+  \]
+  <p>Here \(R = R_S = 220\,\Omega\):</p>
+  \[ R_{Lmin} = \frac{10(220)}{20 - 10} = 220\,\Omega \]
+</div>
+
+<!-- CASE 3 -->
+<h3 id="case3">CASE-3: Fixed \(R_L\), Variable \(V_i\)</h3>
+
+<p>Conditions for \(V_i\) to keep the Zener current \(I_Z\) in the operating limit: \(I_{Zmin} \leq I_Z < I_{Zmax}\).</p>
+
+<h4>Condition for \(V_{i\,min}\):</h4>
+<div class="formula-block">
+\[
+I_R = I_Z + I_L, \quad I_{Rmin} = I_{Zmin} + I_L
+\]
+\[
+I_{Rmin} = \frac{V_{imin} - V_Z}{R}
+\]
+\[
+V_{imin} = V_Z + I_{Rmin}\,R
+\]
+\text{If } I_{Zmin} = 0\text{; then } I_{Rmin} = I_L\text{; } V_{imin} = V_Z + I_L\,R = \frac{V_Z(R_L + R)}{R_L}
+</div>
+
+<h4>Condition for \(V_{i\,max}\):</h4>
+<div class="formula-block">
+\[
+I_R = I_Z + I_L, \quad I_{Rmax} = I_{Zmax} + I_L
+\]
+\[
+I_L = \frac{V_Z}{R_L}, \quad I_{Zmax} = \frac{P_{ZM}}{V_Z}
+\]
+\[
+I_{Rmax} = \frac{V_{imax} - V_Z}{R}
+\]
+\[
+V_{imax} = V_Z + I_{Rmax}\,R
+\]
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 5 — Variable Supply</div>
+  <p>Determine the range of values of \(V_i\) that will maintain the Zener diode in the "on" state. Given: \(R = 220\,\Omega\), \(V_Z = 20\,\text{V}\), \(I_{ZM} = 60\,\text{mA}\), \(R_L = 1.2\,\text{k}\Omega\), \(I_{Zmin} = 2\,\text{mA}\).</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  \[
+  I_L = \frac{V_Z}{R_L} = \frac{20}{1.2\,\text{k}\Omega} = 16.67\,\text{mA}
+  \]
+  \[
+  I_{Rmin} = I_{Zmin} + I_L = 2\,\text{mA} + 16.67\,\text{mA} = 18.67\,\text{mA}
+  \]
+  \[
+  V_{imin} = V_Z + I_{Rmin}\,R = 20 + 18.67\,\text{mA} \times 220\,\Omega = 24.107\,\text{V}
+  \]
+  \[
+  I_{Rmax} = I_{Zmax} + I_L = 60\,\text{mA} + 16.67\,\text{mA} = 76.67\,\text{mA}
+  \]
+  \[
+  V_{imax} = V_Z + I_{Rmax}\,R = 20 + 76.67\,\text{mA} \times 220\,\Omega = 36.86\,\text{V}
+  \]
+  <div class="diagram-desc">
+    <strong>Graph of \(V_L\) vs \(V_i\):</strong> \(V_L\) remains constant at 20 V for \(V_i\) in the range 23.67 V to 36.87 V (shown as a flat region in the plot). Outside this range, regulation fails.
+  </div>
+</div>
+
+<!-- CASE 4 -->
+<h3 id="case4">CASE-4: Variable Supply Voltage and a Variable Load</h3>
+
+<p><strong>Worst case conditions for Zener Diode:</strong></p>
+
+<p><strong>1. For the diode to enter into the breakdown region, the necessary condition is \(I_Z \geq I_{Zmin}\).</strong></p>
+
+<p>\(I_Z\) can become less than \(I_{Zmin}\) when:</p>
+<ol>
+  <li>\(I_L\) increases or \(R_L\) decreases.</li>
+  <li>R increases or \(I_R\) decreases.</li>
+  <li>\(V_{in}\) decreases.</li>
+</ol>
+
+<p>Hence the value for \(R_{max}\) to ensure \(I_Z \geq I_{Zmin}\) is:</p>
+<div class="formula-block">
+\[
+R_{max} = \frac{V_{imin} - V_Z}{I_{Zmin} + I_{Lmax}}
+\]
+</div>
+
+<p><strong>2. The upper limit for the Zener current is \(I_Z < I_{Zmax}\).</strong></p>
+
+<p>\(I_Z\) can become greater than \(I_{Zmax}\) when:</p>
+<ol>
+  <li>\(I_L\) decreases or \(R_L\) increases.</li>
+  <li>R decreases or \(I_R\) increases.</li>
+  <li>\(V_{in}\) increases.</li>
+</ol>
+
+<p>Hence the value for \(R_{min}\) to ensure \(I_Z < I_{Zmax}\) is:</p>
+<div class="formula-block">
+\[
+R_{min} = \frac{V_{imax} - V_Z}{I_{Zmax} + I_{Lmin}}
+\]
+</div>
+
+<div class="problem-block">
+  <div class="problem-label">Problem 6 — Design</div>
+  <p>Design a Zener voltage regulator that maintains \(V_o\) at 10 V for input voltage variation of \(20\,\text{V} \pm 10\%\) and load current variation of \(30\,\text{mA} \pm 20\%\). Given \(I_{Zmin} = 2\,\text{mA}\) and \(P_{Zmax} = 0.5\,\text{W}\).</p>
+</div>
+<div class="solution-block">
+  <div class="solution-label">Solution</div>
+  \[
+  V_{imin} = 20\,\text{V} - 2\,\text{V} = 18\,\text{V}, \quad V_{imax} = 20\,\text{V} + 2\,\text{V} = 22\,\text{V}
+  \]
+  \[
+  I_{Lmin} = 30\,\text{mA} - 6\,\text{mA} = 24\,\text{mA}, \quad I_{Lmax} = 30\,\text{mA} + 6\,\text{mA} = 36\,\text{mA}
+  \]
+  \[
+  I_{Zmax} = \frac{P_{Zmax}}{V_Z} = \frac{0.5\,\text{W}}{10\,\text{V}} = 50\,\text{mA}
+  \]
+  \[
+  R_{max} = \frac{V_{imin} - V_Z}{I_{Zmin} + I_{Lmax}} = \frac{18 - 10}{2\,\text{mA} + 36\,\text{mA}} = \frac{8}{38\,\text{mA}} = 210.5\,\Omega
+  \]
+  \[
+  R_{min} = \frac{V_{imax} - V_Z}{I_{Zmax} + I_{Lmin}} = \frac{22 - 10}{50\,\text{mA} + 24\,\text{mA}} = \frac{12}{74\,\text{mA}} = 162.16\,\Omega
+  \]
+  \[
+  \boxed{162.16\,\Omega \leq R \leq 210.52\,\Omega}
+  \]
+</div>
+
+</div><!-- /content -->
+</main>
+
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+
+<script>
+// ============================================================
+// THEME
+// ============================================================
+(function(){
+  const saved = localStorage.getItem('epd-theme') || 'light';
+  if(saved === 'dark') document.documentElement.setAttribute('data-theme','dark');
+})();
+
+function toggleTheme(){
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  if(isDark){
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('epd-theme','light');
+  } else {
+    document.documentElement.setAttribute('data-theme','dark');
+    localStorage.setItem('epd-theme','dark');
+  }
+}
+
+// ============================================================
+// SCROLL & PROGRESS
+// ============================================================
+let lastScroll = 0;
+const header = document.getElementById('header');
+const progressBar = document.getElementById('progress-bar');
+const backTop = document.getElementById('back-to-top');
+
+window.addEventListener('scroll', function(){
+  const scrollY = window.scrollY;
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = maxScroll > 0 ? scrollY / maxScroll : 0;
+  progressBar.style.transform = `scaleX(${progress})`;
+
+  if(scrollY > lastScroll && scrollY > 60){
+    header.classList.add('hidden');
+  } else {
+    header.classList.remove('hidden');
+  }
+  lastScroll = scrollY;
+
+  if(scrollY > 300){
+    backTop.classList.add('show');
+  } else {
+    backTop.classList.remove('show');
+  }
+
+  updateActiveNav();
+}, {passive:true});
+
+// ============================================================
+// SCROLL SPY
+// ============================================================
+function updateActiveNav(){
+  const headings = document.querySelectorAll('#content h2[id], #content h3[id]');
+  let current = '';
+  headings.forEach(h => {
+    if(window.scrollY + 80 >= h.offsetTop) current = h.id;
+  });
+  document.querySelectorAll('.nav-item, .nav-sub-item').forEach(a => {
+    a.classList.remove('active');
+  });
+  if(current){
+    document.querySelectorAll(`.nav-item[onclick*="${current}"], .nav-sub-item[onclick*="${current}"]`).forEach(a => {
+      a.classList.add('active');
+    });
+  }
+}
+
+// ============================================================
+// SMOOTH SCROLL
+// ============================================================
+function scrollTo(id){
+  const el = document.getElementById(id);
+  if(el){
+    const offset = 70;
+    const top = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({top, behavior:'smooth'});
+  }
+  if(window.innerWidth <= 768) closeSidebar();
+}
+
+// ============================================================
+// SIDEBAR TOGGLE
+// ============================================================
+function openSidebar(){
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+// ============================================================
+// NAV SECTION TOGGLE
+// ============================================================
+function toggleSection(el){
+  el.classList.toggle('open');
+  const children = el.nextElementSibling;
+  if(children) children.classList.toggle('open');
+}
+
+// ============================================================
+// SEARCH
+// ============================================================
+const searchIndex = [];
+(function buildIndex(){
+  const content = document.getElementById('content');
+  const headings = content.querySelectorAll('h1,h2,h3,h4');
+  headings.forEach(h => {
+    const id = h.id || '';
+    let section = '';
+    let parent = h.previousElementSibling;
+    while(parent){
+      if(parent.tagName === 'H2'){ section = parent.textContent; break; }
+      parent = parent.previousElementSibling;
+    }
+    searchIndex.push({
+      title: h.textContent.trim(),
+      section: section || h.textContent.trim(),
+      id: id,
+      text: h.textContent.trim(),
+      el: h
+    });
+  });
+
+  // Also index paragraphs with their nearest heading
+  const paras = content.querySelectorAll('p, li');
+  paras.forEach(p => {
+    let nearHead = null;
+    let el = p;
+    while(el = el.previousElementSibling || el.parentElement){
+      if(el && /^H[1-4]$/.test(el.tagName)){ nearHead = el; break; }
+      if(el === content) break;
+    }
+    if(!nearHead) return;
+    const text = p.textContent.trim();
+    if(text.length < 10) return;
+    searchIndex.push({
+      title: nearHead.textContent.trim(),
+      section: nearHead.textContent.trim(),
+      id: nearHead.id || '',
+      text: text.substring(0, 200),
+      el: p
+    });
+  });
+})();
+
+const searchInput = document.getElementById('sidebar-search');
+const searchDropdown = document.getElementById('search-results-dropdown');
+
+searchInput.addEventListener('input', function(){
+  const q = this.value.trim().toLowerCase();
+  if(!q || q.length < 2){
+    searchDropdown.style.display = 'none';
+    return;
+  }
+  const results = [];
+  const seen = new Set();
+  searchIndex.forEach(item => {
+    if(item.text.toLowerCase().includes(q) || item.title.toLowerCase().includes(q)){
+      const key = item.id + item.title;
+      if(!seen.has(key)){
+        seen.add(key);
+        results.push(item);
+      }
+    }
+  });
+  if(results.length === 0){
+    searchDropdown.style.display = 'none';
+    return;
+  }
+  const top = results.slice(0, 8);
+  searchDropdown.innerHTML = top.map(r => {
+    const hi = (str) => str.replace(new RegExp(q,'gi'), m => `<mark>${m}</mark>`);
+    const preview = r.text.length > 80 ? r.text.substring(0,80)+'…' : r.text;
+    return `<div class="search-result-item" onclick="jumpResult('${r.id}')">
+      <div class="sri-title">${hi(r.title)}</div>
+      <div class="sri-section">${r.section}</div>
+      <div class="sri-preview">${hi(preview)}</div>
+    </div>`;
+  }).join('');
+  searchDropdown.style.display = 'block';
+});
+
+function jumpResult(id){
+  searchDropdown.style.display = 'none';
+  searchInput.value = '';
+  if(id) scrollTo(id);
+}
+
+document.addEventListener('click', function(e){
+  if(!e.target.closest('#sidebar-search-wrap')){
+    searchDropdown.style.display = 'none';
+  }
+});
+
+// ============================================================
+// COPY CODE BUTTONS
+// ============================================================
+document.querySelectorAll('pre').forEach(pre => {
+  const wrap = document.createElement('div');
+  wrap.className = 'code-block-wrap';
+  pre.parentNode.insertBefore(wrap, pre);
+  wrap.appendChild(pre);
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'Copy';
+  btn.onclick = () => {
+    navigator.clipboard.writeText(pre.textContent).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 1500);
+    });
+  };
+  wrap.appendChild(btn);
+});
+
+// ============================================================
+// SECTION CARD COLLAPSIBLES
+// ============================================================
+document.querySelectorAll('.section-card-header').forEach(header => {
+  header.addEventListener('click', function(){
+    this.classList.toggle('open');
+    const body = this.nextElementSibling;
+    if(body) body.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>
