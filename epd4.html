@@ -1,0 +1,2536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Electronic Principles and Devices — PES University</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)'],['$','$']], displayMath: [['\\[','\\]'],['$$','$$']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --bg: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-sidebar: #1e2128;
+  --sidebar-text: #c9d1d9;
+  --sidebar-muted: #8b949e;
+  --sidebar-hover: #2d333b;
+  --sidebar-active: #388bfd;
+  --sidebar-active-bg: #1f3a5f;
+  --text: #1c1e21;
+  --text-muted: #6c757d;
+  --border: #e1e4e8;
+  --accent: #c35a00;
+  --accent2: #1a3a6e;
+  --code-bg: #f6f8fa;
+  --code-border: #d0d7de;
+  --table-head: #f2f4f6;
+  --shadow: rgba(0,0,0,0.08);
+  --progress-color: #c35a00;
+  --sidebar-width: 280px;
+  --header-height: 52px;
+  --transition: 0.2s ease;
+}
+[data-theme="dark"] {
+  --bg: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-sidebar: #13161c;
+  --sidebar-text: #c9d1d9;
+  --sidebar-muted: #8b949e;
+  --sidebar-hover: #1c2128;
+  --sidebar-active: #58a6ff;
+  --sidebar-active-bg: #1f3a5f;
+  --text: #e6edf3;
+  --text-muted: #8b949e;
+  --border: #30363d;
+  --accent: #f0883e;
+  --accent2: #79c0ff;
+  --code-bg: #161b22;
+  --code-border: #30363d;
+  --table-head: #1c2128;
+  --shadow: rgba(0,0,0,0.4);
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  transition: background var(--transition), color var(--transition);
+}
+
+/* ===== LAYOUT ===== */
+.app-container { display: flex; min-height: 100vh; }
+
+/* ===== SIDEBAR ===== */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--bg-sidebar);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow: hidden;
+  transition: transform var(--transition);
+}
+.sidebar-logo {
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
+}
+.sidebar-logo-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+.sidebar-logo-sub {
+  font-size: 11px;
+  color: var(--sidebar-muted);
+  margin-top: 2px;
+}
+.sidebar-search-wrap {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
+  position: relative;
+}
+#sidebar-search {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 6px 10px 6px 30px;
+  font-size: 12px;
+  color: var(--sidebar-text);
+  outline: none;
+  transition: border-color var(--transition);
+}
+#sidebar-search::placeholder { color: var(--sidebar-muted); }
+#sidebar-search:focus { border-color: var(--sidebar-active); background: rgba(255,255,255,0.09); }
+.search-icon {
+  position: absolute;
+  left: 21px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--sidebar-muted);
+  font-size: 13px;
+  pointer-events: none;
+}
+#search-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 12px; right: 12px;
+  background: #252b33;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  max-height: 340px;
+  overflow-y: auto;
+  z-index: 200;
+  display: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+#search-results.visible { display: block; }
+.search-result-item {
+  padding: 9px 12px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.15s;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover { background: rgba(255,255,255,0.07); }
+.sri-title { font-size: 12px; font-weight: 600; color: #e6edf3; }
+.sri-section { font-size: 11px; color: var(--sidebar-muted); margin-top: 1px; }
+.sri-preview { font-size: 11px; color: #8b949e; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sri-highlight { background: rgba(196,90,0,0.5); color: #fff; border-radius: 2px; padding: 0 2px; }
+.no-results { padding: 12px; text-align: center; color: var(--sidebar-muted); font-size: 12px; }
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 0 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+.sidebar-nav::-webkit-scrollbar { width: 4px; }
+.sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+.nav-section { margin-bottom: 2px; }
+.nav-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px 6px 16px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sidebar-text);
+  letter-spacing: 0.02em;
+  border-radius: 4px;
+  margin: 0 4px;
+  transition: background var(--transition);
+  user-select: none;
+}
+.nav-section-header:hover { background: var(--sidebar-hover); }
+.nav-chevron { font-size: 10px; color: var(--sidebar-muted); transition: transform var(--transition); }
+.nav-section-header.open .nav-chevron { transform: rotate(90deg); }
+
+.nav-items { display: none; padding-left: 8px; }
+.nav-items.open { display: block; }
+.nav-item {
+  display: block;
+  padding: 5px 12px 5px 20px;
+  font-size: 12px;
+  color: var(--sidebar-muted);
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 1px 4px;
+  transition: background var(--transition), color var(--transition);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+}
+.nav-item:hover { background: var(--sidebar-hover); color: var(--sidebar-text); }
+.nav-item.active { background: var(--sidebar-active-bg); color: var(--sidebar-active); font-weight: 500; }
+
+/* ===== MAIN CONTENT ===== */
+.main-wrapper {
+  margin-left: var(--sidebar-width);
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== HEADER ===== */
+#header {
+  position: sticky;
+  top: 0;
+  height: var(--header-height);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  z-index: 50;
+  transition: transform var(--transition), background var(--transition);
+}
+#header.hidden { transform: translateY(-100%); }
+.header-left { display: flex; align-items: center; gap: 12px; }
+#menu-btn {
+  display: none;
+  background: none; border: none; cursor: pointer;
+  color: var(--text); font-size: 18px; padding: 4px;
+}
+.header-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.theme-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text);
+  transition: background var(--transition);
+}
+.theme-btn:hover { background: var(--bg-secondary); }
+
+/* ===== PROGRESS BAR ===== */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 3px;
+  background: var(--accent);
+  z-index: 999;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* ===== CONTENT AREA ===== */
+#content {
+  flex: 1;
+  max-width: 860px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+  line-height: 1.2;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent);
+}
+h2 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 48px 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--accent2);
+  margin: 32px 0 12px;
+}
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin: 20px 0 8px;
+}
+p { margin: 0 0 12px; }
+ul, ol { margin: 8px 0 12px 24px; }
+li { margin-bottom: 4px; }
+strong { font-weight: 600; }
+
+.section-anchor { scroll-margin-top: calc(var(--header-height) + 16px); }
+
+/* ===== TOPIC CARDS ===== */
+.topic-section {
+  margin-bottom: 48px;
+}
+.topic-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.topic-badge {
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* ===== INFO BOXES ===== */
+.info-box {
+  background: var(--bg-secondary);
+  border-left: 4px solid var(--accent2);
+  border-radius: 0 6px 6px 0;
+  padding: 14px 18px;
+  margin: 16px 0;
+}
+.info-box.orange { border-left-color: var(--accent); }
+.info-box.green { border-left-color: #28a745; }
+.definition-box {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+.definition-box .def-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+/* ===== CODE BLOCKS ===== */
+.code-wrap {
+  position: relative;
+  margin: 16px 0;
+  border-radius: 8px;
+  border: 1px solid var(--code-border);
+  background: var(--code-bg);
+  overflow: hidden;
+}
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: rgba(0,0,0,0.04);
+  border-bottom: 1px solid var(--code-border);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+[data-theme="dark"] .code-header { background: rgba(255,255,255,0.04); }
+.copy-btn {
+  background: none;
+  border: 1px solid var(--code-border);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.copy-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.copy-btn.copied { background: #28a745; color: #fff; border-color: #28a745; }
+pre {
+  padding: 14px 16px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+  background: transparent;
+  margin: 0;
+}
+code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 0.88em;
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+pre code { background: none; border: none; padding: 0; font-size: 1em; }
+
+/* ===== TABLES ===== */
+.table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 8px; border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+th {
+  background: var(--table-head);
+  color: var(--text);
+  font-weight: 600;
+  padding: 10px 14px;
+  text-align: center;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+td {
+  padding: 8px 14px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--bg-secondary); }
+
+/* ===== MATH STEPS ===== */
+.math-steps {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px 0;
+  border: 1px solid var(--border);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 13px;
+  line-height: 2;
+  overflow-x: auto;
+}
+.step { display: flex; align-items: baseline; gap: 12px; margin: 4px 0; }
+.step-num { color: var(--accent); font-weight: 700; font-size: 12px; min-width: 20px; }
+
+/* ===== BINARY DISPLAY ===== */
+.binary-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 12px 0;
+  overflow-x: auto;
+}
+.bin-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; line-height: 1.8; }
+.bin-label { color: var(--text-muted); font-size: 12px; min-width: 100px; }
+.bin-value { color: var(--accent2); font-weight: 600; letter-spacing: 3px; }
+.bin-result { color: var(--accent); font-weight: 700; letter-spacing: 3px; }
+.bin-note { color: var(--text-muted); font-size: 11px; font-style: italic; }
+.bin-sep { border-top: 1px solid var(--border); margin: 6px 0; }
+
+/* ===== GATE LOGIC ===== */
+.gate-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+.gate-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  overflow: hidden;
+}
+.gate-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.gate-symbol {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 4px;
+  padding: 1px 8px;
+  font-size: 11px;
+  font-family: monospace;
+}
+
+/* ===== COLLAPSIBLE ===== */
+.collapsible {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 12px 0;
+  overflow: hidden;
+}
+.collapsible-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  cursor: pointer;
+  background: var(--bg-secondary);
+  font-weight: 600;
+  font-size: 14px;
+  transition: background var(--transition);
+  user-select: none;
+}
+.collapsible-header:hover { background: var(--table-head); }
+.collapsible-arrow { transition: transform var(--transition); color: var(--text-muted); }
+.collapsible-header.open .collapsible-arrow { transform: rotate(90deg); }
+.collapsible-body { padding: 16px; display: none; }
+.collapsible-body.open { display: block; }
+
+/* ===== BACK TO TOP ===== */
+#back-top {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 42px; height: 42px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px var(--shadow);
+  opacity: 0; pointer-events: none;
+  transition: opacity var(--transition), transform var(--transition);
+  z-index: 80;
+}
+#back-top.visible { opacity: 1; pointer-events: auto; }
+#back-top:hover { transform: translateY(-2px); }
+
+/* ===== OVERLAY ===== */
+#overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 90;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  #sidebar {
+    transform: translateX(-100%);
+  }
+  #sidebar.open {
+    transform: translateX(0);
+  }
+  .main-wrapper { margin-left: 0; }
+  #menu-btn { display: flex; }
+  #overlay.open { display: block; }
+  #content { padding: 28px 20px 60px; }
+}
+@media (max-width: 600px) {
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.2rem; }
+  .gate-grid { grid-template-columns: 1fr; }
+  #content { padding: 20px 14px 60px; }
+}
+
+/* ===== PRINT ===== */
+@media print {
+  #sidebar, #header, #back-top, #progress-bar { display: none !important; }
+  .main-wrapper { margin-left: 0; }
+  #content { padding: 0; max-width: 100%; }
+  h2 { page-break-before: always; }
+}
+
+/* ===== HIGHLIGHT ===== */
+.search-highlight { background: rgba(196,90,0,0.25); border-radius: 2px; }
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<div class="app-container">
+<!-- SIDEBAR -->
+<nav id="sidebar" aria-label="Navigation">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-title">Electronic Principles and Devices</div>
+    <div class="sidebar-logo-sub">PES University · Study Notes</div>
+  </div>
+  <div class="sidebar-search-wrap">
+    <span class="search-icon">⌕</span>
+    <input id="sidebar-search" type="search" placeholder="Search notes…" autocomplete="off" aria-label="Search">
+    <div id="search-results"></div>
+  </div>
+  <div class="sidebar-nav" id="sidebar-nav">
+
+    <div class="nav-section">
+      <div class="nav-section-header open" onclick="toggleSection(this)">
+        <span>Number Systems</span><span class="nav-chevron">▶</span>
+      </div>
+      <div class="nav-items open">
+        <a class="nav-item" onclick="scrollTo('binary-hex')">Binary &amp; Hexadecimal</a>
+        <a class="nav-item" onclick="scrollTo('ones-complement')">1's Complement</a>
+        <a class="nav-item" onclick="scrollTo('twos-complement')">2's Complement</a>
+        <a class="nav-item" onclick="scrollTo('range-values')">Range of Values</a>
+        <a class="nav-item" onclick="scrollTo('binary-addition')">Binary Addition</a>
+        <a class="nav-item" onclick="scrollTo('binary-subtraction')">Binary Subtraction (2's Comp)</a>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-header open" onclick="toggleSection(this)">
+        <span>Boolean Algebra</span><span class="nav-chevron">▶</span>
+      </div>
+      <div class="nav-items open">
+        <a class="nav-item" onclick="scrollTo('logic-gates')">Logic Gates (AND, OR, NOT)</a>
+        <a class="nav-item" onclick="scrollTo('nand-nor')">NAND &amp; NOR Gates</a>
+        <a class="nav-item" onclick="scrollTo('boolean-laws')">Boolean Laws</a>
+        <a class="nav-item" onclick="scrollTo('duality')">Principle of Duality</a>
+        <a class="nav-item" onclick="scrollTo('commutative')">Commutative Law</a>
+        <a class="nav-item" onclick="scrollTo('associative')">Associative Law</a>
+        <a class="nav-item" onclick="scrollTo('distributive')">Distributive Law</a>
+        <a class="nav-item" onclick="scrollTo('demorgan')">De Morgan's Theorem</a>
+        <a class="nav-item" onclick="scrollTo('absorption')">Absorption Theorem</a>
+        <a class="nav-item" onclick="scrollTo('consensus')">Consensus Theorem</a>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-header open" onclick="toggleSection(this)">
+        <span>Boolean Functions</span><span class="nav-chevron">▶</span>
+      </div>
+      <div class="nav-items open">
+        <a class="nav-item" onclick="scrollTo('bool-functions')">Boolean Functions</a>
+        <a class="nav-item" onclick="scrollTo('sop')">Sum of Products (SOP)</a>
+        <a class="nav-item" onclick="scrollTo('pos')">Product of Sums (POS)</a>
+        <a class="nav-item" onclick="scrollTo('canonical-sop')">Canonical SOP (Minterms)</a>
+        <a class="nav-item" onclick="scrollTo('canonical-pos')">Canonical POS (Maxterms)</a>
+        <a class="nav-item" onclick="scrollTo('sop-examples')">SOP Conversion Examples</a>
+        <a class="nav-item" onclick="scrollTo('pos-examples')">POS Conversion Examples</a>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-header open" onclick="toggleSection(this)">
+        <span>Other Logic Gates</span><span class="nav-chevron">▶</span>
+      </div>
+      <div class="nav-items open">
+        <a class="nav-item" onclick="scrollTo('xor-gate')">XOR Gate</a>
+        <a class="nav-item" onclick="scrollTo('xnor-gate')">XNOR Gate</a>
+        <a class="nav-item" onclick="scrollTo('xor-properties')">XOR Properties &amp; Applications</a>
+        <a class="nav-item" onclick="scrollTo('universal-gates')">Universal Gates</a>
+        <a class="nav-item" onclick="scrollTo('nand-realization')">Realization via NAND</a>
+        <a class="nav-item" onclick="scrollTo('nor-realization')">Realization via NOR</a>
+        <a class="nav-item" onclick="scrollTo('boolean-problems')">Boolean Problems</a>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-header open" onclick="toggleSection(this)">
+        <span>Combinational Circuits</span><span class="nav-chevron">▶</span>
+      </div>
+      <div class="nav-items open">
+        <a class="nav-item" onclick="scrollTo('comb-intro')">Introduction</a>
+        <a class="nav-item" onclick="scrollTo('half-adder')">Half Adder</a>
+        <a class="nav-item" onclick="scrollTo('full-adder')">Full Adder</a>
+        <a class="nav-item" onclick="scrollTo('fa-half-adders')">Full Adder via Half Adders</a>
+        <a class="nav-item" onclick="scrollTo('four-bit-adder')">4-bit Ripple Adder</a>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-header open" onclick="toggleSection(this)">
+        <span>Sequential Circuits</span><span class="nav-chevron">▶</span>
+      </div>
+      <div class="nav-items open">
+        <a class="nav-item" onclick="scrollTo('seq-intro')">Introduction &amp; Types</a>
+        <a class="nav-item" onclick="scrollTo('latches-vs-ff')">Latches vs Flip-Flops</a>
+        <a class="nav-item" onclick="scrollTo('sr-latch')">SR Latch (NOR &amp; NAND)</a>
+        <a class="nav-item" onclick="scrollTo('d-latch')">D Latch (Transparent)</a>
+        <a class="nav-item" onclick="scrollTo('d-flipflop')">D Flip-Flop (Edge Triggered)</a>
+        <a class="nav-item" onclick="scrollTo('jk-flipflop')">JK Flip-Flop</a>
+        <a class="nav-item" onclick="scrollTo('t-flipflop')">T Flip-Flop</a>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-header open" onclick="toggleSection(this)">
+        <span>Registers &amp; Counters</span><span class="nav-chevron">▶</span>
+      </div>
+      <div class="nav-items open">
+        <a class="nav-item" onclick="scrollTo('registers-intro')">Registers</a>
+        <a class="nav-item" onclick="scrollTo('four-bit-register')">4-bit Register</a>
+        <a class="nav-item" onclick="scrollTo('shift-registers')">Shift Registers (SISO)</a>
+        <a class="nav-item" onclick="scrollTo('siso-example')">SISO Example</a>
+        <a class="nav-item" onclick="scrollTo('counters-intro')">Counters Introduction</a>
+        <a class="nav-item" onclick="scrollTo('async-up-counter')">3-bit Async Up Counter</a>
+        <a class="nav-item" onclick="scrollTo('async-down-counter')">3-bit Async Down Counter</a>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<!-- OVERLAY (mobile) -->
+<div id="overlay" onclick="closeSidebar()"></div>
+
+<!-- MAIN -->
+<div class="main-wrapper">
+  <!-- HEADER -->
+  <header id="header">
+    <div class="header-left">
+      <button id="menu-btn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+      <span class="header-title">Electronic Principles &amp; Devices</span>
+    </div>
+    <div class="header-right">
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙 Dark</button>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main id="content">
+
+    <!-- PAGE TITLE -->
+    <h1 id="top" class="section-anchor">Electronic Principles and Devices</h1>
+    <p style="color:var(--text-muted); font-size:14px; margin-bottom:32px;">PES University · Complete Study Notes · Covers all syllabus topics</p>
+
+    <!-- ===================== NUMBER SYSTEMS ===================== -->
+    <h2 id="binary-hex" class="section-anchor">Number Systems: Binary &amp; Hexadecimal</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Binary Number System</div>
+      <p>The binary number system uses only two digits: <strong>0</strong> and <strong>1</strong>. It is the fundamental language of digital electronics. Each digit is called a <strong>bit</strong> (binary digit).</p>
+    </div>
+
+    <h3>Unsigned Binary Numbers</h3>
+    <p>In unsigned binary, all values are non-negative, starting from 0.</p>
+    <div class="info-box orange">
+      <strong>Range:</strong> 0 to \((2^n - 1)\), where <em>n</em> is the number of bits.
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bits (n)</th><th>Number of Values (2<sup>n</sup>)</th><th>Range</th><th>Example Values</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>2</td><td>0 to 1</td><td>0, 1</td></tr>
+          <tr><td>2</td><td>4</td><td>0 to 3</td><td>00, 01, 10, 11</td></tr>
+          <tr><td>3</td><td>8</td><td>0 to 7</td><td>000 to 111</td></tr>
+          <tr><td>8</td><td>256</td><td>0 to 255</td><td>00000000 to 11111111</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Signed Binary Numbers (2's Complement)</h3>
+    <div class="info-box orange">
+      <strong>Range:</strong> \(-2^{n-1}\) to \((2^{n-1} - 1)\)
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Bits (n)</th><th>Total Values</th><th>Range</th></tr></thead>
+        <tbody>
+          <tr><td>2</td><td>4</td><td>−2 to 1 (i.e., −2, −1, 0, 1)</td></tr>
+          <tr><td>3</td><td>8</td><td>−4 to 3 (i.e., −4, −3, −2, −1, 0, 1, 2, 3)</td></tr>
+          <tr><td>8</td><td>256</td><td>−128 to 127</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 1's Complement -->
+    <h2 id="ones-complement" class="section-anchor">1's Complement</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Definition</div>
+      <p>The <strong>1's complement</strong> of a binary number is obtained by inverting all the bits — swapping all 0s for 1s and all 1s for 0s.</p>
+    </div>
+
+    <div class="info-box">
+      <strong>Example:</strong> The 1's complement of 1010 is <strong>0101</strong>.
+    </div>
+
+    <p>In 1's complement representation, negative numbers are represented by inverting all bits of the corresponding positive number.</p>
+
+    <h4>Example: Represent −34 in 8-bit 1's Complement Form</h4>
+    <div class="binary-display">
+      <div class="bin-row"><span class="bin-label">+34 =</span><span class="bin-value">0 0 1 0 0 0 1 0</span></div>
+      <div style="text-align:center; color:var(--text-muted); font-size:13px; margin:4px 0;">↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ &nbsp; (Invert all bits)</div>
+      <div class="bin-row"><span class="bin-label">−34 =</span><span class="bin-result">1 1 0 1 1 1 0 1</span><span class="bin-note">&nbsp; (1's complement of +34)</span></div>
+    </div>
+
+    <!-- 2's Complement -->
+    <h2 id="twos-complement" class="section-anchor">2's Complement</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Definition</div>
+      <p><strong>2's complement</strong> is the most common method used to represent signed numbers in digital systems.</p>
+    </div>
+
+    <h4>Steps to Find 2's Complement</h4>
+    <ol>
+      <li>Find the 1's complement (invert all bits)</li>
+      <li>Add 1 to the 1's complement</li>
+    </ol>
+
+    <h4>Example: Represent −34 in 8-bit 2's Complement Form</h4>
+    <div class="binary-display">
+      <div class="bin-row"><span class="bin-label">+34 =</span><span class="bin-value">0 0 1 0 0 0 1 0</span></div>
+      <div style="text-align:center; color:var(--text-muted); font-size:13px; margin:4px 0;">↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ &nbsp; (1's complement)</div>
+      <div class="bin-row"><span class="bin-label"></span><span class="bin-value">1 1 0 1 1 1 0 1</span><span class="bin-note">&nbsp; (1's complement of +34)</span></div>
+      <div class="bin-row"><span class="bin-label">+</span><span class="bin-value">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1</span></div>
+      <div class="bin-sep"></div>
+      <div class="bin-row"><span class="bin-label">−34 =</span><span class="bin-result">1 1 0 1 1 1 1 0</span><span class="bin-note">&nbsp; (2's complement of +34)</span></div>
+    </div>
+
+    <!-- Range -->
+    <h2 id="range-values" class="section-anchor">Range of Values</h2>
+
+    <div class="gate-grid">
+      <div class="definition-box">
+        <div class="def-title">Unsigned Binary Range</div>
+        <p>\[\text{Range} = 0 \text{ to } (2^n - 1)\]</p>
+        <ul>
+          <li>n=1: 2 values (0, 1)</li>
+          <li>n=2: 4 values (0 to 3)</li>
+          <li>n=3: 8 values (0 to 7)</li>
+        </ul>
+      </div>
+      <div class="definition-box">
+        <div class="def-title">Signed Binary Range (2's Complement)</div>
+        <p>\[\text{Range} = -2^{n-1} \text{ to } (2^{n-1} - 1)\]</p>
+        <ul>
+          <li>n=2: −2 to 1</li>
+          <li>n=3: −4 to 3</li>
+          <li>n=8: −128 to 127</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Binary Addition -->
+    <h2 id="binary-addition" class="section-anchor">Binary Addition</h2>
+
+    <div class="info-box">
+      <strong>A + B = ? (Both numbers are positive)</strong> — Simply add the binary representations, carrying over when sum exceeds 1.
+    </div>
+    <p>The <strong>sign bit</strong> (MSB) of the result indicates the sign: 0 = positive, 1 = negative.</p>
+
+    <h4>Example 1: 8 + 5 = ?</h4>
+    <p>Binary representation of 8 = 00001000 &nbsp;|&nbsp; Binary representation of 5 = 00000101</p>
+    <div class="binary-display">
+      <div class="bin-row"><span class="bin-label">&nbsp;&nbsp;8 =</span><span class="bin-value">0 0 0 0 1 0 0 0</span></div>
+      <div class="bin-row"><span class="bin-label">+ 5 =</span><span class="bin-value">0 0 0 0 0 1 0 1</span></div>
+      <div class="bin-sep"></div>
+      <div class="bin-row"><span class="bin-label">13 =</span><span class="bin-result">0 0 0 0 1 1 0 1</span><span class="bin-note">&nbsp; Sign bit = 0 → positive</span></div>
+    </div>
+
+    <h4>Example 2: 6 + 13 = ?</h4>
+    <div class="binary-display">
+      <div class="bin-row"><span class="bin-label">&nbsp;&nbsp;6 =</span><span class="bin-value">0 0 0 0 0 1 1 0</span></div>
+      <div class="bin-row"><span class="bin-label">+13 =</span><span class="bin-value">0 0 0 0 1 1 0 1</span></div>
+      <div class="bin-sep"></div>
+      <div class="bin-row"><span class="bin-label">19 =</span><span class="bin-result">0 0 0 1 0 0 1 1</span></div>
+    </div>
+
+    <!-- Binary Subtraction -->
+    <h2 id="binary-subtraction" class="section-anchor">Binary Subtraction using 2's Complement</h2>
+
+    <div class="definition-box">
+      <div class="def-title">A − B = ? (Steps)</div>
+      <ol>
+        <li>Find the 2's complement of B (subtrahend).</li>
+        <li>Add it to A (minuend).</li>
+        <li>If the final carry is 1 → drop it, result is positive (A &gt; B).</li>
+        <li>If no final carry → take 2's complement of sum, result is negative (A &lt; B).</li>
+      </ol>
+    </div>
+
+    <h4>Example 3: 8 − 5 = ?</h4>
+    <p>Binary: 8 = 00001000 &nbsp;|&nbsp; 5 = 00000101</p>
+    <div class="math-steps">
+      <div>Step 1: 2's complement of (00000101)₂ is (11111011)₂</div>
+      <div>Step 2: Add (00001000)₂ + (11111011)₂</div>
+    </div>
+    <div class="binary-display">
+      <div class="bin-row"><span class="bin-label">8 =</span><span class="bin-value">0 0 0 0 1 0 0 0</span></div>
+      <div class="bin-row"><span class="bin-label">+(-5)=</span><span class="bin-value">1 1 1 1 1 0 1 1</span></div>
+      <div class="bin-sep"></div>
+      <div class="bin-row"><span class="bin-label">Result=</span><span class="bin-result">0 0 0 0 0 0 1 1</span><span class="bin-note">&nbsp; (Discard carry 1 → +3)</span></div>
+    </div>
+    <p><strong>Step 3:</strong> Final carry = 1 → answer is positive, drop the carry. <strong>Answer = 3 = 00000011</strong></p>
+
+    <h4>Example 4: Subtract (1010)₂ from (1111)₂</h4>
+    <p>Solution: (1111)₂ − (1010)₂ = ?</p>
+    <div class="math-steps">
+      <div>Step 1: 2's complement of (1010)₂ is (0110)₂</div>
+      <div>Step 2: Add (1111)₂ + (0110)₂</div>
+    </div>
+    <div class="binary-display">
+      <div class="bin-row"><span class="bin-label">1111 =</span><span class="bin-value">1 1 1 1</span></div>
+      <div class="bin-row"><span class="bin-label">+ 0110=</span><span class="bin-value">0 1 1 0</span></div>
+      <div class="bin-sep"></div>
+      <div class="bin-row"><span class="bin-label">Result=</span><span class="bin-result">0 1 0 1</span><span class="bin-note">&nbsp; (Omit carry 1 → Answer = 0101)</span></div>
+    </div>
+    <p><strong>Step 3:</strong> Final carry = 1 → answer is positive. <strong>Answer = (0101)₂ = 5</strong></p>
+
+    <h4>Example 5: Subtract (1010)₂ from (1000)₂ (Negative result)</h4>
+    <div class="math-steps">
+      <div>Step 1: 2's complement of (1010)₂ is (0110)₂</div>
+      <div>Step 2: Add (1000)₂ + (0110)₂</div>
+    </div>
+    <div class="binary-display">
+      <div class="bin-row"><span class="bin-label">1000 =</span><span class="bin-value">1 0 0 0</span></div>
+      <div class="bin-row"><span class="bin-label">+ 0110=</span><span class="bin-value">0 1 1 0</span></div>
+      <div class="bin-sep"></div>
+      <div class="bin-row"><span class="bin-label">Sum =</span><span class="bin-result">1 1 1 0</span></div>
+    </div>
+    <p><strong>Step 3:</strong> No final carry → answer is negative. Take 2's complement of (1110)₂ = <strong>(0010)₂</strong>. Final answer = <strong>−0010 = −2</strong></p>
+
+    <h4>Example 6: X = 1010100, Y = 1000011 — Compute X−Y and Y−X</h4>
+    <div class="collapsible">
+      <div class="collapsible-header" onclick="toggleCollapse(this)">Show Solution <span class="collapsible-arrow">▶</span></div>
+      <div class="collapsible-body">
+        <h4>(a) X − Y</h4>
+        <div class="math-steps">
+          <div>X &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;1010100</div>
+          <div>2's complement of Y = + 0111101</div>
+          <div>Sum &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;10010001</div>
+          <div>Discard end carry 2⁷ = −10000000</div>
+          <div>Answer: X − Y = 0010001</div>
+        </div>
+        <h4>(b) Y − X</h4>
+        <div class="math-steps">
+          <div>Y &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;1000011</div>
+          <div>2's complement of X = + 0101100</div>
+          <div>Sum &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= &nbsp;1101111</div>
+          <div>No end carry → Y − X = −(2's complement of 1101111) = −0010001</div>
+        </div>
+      </div>
+    </div>
+
+    <h4>Example 7: Subtract 100011 from 10101</h4>
+    <div class="math-steps">
+      <div>Step 1: Make equal number of bits → Minuend = 010101, Subtrahend = 100011</div>
+      <div>Step 2: 2's complement of (100011)₂ = (011101)₂</div>
+      <div>Step 3: Add (011101)₂ + (010101)₂</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;011101</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;+ 010101</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;———</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;110010</div>
+      <div>No final carry → answer is negative → take 2's complement of 110010</div>
+      <div><strong>Final answer: −001110</strong></div>
+    </div>
+
+    <h4>Case: −A − B = ? (Both numbers negative)</h4>
+    <div class="definition-box">
+      <div class="def-title">Steps to Find −A − B</div>
+      <ol>
+        <li>Find 2's complement of A and B.</li>
+        <li>Add the 2's complements of A and B.</li>
+        <li>Discard the final carry.</li>
+        <li>Take 2's complement of the sum → result is negative.</li>
+      </ol>
+    </div>
+    <h4>Example: −5 − 3 = ?</h4>
+    <div class="math-steps">
+      <div>Binary of 5 = 0101 &nbsp;|&nbsp; Binary of 3 = 0011</div>
+      <div>2's complement of 5 = 1011</div>
+      <div>2's complement of 3 = 1101</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1011 &nbsp;&nbsp;&nbsp;(−5)</div>
+      <div>&nbsp;+ 1101 &nbsp;&nbsp;&nbsp;(−3)</div>
+      <div>&nbsp;———</div>
+      <div>&nbsp;&nbsp;1 1000 &nbsp;&nbsp;&nbsp;(−8)</div>
+      <div>Discard carry, take 2's complement of 1000 → but 1000 = −8 already</div>
+      <div><strong>Final answer: −1000 = −8</strong></div>
+    </div>
+
+    <!-- ===================== BOOLEAN ALGEBRA ===================== -->
+    <h2 id="logic-gates" class="section-anchor">Boolean Algebra and Logic Gates</h2>
+
+    <div class="gate-grid">
+      <div class="gate-card">
+        <div class="gate-card-title"><span class="gate-symbol">AND</span> AND Gate</div>
+        <p>Gives output logic "1" (HIGH) <strong>only if all inputs are "1"</strong>. Otherwise output is logic "0" (LOW).</p>
+        <p><strong>Boolean expression:</strong> Y = A · B</p>
+        <p>Represented as <strong>series connection</strong> of two switches.</p>
+        <div class="table-wrap" style="margin-top:10px;">
+          <table><thead><tr><th>A</th><th>B</th><th>Y</th></tr></thead>
+          <tbody><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>0</td></tr><tr><td>1</td><td>0</td><td>0</td></tr><tr><td>1</td><td>1</td><td>1</td></tr></tbody></table>
+        </div>
+      </div>
+      <div class="gate-card">
+        <div class="gate-card-title"><span class="gate-symbol">OR</span> OR Gate</div>
+        <p>Gives output logic "1" (HIGH) <strong>if any of the inputs are HIGH</strong>. Output is "0" only if all inputs are "0".</p>
+        <p><strong>Boolean expression:</strong> Y = A + B</p>
+        <p>Represented as <strong>parallel connection</strong> of two switches.</p>
+        <div class="table-wrap" style="margin-top:10px;">
+          <table><thead><tr><th>A</th><th>B</th><th>Y</th></tr></thead>
+          <tbody><tr><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>1</td></tr><tr><td>1</td><td>0</td><td>1</td></tr><tr><td>1</td><td>1</td><td>1</td></tr></tbody></table>
+        </div>
+      </div>
+      <div class="gate-card">
+        <div class="gate-card-title"><span class="gate-symbol">NOT</span> NOT Gate (Inverter)</div>
+        <p>Single input, single output gate. Performs <strong>inversion</strong> of the applied binary input signal. Also called Inverter Gate.</p>
+        <p><strong>Boolean expression:</strong> Y = Ā</p>
+        <p>Represented by connecting a switch parallel to a bulb.</p>
+        <div class="table-wrap" style="margin-top:10px;">
+          <table><thead><tr><th>A</th><th>Y</th></tr></thead>
+          <tbody><tr><td>0</td><td>1</td></tr><tr><td>1</td><td>0</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="nand-nor" class="section-anchor">NAND and NOR Gates</h2>
+    <div class="gate-grid">
+      <div class="gate-card">
+        <div class="gate-card-title"><span class="gate-symbol">NAND</span> NAND Gate</div>
+        <p>NAND = NOT of AND. Output is logic "0" only when <strong>all inputs are "1"</strong>.</p>
+        <p><strong>Boolean expression:</strong> Y = \(\overline{A \cdot B}\)</p>
+        <div class="table-wrap" style="margin-top:10px;">
+          <table><thead><tr><th>A</th><th>B</th><th>Y</th></tr></thead>
+          <tbody><tr><td>0</td><td>0</td><td>1</td></tr><tr><td>0</td><td>1</td><td>1</td></tr><tr><td>1</td><td>0</td><td>1</td></tr><tr><td>1</td><td>1</td><td>0</td></tr></tbody></table>
+        </div>
+      </div>
+      <div class="gate-card">
+        <div class="gate-card-title"><span class="gate-symbol">NOR</span> NOR Gate</div>
+        <p>NOR = NOT of OR. Output is logic "1" only when <strong>all inputs are "0"</strong>.</p>
+        <p><strong>Boolean expression:</strong> Y = \(\overline{A + B}\)</p>
+        <div class="table-wrap" style="margin-top:10px;">
+          <table><thead><tr><th>A</th><th>B</th><th>Y</th></tr></thead>
+          <tbody><tr><td>0</td><td>0</td><td>1</td></tr><tr><td>0</td><td>1</td><td>0</td></tr><tr><td>1</td><td>0</td><td>0</td></tr><tr><td>1</td><td>1</td><td>0</td></tr></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="boolean-laws" class="section-anchor">Logical Boolean Laws</h2>
+    <p>Boolean Laws and Theorems are used to <strong>simplify Boolean expressions</strong>, thus reducing the number of logic gates required.</p>
+
+    <div class="gate-grid">
+      <div class="definition-box">
+        <div class="def-title">AND Law</div>
+        <div class="math-steps" style="font-size:13px; line-height:1.9;">
+          <div>0 · 0 = 0 &nbsp;&nbsp;&nbsp; A · 0 = 0</div>
+          <div>0 · 1 = 0 &nbsp;&nbsp;&nbsp; A · 1 = A</div>
+          <div>1 · 0 = 0 &nbsp;&nbsp;&nbsp; A · A = A</div>
+          <div>1 · 1 = 1 &nbsp;&nbsp;&nbsp; A · Ā = 0</div>
+        </div>
+      </div>
+      <div class="definition-box">
+        <div class="def-title">OR Law</div>
+        <div class="math-steps" style="font-size:13px; line-height:1.9;">
+          <div>0 + 0 = 0 &nbsp;&nbsp;&nbsp; A + 0 = A</div>
+          <div>0 + 1 = 1 &nbsp;&nbsp;&nbsp; A + 1 = 1</div>
+          <div>1 + 0 = 1 &nbsp;&nbsp;&nbsp; A + A = A</div>
+          <div>1 + 1 = 1 &nbsp;&nbsp;&nbsp; A + Ā = 1</div>
+        </div>
+      </div>
+      <div class="definition-box">
+        <div class="def-title">NOT / Inversion Law</div>
+        <div class="math-steps" style="font-size:13px; line-height:1.9;">
+          <div>\(\bar{1} = 0\)</div>
+          <div>\(\bar{0} = 1\)</div>
+          <div>(i) If A = 1 then A' = 0, and if A = 0 then A' = 1</div>
+          <div>(ii) (A')' = A itself</div>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="duality" class="section-anchor">Principle of Duality in Boolean Algebra</h2>
+    <div class="definition-box">
+      <div class="def-title">Principle of Duality</div>
+      <p>In Boolean Algebra, one type of expression can be converted into another type of expression by replacing:</p>
+      <ul>
+        <li>"0" with "1" and "1" with "0"</li>
+        <li>"+" (OR) sign with "·" (AND) sign, and vice versa</li>
+      </ul>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Expression</th><th>Dual Expression</th></tr></thead>
+        <tbody>
+          <tr><td>\(\bar{0} = 1\)</td><td>\(\bar{1} = 0\)</td></tr>
+          <tr><td>0 · 1 = 0</td><td>1 + 0 = 1</td></tr>
+          <tr><td>A · 0 = 0</td><td>A + 1 = 1</td></tr>
+          <tr><td>A · B = B · A</td><td>A + B = B + A</td></tr>
+          <tr><td>A · Ā = 0</td><td>A + Ā = 1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>AND (·) vs OR (+) Duality</h4>
+    <div class="gate-grid">
+      <div class="definition-box">
+        <div class="def-title">AND (·)</div>
+        <div class="math-steps" style="font-size:13px;">
+          <div>0 · 0 = 0</div><div>0 · 1 = 0</div><div>1 · 0 = 0</div><div>1 · 1 = 1</div>
+        </div>
+      </div>
+      <div class="definition-box">
+        <div class="def-title">OR (+) — Dual</div>
+        <div class="math-steps" style="font-size:13px;">
+          <div>1 + 1 = 1</div><div>1 + 0 = 1</div><div>0 + 1 = 1</div><div>0 + 0 = 0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Commutative -->
+    <h2 id="commutative" class="section-anchor">Basic Theorem and Properties of Boolean Algebra</h2>
+    <h3>Commutative Laws</h3>
+    <div class="info-box orange">
+      <p>(i) A + B = B + A</p>
+      <p>(ii) A · B = B · A</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>A</th><th>B</th><th>A+B</th><th>B+A</th><th>A·B</th><th>B·A</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Proof: The columns A+B = B+A and A·B = B·A are identical for all input combinations.</p>
+
+    <!-- Associative -->
+    <h3 id="associative" class="section-anchor">Associative Law</h3>
+    <div class="info-box orange">
+      <p>(A + B) + C = A + (B + C) &nbsp;&nbsp;&nbsp; <em>Boolean addition</em></p>
+      <p>From principle of duality: (A · B) · C = A · (B · C) &nbsp;&nbsp;&nbsp; <em>Boolean Multiplication</em></p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>A</th><th>B</th><th>C</th><th>A+B</th><th>(A+B)+C</th><th>B+C</th><th>A+(B+C)</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Distributive -->
+    <h3 id="distributive" class="section-anchor">Distributive Law</h3>
+    <div class="info-box orange">
+      <p>A + B·C = (A+B)·(A+C)</p>
+      <p><em>Dual of distributive law:</em> A·(B+C) = A·B + A·C</p>
+    </div>
+
+    <div class="gate-grid">
+      <div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>A</th><th>B</th><th>C</th><th>BC</th><th>A+BC</th><th>(A+B)</th><th>(A+C)</th><th>(A+B)(A+C)</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+              <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+              <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+              <tr><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+              <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+              <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+              <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+              <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>A</th><th>B</th><th>C</th><th>B+C</th><th>A(B+C)</th><th>AB</th><th>AC</th><th>AB+AC</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+              <tr><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+              <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+              <tr><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+              <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+              <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+              <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+              <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- De Morgan's -->
+    <h2 id="demorgan" class="section-anchor">De Morgan's Theorem</h2>
+    <div class="gate-grid">
+      <div class="info-box orange">
+        <p><strong>(i)</strong> The complement of the sum of 2 variables is equal to the <strong>product of the complements</strong> of individual variables:</p>
+        <p style="text-align:center; font-size:1.1em; margin-top:8px;">\[\overline{A + B} = \bar{A} \cdot \bar{B}\]</p>
+      </div>
+      <div class="info-box orange">
+        <p><strong>(ii)</strong> The complement of the product of 2 variables is equal to the <strong>sum of the complements</strong> of individual variables:</p>
+        <p style="text-align:center; font-size:1.1em; margin-top:8px;">\[\overline{A \cdot B} = \bar{A} + \bar{B}\]</p>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>A</th><th>B</th><th>Ā</th><th>B̄</th><th>A+B</th><th>A·B</th><th>\(\overline{A+B}\)</th><th>Ā·B̄</th><th>\(\overline{A·B}\)</th><th>Ā+B̄</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Columns \(\overline{A+B}\) = Ā·B̄ and \(\overline{A·B}\) = Ā+B̄ are confirmed identical.</p>
+
+    <!-- Absorption -->
+    <h2 id="absorption" class="section-anchor">Absorption Theorem</h2>
+
+    <div class="gate-grid">
+      <div class="definition-box">
+        <div class="def-title">(i) A + AB = A</div>
+        <div class="math-steps" style="font-size:13px;">
+          <div>LHS = A + AB</div>
+          <div>= A·1 + AB &nbsp;&nbsp;&nbsp; (since A·1 = A)</div>
+          <div>= A(1 + B) &nbsp;&nbsp;&nbsp; (since 1 + B = 1)</div>
+          <div>= A·1 = A = RHS ✓</div>
+        </div>
+      </div>
+      <div class="definition-box">
+        <div class="def-title">(ii) A(A+B) = A</div>
+        <div class="math-steps" style="font-size:13px;">
+          <div>LHS = A(A + B)</div>
+          <div>= A·A + A·B</div>
+          <div>= A + AB &nbsp;&nbsp;&nbsp; (since A·A = A)</div>
+          <div>= A(1 + B) = A·1 = A = RHS ✓</div>
+        </div>
+      </div>
+      <div class="definition-box">
+        <div class="def-title">(iii) A + ĀB = A + B</div>
+        <div class="math-steps" style="font-size:13px;">
+          <div>LHS = A + ĀB</div>
+          <div>= (A + Ā)(A + B) &nbsp; [Distributive: A+BC=(A+B)(A+C)]</div>
+          <div>= (1)(A + B) &nbsp;&nbsp;&nbsp;&nbsp; (since A + Ā = 1)</div>
+          <div>= A + B = RHS ✓</div>
+        </div>
+      </div>
+      <div class="definition-box">
+        <div class="def-title">(iv) A·(Ā+B) = AB</div>
+        <div class="math-steps" style="font-size:13px;">
+          <div>LHS = A·(Ā + B)</div>
+          <div>= A·Ā + A·B &nbsp;&nbsp;&nbsp; (A·Ā = 0)</div>
+          <div>= 0 + AB = AB = RHS ✓</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Redundancy Laws</h3>
+    <p>The Redundancy Laws are a special case of the Absorption Theorem and are used to simplify expressions by eliminating redundant terms.</p>
+
+    <!-- Consensus -->
+    <h2 id="consensus" class="section-anchor">Consensus Theorem</h2>
+    <div class="info-box orange">
+      <p><strong>AB + ĀC + BC = AB + ĀC</strong> &nbsp;&nbsp;&nbsp; (BC is the redundant term)</p>
+    </div>
+
+    <div class="math-steps">
+      <div>LHS = AB + ĀC + BC</div>
+      <div>= AB + ĀC + BC·1</div>
+      <div>= AB + ĀC + BC(A + Ā) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (since A + Ā = 1)</div>
+      <div>= AB + ĀC + ABC + ĀBC</div>
+      <div>= AB(1 + C) + ĀC(1 + B) &nbsp;&nbsp;&nbsp; (since 1+B = 1+C = 1)</div>
+      <div>= AB + ĀC = RHS ✓</div>
+    </div>
+
+    <div class="info-box">
+      <strong>Dual of Consensus Theorem:</strong><br>
+      (A+B)(Ā+C)(B+C) = (A+B)(Ā+C)
+    </div>
+    <div class="math-steps">
+      <div>LHS = (A+B)(Ā+C)(B+C)</div>
+      <div>Using A+BC = (A+B)(A+C), we get B+AC = (B+A)(B+C)</div>
+      <div>LHS = (B+AC)(Ā+C)</div>
+      <div>= ĀB + ĀAC + BC + ACC</div>
+      <div>= ĀB + BC + AC + AĀ</div>
+      <div>= B(Ā+C) + A(Ā+C)</div>
+      <div>= (A+B)(Ā+C) = RHS ✓</div>
+    </div>
+
+    <!-- ===================== BOOLEAN FUNCTIONS ===================== -->
+    <h2 id="bool-functions" class="section-anchor">Boolean Functions, Canonical and Standard Form</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Boolean Function</div>
+      <ul>
+        <li>A Boolean function is described by an algebraic expression consisting of <strong>binary variables, the constants 0 and 1, and the logic operation symbols</strong>.</li>
+        <li>A Boolean function is <strong>evaluated to logic-1 or logic-0</strong> for a given value of the binary variables.</li>
+        <li>A Boolean function can be <strong>represented in a truth table</strong>.</li>
+        <li>A Boolean function can be <strong>implemented as a digital circuit</strong> constructed using logic gates.</li>
+      </ul>
+    </div>
+
+    <h4>Example: F = X + Y'Z</h4>
+    <ul>
+      <li>F = 1 &nbsp; if X = 1 <strong>or</strong> if Y = 0 and Z = 1</li>
+      <li>F = 0 &nbsp; Otherwise</li>
+    </ul>
+
+    <h4>Example: F₁ = x + y'z — Truth Table</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>x</th><th>y</th><th>z</th><th>F₁</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>F₁ contains either 0 or 1 for each of these combinations. The table shows that the function is equal to 1 when x = 1 or when yz = 01, and is equal to 0 otherwise.</p>
+    <p>Reference: "Digital Design with an Introduction to Verilog HDL" — M Morris Mano, Michael D Ciletti</p>
+
+    <h4>Simplification Example: F₂ = x'y'z + x'yz + xy'</h4>
+    <div class="math-steps">
+      <div>F₂ = x'y'z + x'yz + xy' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...(1)</div>
+      <div>F₂ = x'z(y' + y) + xy'</div>
+      <div>F₂ = x'z + xy' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...(2) (simplified)</div>
+    </div>
+    <div class="info-box">Equation (2) requires fewer gates than equation (1), demonstrating the benefit of simplification.</div>
+
+    <!-- SOP -->
+    <h2 id="sop" class="section-anchor">Sum of Products (SOP)</h2>
+    <div class="definition-box">
+      <div class="def-title">Sum of Products (SOP)</div>
+      <p>The sum of products is a Boolean expression containing <strong>AND terms</strong> (called product terms), with one or more literals each. The <strong>sum</strong> denotes the ORing of these terms.</p>
+      <p>Implemented as a <strong>Two-Level Logic</strong> (AND-OR structure).</p>
+    </div>
+
+    <h4>Example 1: F₁ = y' + xy + x'yz'</h4>
+    <p>This is already in SOP form (literals and product terms OR'd together).</p>
+
+    <h4>Example 2: F = AB + C(D+E)</h4>
+    <p>Expanding to SOP form: F = AB + CD + CE (distributed to eliminate nested terms)</p>
+
+    <!-- POS -->
+    <h2 id="pos" class="section-anchor">Product of Sums (POS)</h2>
+    <div class="definition-box">
+      <div class="def-title">Product of Sums (POS)</div>
+      <p>A product of sum (POS) is a Boolean expression containing <strong>OR terms</strong>, called sum terms. Each term may have any number of literals. The <strong>product</strong> denotes the ANDing of these terms.</p>
+      <p>Implemented as a <strong>Two-Level Logic</strong> (OR-AND structure).</p>
+    </div>
+
+    <h4>Example 1: F = x·(y' + z)·(x' + y + z)</h4>
+
+    <h4>Example 2: Y = (A+B)·(C+D)</h4>
+
+    <!-- Canonical SOP -->
+    <h2 id="canonical-sop" class="section-anchor">Canonical SOP Form (Minterms)</h2>
+    <div class="definition-box">
+      <div class="def-title">Canonical SOP (Sum of Minterms)</div>
+      <p>In Canonical SOP form, <strong>each product term contains all the literals</strong> of that function either in true or complement form. Each product term is called a <strong>minterm</strong>.</p>
+      <p><strong>Example:</strong> F(x,y,z) = xyz + x'y'z + x'yz' + x'y'z'</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>x</th><th>y</th><th>z</th><th colspan="2">Minterms</th></tr>
+        <tr><th></th><th></th><th></th><th>Term</th><th>Designation</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td>x'y'z'</td><td>m₀</td></tr>
+          <tr><td>0</td><td>0</td><td>1</td><td>x'y'z</td><td>m₁</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>x'yz'</td><td>m₂</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td><td>x'yz</td><td>m₃</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>xy'z'</td><td>m₄</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td><td>xy'z</td><td>m₅</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>xyz'</td><td>m₆</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>xyz</td><td>m₇</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Example: Consider functions f₁ and f₂</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>x</th><th>y</th><th>z</th><th>f₁</th><th>f₂</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="info-box orange">
+      <p><strong>Canonical SOP for f₁:</strong> f₁ = x'y'z + xy'z' + xyz = m₁ + m₄ + m₇ = Σ(1, 4, 7)</p>
+      <p><strong>Canonical SOP for f₂:</strong> f₂ = x'yz + xy'z + xyz' + xyz = m₃ + m₅ + m₆ + m₇ = Σ(3, 5, 6, 7)</p>
+    </div>
+
+    <!-- Canonical POS -->
+    <h2 id="canonical-pos" class="section-anchor">Canonical POS Form (Maxterms)</h2>
+    <div class="definition-box">
+      <div class="def-title">Canonical POS (Product of Maxterms)</div>
+      <p>In Canonical POS form, <strong>each sum term contains all the literals</strong> of that function either in true or complement form. Each sum term is called a <strong>maxterm</strong>.</p>
+      <p><strong>Example:</strong> F(x, y, z) = (x+y+z)(x'+y'+z)(x'+y+z')</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>x</th><th>y</th><th>z</th><th colspan="2">Maxterms</th></tr>
+        <tr><th></th><th></th><th></th><th>Term</th><th>Designation</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td>x + y + z</td><td>M₀</td></tr>
+          <tr><td>0</td><td>0</td><td>1</td><td>x + y + z'</td><td>M₁</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>x + y' + z</td><td>M₂</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td><td>x + y' + z'</td><td>M₃</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>x' + y + z</td><td>M₄</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td><td>x' + y + z'</td><td>M₅</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>x' + y' + z</td><td>M₆</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>x' + y' + z'</td><td>M₇</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-box orange">
+      <p><strong>Canonical POS for f₁:</strong> f₁ = (x+y+z)(x+y'+z)(x+y'+z')(x'+y+z')(x'+y'+z) = M₀·M₂·M₃·M₅·M₆ = Π(0,2,3,5,6)</p>
+      <p><strong>Canonical POS for f₂:</strong> f₂ = (x+y+z)(x+y+z')(x+y'+z)(x'+y+z) = M₀·M₁·M₂·M₄ = Π(0,1,2,4)</p>
+    </div>
+
+    <!-- SOP Conversion Examples -->
+    <h2 id="sop-examples" class="section-anchor">SOP Conversion Examples</h2>
+
+    <h4>Example: Find the Minterms for F = A + BC (Convert to Canonical SOP Form)</h4>
+    <div class="math-steps">
+      <div>F = A + BC</div>
+      <div>F = A·1·1 + BC·1</div>
+      <div>F = A·(B+B')·(C+C') + BC·(A+A')</div>
+      <div>F = A·(BC + BC' + B'C + B'C') + ABC + A'BC</div>
+      <div>F = ABC + ABC' + AB'C + AB'C' + ABC + A'BC</div>
+      <div>F = ABC + ABC' + AB'C + AB'C' + A'BC &nbsp;&nbsp;&nbsp; (ABC appears twice, combine)</div>
+      <div>F = m₇ + m₆ + m₅ + m₄ + m₃</div>
+      <div><strong>F = Σ(3, 4, 5, 6, 7)</strong></div>
+    </div>
+
+    <h4>Example: Convert F(A,B,C) = A + B'C into Canonical SOP Form</h4>
+    <div class="math-steps">
+      <div>F = A + B'C</div>
+      <div>= A(B+B')(C+C') + B'C(A+A')</div>
+      <div>= (AB+AB')(C+C') + AB'C + A'B'C</div>
+      <div>= ABC + ABC' + AB'C + AB'C' + AB'C + A'B'C</div>
+      <div>= ABC + ABC' + AB'C + AB'C' + A'B'C</div>
+      <div>= m₇ + m₆ + m₅ + m₄ + m₁</div>
+      <div><strong>F = Σ(1, 4, 5, 6, 7)</strong></div>
+    </div>
+    <div class="info-box">
+      <strong>Note:</strong> An alternative procedure for deriving the minterms of a Boolean function is to obtain the truth table of the function directly from the algebraic expression and then read the minterms from the truth table.
+    </div>
+
+    <!-- POS Conversion Examples -->
+    <h2 id="pos-examples" class="section-anchor">POS Conversion Examples</h2>
+
+    <h4>Example: Express F = xy + x'z as a Product of Maxterms (Convert to Canonical POS Form)</h4>
+    <div class="math-steps">
+      <div>First, convert the function into OR terms using the distributive law: x + yz = (x+y)(x+z)</div>
+      <div>F = (xy + x')(xy + z)</div>
+      <div>= (x + x')(y + x')(x + z)(y + z)</div>
+      <div>= (x' + y)(x + z)(y + z)</div>
+      <div>= (x' + y + zz')(x + z + yy')(y + z + xx')</div>
+      <div>= (x'+y+z)(x'+y+z')(x+y+z)(x+y'+z)(x+y+z)(x'+y+z)</div>
+      <div>= M₀ · M₂ · M₄ · M₅</div>
+      <div><strong>F(x,y,z) = Π(0, 2, 4, 5)</strong></div>
+    </div>
+
+    <!-- ===================== XOR & XNOR ===================== -->
+    <h2 id="xor-gate" class="section-anchor">Other Logical Operations: XOR Gate</h2>
+
+    <div class="definition-box">
+      <div class="def-title">XOR Gate (Exclusive OR)</div>
+      <ul>
+        <li>A digital logic gate with two or more inputs and only one output that performs the Exclusive OR operation.</li>
+        <li>Output is logic-1 <strong>only when one of its inputs is logic-1</strong> (unequal inputs).</li>
+        <li>Output is logic-0 <strong>if both inputs are same</strong>.</li>
+        <li>XOR gate performs <strong>modulo sum</strong> operation without including carry.</li>
+      </ul>
+      <p style="margin-top:10px;"><strong>Boolean Expression:</strong> Y = A·B' + A'·B = A ⊕ B</p>
+    </div>
+
+    <div class="gate-grid">
+      <div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Input A</th><th>Input B</th><th>Output Y</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>0</td><td>0</td></tr>
+              <tr><td>0</td><td>1</td><td>1</td></tr>
+              <tr><td>1</td><td>0</td><td>1</td></tr>
+              <tr><td>1</td><td>1</td><td>0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="info-box" style="margin-top:10px;">
+          Modulo-2 addition: 0+0=0, 0+1=1, 1+0=1, 1+1=0 (carry 1)
+        </div>
+      </div>
+      <div>
+        <h4>Proof: Y = A·B' + A'·B = A ⊕ B</h4>
+        <div class="math-steps" style="font-size:12.5px;">
+          <div>Case 1: A=0, B=0 → 0·0' + 0'·0 = 0·1 + 1·0 = 0</div>
+          <div>Case 2: A=0, B=1 → 0·1' + 0'·1 = 0·0 + 1·1 = 1</div>
+          <div>Case 3: A=1, B=0 → 1·0' + 1'·0 = 1·1 + 0·0 = 1</div>
+          <div>Case 4: A=1, B=1 → 1·1' + 1'·1 = 1·0 + 0·1 = 0</div>
+          <div>Hence Y = A ⊕ B = A·B' + A'·B ✓</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>3-Input XOR Gate</h3>
+    <p>Y = A ⊕ B ⊕ C</p>
+    <p><strong>Associative Law:</strong> (A⊕B)⊕C = A⊕(B⊕C)</p>
+    <p>Used to detect <strong>even or odd parity bits</strong>.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>A</th><th>B</th><th>C</th><th>A⊕B</th><th>A⊕B⊕C</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- XNOR -->
+    <h2 id="xnor-gate" class="section-anchor">XNOR Gate (Exclusive NOR)</h2>
+
+    <div class="definition-box">
+      <div class="def-title">XNOR Gate — Logical Complement of XOR</div>
+      <ul>
+        <li>Output is logic-1 if both inputs are <strong>same</strong> (A=B=0 or A=B=1).</li>
+        <li>Output is logic-0 if inputs are <strong>unequal</strong>.</li>
+        <li>Also called <strong>equality detector</strong>.</li>
+      </ul>
+      <p style="margin-top:10px;"><strong>Boolean Expression:</strong> Y = A·B + A'·B' = A ⊙ B = (A⊕B)'</p>
+    </div>
+
+    <div class="gate-grid">
+      <div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Input A</th><th>Input B</th><th>Output Y</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>0</td><td>1</td></tr>
+              <tr><td>0</td><td>1</td><td>0</td></tr>
+              <tr><td>1</td><td>0</td><td>0</td></tr>
+              <tr><td>1</td><td>1</td><td>1</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h4>Derivation using De Morgan's Theorem</h4>
+        <div class="math-steps" style="font-size:12.5px;">
+          <div>Y = (A⊕B)' = (A·B' + A'·B)'</div>
+          <div>De Morgan's: Y = (A·B')' · (A'·B)'</div>
+          <div>= (A'+B) · (A+B')</div>
+          <div>= A'·A + A'·B' + A·B + B·B'</div>
+          <div>= 0 + A'B' + AB + 0</div>
+          <div>= A'B' + AB</div>
+          <div>∴ Y = (A⊕B)' = A⊙B</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- XOR Properties -->
+    <h2 id="xor-properties" class="section-anchor">Properties of XOR Gate and Applications</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Properties of XOR Gate</div>
+      <ul>
+        <li><strong>Commutative Law:</strong> A ⊕ B = B ⊕ A</li>
+        <li><strong>Associative Law:</strong> A ⊕ (B ⊕ C) = (A ⊕ B) ⊕ C</li>
+        <li><strong>Identity element:</strong> A ⊕ 0 = A</li>
+        <li>A ⊕ 1 = A' &nbsp;&nbsp;&nbsp; (works as an inverter)</li>
+        <li>A ⊕ A = 0 &nbsp;&nbsp;&nbsp; (any value XORed with itself = 0)</li>
+      </ul>
+    </div>
+
+    <div class="definition-box">
+      <div class="def-title">Applications of XOR and XNOR</div>
+      <ul>
+        <li>XOR gate is used in processor's <strong>Arithmetic Logic Unit (ALU)</strong> for binary addition.</li>
+        <li>XOR logic gate is used to generate <strong>pseudorandom numbers</strong> in hardware.</li>
+        <li>To <strong>generate parity bits and error detection</strong>.</li>
+        <li><strong>Equality detector</strong> (XNOR).</li>
+      </ul>
+    </div>
+
+    <!-- Universal Gates -->
+    <h2 id="universal-gates" class="section-anchor">Realization of Boolean Expression using Universal Gates</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Universal Gates</div>
+      <p>Universal Gates: (i) NAND Gate &nbsp;&nbsp;&nbsp; (ii) NOR Gate</p>
+      <ul>
+        <li>Any digital logic circuit can be implemented by using NAND or NOR logic gates.</li>
+        <li>NAND and NOR gates are easier to fabricate with electronic components and are used in all Integrated Circuit (IC's) digital logic families.</li>
+      </ul>
+    </div>
+
+    <h2 id="nand-realization" class="section-anchor">Realization of Logic Gates using NAND Gates</h2>
+    <p>Reference: https://www.electronics-tutorials.ws/logic/universal-gates.html</p>
+
+    <h4>NOT Gate using NAND</h4>
+    <div class="info-box orange">
+      Y = (A · A)' = (A)' = A' &nbsp;&nbsp;&nbsp; (Tie both inputs together)
+    </div>
+
+    <h4>AND Gate using NAND</h4>
+    <div class="info-box orange">
+      Y = ((A·B)')' = A·B &nbsp;&nbsp;&nbsp; (NAND followed by NAND acting as inverter)
+    </div>
+
+    <h4>OR Gate using NAND</h4>
+    <div class="info-box orange">
+      Y = ((A+B)')' = (A'·B')' = A+B &nbsp;&nbsp;&nbsp; (Invert each input, then NAND)
+    </div>
+
+    <h4>NOR Gate using NAND</h4>
+    <p>Invert A and B using NAND gates, then OR them using NAND, then invert the result.</p>
+    <div class="math-steps">
+      <div>NOR = (A + B)' = NOT of OR</div>
+      <div>Using NAND: Invert A → Ā, Invert B → B̄, NAND(Ā, B̄) → (Ā·B̄)' = A+B, then NOT to get (A+B)'</div>
+    </div>
+
+    <h4>XOR Gate using NAND</h4>
+    <div class="math-steps">
+      <div>Y = A ⊕ B = A·B' + A'·B = A(A·B)' + B·(A·B)'</div>
+      <div>Y = ((A(A·B)')' · (B·(A·B)')')'</div>
+      <div>Requires 4 NAND gates</div>
+    </div>
+
+    <h4>XNOR Gate using NAND</h4>
+    <p>XNOR = XOR followed by NOT = 5 NAND gates total.</p>
+
+    <!-- NOR Realization -->
+    <h2 id="nor-realization" class="section-anchor">Realization of Logic Gates using NOR Gates</h2>
+
+    <h4>NOT Gate using NOR</h4>
+    <div class="info-box orange">Y = (A + A)' = (A)' = A' &nbsp;&nbsp;&nbsp; (Tie both inputs together)</div>
+
+    <h4>AND Gate using NOR</h4>
+    <div class="info-box orange">Y = ((A·B)')' = (A'+B')' = A·B &nbsp;&nbsp;&nbsp; (Invert each input, then NOR)</div>
+
+    <h4>OR Gate using NOR</h4>
+    <div class="info-box orange">Y = ((A+B)')' = A+B &nbsp;&nbsp;&nbsp; (NOR followed by NOR acting as inverter)</div>
+
+    <h4>NAND Gate using NOR</h4>
+    <p>Invert A and B using NOR gates, OR them, then invert:</p>
+    <div class="math-steps">
+      <div>NAND = (A·B)' = Ā + B̄</div>
+      <div>Using NOR: Invert A and B, then NOR to get A+B, then NOR that with itself... combine via De Morgan's</div>
+    </div>
+
+    <h4>XOR Gate using NOR</h4>
+    <div class="math-steps">
+      <div>Y = A⊕B = XNOR followed by NOT</div>
+      <div>Using NOR gates: Y₁ = ((A+B)' + A)' = (A+B)·A' = A'B</div>
+      <div>Y₂ = ((A+B)' + B)' = (A+B)·B' = AB'</div>
+      <div>Y = (A'B + AB')' (need further NOR) then invert → XOR</div>
+    </div>
+
+    <h4>XNOR Gate using NOR</h4>
+    <div class="math-steps">
+      <div>Y = A⊙B = A·B + A'·B'</div>
+      <div>Y₁ = ((A+B)' + A)' = (A+B)·A' = A'·B</div>
+      <div>Y₂ = ((A+B)' + B)' = (A+B)·B' = A·B'</div>
+      <div>Y = (A'·B + A·B')' = (A'·B)' · (A·B')'</div>
+      <div>= (A+B') · (A'+B) = A·A' + A·B + A'·B' + B·B'</div>
+      <div>= A·B + A'·B' = Y = A⊙B ✓</div>
+    </div>
+
+    <!-- Boolean Problems -->
+    <h2 id="boolean-problems" class="section-anchor">Problems on Boolean Algebra</h2>
+
+    <h4>(1) Simplify and implement using basic gates: F = A·B·C + A' + A·B'·C</h4>
+    <div class="math-steps">
+      <div>F = A·B·C + A' + A·B'·C</div>
+      <div>F = A·C(B + B') + A' &nbsp;&nbsp;&nbsp; (where B + B' = 1)</div>
+      <div>F = A·C + A'</div>
+      <div>F = (A' + A)·(A' + C) &nbsp;&nbsp;&nbsp; [Distributive Law: A + B·C = (A+B)(A+C)]</div>
+      <div>F = 1·(A' + C) = A' + C</div>
+      <div><strong>Simplified: F = A' + C</strong></div>
+    </div>
+    <p>Logic diagram: A → NOT → A', then (A' OR C) → F</p>
+
+    <h4>(2) Simplify and realize using basic gates: Y = A'B'C' + AB'C' + A'B' + AC'</h4>
+    <div class="math-steps">
+      <div>Y = A'B'C' + AB'C' + A'B' + AC'</div>
+      <div>Y = B'C'(A' + A) + A'B' + AC'</div>
+      <div>Y = B'C'·1 + A'B' + AC' = B'C' + A'B' + AC'</div>
+      <div>By Consensus Theorem (AB + ĀC + BC = AB + ĀC):</div>
+      <div>Here A'B' plays role of AB, AC' plays role of ĀC, B'C' plays role of BC</div>
+      <div><strong>Y = A'B' + AC'</strong></div>
+    </div>
+
+    <h4>(3) Simplify and implement using NAND Gates only: F = A(B + C) + DE</h4>
+    <div class="math-steps">
+      <div>SOP Form: F = AB + AC + DE</div>
+      <div>Using De Morgan's Law:</div>
+      <div>F = ((AB + AC + DE)') ' = ((AB)'·(AC)'·(DE)')'</div>
+    </div>
+    <p>This can be implemented with 4 NAND gates: one each for AB, AC, DE, then a final 3-input NAND.</p>
+
+    <h4>(4) F = A·C + B — Using Basic Gates and NAND Gates</h4>
+    <div class="gate-grid">
+      <div class="definition-box">
+        <div class="def-title">Basic Gates</div>
+        <p>AND(A, C) → AND output, then OR with B → F = AC + B</p>
+      </div>
+      <div class="definition-box">
+        <div class="def-title">NAND Gates Only</div>
+        <div class="math-steps" style="font-size:12.5px;">
+          <div>F = AC + B</div>
+          <div>= ((AC + B)')' = ((AC)'·B')'</div>
+        </div>
+        <p>NAND(A,C) → (AC)', NAND(B,B) → B', NAND((AC)', B') → F</p>
+      </div>
+    </div>
+
+    <h4>(5) Y = A·B' — Using Basic Gates and NAND Gates</h4>
+    <div class="gate-grid">
+      <div class="definition-box">
+        <div class="def-title">Basic Gates</div>
+        <p>B → NOT → B', then AND(A, B') → Y = AB'</p>
+      </div>
+      <div class="definition-box">
+        <div class="def-title">NAND Gates Only</div>
+        <p>NAND(B,B) → B', NAND(A, B') → (AB')', NAND that result with itself → AB'</p>
+      </div>
+    </div>
+
+    <!-- ===================== COMBINATIONAL CIRCUITS ===================== -->
+    <h2 id="comb-intro" class="section-anchor">Combinational Logic Circuits</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Combinational Circuits</div>
+      <ul>
+        <li><strong>Combinational circuits</strong> are constructed by interconnection of logic gates whose outputs at any time are determined from <strong>only the present combination of inputs</strong>.</li>
+        <li>A combinational circuit performs an operation that can be specified logically by a set of <strong>Boolean functions</strong>.</li>
+        <li><strong>Examples:</strong> Binary Adders, Multiplexers, etc.</li>
+      </ul>
+    </div>
+    <p>The circuit has <em>n</em> input variables and <em>m</em> output variables (Boolean functions).</p>
+
+    <!-- Half Adder -->
+    <h2 id="half-adder" class="section-anchor">Half Adder</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Half Adder</div>
+      <p><strong>x</strong> and <strong>y</strong> are the two binary inputs. <strong>Sum (S)</strong> and <strong>Carry (C)</strong> are the two binary outputs.</p>
+    </div>
+
+    <div class="info-box orange">
+      <strong>Boolean Expressions:</strong><br>
+      S = f(x, y) = Σ(1, 2) = x'·y + x·y' = x ⊕ y<br>
+      C = f(x, y) = Σ(3) = x·y
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>x</th><th>y</th><th>C (Carry)</th><th>S (Sum)</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The Half Adder can be implemented using:</p>
+    <ul>
+      <li><strong>Using Logic Gates:</strong> XOR gate for Sum (S = x⊕y), AND gate for Carry (C = x·y)</li>
+      <li><strong>Using NAND Gates only:</strong> Requires 4 NAND gates (1 for carry, 3 for sum/XOR)</li>
+    </ul>
+
+    <h4>Sum Expression Derivation</h4>
+    <div class="math-steps">
+      <div>S = x'·y + x·y' &nbsp;&nbsp;&nbsp; (from truth table, rows 01 and 10)</div>
+      <div>S = x ⊕ y &nbsp;&nbsp;&nbsp; (XOR operation)</div>
+      <div>C = x·y &nbsp;&nbsp;&nbsp; (AND operation, only when both inputs are 1)</div>
+    </div>
+
+    <!-- Full Adder -->
+    <h2 id="full-adder" class="section-anchor">Full Adder</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Full Adder</div>
+      <p><strong>x, y</strong> and <strong>z</strong> are three binary inputs (z is the carry-in). <strong>S (Sum)</strong> and <strong>C (Carry)</strong> are the two binary outputs.</p>
+    </div>
+
+    <div class="info-box orange">
+      <strong>Boolean Expressions:</strong><br>
+      S = f(x,y,z) = Σ(1,2,4,7) = x'y'z + x'yz' + xy'z' + xyz<br>
+      C = f(x,y,z) = Σ(3,5,6,7) = x'yz + xy'z + xyz' + xyz
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>x</th><th>y</th><th>z</th><th>C (Carry)</th><th>S (Sum)</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Carry Expression Derivation</h4>
+    <div class="math-steps">
+      <div>C = x'yz + xy'z + xyz' + xyz</div>
+      <div>C = x'yz + xy'z + xy(z'+z)</div>
+      <div>C = x'yz + xy'z + xy</div>
+      <div>C = x'yz + x(y'z + y) &nbsp;&nbsp;&nbsp; [Absorption Law: y'z + y = z + y]</div>
+      <div>C = x'yz + x(z + y)</div>
+      <div>C = x'yz + xz + xy</div>
+      <div>C = z(x'y + x) + xy &nbsp;&nbsp;&nbsp; [x'y + x = y + x]</div>
+      <div>C = z(y + x) + xy</div>
+      <div><strong>C = yz + xz + xy</strong></div>
+    </div>
+
+    <p>Reference: "Digital Design with an Introduction to Verilog HDL" — M Morris Mano, Michael D Ciletti</p>
+
+    <!-- Full Adder from Half Adders -->
+    <h2 id="fa-half-adders" class="section-anchor">Implement Full Adder using Two Half Adders</h2>
+
+    <h4>Boolean Expression for Sum</h4>
+    <div class="math-steps">
+      <div>S = x'y'z + x'yz' + xy'z' + xyz</div>
+      <div>S = x'(y'z + yz') + x(y'z' + yz)</div>
+      <div>S = x'(y ⊕ z) + x((y ⊕ z)')</div>
+      <div><strong>S = x ⊕ (y ⊕ z) = (x ⊕ y) ⊕ z</strong></div>
+    </div>
+
+    <h4>Boolean Expression for Carry</h4>
+    <div class="math-steps">
+      <div>C = x'yz + xy'z + xyz' + xyz</div>
+      <div>C = z·(x'y + xy') + xy(z' + z)</div>
+      <div>C = z·(x ⊕ y) + xy·1</div>
+      <div><strong>C = (x ⊕ y)·z + x·y</strong></div>
+    </div>
+
+    <div class="info-box orange">
+      <strong>Full Adder Boolean Expression:</strong><br>
+      S = (x ⊕ y) ⊕ z<br>
+      C = (x ⊕ y)·z + x·y
+    </div>
+
+    <p>Implementation: Use <strong>two Half Adders and one OR gate</strong>.</p>
+    <ul>
+      <li>First HA: inputs x, y → outputs (x⊕y) and x·y</li>
+      <li>Second HA: inputs (x⊕y) and z → outputs (x⊕y)⊕z [=S] and (x⊕y)·z</li>
+      <li>OR gate: (x⊕y)·z + x·y → C (carry out)</li>
+    </ul>
+
+    <h4>Full Adder using NAND Gates Only</h4>
+    <div class="math-steps">
+      <div>S = (x ⊕ y) ⊕ z</div>
+      <div>C = (x ⊕ y)·z + x·y</div>
+      <div>Using De Morgan's: C = ((x⊕y)·z + x·y)' ' = (((x⊕y)·z)' · (x·y)')' </div>
+    </div>
+    <p>Implementation requires 9 NAND gates (4 for first XOR, 4 for second XOR logic, 1 for carry).</p>
+
+    <!-- 4-bit adder -->
+    <h2 id="four-bit-adder" class="section-anchor">Four-bit Ripple Adder</h2>
+    <p>A 4-bit adder can be constructed using <strong>four Full Adders</strong> connected in series — this is called a <strong>Ripple Carry Adder</strong>.</p>
+    <p>The carry output of each Full Adder is connected as carry input to the next stage. The carry "ripples" from the least significant bit to the most significant bit.</p>
+
+    <div class="info-box orange">
+      <strong>Example: A = 1101, B = 0111</strong><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;1101 (13)<br>
+      + 0111 &nbsp;(7)<br>
+      ————<br>
+      &nbsp;10100 (20)
+    </div>
+    <p>Reference: "Digital Design with an Introduction to Verilog HDL" — M Morris Mano, Michael D Ciletti</p>
+
+    <!-- ===================== SEQUENTIAL CIRCUITS ===================== -->
+    <h2 id="seq-intro" class="section-anchor">Introduction: Sequential Circuits</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Sequential Circuits</div>
+      <ul>
+        <li>We want circuits that produce output depending on <strong>current and past input values</strong> — circuits with <strong>memory</strong>.</li>
+        <li>A sequential circuit contains a <strong>Combinational Circuit</strong> and a <strong>Storage Element</strong> with feedback.</li>
+      </ul>
+    </div>
+
+    <h4>Types of Sequential Circuits</h4>
+    <div class="gate-grid">
+      <div class="info-box">
+        <strong>1. Synchronous Circuits</strong><br>
+        In synchronous sequential circuits, the state of the device changes only at <strong>discrete times</strong> in response to a <strong>clock pulse</strong>.
+      </div>
+      <div class="info-box orange">
+        <strong>2. Asynchronous Circuits</strong><br>
+        Asynchronous circuit is <strong>not synchronized by a clock signal</strong>; the outputs of the circuit change directly in response to the change in the inputs.
+      </div>
+    </div>
+
+    <h2 id="latches-vs-ff" class="section-anchor">Latches vs. Flip-Flops</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Property</th><th>Latches</th><th>Flip-Flops</th></tr></thead>
+        <tbody>
+          <tr><td>Sensitivity</td><td>Level sensitive (respond to clock <em>level</em>)</td><td>Edge sensitive (respond to clock <em>transition</em>)</td></tr>
+          <tr><td>Trigger</td><td>Active while enable is HIGH</td><td>Active only at rising or falling edge</td></tr>
+          <tr><td>Use</td><td>Asynchronous circuits, data storage</td><td>Synchronous sequential circuits</td></tr>
+          <tr><td>Relationship</td><td>Basic building block</td><td>Constructed from latches</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Storage elements that operate with signal levels (rather than signal transitions) are referred to as <strong>latches</strong>; those controlled by a clock transition are <strong>flip-flops</strong>.</p>
+    <p>Although latches are useful for storing binary information and for the design of asynchronous sequential circuits, they are <strong>not practical for use as storage elements in synchronous sequential circuits</strong>.</p>
+
+    <!-- SR Latch -->
+    <h2 id="sr-latch" class="section-anchor">SR Latch</h2>
+
+    <h3>SR Latch using NOR Gates</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>S</th><th>R</th><th>Q</th><th>Q'</th><th>State</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>Set state</td></tr>
+          <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>No change (after S=1, R=0)</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>Reset state</td></tr>
+          <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>No change (after S=0, R=1)</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>Forbidden</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Circuit: Two NOR gates cross-coupled. R (reset) goes to top NOR gate, S (set) goes to bottom NOR gate.</p>
+
+    <h3>SR Latch using NAND Gates</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>S</th><th>R</th><th>Q</th><th>Q'</th><th>State</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>Reset state</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>No change (after S=1, R=0)</td></tr>
+          <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>Set state</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>0</td><td>No change (after S=0, R=1)</td></tr>
+          <tr><td>0</td><td>0</td><td>1</td><td>1</td><td>Forbidden</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Circuit: Two NAND gates cross-coupled with active-low inputs (S̄R̄ latch). Note input logic is inverted compared to NOR version.</p>
+
+    <h3>SR Latch with Control Input (Enable)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>En</th><th>S</th><th>R</th><th>Next state of Q</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>X</td><td>X</td><td>No change</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>No change</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td><td>Q = 0 (reset state)</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>Q = 1 (set state)</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>Indeterminate</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The control input (Enable) allows the latch to respond only when En = 1. When En = 0, the state remains unchanged regardless of S and R.</p>
+
+    <!-- D Latch -->
+    <h2 id="d-latch" class="section-anchor">The D Latch (Transparent Latch)</h2>
+
+    <div class="definition-box">
+      <div class="def-title">D Latch</div>
+      <p>The D latch eliminates the forbidden state of the SR latch by making R = D' (complementing D to generate R). When enabled, Q follows D directly — hence called <strong>transparent latch</strong>.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>En</th><th>D</th><th>Next state of Q</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>X</td><td>No change</td></tr>
+          <tr><td>1</td><td>0</td><td>Q = 0 (reset state)</td></tr>
+          <tr><td>1</td><td>1</td><td>Q = 1 (set state)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Circuit: SR latch with control input, where S = D and R = D' (NOT gate on input). When En=1, latch is "transparent" — output Q follows input D.</p>
+
+    <!-- Flip-Flops Introduction -->
+    <h3>Flip-Flops — Introduction</h3>
+    <p>Flip-flop circuits are constructed in such a way as to make them operate properly when they are part of a sequential circuit that employs a common clock.</p>
+    <p>The problem with the latch is that it responds to a change in the <em>level</em> of a clock pulse. As shown in Fig. (a), a positive level response in the enable input allows changes in the output when the D input changes while the clock pulse stays at logic 1.</p>
+    <p>The key to the proper operation of a flip-flop is to <strong>trigger it only during a signal transition</strong>.</p>
+
+    <div class="gate-grid">
+      <div class="info-box">
+        <strong>Latch (Level Sensitive):</strong> Will change the output when the clock <em>remains</em> at logic 1 — Fig. (a) Positive level response.
+      </div>
+      <div class="info-box orange">
+        <strong>Flip-Flop (Edge Triggered):</strong> Will change the output when the clock <em>changes</em> from logic 0 to logic 1 — Fig. (b) Positive-edge response.
+      </div>
+    </div>
+    <p>Fig. (c) shows Negative-edge response — flip-flop triggers on falling edge (1→0 transition).</p>
+
+    <!-- D Flip-Flop -->
+    <h2 id="d-flipflop" class="section-anchor">Edge Triggered D Flip-Flop</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Edge-Triggered D Flip-Flop</div>
+      <p>Construction uses <strong>three SR latches</strong>. Two latches respond to the external D (data) and Clk (clock) inputs. The third latch provides the outputs for the flip-flop.</p>
+    </div>
+
+    <h4>Operation</h4>
+    <ul>
+      <li>The S and R inputs of the output latch are maintained at logic-1 level when Clk = 0. This causes the output to remain in its present state.</li>
+      <li>If D = 0 when Clk becomes 1, R changes to 0. This causes the flip-flop to go to the <strong>reset state</strong>, making Q = 0. If there is a change in the D input while Clk = 1, terminal R remains at 0 because Q is 0. Thus, the flip-flop is <strong>locked out</strong> and is unresponsive to further changes in the input.</li>
+      <li>Similarly, if D = 1 when Clk goes from 0 to 1, S changes to 0. This causes the circuit to go to the <strong>set state</strong>, making Q = 1. Any change in D while Clk = 1 does not affect the output.</li>
+    </ul>
+
+    <h4>Positive-Edge vs. Negative-Edge Triggered D Flip-Flop</h4>
+    <div class="gate-grid">
+      <div class="info-box">
+        <strong>Positive-Edge Triggered:</strong> Absence of bubble in front of Clk input. Output changes on 0→1 clock transition.
+      </div>
+      <div class="info-box orange">
+        <strong>Negative-Edge Triggered:</strong> Presence of bubble in front of Clk input. Output changes on 1→0 clock transition.
+      </div>
+    </div>
+
+    <!-- JK Flip-Flop -->
+    <h2 id="jk-flipflop" class="section-anchor">JK Flip-Flop</h2>
+
+    <div class="definition-box">
+      <div class="def-title">JK Flip-Flop</div>
+      <p>The inputs are <strong>J-K</strong> along with the Clk. J-K inputs come after its inventors <strong>Jack Kilby</strong>.</p>
+      <p>In JK flip-flop, <strong>all rows are valid states</strong> in the characteristic table. The J=K=1 condition produces a <strong>Toggle state</strong> (output complements), eliminating the forbidden state of SR flip-flop.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>J</th><th>K</th><th>Q(t+1)</th><th>State</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>Q(t)</td><td>No change</td></tr>
+          <tr><td>0</td><td>1</td><td>0</td><td>Reset</td></tr>
+          <tr><td>1</td><td>0</td><td>1</td><td>Set</td></tr>
+          <tr><td>1</td><td>1</td><td>Q'(t)</td><td>Complement (Toggle)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-box orange">
+      <strong>Implementation using D Flip-Flop:</strong><br>
+      D = J·Q' + K'·Q<br>
+      Connect J to one AND gate with Q', K to another AND gate (via NOT) with Q, then OR them and feed to D input of D flip-flop.
+    </div>
+
+    <h4>Conclusion Remarks</h4>
+    <ul>
+      <li><strong>JK flip-flop</strong> is a sequential circuit whose state transitions are <strong>synchronized with the clock pulse</strong> (+ve / −ve) edge triggered.</li>
+      <li>In JK flip-flop, all the rows are valid states in the characteristic table; also when J=K=1, the output toggles — <strong>Toggle state</strong>.</li>
+      <li><strong>D flip-flop</strong> is a sequential circuit whose output is same as the input and hence also called as <strong>transparent flip-flop</strong>.</li>
+    </ul>
+
+    <!-- T Flip-Flop -->
+    <h2 id="t-flipflop" class="section-anchor">T Flip-Flop</h2>
+
+    <div class="definition-box">
+      <div class="def-title">T Flip-Flop (Toggle)</div>
+      <p><strong>T Flip-Flop</strong> is a synchronous device where high-to-low or low-to-high transitions passed through clock signal <strong>change the output state</strong> of the Flip-Flop.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>T</th><th>Q(t+1)</th><th>State</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>Q(t)</td><td>No change</td></tr>
+          <tr><td>1</td><td>Q'(t)</td><td>Complement (Toggle)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>Implementation</h4>
+    <div class="gate-grid">
+      <div class="info-box">
+        <strong>From JK Flip-Flop:</strong><br>
+        Connect T to both J and K inputs. When T=0: J=K=0 (no change). When T=1: J=K=1 (toggle).
+      </div>
+      <div class="info-box orange">
+        <strong>From D Flip-Flop:</strong><br>
+        D = T ⊕ Q (XOR gate). Connect T and Q(feedback) to XOR gate, feed output to D input.
+      </div>
+    </div>
+
+    <h4>Advantages of T Flip-Flop</h4>
+    <ul>
+      <li>These Flip-Flops have a <strong>toggle input</strong> and a <strong>clock</strong>.</li>
+      <li>They are used for designing <strong>counters</strong>.</li>
+    </ul>
+
+    <!-- ===================== REGISTERS ===================== -->
+    <h2 id="registers-intro" class="section-anchor">Registers</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Register</div>
+      <ul>
+        <li>A register is a group of flip-flops, each one of which shares a common clock and is capable of <strong>storing one bit of information</strong>.</li>
+        <li>An <em>n</em>-bit register consists of a group of <em>n</em> flip-flops capable of storing <em>n</em> bits of binary information.</li>
+        <li>In addition to flip-flops, a register may have <strong>combinational gates</strong> that perform certain data-processing tasks.</li>
+        <li>The flip-flops <strong>hold the binary information</strong>, and the gates determine how the information is transferred into the register.</li>
+      </ul>
+    </div>
+
+    <h2 id="four-bit-register" class="section-anchor">4-bit Register</h2>
+
+    <p>The simplest register consists of only flip-flops, without any gates. A 4-bit register is constructed with <strong>four D-type flip-flops</strong>.</p>
+
+    <ul>
+      <li>The common clock input triggers all flip-flops on the positive edge of each pulse, and the binary data available at the four inputs are transferred into the register.</li>
+      <li>The four outputs can be sampled at any time to obtain the binary information stored in the register.</li>
+      <li>The input <strong>Clear</strong> goes to the active-low R (reset) input of all four flip-flops. When this input goes to 0, all flip-flops are reset asynchronously.</li>
+      <li>The R inputs must be maintained at logic 1 (de-asserted) during normal clocked operation.</li>
+    </ul>
+
+    <div class="info-box orange">
+      <ul>
+        <li>The transfer of new information into a register is referred to as <strong>loading</strong> or <strong>updating</strong> the register.</li>
+        <li>If all the bits of the register are loaded simultaneously with a common clock pulse, we say that the loading is done <strong>in parallel</strong>.</li>
+        <li>A clock edge applied to the C inputs will load all four inputs in parallel.</li>
+        <li>If the contents of the register must be left unchanged, the inputs must be held constant or the clock must be inhibited from the circuit.</li>
+      </ul>
+    </div>
+
+    <!-- Shift Registers -->
+    <h2 id="shift-registers" class="section-anchor">Shift Registers (SISO)</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Shift Register</div>
+      <p>A register capable of <strong>shifting the binary information</strong> held in each cell to its neighboring cell, in a selected direction, is called a shift register.</p>
+      <ul>
+        <li>The logical configuration consists of a chain of flip-flops in cascade, with the output of one flip-flop connected to the input of the next.</li>
+        <li>All flip-flops receive common clock pulses which activate the shift of data from one stage to the next.</li>
+      </ul>
+    </div>
+
+    <h4>Four Different Types of Shift Registers</h4>
+    <div class="gate-grid">
+      <div class="info-box"><strong>SISO</strong> — Serial In Serial Out</div>
+      <div class="info-box"><strong>SIPO</strong> — Serial In Parallel Out</div>
+      <div class="info-box"><strong>PISO</strong> — Parallel In Serial Out</div>
+      <div class="info-box"><strong>PIPO</strong> — Parallel In Parallel Out</div>
+    </div>
+
+    <h3>Serial In Serial Out (SISO)</h3>
+    <p>The simplest possible shift register (SISO) uses only flip-flops. The output of a given flip-flop is connected to the D input of the flip-flop at its right. This shift register is <strong>unidirectional (left-to-right)</strong>. Each clock pulse shifts the contents of the register one bit position to the right.</p>
+
+    <div class="info-box orange">
+      <strong>4-bit SISO structure:</strong><br>
+      SI → [D₀/FA] → [D₁/FB] → [D₂/FC] → [D₃/FD] → SO<br>
+      Common CLK connected to all C inputs.
+    </div>
+
+    <p>Each flip-flop's output feeds the next flip-flop's D input. After each clock pulse, data moves one position right. The last flip-flop (D₃) provides the serial output (SO).</p>
+
+    <h2 id="siso-example" class="section-anchor">SISO Register Example</h2>
+
+    <h4>Data Movement through a 4-bit SISO Shift Register</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Clock Pulse No.</th><th>QA</th><th>QB</th><th>QC</th><th>QD</th></tr></thead>
+        <tbody>
+          <tr><td>0 (initial)</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>2</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+          <tr><td>3</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+          <tr><td>4</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+          <tr><td>5</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Showing a single '1' bit entering and propagating through all four stages, exiting after 4 clock pulses.</p>
+
+    <h4>Example: 4-bit register initially 0110, shifted 6 times to the right with serial input 1011100</h4>
+    <div class="info-box orange">
+      <strong>Answer:</strong> 0110; 0011; 0001; 1000; 1100; 1110; 0111; 1011
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Shift</th><th>Serial Input Data</th><th>QA</th><th>QB</th><th>QC</th><th>QD</th></tr></thead>
+        <tbody>
+          <tr><td>Initial</td><td>—</td><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+          <tr><td>1st</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+          <tr><td>2nd</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+          <tr><td>3rd</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>4th</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+          <tr><td>5th</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+          <tr><td>6th</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td></tr>
+          <tr><td>7th</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Counters -->
+    <h2 id="counters-intro" class="section-anchor">Synchronous and Asynchronous Counters</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Counter</div>
+      <ul>
+        <li>A register (group of flip-flops) that goes through a <strong>prescribed sequence of states</strong> upon the application of input pulses is called a counter.</li>
+        <li>The input pulses may be clock pulses, or they may originate from some external source and may occur at a fixed interval of time or at random.</li>
+        <li>The sequence of states may follow the binary number sequence or any other sequence of states.</li>
+        <li>A counter that follows the binary number sequence is called a <strong>binary counter</strong>.</li>
+        <li>An <em>n</em>-bit binary counter consists of <em>n</em> flip-flops and can count in binary from 0 through \(2^n - 1\).</li>
+      </ul>
+    </div>
+
+    <div class="gate-grid">
+      <div class="info-box">
+        <strong>Ripple (Asynchronous) Counters:</strong><br>
+        A flip-flop output transition serves as a source for triggering other flip-flops. The C input of some or all flip-flops are triggered <strong>not by the common clock pulses</strong>, but rather by the transition that occurs in other flip-flop outputs.
+      </div>
+      <div class="info-box orange">
+        <strong>Synchronous Counters:</strong><br>
+        The C inputs of all flip-flops receive the <strong>common clock</strong>. All flip-flops change state simultaneously at the clock edge.
+      </div>
+    </div>
+
+    <!-- 3-bit Async Up Counter -->
+    <h2 id="async-up-counter" class="section-anchor">3-bit Asynchronous Up Counter</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Circuit Description</div>
+      <p>Uses <strong>three T flip-flops</strong> connected in cascade. The clock signal goes to the first flip-flop (Q₀). The Q̄ output of each flip-flop provides the clock for the next flip-flop. Each T input is held at logic 1 (so each flip-flop toggles on every active clock edge it receives). This creates an asynchronous positive-edge-triggered up counter.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Clock Pulse</th><th>Q₂ (MSB)</th><th>Q₁</th><th>Q₀ (LSB)</th><th>Decimal</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+          <tr><td>2</td><td>0</td><td>1</td><td>0</td><td>2</td></tr>
+          <tr><td>3</td><td>0</td><td>1</td><td>1</td><td>3</td></tr>
+          <tr><td>4</td><td>1</td><td>0</td><td>0</td><td>4</td></tr>
+          <tr><td>5</td><td>1</td><td>0</td><td>1</td><td>5</td></tr>
+          <tr><td>6</td><td>1</td><td>1</td><td>0</td><td>6</td></tr>
+          <tr><td>7</td><td>1</td><td>1</td><td>1</td><td>7</td></tr>
+          <tr><td>8 (reset)</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>The timing diagram shows Q₀ toggling every clock pulse, Q₁ toggling every 2 clock pulses, and Q₂ toggling every 4 clock pulses. The sequence repeats after 8 pulses (mod-8 counter).</p>
+
+    <div class="info-box orange">
+      <strong>Key Note:</strong> This is called an "asynchronous" counter because the flip-flops do not all change simultaneously — the change in Q₀ triggers Q₁, and Q₁'s change triggers Q₂. This propagation delay (ripple) is why it is also called a <strong>Ripple Counter</strong>.
+    </div>
+
+    <!-- 3-bit Async Down Counter -->
+    <h2 id="async-down-counter" class="section-anchor">3-bit Asynchronous Down Counter</h2>
+
+    <div class="definition-box">
+      <div class="def-title">Circuit Description</div>
+      <p>Similar to the up counter, but the <strong>Q output</strong> (not Q̄) of each flip-flop provides the clock input to the next flip-flop. This causes the counter to count in reverse (downward) sequence.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Clock Pulse</th><th>Q₂ (MSB)</th><th>Q₁</th><th>Q₀ (LSB)</th><th>Decimal</th></tr></thead>
+        <tbody>
+          <tr><td>0 (initial)</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+          <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>7</td></tr>
+          <tr><td>2</td><td>1</td><td>1</td><td>0</td><td>6</td></tr>
+          <tr><td>3</td><td>1</td><td>0</td><td>1</td><td>5</td></tr>
+          <tr><td>4</td><td>1</td><td>0</td><td>0</td><td>4</td></tr>
+          <tr><td>5</td><td>0</td><td>1</td><td>1</td><td>3</td></tr>
+          <tr><td>6</td><td>0</td><td>1</td><td>0</td><td>2</td></tr>
+          <tr><td>7</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+          <tr><td>8 (reset)</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="info-box orange">
+      <strong>Down Counter Count Sequence:</strong> 0 → 7 → 6 → 5 → 4 → 3 → 2 → 1 → 0 → 7 → ... (repeating)
+    </div>
+
+    <div class="gate-grid">
+      <div class="definition-box">
+        <div class="def-title">Up Counter vs. Down Counter</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Property</th><th>Up Counter</th><th>Down Counter</th></tr></thead>
+            <tbody>
+              <tr><td>Clock source for next FF</td><td>Q̄ output</td><td>Q output</td></tr>
+              <tr><td>Count sequence</td><td>0,1,2,...,7,0,...</td><td>0,7,6,...,1,0,...</td></tr>
+              <tr><td>Q₀ behavior</td><td>Toggles every clock</td><td>Toggles every clock</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div style="margin-top:60px; padding-top:24px; border-top:1px solid var(--border); color:var(--text-muted); font-size:12px;">
+      <p>Electronic Principles and Devices — PES University Study Notes</p>
+      <p>Reference: "Digital Design with an Introduction to Verilog HDL" by M Morris Mano &amp; Michael D Ciletti</p>
+    </div>
+
+  </main>
+</div>
+</div>
+
+<!-- BACK TO TOP -->
+<button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+
+<script>
+/* ===== THEME ===== */
+(function(){
+  const t = localStorage.getItem('theme') || 'light';
+  if(t === 'dark') { document.documentElement.setAttribute('data-theme','dark'); }
+  updateThemeBtn();
+})();
+
+function toggleTheme(){
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  updateThemeBtn();
+}
+function updateThemeBtn(){
+  const btn = document.getElementById('theme-btn');
+  if(!btn) return;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  btn.textContent = isDark ? '☀️ Light' : '🌙 Dark';
+}
+
+/* ===== SIDEBAR TOGGLE (mobile) ===== */
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+/* ===== NAV SECTION TOGGLE ===== */
+function toggleSection(el){
+  el.classList.toggle('open');
+  const items = el.nextElementSibling;
+  if(items) items.classList.toggle('open');
+}
+
+/* ===== SMOOTH SCROLL ===== */
+function scrollTo(id){
+  const el = document.getElementById(id);
+  if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); closeSidebar(); }
+}
+
+/* ===== PROGRESS BAR ===== */
+window.addEventListener('scroll', function(){
+  const el = document.getElementById('progress-bar');
+  const doc = document.documentElement;
+  const body = document.body;
+  const scrollTop = doc.scrollTop || body.scrollTop;
+  const scrollHeight = Math.max(doc.scrollHeight, body.scrollHeight) - doc.clientHeight;
+  const pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+  el.style.width = pct + '%';
+}, {passive:true});
+
+/* ===== BACK TO TOP ===== */
+window.addEventListener('scroll', function(){
+  const btn = document.getElementById('back-top');
+  btn.classList.toggle('visible', window.scrollY > 400);
+}, {passive:true});
+
+/* ===== HEADER HIDE ON SCROLL ===== */
+let lastScroll = 0;
+window.addEventListener('scroll', function(){
+  const header = document.getElementById('header');
+  const cur = window.scrollY;
+  if(cur > lastScroll && cur > 80) { header.classList.add('hidden'); }
+  else { header.classList.remove('hidden'); }
+  lastScroll = cur;
+}, {passive:true});
+
+/* ===== COLLAPSIBLE ===== */
+function toggleCollapse(el){
+  el.classList.toggle('open');
+  const body = el.nextElementSibling;
+  if(body) body.classList.toggle('open');
+}
+
+/* ===== COPY CODE ===== */
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', function(){
+    const pre = this.closest('.code-wrap').querySelector('pre');
+    if(pre){
+      navigator.clipboard.writeText(pre.textContent).then(() => {
+        this.textContent = 'Copied!';
+        this.classList.add('copied');
+        setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 2000);
+      });
+    }
+  });
+});
+
+/* ===== SCROLL SPY ===== */
+const navItems = document.querySelectorAll('.nav-item');
+const sections = document.querySelectorAll('.section-anchor');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      const id = entry.target.id;
+      navItems.forEach(item => {
+        item.classList.toggle('active', item.getAttribute('onclick') && item.getAttribute('onclick').includes("'"+id+"'"));
+      });
+    }
+  });
+}, { rootMargin: '-60px 0px -70% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+/* ===== SEARCH ===== */
+const searchIndex = [];
+
+function buildSearchIndex(){
+  // Build from all headings and paragraphs
+  const headings = document.querySelectorAll('h2[id], h3[id], h4');
+  let currentSection = '';
+  document.querySelectorAll('#content *').forEach(el => {
+    if(el.matches('h2[id]')) currentSection = el.textContent.trim();
+    if(el.matches('h3, h4, p, li, .definition-box, .info-box, .math-steps')) {
+      const text = el.textContent.trim();
+      if(text.length > 10){
+        searchIndex.push({
+          title: el.closest('h2, h3, h4') ? el.textContent.trim() : (el.previousElementSibling ? el.previousElementSibling.textContent.trim() : currentSection),
+          section: currentSection,
+          text: text,
+          id: el.closest('[id]') ? el.closest('[id]').id : null
+        });
+      }
+    }
+  });
+  // Also add all h2, h3, h4
+  document.querySelectorAll('#content h2[id], #content h3, #content h4').forEach(h => {
+    searchIndex.push({
+      title: h.textContent.trim(),
+      section: h.closest('h2') ? h.closest('h2').textContent : h.textContent,
+      text: h.textContent.trim(),
+      id: h.id || (h.closest('[id]') ? h.closest('[id]').id : null)
+    });
+  });
+}
+
+function doSearch(query){
+  if(!query || query.length < 2) return [];
+  const q = query.toLowerCase();
+  const results = [];
+  const seen = new Set();
+  searchIndex.forEach(item => {
+    if(item.text.toLowerCase().includes(q) || item.title.toLowerCase().includes(q)){
+      const key = item.id + item.title;
+      if(!seen.has(key) && item.id){
+        seen.add(key);
+        results.push(item);
+      }
+    }
+  });
+  return results.slice(0, 12);
+}
+
+const searchInput = document.getElementById('sidebar-search');
+const searchResults = document.getElementById('search-results');
+
+searchInput.addEventListener('input', function(){
+  const q = this.value.trim();
+  if(!q){ searchResults.classList.remove('visible'); return; }
+  const results = doSearch(q);
+  if(results.length === 0){
+    searchResults.innerHTML = '<div class="no-results">No results found</div>';
+  } else {
+    const ql = q.toLowerCase();
+    searchResults.innerHTML = results.map(r => {
+      const preview = r.text.substring(0, 100).replace(new RegExp(q,'gi'), m => `<span class="sri-highlight">${m}</span>`);
+      return `<div class="search-result-item" onclick="scrollTo('${r.id}'); searchResults.classList.remove('visible'); searchInput.value='';">
+        <div class="sri-title">${r.title.substring(0,60)}</div>
+        <div class="sri-section">${r.section.substring(0,50)}</div>
+        <div class="sri-preview">${preview}</div>
+      </div>`;
+    }).join('');
+  }
+  searchResults.classList.add('visible');
+});
+
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.sidebar-search-wrap')) searchResults.classList.remove('visible');
+});
+
+window.addEventListener('load', function(){
+  setTimeout(buildSearchIndex, 500);
+});
+</script>
+</body>
+</html>
