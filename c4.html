@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UE25CS151B — Unit 4: File Handling & Portable Programming</title>
+<style>
+  :root {
+    --bg:        #fdf8f2;
+    --surface:   #fff9f3;
+    --border:    #e8ddd0;
+    --amber:     #c97b2e;
+    --amber-lt:  #f5dfc0;
+    --amber-dk:  #9a5a18;
+    --teal:      #2a7d72;
+    --teal-lt:   #d0ece9;
+    --rust:      #b84a2f;
+    --rust-lt:   #fae6e1;
+    --plum:      #6b3fa0;
+    --plum-lt:   #ede2f8;
+    --navy:      #1e3a5f;
+    --navy-lt:   #dce7f5;
+    --text:      #2c2015;
+    --text-muted:#7a6250;
+    --code-bg:   #1e1612;
+    --code-fg:   #f0e8d8;
+    --code-key:  #f4a26a;
+    --code-str:  #a8d8a0;
+    --code-cmt:  #8a9e8a;
+    --code-fn:   #91c8e8;
+    --code-num:  #f4d46a;
+    --shadow:    0 2px 12px rgba(0,0,0,.09);
+    --radius:    10px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI',system-ui,sans-serif;
+    font-size:15px;
+    line-height:1.7;
+  }
+
+  /* ── TOP BAR ── */
+  #topbar{
+    position:sticky;top:0;z-index:200;
+    background:var(--amber-dk);
+    color:#fff;
+    display:flex;align-items:center;gap:12px;
+    padding:10px 20px;
+    box-shadow:0 3px 14px rgba(0,0,0,.25);
+  }
+  #topbar .brand{font-weight:700;font-size:14px;white-space:nowrap;letter-spacing:.3px;}
+  #topbar .course{font-size:12px;opacity:.8;white-space:nowrap;}
+  #search-wrap{flex:1;position:relative;max-width:480px;margin-left:auto;}
+  #search{
+    width:100%;padding:7px 14px 7px 36px;
+    border-radius:20px;border:none;
+    background:rgba(255,255,255,.18);color:#fff;
+    font-size:13px;outline:none;
+    transition:background .2s;
+  }
+  #search::placeholder{color:rgba(255,255,255,.6);}
+  #search:focus{background:rgba(255,255,255,.28);}
+  #search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);opacity:.7;font-size:14px;}
+  #search-count{font-size:11px;opacity:.7;white-space:nowrap;}
+  #prev-btn,#next-btn{
+    background:rgba(255,255,255,.2);border:none;color:#fff;
+    width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:13px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  #prev-btn:hover,#next-btn:hover{background:rgba(255,255,255,.35);}
+
+  /* ── SIDEBAR ── */
+  #shell{display:flex;min-height:calc(100vh - 46px);}
+  #sidebar{
+    width:260px;min-width:260px;
+    background:var(--surface);
+    border-right:1px solid var(--border);
+    padding:18px 0;
+    position:sticky;top:46px;
+    height:calc(100vh - 46px);
+    overflow-y:auto;
+  }
+  #sidebar::-webkit-scrollbar{width:4px;}
+  #sidebar::-webkit-scrollbar-track{background:transparent;}
+  #sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+  .sbar-title{
+    font-size:10px;font-weight:700;letter-spacing:1.2px;
+    text-transform:uppercase;color:var(--text-muted);
+    padding:0 18px 8px;
+  }
+  .sbar-section{margin-bottom:6px;}
+  .sbar-pill{
+    display:inline-block;
+    font-size:9px;font-weight:700;letter-spacing:.8px;
+    text-transform:uppercase;padding:1px 7px;border-radius:10px;
+    margin-right:6px;vertical-align:middle;
+  }
+  .pill-l1{background:var(--amber-lt);color:var(--amber-dk);}
+  .pill-l2{background:var(--teal-lt);color:var(--teal);}
+  .pill-l3{background:var(--plum-lt);color:var(--plum);}
+  .pill-l4{background:var(--navy-lt);color:var(--navy);}
+  .pill-l5{background:var(--rust-lt);color:var(--rust);}
+  .sbar-link{
+    display:block;padding:6px 18px;
+    font-size:12.5px;color:var(--text-muted);
+    text-decoration:none;cursor:pointer;
+    border-left:3px solid transparent;
+    transition:all .15s;
+  }
+  .sbar-link:hover{color:var(--amber-dk);background:var(--amber-lt);border-left-color:var(--amber);}
+  .sbar-link.active{color:var(--amber-dk);background:var(--amber-lt);border-left-color:var(--amber);font-weight:600;}
+  .sbar-sub{padding-left:30px;font-size:12px;}
+  hr.sbar-div{border:none;border-top:1px solid var(--border);margin:10px 18px;}
+
+  /* ── MAIN CONTENT ── */
+  #main{flex:1;padding:32px 44px;max-width:920px;}
+
+  /* ── SECTIONS ── */
+  .unit-header{
+    background:linear-gradient(135deg,var(--amber-dk) 0%,#7a3d0e 100%);
+    color:#fff;border-radius:var(--radius);
+    padding:28px 32px;margin-bottom:32px;
+    box-shadow:var(--shadow);
+  }
+  .unit-header h1{font-size:24px;font-weight:700;margin-bottom:4px;}
+  .unit-header .sub{font-size:13px;opacity:.8;}
+  .unit-header .badges{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;}
+  .badge{
+    background:rgba(255,255,255,.2);
+    border:1px solid rgba(255,255,255,.35);
+    border-radius:14px;padding:3px 12px;font-size:11px;font-weight:600;
+  }
+
+  .topic-section{margin-bottom:40px;}
+  .section-label{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:10px;font-weight:700;letter-spacing:1.1px;
+    text-transform:uppercase;color:var(--text-muted);
+    margin-bottom:8px;
+  }
+  h2.section-heading{
+    font-size:20px;font-weight:700;color:var(--amber-dk);
+    padding-bottom:8px;
+    border-bottom:2px solid var(--amber-lt);
+    margin-bottom:18px;
+  }
+  h3.sub-heading{
+    font-size:15px;font-weight:700;color:var(--teal);
+    margin:22px 0 10px;display:flex;align-items:center;gap:8px;
+  }
+  h3.sub-heading::before{content:'▶';font-size:9px;color:var(--amber);}
+  h4.mini-heading{
+    font-size:13px;font-weight:700;color:var(--navy);
+    margin:16px 0 8px;
+  }
+
+  p{margin-bottom:12px;}
+  ul,ol{margin:0 0 14px 22px;}
+  li{margin-bottom:4px;}
+  strong{color:var(--amber-dk);}
+
+  /* ── CALLOUT BOXES ── */
+  .callout{
+    border-radius:var(--radius);padding:14px 18px;
+    margin:16px 0;font-size:13.5px;
+  }
+  .callout-key{background:var(--amber-lt);border-left:4px solid var(--amber);}
+  .callout-tip{background:var(--teal-lt);border-left:4px solid var(--teal);}
+  .callout-warn{background:var(--rust-lt);border-left:4px solid var(--rust);}
+  .callout-info{background:var(--navy-lt);border-left:4px solid var(--navy);}
+  .callout-title{font-weight:700;font-size:11px;letter-spacing:.8px;text-transform:uppercase;margin-bottom:4px;}
+  .callout-key .callout-title{color:var(--amber-dk);}
+  .callout-tip .callout-title{color:var(--teal);}
+  .callout-warn .callout-title{color:var(--rust);}
+  .callout-info .callout-title{color:var(--navy);}
+
+  /* ── FUNCTION REFERENCE TABLE ── */
+  .fn-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px;}
+  .fn-table th{
+    background:var(--amber-dk);color:#fff;
+    padding:9px 14px;text-align:left;font-size:12px;letter-spacing:.5px;
+  }
+  .fn-table td{padding:8px 14px;border-bottom:1px solid var(--border);}
+  .fn-table tr:nth-child(even) td{background:var(--amber-lt);}
+  .fn-table tr:hover td{background:var(--teal-lt);}
+  .fn-name{font-family:monospace;font-weight:700;color:var(--teal);font-size:12.5px;}
+  .fn-ret{font-family:monospace;font-size:11.5px;color:var(--plum);}
+
+  /* ── CODE BLOCK ── */
+  .code-wrap{
+    background:var(--code-bg);border-radius:var(--radius);
+    margin:14px 0;overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  .code-header{
+    background:#2c201a;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:8px 16px;
+  }
+  .code-title{font-size:11.5px;font-weight:600;color:#d4a96a;letter-spacing:.4px;}
+  .code-actions{display:flex;gap:6px;}
+  .run-btn,.copy-btn{
+    border:none;border-radius:6px;
+    padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;
+    transition:opacity .15s;
+  }
+  .run-btn{background:#c97b2e;color:#fff;}
+  .copy-btn{background:#2a7d72;color:#fff;}
+  .run-btn:hover,.copy-btn:hover{opacity:.85;}
+  pre{
+    padding:18px 20px;overflow-x:auto;
+    font-family:'Cascadia Code','Fira Code','Consolas',monospace;
+    font-size:13px;line-height:1.65;color:var(--code-fg);
+    margin:0;
+  }
+  .kw{color:var(--code-key);}
+  .str{color:var(--code-str);}
+  .cmt{color:var(--code-cmt);font-style:italic;}
+  .fn{color:var(--code-fn);}
+  .num{color:var(--code-num);}
+  .pp{color:#d4a96a;}
+
+  /* ── OUTPUT BOX ── */
+  .output-box{
+    background:#101a10;border-radius:0 0 var(--radius) var(--radius);
+    padding:10px 18px;
+    font-family:monospace;font-size:12.5px;color:#90ee90;
+    border-top:1px solid #2a3a2a;
+  }
+  .output-label{font-size:10px;letter-spacing:.8px;color:#558855;text-transform:uppercase;margin-bottom:4px;}
+
+  /* ── HIGHLIGHT (search) ── */
+  mark{background:#ffe066;color:#3a2800;border-radius:2px;padding:0 2px;}
+  mark.active-mark{background:#ff9900;color:#fff;}
+
+  /* ── COMPILER MODAL ── */
+  #compiler-fab{
+    position:fixed;bottom:28px;right:28px;z-index:300;
+    width:52px;height:52px;border-radius:50%;
+    background:linear-gradient(135deg,var(--amber) 0%,var(--amber-dk) 100%);
+    border:none;cursor:pointer;
+    box-shadow:0 4px 16px rgba(0,0,0,.3);
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;color:#fff;
+    transition:transform .2s,box-shadow .2s;
+  }
+  #compiler-fab:hover{transform:scale(1.1);box-shadow:0 6px 22px rgba(0,0,0,.4);}
+  #compiler-fab .fab-tooltip{
+    position:absolute;right:60px;top:50%;transform:translateY(-50%);
+    background:var(--text);color:#fff;
+    font-size:11px;font-weight:600;white-space:nowrap;
+    padding:4px 10px;border-radius:6px;pointer-events:none;
+    opacity:0;transition:opacity .2s;
+  }
+  #compiler-fab:hover .fab-tooltip{opacity:1;}
+
+  #compiler-modal{
+    display:none;position:fixed;inset:0;z-index:400;
+    background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+    align-items:center;justify-content:center;
+  }
+  #compiler-modal.open{display:flex;}
+  #compiler-box{
+    background:var(--surface);border-radius:14px;
+    width:min(860px,95vw);height:min(620px,90vh);
+    box-shadow:0 20px 60px rgba(0,0,0,.4);
+    display:flex;flex-direction:column;overflow:hidden;
+  }
+  #compiler-bar{
+    background:var(--amber-dk);color:#fff;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 20px;
+  }
+  #compiler-bar .ctitle{font-weight:700;font-size:15px;}
+  #compiler-bar .ctitle span{font-size:11px;opacity:.7;margin-left:8px;}
+  #close-compiler{
+    background:rgba(255,255,255,.2);border:none;color:#fff;
+    width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;
+  }
+  #compiler-body{display:flex;flex:1;overflow:hidden;}
+  #code-input{
+    flex:1;background:var(--code-bg);color:var(--code-fg);
+    border:none;padding:16px;resize:none;outline:none;
+    font-family:'Cascadia Code','Fira Code',monospace;font-size:13px;
+    line-height:1.65;
+  }
+  #compiler-right{
+    width:300px;border-left:1px solid var(--border);
+    display:flex;flex-direction:column;
+  }
+  #run-area{
+    background:#2c201a;padding:12px;
+    display:flex;flex-direction:column;gap:8px;
+  }
+  #compiler-run-btn{
+    background:var(--amber);border:none;color:#fff;
+    padding:9px 0;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;
+    transition:background .15s;
+  }
+  #compiler-run-btn:hover{background:var(--amber-dk);}
+  #compiler-status{font-size:11px;color:#d4a96a;text-align:center;}
+  #stdin-label{font-size:11px;color:#d4a96a;padding:0 12px;}
+  #stdin-input{
+    background:#1a1008;border:1px solid #3a2a18;color:#f0e8d8;
+    padding:6px 10px;font-size:12px;font-family:monospace;border-radius:6px;
+    margin:0 12px;resize:none;height:60px;outline:none;
+  }
+  #output-area{
+    flex:1;overflow-y:auto;
+    background:#0a120a;padding:14px;
+    font-family:monospace;font-size:12.5px;color:#90ee90;
+    white-space:pre-wrap;word-break:break-all;
+  }
+  #output-area.err{color:#ff8080;}
+  .out-label{font-size:10px;letter-spacing:.8px;color:#558855;margin-bottom:8px;text-transform:uppercase;}
+
+  /* ── MISC ── */
+  .topic-jump{font-size:11px;color:var(--text-muted);text-decoration:none;}
+  .topic-jump:hover{color:var(--amber);}
+  .back-top{
+    display:inline-block;margin-top:8px;font-size:12px;
+    color:var(--text-muted);text-decoration:none;
+  }
+  .back-top:hover{color:var(--amber);}
+  .tag{
+    display:inline-block;font-size:10px;font-weight:700;
+    border-radius:4px;padding:1px 7px;margin:0 3px;
+    text-transform:uppercase;letter-spacing:.6px;
+  }
+  .tag-r{background:var(--rust-lt);color:var(--rust);}
+  .tag-g{background:var(--teal-lt);color:var(--teal);}
+  .tag-b{background:var(--navy-lt);color:var(--navy);}
+
+  @media(max-width:720px){
+    #sidebar{display:none;}
+    #main{padding:20px 18px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div>
+    <div class="brand">UE25CS151B — Problem Solving with C</div>
+    <div class="course">Unit 4: File Handling &amp; Portable Programming</div>
+  </div>
+  <div id="search-wrap">
+    <span id="search-icon">🔍</span>
+    <input id="search" type="text" placeholder="Search topics, functions, examples…" autocomplete="off">
+  </div>
+  <span id="search-count"></span>
+  <button id="prev-btn" title="Previous match">↑</button>
+  <button id="next-btn" title="Next match">↓</button>
+</div>
+
+<div id="shell">
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sbar-title">Unit 4 Topics</div>
+
+  <div class="sbar-section">
+    <span class="sbar-link sbar-sub" style="font-weight:700;color:var(--amber-dk);cursor:default;">
+      <span class="sbar-pill pill-l1">L1</span>File Handling in C
+    </span>
+    <a class="sbar-link sbar-sub" href="#intro">Introduction &amp; Overview</a>
+    <a class="sbar-link sbar-sub" href="#file-types">Text vs Binary Files</a>
+    <a class="sbar-link sbar-sub" href="#fopen-fclose">fopen / fclose</a>
+    <a class="sbar-link sbar-sub" href="#char-io">Character I/O (fgetc / fputc)</a>
+    <a class="sbar-link sbar-sub" href="#string-io">String I/O (fgets / fputs)</a>
+    <a class="sbar-link sbar-sub" href="#formatted-io">Formatted I/O (fscanf / fprintf)</a>
+    <a class="sbar-link sbar-sub" href="#block-io">Block I/O (fread / fwrite)</a>
+    <a class="sbar-link sbar-sub" href="#random-access">Random Access (fseek / ftell / rewind)</a>
+  </div>
+
+  <hr class="sbar-div">
+
+  <div class="sbar-section">
+    <span class="sbar-link sbar-sub" style="font-weight:700;color:var(--teal);cursor:default;">
+      <span class="sbar-pill pill-l2">L2</span>Error Handling
+    </span>
+    <a class="sbar-link sbar-sub" href="#err-intro">Common File Errors</a>
+    <a class="sbar-link sbar-sub" href="#return-check">Return Value Checking</a>
+    <a class="sbar-link sbar-sub" href="#errno">errno Global Variable</a>
+    <a class="sbar-link sbar-sub" href="#perror-strerror">perror / strerror</a>
+    <a class="sbar-link sbar-sub" href="#feof-ferror">feof / ferror / clearerr</a>
+  </div>
+
+  <hr class="sbar-div">
+
+  <div class="sbar-section">
+    <span class="sbar-link sbar-sub" style="font-weight:700;color:var(--plum);cursor:default;">
+      <span class="sbar-pill pill-l3">L4</span>Search with Array of Pointers
+    </span>
+    <a class="sbar-link sbar-sub" href="#aop-intro">Why Array of Pointers?</a>
+    <a class="sbar-link sbar-sub" href="#bin-search">Binary Search on File Data</a>
+    <a class="sbar-link sbar-sub" href="#struct-search">Search on Array of Structs</a>
+  </div>
+
+  <hr class="sbar-div">
+
+  <div class="sbar-section">
+    <span class="sbar-link sbar-sub" style="font-weight:700;color:var(--navy);cursor:default;">
+      <span class="sbar-pill pill-l4">L5</span>Sort with Array of Pointers
+    </span>
+    <a class="sbar-link sbar-sub" href="#sort-intro">Sorting Strategy</a>
+    <a class="sbar-link sbar-sub" href="#sort-ints">Sort Integers from File</a>
+    <a class="sbar-link sbar-sub" href="#sort-structs">Sort Structs (roll / name)</a>
+  </div>
+
+  <hr class="sbar-div">
+
+  <div class="sbar-section">
+    <span class="sbar-link sbar-sub" style="font-weight:700;color:var(--rust);cursor:default;">
+      <span class="sbar-pill pill-l5">L7</span>Header Files
+    </span>
+    <a class="sbar-link sbar-sub" href="#header-intro">What are Header Files?</a>
+    <a class="sbar-link sbar-sub" href="#header-example">Palindrome Example</a>
+    <a class="sbar-link sbar-sub" href="#employee-example">Employee App (Client/Server)</a>
+  </div>
+
+  <hr class="sbar-div">
+
+  <div class="sbar-section">
+    <span class="sbar-link sbar-sub" style="font-weight:700;color:var(--teal);cursor:default;">
+      <span class="sbar-pill pill-l2">ENV</span>Environment Variables
+    </span>
+    <a class="sbar-link sbar-sub" href="#env-intro">Introduction</a>
+    <a class="sbar-link sbar-sub" href="#env-fns">setenv / getenv / putenv</a>
+  </div>
+
+  <hr class="sbar-div">
+
+  <div class="sbar-section">
+    <span class="sbar-link sbar-sub" style="font-weight:700;color:var(--amber-dk);cursor:default;">
+      <span class="sbar-pill pill-l1">PP</span>Preprocessor Directives
+    </span>
+    <a class="sbar-link sbar-sub" href="#pp-intro">Introduction &amp; Directives</a>
+    <a class="sbar-link sbar-sub" href="#macros">Macros (#define)</a>
+    <a class="sbar-link sbar-sub" href="#predefined">Pre-defined Macros</a>
+    <a class="sbar-link sbar-sub" href="#cond-compile">Conditional Compilation</a>
+    <a class="sbar-link sbar-sub" href="#pragma">Pragma Directives</a>
+    <a class="sbar-link sbar-sub" href="#portable">Portable Programming</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- HEADER CARD -->
+  <div class="unit-header">
+    <h1>Unit 4: File Handling &amp; Portable Programming</h1>
+    <div class="sub">UE25CS151B — Problem Solving with C &nbsp;|&nbsp; PES University</div>
+    <div class="badges">
+      <span class="badge">File I/O</span>
+      <span class="badge">Error Handling</span>
+      <span class="badge">Array of Pointers</span>
+      <span class="badge">Header Files</span>
+      <span class="badge">Preprocessor</span>
+      <span class="badge">Environment Variables</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- LECTURE 1: FILE HANDLING -->
+  <!-- ═══════════════════════════════════════════════════ -->
+
+  <div id="intro" class="topic-section">
+    <div class="section-label"><span class="sbar-pill pill-l1">Lecture 1</span></div>
+    <h2 class="section-heading">Introduction to File Handling</h2>
+    <p>Data created during program execution is stored temporarily in <strong>variables</strong>. Once the program ends, this data is lost. To preserve data after termination, <strong>files</strong> are used.</p>
+    <p>File handling allows a C program to <strong>create, read, write, and modify files</strong> stored on disk — enabling persistent storage, data sharing between programs, and efficient handling of large datasets.</p>
+
+    <div class="callout callout-key">
+      <div class="callout-title">📁 Why File Handling?</div>
+      <ul>
+        <li><strong>Persistent data storage</strong> — survives beyond program life</li>
+        <li><strong>Data sharing</strong> between programs</li>
+        <li><strong>Handle large datasets</strong> that may not fit in RAM</li>
+      </ul>
+    </div>
+
+    <h3 class="sub-heading">Real-Life Examples</h3>
+    <ul>
+      <li>Saving user input / game scores</li>
+      <li>Creating system logs &amp; audit trails</li>
+      <li>Reading configuration files on startup</li>
+      <li>Writing scientific simulation results</li>
+      <li>Recording financial transactions securely</li>
+    </ul>
+  </div>
+
+  <div id="file-types" class="topic-section">
+    <h2 class="section-heading">File Classification</h2>
+    <table class="fn-table">
+      <tr><th>Type</th><th>Extension</th><th>Storage</th><th>Human-Readable?</th><th>Security</th></tr>
+      <tr><td class="fn-name">Text File</td><td>.txt</td><td>ASCII characters</td><td>✅ Yes</td><td>Less secure (plain text)</td></tr>
+      <tr><td class="fn-name">Binary File</td><td>.bin</td><td>Binary (0s &amp; 1s)</td><td>❌ No</td><td>More secure, less space</td></tr>
+    </table>
+
+    <div class="callout callout-info">
+      <div class="callout-title">Key Concepts</div>
+      <ul>
+        <li><strong>Physical Name</strong> — the actual filename on disk managed by the OS</li>
+        <li><strong>Logical Name (FileHandle)</strong> — the C identifier (pointer) used in program</li>
+        <li><strong>Mode</strong> — read, write, append, or combinations</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- fopen/fclose -->
+  <div id="fopen-fclose" class="topic-section">
+    <h2 class="section-heading">Opening &amp; Closing Files — fopen / fclose</h2>
+
+    <h3 class="sub-heading">fopen()</h3>
+    <p>Opens a file and returns a <code>FILE*</code> pointer. Returns <code>NULL</code> on failure.</p>
+
+    <table class="fn-table">
+      <tr><th>Mode</th><th>Description</th></tr>
+      <tr><td class="fn-name">"r"</td><td>Read only — file must exist</td></tr>
+      <tr><td class="fn-name">"w"</td><td>Write only — creates new / overwrites existing</td></tr>
+      <tr><td class="fn-name">"a"</td><td>Append — creates if not exists, adds to end</td></tr>
+      <tr><td class="fn-name">"r+"</td><td>Read + Write — file must exist</td></tr>
+      <tr><td class="fn-name">"w+"</td><td>Read + Write — creates new / overwrites</td></tr>
+      <tr><td class="fn-name">"a+"</td><td>Read + Append — creates if not exists</td></tr>
+    </table>
+
+    <h3 class="sub-heading">fclose()</h3>
+    <p>Closes the file stream, <strong>flushes buffers</strong>, and frees associated memory. Returns <code>0</code> on success, <code>EOF</code> on error.</p>
+
+    <div class="callout callout-warn">
+      <div class="callout-title">⚠️ Best Practice</div>
+      Always check if <code>fp == NULL</code> after <code>fopen()</code>. Initializing a FILE pointer does <strong>not</strong> load the file into memory.
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 1 — Demo of fopen and fclose</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>()
+{
+    <span class="fn">FILE</span>* fp = <span class="fn">fopen</span>(<span class="str">"data.txt"</span>, <span class="str">"r"</span>);  <span class="cmt">// file must exist to open in "r" mode</span>
+    <span class="kw">if</span> (fp == NULL)
+        <span class="fn">printf</span>(<span class="str">"File cannot be opened\n"</span>);
+    <span class="kw">else</span> {
+        <span class="fn">printf</span>(<span class="str">"File can be accessed for reading\n"</span>);
+        <span class="fn">fclose</span>(fp);   <span class="cmt">// always close after use</span>
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      <div class="output-box">
+        <div class="output-label">Sample Output</div>
+File can be accessed for reading</div>
+    </div>
+  </div>
+
+  <!-- CHAR I/O -->
+  <div id="char-io" class="topic-section">
+    <h2 class="section-heading">Character-Based I/O</h2>
+    <table class="fn-table">
+      <tr><th>Function</th><th>Prototype</th><th>Description</th><th>Return</th></tr>
+      <tr><td class="fn-name">fputc</td><td class="fn-ret">int fputc(int ch, FILE *fp)</td><td>Writes one character to file</td><td>char written or EOF</td></tr>
+      <tr><td class="fn-name">fgetc</td><td class="fn-ret">int fgetc(FILE *fp)</td><td>Reads one character from file</td><td>char as int, or EOF</td></tr>
+      <tr><td class="fn-name">putc</td><td class="fn-ret">int putc(int ch, FILE *fp)</td><td>Same as fputc</td><td>char written or EOF</td></tr>
+      <tr><td class="fn-name">getc</td><td class="fn-ret">int getc(FILE *fp)</td><td>Same as fgetc</td><td>char as int, or EOF</td></tr>
+    </table>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 2 — fgetc and fputc (read file, write to terminal)</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>()
+{
+    <span class="fn">FILE</span>* fp = <span class="fn">fopen</span>(<span class="str">"data.txt"</span>, <span class="str">"r"</span>);
+    <span class="kw">if</span> (fp == NULL)
+        <span class="fn">printf</span>(<span class="str">"File cannot be opened\n"</span>);
+    <span class="kw">else</span> {
+        <span class="kw">char</span> ch;
+        <span class="kw">while</span> ((ch = <span class="fn">fgetc</span>(fp)) != EOF)
+            <span class="fn">fputc</span>(ch, stdout);  <span class="cmt">// writing to standard output (terminal)</span>
+        <span class="fn">fclose</span>(fp);
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      <div class="output-box">
+        <div class="output-label">Sample Output (if data.txt contains "welcome to file")</div>
+welcome to file
+handling
+in C</div>
+    </div>
+  </div>
+
+  <!-- STRING I/O -->
+  <div id="string-io" class="topic-section">
+    <h2 class="section-heading">String-Based I/O</h2>
+    <table class="fn-table">
+      <tr><th>Function</th><th>Prototype</th><th>Description</th><th>Return</th></tr>
+      <tr><td class="fn-name">fputs</td><td class="fn-ret">int fputs(const char *str, FILE *fp)</td><td>Writes string (not null terminator) to file</td><td>Non-negative or EOF</td></tr>
+      <tr><td class="fn-name">fgets</td><td class="fn-ret">char* fgets(char *str, int n, FILE *fp)</td><td>Reads line: stops at n-1 chars / newline / EOF</td><td>str pointer or NULL</td></tr>
+    </table>
+
+    <div class="callout callout-tip">
+      <div class="callout-title">💡 fgets vs fgetc</div>
+      Use <code>fgets</code> for line-by-line reading — it handles newlines and buffer limits automatically, making it safer than reading char-by-char in many cases.
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 3 — fgets and fputs (copy data.txt → out.txt)</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">FILE</span> *fp1 = <span class="fn">fopen</span>(<span class="str">"data.txt"</span>, <span class="str">"r"</span>);
+    <span class="fn">FILE</span> *fp2 = <span class="fn">fopen</span>(<span class="str">"out.txt"</span>,  <span class="str">"w"</span>);
+    <span class="kw">char</span> ch[<span class="num">500</span>];
+    <span class="kw">if</span> (fp1 == NULL || fp2 == NULL)
+        <span class="fn">printf</span>(<span class="str">"Issue in opening the file\n"</span>);
+    <span class="kw">else</span> {
+        <span class="kw">while</span> (<span class="fn">fgets</span>(ch, <span class="num">500</span>, fp1) != NULL)  <span class="cmt">// read line by line</span>
+            <span class="fn">fputs</span>(ch, fp2);                    <span class="cmt">// write to out.txt</span>
+        <span class="fn">fclose</span>(fp1);
+        <span class="fn">fclose</span>(fp2);
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+  </div>
+
+  <!-- FORMATTED I/O -->
+  <div id="formatted-io" class="topic-section">
+    <h2 class="section-heading">Formatted I/O — fscanf / fprintf</h2>
+    <p>Used when data is in a known structured format (e.g., integers separated by spaces). More efficient than reading character-by-character.</p>
+
+    <table class="fn-table">
+      <tr><th>Function</th><th>Prototype</th><th>Description</th><th>Return</th></tr>
+      <tr><td class="fn-name">fprintf</td><td class="fn-ret">int fprintf(FILE *fp, "fmt", ...)</td><td>Sends formatted output to file</td><td>Chars written, or negative</td></tr>
+      <tr><td class="fn-name">fscanf</td><td class="fn-ret">int fscanf(FILE *fp, "fmt", ...)</td><td>Reads formatted input from file</td><td>Items matched, or EOF</td></tr>
+    </table>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 4 — fscanf / fprintf (read one integer from file)</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">FILE</span> *fp1 = <span class="fn">fopen</span>(<span class="str">"Formatted_data.txt"</span>, <span class="str">"r"</span>);
+    <span class="kw">if</span> (fp1 == NULL)
+        <span class="fn">printf</span>(<span class="str">"Issue in opening the file\n"</span>);
+    <span class="kw">else</span> {
+        <span class="kw">int</span> a;
+        <span class="fn">fscanf</span>(fp1, <span class="str">"%d"</span>, &amp;a);
+        <span class="fn">fprintf</span>(stdout, <span class="str">"%d"</span>, a);  <span class="cmt">// print to terminal</span>
+        <span class="fn">fclose</span>(fp1);
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      <div class="output-box">
+        <div class="output-label">Output</div>
+10</div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 5 — Sum of integers (Version 2: using fscanf return value for n)</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">read</span>(<span class="kw">int</span> *a, <span class="fn">FILE</span> *fp);
+<span class="kw">int</span> <span class="fn">find_sum</span>(<span class="kw">int</span> *a, <span class="kw">int</span> n);
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">FILE</span> *fp1 = <span class="fn">fopen</span>(<span class="str">"formatted_data.txt"</span>, <span class="str">"r"</span>);
+    <span class="fn">FILE</span> *fp2 = <span class="fn">fopen</span>(<span class="str">"formatted_out.txt"</span>,  <span class="str">"w"</span>);
+    <span class="kw">if</span> (fp1 == NULL || fp2 == NULL)
+        <span class="fn">printf</span>(<span class="str">"Issue in opening the file\n"</span>);
+    <span class="kw">else</span> {
+        <span class="kw">int</span> a[<span class="num">500</span>];
+        <span class="kw">int</span> n   = <span class="fn">read</span>(a, fp1);
+        <span class="kw">int</span> sum = <span class="fn">find_sum</span>(a, n);
+        <span class="fn">fprintf</span>(stdout, <span class="str">"sum is %d"</span>, sum);
+        <span class="fn">fclose</span>(fp1); <span class="fn">fclose</span>(fp2);
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="cmt">/* Returns count of integers read from file */</span>
+<span class="kw">int</span> <span class="fn">read</span>(<span class="kw">int</span> *a, <span class="fn">FILE</span> *fp) {
+    <span class="kw">int</span> i = <span class="num">0</span>;
+    <span class="kw">while</span> (<span class="fn">fscanf</span>(fp, <span class="str">"%d"</span>, a + i) != EOF)  i++;
+    <span class="kw">return</span> i;
+}
+
+<span class="kw">int</span> <span class="fn">find_sum</span>(<span class="kw">int</span> *a, <span class="kw">int</span> n) {
+    <span class="kw">int</span> sum = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++)  sum += *(a + i);
+    <span class="kw">return</span> sum;
+}</pre>
+      <div class="output-box">
+        <div class="output-label">Output</div>
+sum is 130</div>
+    </div>
+  </div>
+
+  <!-- BLOCK I/O -->
+  <div id="block-io" class="topic-section">
+    <h2 class="section-heading">Block I/O — fread / fwrite</h2>
+    <p>Used primarily for <strong>binary files</strong> — reads/writes entire structs or arrays in one call.</p>
+
+    <table class="fn-table">
+      <tr><th>Function</th><th>Prototype</th><th>Returns</th></tr>
+      <tr><td class="fn-name">fwrite</td><td class="fn-ret">size_t fwrite(const void *ptr, size_t size, size_t n, FILE *fp)</td><td>Number of items written (= n on success)</td></tr>
+      <tr><td class="fn-name">fread</td><td class="fn-ret">size_t fread(void *ptr, size_t size, size_t n, FILE *fp)</td><td>Number of items read (= n on success, &lt; n on error/EOF)</td></tr>
+    </table>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 6 — fwrite &amp; fread: Employee Records</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="pp">#include</span><span class="str">&lt;stdlib.h&gt;</span>
+<span class="kw">struct</span> employee {
+    <span class="kw">char</span>  name[<span class="num">15</span>];
+    <span class="kw">char</span>  designation[<span class="num">15</span>];
+    <span class="kw">int</span>   age;
+    <span class="kw">float</span> salary;
+} emp;
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">FILE</span> *fp = <span class="fn">fopen</span>(<span class="str">"employee_data.bin"</span>, <span class="str">"wb"</span>);
+    <span class="kw">if</span> (fp == NULL) { <span class="fn">printf</span>(<span class="str">"Error\n"</span>); <span class="kw">return</span> <span class="num">1</span>; }
+    <span class="kw">char</span> ch;
+    <span class="kw">do</span> {
+        <span class="fn">printf</span>(<span class="str">"\nEnter name: "</span>);       <span class="fn">scanf</span>(<span class="str">"%s"</span>, emp.name);
+        <span class="fn">printf</span>(<span class="str">"Enter designation: "</span>); <span class="fn">scanf</span>(<span class="str">"%s"</span>, emp.designation);
+        <span class="fn">printf</span>(<span class="str">"Enter age: "</span>);         <span class="fn">scanf</span>(<span class="str">"%d"</span>, &amp;emp.age);
+        <span class="fn">printf</span>(<span class="str">"Enter salary: "</span>);      <span class="fn">scanf</span>(<span class="str">"%f"</span>, &amp;emp.salary);
+        <span class="fn">fwrite</span>(&amp;emp, <span class="kw">sizeof</span>(emp), <span class="num">1</span>, fp);
+        <span class="fn">printf</span>(<span class="str">"Add another? (y/n): "</span>);
+        <span class="fn">fflush</span>(stdin);  ch = <span class="fn">getchar</span>();
+    } <span class="kw">while</span> (ch == <span class="str">'y'</span> || ch == <span class="str">'Y'</span>);
+    <span class="fn">fclose</span>(fp);
+
+    fp = <span class="fn">fopen</span>(<span class="str">"employee_data.bin"</span>, <span class="str">"rb"</span>);
+    <span class="fn">printf</span>(<span class="str">"\n\tNAME\tDESIG\tAGE\tSALARY\n"</span>);
+    <span class="kw">while</span> (<span class="fn">fread</span>(&amp;emp, <span class="kw">sizeof</span>(emp), <span class="num">1</span>, fp) &gt; <span class="num">0</span>)
+        <span class="fn">printf</span>(<span class="str">"\t%s\t%s\t%d\t%.2f\n"</span>,
+               emp.name, emp.designation, emp.age, emp.salary);
+    <span class="fn">fclose</span>(fp);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+  </div>
+
+  <!-- RANDOM ACCESS -->
+  <div id="random-access" class="topic-section">
+    <h2 class="section-heading">Random Access — fseek / ftell / rewind</h2>
+    <p>Jump to any specific position in a file without sequential reading.</p>
+
+    <table class="fn-table">
+      <tr><th>Function</th><th>Prototype</th><th>Description</th></tr>
+      <tr><td class="fn-name">fseek</td><td class="fn-ret">int fseek(FILE *fp, long offset, int whence)</td><td>Move file pointer to offset from whence</td></tr>
+      <tr><td class="fn-name">ftell</td><td class="fn-ret">long ftell(FILE *fp)</td><td>Returns current file pointer position</td></tr>
+      <tr><td class="fn-name">rewind</td><td class="fn-ret">void rewind(FILE *fp)</td><td>Moves pointer to beginning of file</td></tr>
+    </table>
+
+    <h4 class="mini-heading">whence values for fseek:</h4>
+    <table class="fn-table">
+      <tr><th>Constant</th><th>Value</th><th>Meaning</th></tr>
+      <tr><td class="fn-name">SEEK_SET</td><td>0</td><td>From beginning of file</td></tr>
+      <tr><td class="fn-name">SEEK_CUR</td><td>1</td><td>From current position</td></tr>
+      <tr><td class="fn-name">SEEK_END</td><td>2</td><td>From end of file</td></tr>
+    </table>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 8 — fseek and ftell</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">FILE</span> *fp = <span class="fn">fopen</span>(<span class="str">"data.txt"</span>, <span class="str">"r"</span>);
+    <span class="kw">if</span> (fp == NULL) { <span class="fn">printf</span>(<span class="str">"Cannot open\n"</span>); <span class="kw">return</span> <span class="num">1</span>; }
+
+    <span class="fn">printf</span>(<span class="str">"Initially pointer is at %ld\n"</span>, <span class="fn">ftell</span>(fp));
+
+    <span class="fn">fseek</span>(fp, <span class="num">5</span>, SEEK_SET);   <span class="cmt">// move 5 bytes from beginning</span>
+    <span class="fn">printf</span>(<span class="str">"After SEEK_SET(5): %ld\n"</span>, <span class="fn">ftell</span>(fp));
+
+    <span class="fn">fseek</span>(fp, <span class="num">2</span>, SEEK_CUR);   <span class="cmt">// move 2 bytes from current</span>
+    <span class="fn">printf</span>(<span class="str">"After SEEK_CUR(2): %ld\n"</span>, <span class="fn">ftell</span>(fp));
+
+    <span class="fn">fseek</span>(fp, <span class="num">-9</span>, SEEK_END);  <span class="cmt">// 9 bytes before end</span>
+    <span class="fn">printf</span>(<span class="str">"After SEEK_END(-9): %ld\n"</span>, <span class="fn">ftell</span>(fp));
+    <span class="fn">printf</span>(<span class="str">"Character at position: %c\n"</span>, <span class="fn">fgetc</span>(fp));
+
+    <span class="fn">fclose</span>(fp);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      <div class="output-box">
+        <div class="output-label">Sample Output</div>
+Initially pointer is at 0
+After SEEK_SET(5): 5
+After SEEK_CUR(2): 7
+After SEEK_END(-9): 22
+Character at position: l</div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 9 — Copy file contents using fgetc / fputc</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">FILE</span> *fp1 = <span class="fn">fopen</span>(<span class="str">"data.txt"</span>,     <span class="str">"r"</span>);
+    <span class="fn">FILE</span> *fp2 = <span class="fn">fopen</span>(<span class="str">"data_new.txt"</span>, <span class="str">"w"</span>);
+    <span class="kw">char</span> ch;
+    <span class="kw">while</span> ((ch = <span class="fn">fgetc</span>(fp1)) != EOF)
+        <span class="fn">fputc</span>(ch, fp2);
+    <span class="fn">fclose</span>(fp1); <span class="fn">fclose</span>(fp2);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- LECTURE 2: ERROR HANDLING -->
+  <!-- ═══════════════════════════════════════════════════ -->
+
+  <div id="err-intro" class="topic-section">
+    <div class="section-label"><span class="sbar-pill pill-l2">Lecture 2</span></div>
+    <h2 class="section-heading">Error Handling in File Handling</h2>
+
+    <div class="callout callout-warn">
+      <div class="callout-title">⚠️ Common File Errors</div>
+      <ol>
+        <li><strong>Reading beyond EOF</strong> — no more data can be read</li>
+        <li><strong>Operating on unopened file</strong> — file must be opened first</li>
+        <li><strong>Writing to a read-only file</strong> — mode mismatch</li>
+        <li><strong>Invalid filename</strong> — bad file name or type</li>
+        <li><strong>Write-protected file</strong> — OS permission denied</li>
+      </ol>
+    </div>
+
+    <p>C does <strong>not</strong> have built-in exception handling. It uses <strong>manual error handling</strong> via return values, global <code>errno</code>, and helper functions.</p>
+  </div>
+
+  <div id="return-check" class="topic-section">
+    <h2 class="section-heading">1. Return Value Checking</h2>
+    <p>Most C file functions return a value indicating success or failure — always check it!</p>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Return Value Checking Cases</span>
+        <div class="code-actions">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="cmt">/* Case 1: fopen() returns NULL on failure */</span>
+<span class="fn">FILE</span> *fp = <span class="fn">fopen</span>(<span class="str">"data.txt"</span>, <span class="str">"r"</span>);
+<span class="kw">if</span> (fp == NULL) {
+    <span class="fn">printf</span>(<span class="str">"Error opening file\n"</span>);
+    <span class="fn">exit</span>(<span class="num">1</span>);
+}
+
+<span class="cmt">/* Case 2: fscanf() returns items read; check expected count */</span>
+<span class="kw">int</span> num;
+<span class="kw">if</span> (<span class="fn">fscanf</span>(fp, <span class="str">"%d"</span>, &amp;num) != <span class="num">1</span>)
+    <span class="fn">fprintf</span>(stderr, <span class="str">"Error reading integer\n"</span>);
+
+<span class="cmt">/* Case 3: fclose() returns 0 on success */</span>
+<span class="kw">if</span> (<span class="fn">fclose</span>(fp) != <span class="num">0</span>)
+    <span class="fn">perror</span>(<span class="str">"Error closing file"</span>);</pre>
+    </div>
+  </div>
+
+  <div id="errno" class="topic-section">
+    <h2 class="section-heading">2. Global Variable errno</h2>
+    <p>When a C function fails, it sets the global variable <code>errno</code> (defined in <code>&lt;errno.h&gt;</code>) to a code identifying the error type.</p>
+
+    <table class="fn-table">
+      <tr><th>errno Value</th><th>Error Type</th></tr>
+      <tr><td class="fn-name">0</td><td>No Error</td></tr>
+      <tr><td class="fn-name">1</td><td>Operation not permitted</td></tr>
+      <tr><td class="fn-name">2</td><td>No such file or directory</td></tr>
+      <tr><td class="fn-name">5</td><td>I/O error</td></tr>
+      <tr><td class="fn-name">9</td><td>Bad file number</td></tr>
+      <tr><td class="fn-name">12</td><td>Out of memory</td></tr>
+      <tr><td class="fn-name">13</td><td>Permission denied</td></tr>
+    </table>
+  </div>
+
+  <div id="perror-strerror" class="topic-section">
+    <h2 class="section-heading">3. perror() and strerror()</h2>
+    <table class="fn-table">
+      <tr><th>Function</th><th>Prototype</th><th>Description</th></tr>
+      <tr><td class="fn-name">perror</td><td class="fn-ret">void perror(const char *str)</td><td>Prints custom message + textual errno description</td></tr>
+      <tr><td class="fn-name">strerror</td><td class="fn-ret">char* strerror(int errnum)</td><td>Returns human-readable string for error code</td></tr>
+    </table>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 1 — perror() demo</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="pp">#include</span><span class="str">&lt;errno.h&gt;</span>
+<span class="pp">#include</span><span class="str">&lt;string.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">FILE</span> *fp = <span class="fn">fopen</span>(<span class="str">"nonexistent.txt"</span>, <span class="str">"r"</span>);
+    <span class="fn">printf</span>(<span class="str">"Value of errno: %d\n"</span>, errno);
+    <span class="fn">perror</span>(<span class="str">"Error"</span>);  <span class="cmt">// prints "Error: No such file or directory"</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      <div class="output-box">
+        <div class="output-label">Output</div>
+Value of errno: 2
+Error: No such file or directory</div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 2 — strerror() demo</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="pp">#include</span><span class="str">&lt;string.h&gt;</span>
+<span class="pp">#include</span><span class="str">&lt;errno.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">FILE</span> *fp = <span class="fn">fopen</span>(<span class="str">"data1.txt"</span>, <span class="str">"r"</span>);
+    <span class="kw">if</span> (fp == NULL)
+        <span class="fn">printf</span>(<span class="str">"File open failed: %s\n"</span>, <span class="fn">strerror</span>(errno));
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      <div class="output-box">
+        <div class="output-label">Output</div>
+File open failed: No such file or directory</div>
+    </div>
+  </div>
+
+  <div id="feof-ferror" class="topic-section">
+    <h2 class="section-heading">4. feof() / ferror() / clearerr()</h2>
+    <table class="fn-table">
+      <tr><th>Function</th><th>Prototype</th><th>Returns</th><th>Purpose</th></tr>
+      <tr><td class="fn-name">feof</td><td class="fn-ret">int feof(FILE *fp)</td><td>Non-zero if EOF reached</td><td>Distinguish EOF from error</td></tr>
+      <tr><td class="fn-name">ferror</td><td class="fn-ret">int ferror(FILE *fp)</td><td>Non-zero if error occurred</td><td>Detect I/O errors on stream</td></tr>
+      <tr><td class="fn-name">clearerr</td><td class="fn-ret">void clearerr(FILE *fp)</td><td>—</td><td>Reset error and EOF indicators</td></tr>
+    </table>
+
+    <div class="callout callout-tip">
+      <div class="callout-title">💡 Best Practice</div>
+      Check the return value of <code>fgetc()</code> / <code>fscanf()</code> first. Use <code>feof()</code> only to <em>confirm</em> EOF after a failed read, not before reading. Use <code>ferror()</code> alongside <code>perror()</code> for detailed error info.
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 4 — feof() usage</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">FILE</span> *fp = <span class="fn">fopen</span>(<span class="str">"data.txt"</span>, <span class="str">"r"</span>);
+    <span class="kw">char</span> ch;
+    <span class="kw">if</span> (fp != NULL) {
+        <span class="kw">while</span> (!<span class="fn">feof</span>(fp)) {
+            ch = <span class="fn">fgetc</span>(fp);
+            <span class="kw">if</span> (!<span class="fn">feof</span>(fp))   <span class="cmt">// check again after reading</span>
+                <span class="fn">putchar</span>(ch);
+        }
+    }
+    <span class="fn">fclose</span>(fp);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 5 — ferror() detects illegal read on write-only file</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">FILE</span> *fp = <span class="fn">fopen</span>(<span class="str">"data.txt"</span>, <span class="str">"w"</span>);  <span class="cmt">// opened in WRITE mode</span>
+    <span class="kw">char</span> buffer[<span class="num">100</span>];
+    <span class="kw">if</span> (fp != NULL) {
+        <span class="kw">if</span> (<span class="fn">fgets</span>(buffer, <span class="kw">sizeof</span>(buffer), fp) != NULL)
+            <span class="fn">printf</span>(<span class="str">"Read: %s"</span>, buffer);
+        <span class="kw">else</span> <span class="kw">if</span> (<span class="fn">ferror</span>(fp))
+            <span class="fn">printf</span>(<span class="str">"An error occurred while reading the file.\n"</span>);
+        <span class="fn">fclose</span>(fp);
+    }
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      <div class="output-box">
+        <div class="output-label">Output</div>
+An error occurred while reading the file.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- LECTURE 4: SEARCH WITH AOP -->
+  <!-- ═══════════════════════════════════════════════════ -->
+
+  <div id="aop-intro" class="topic-section">
+    <div class="section-label"><span class="sbar-pill pill-l3">Lecture 4</span></div>
+    <h2 class="section-heading">Searching File Data using Array of Pointers</h2>
+    <p>An <strong>array of pointers (AOP)</strong> is a powerful technique for working with file data in memory. Instead of working with the data directly, we store <em>addresses</em> of each record — enabling fast search and manipulation without altering original data.</p>
+
+    <div class="callout callout-key">
+      <div class="callout-title">Why Array of Pointers?</div>
+      <ul>
+        <li>Flexible memory management</li>
+        <li>Faster search — manipulate pointers, not data</li>
+        <li>Easier data manipulation without altering original file</li>
+        <li>Efficient in-memory operations (sort, search, filter)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="bin-search" class="topic-section">
+    <h2 class="section-heading">Binary Search on File Integers</h2>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 1 — Recursive Binary Search with AOP on integers from file</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="pp">#include</span><span class="str">&lt;stdlib.h&gt;</span>
+
+<span class="kw">int</span> <span class="fn">Search</span>(<span class="kw">int</span> **aop, <span class="kw">int</span> low, <span class="kw">int</span> high, <span class="kw">int</span> key);
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">FILE</span> *fp = <span class="fn">fopen</span>(<span class="str">"numbers.txt"</span>, <span class="str">"r"</span>);
+    <span class="kw">if</span> (fp == NULL) { <span class="fn">printf</span>(<span class="str">"Can't open\n"</span>); <span class="kw">return</span> <span class="num">1</span>; }
+
+    <span class="kw">int</span> a, n = <span class="num">0</span>;
+    <span class="kw">while</span> (<span class="fn">fscanf</span>(fp, <span class="str">"%d"</span>, &amp;a) != -<span class="num">1</span>)  n++;
+
+    <span class="kw">int</span>  *p   = <span class="fn">malloc</span>(n * <span class="kw">sizeof</span>(<span class="kw">int</span>));
+    <span class="kw">int</span> **aop = (<span class="kw">int</span> **)<span class="fn">malloc</span>(n * <span class="kw">sizeof</span>(<span class="kw">int</span> *));
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++)  aop[i] = &amp;p[i];
+
+    <span class="fn">rewind</span>(fp);
+    <span class="kw">int</span> i = <span class="num">0</span>;
+    <span class="kw">while</span> (<span class="fn">fscanf</span>(fp, <span class="str">"%d"</span>, &amp;p[i]) != -<span class="num">1</span>)  i++;
+    <span class="fn">fclose</span>(fp);
+
+    <span class="fn">printf</span>(<span class="str">"Enter integer to search: "</span>);
+    <span class="kw">int</span> key;
+    <span class="fn">scanf</span>(<span class="str">"%d"</span>, &amp;key);
+
+    <span class="kw">int</span> res = <span class="fn">Search</span>(aop, <span class="num">0</span>, n - <span class="num">1</span>, key);
+    <span class="kw">if</span> (res == -<span class="num">1</span>)  <span class="fn">printf</span>(<span class="str">"Not found\n"</span>);
+    <span class="kw">else</span>           <span class="fn">printf</span>(<span class="str">"Found at index %d\n"</span>, res);
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="kw">int</span> <span class="fn">Search</span>(<span class="kw">int</span> **aop, <span class="kw">int</span> low, <span class="kw">int</span> high, <span class="kw">int</span> key) {
+    <span class="kw">if</span> (low &gt; high) <span class="kw">return</span> -<span class="num">1</span>;
+    <span class="kw">int</span> mid = (low + high) / <span class="num">2</span>;
+    <span class="kw">if</span>      (*aop[mid] == key) <span class="kw">return</span> mid;
+    <span class="kw">else if</span> (key &lt; *aop[mid]) <span class="kw">return</span> <span class="fn">Search</span>(aop, low, mid - <span class="num">1</span>, key);
+    <span class="kw">else</span>                       <span class="kw">return</span> <span class="fn">Search</span>(aop, mid + <span class="num">1</span>, high, key);
+}</pre>
+    </div>
+  </div>
+
+  <div id="struct-search" class="topic-section">
+    <h2 class="section-heading">Binary Search on Array of Structs (CSV)</h2>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 2 — Search student by roll number (sorted_data.csv)</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="pp">#include</span><span class="str">&lt;string.h&gt;</span>
+<span class="pp">#include</span><span class="str">&lt;stdlib.h&gt;</span>
+
+<span class="kw">typedef struct</span> student { <span class="kw">int</span> roll; <span class="kw">char</span> name[<span class="num">20</span>]; } STUDENT;
+
+<span class="kw">void</span> <span class="fn">init_ptr</span>(STUDENT s[], STUDENT *p[], <span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++)  p[i] = &amp;s[i];
+}
+<span class="kw">void</span> <span class="fn">disp</span>(STUDENT *p[], <span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++)
+        <span class="fn">printf</span>(<span class="str">"%d %s\n"</span>, p[i]-&gt;roll, p[i]-&gt;name);
+}
+<span class="kw">int</span> <span class="fn">Search</span>(STUDENT **aop, <span class="kw">int</span> low, <span class="kw">int</span> high, <span class="kw">int</span> key) {
+    <span class="kw">if</span> (low &gt; high) <span class="kw">return</span> -<span class="num">1</span>;
+    <span class="kw">int</span> mid = (low + high) / <span class="num">2</span>;
+    <span class="kw">if</span>      (aop[mid]-&gt;roll == key) <span class="kw">return</span> mid;
+    <span class="kw">else if</span> (key &lt; aop[mid]-&gt;roll) <span class="kw">return</span> <span class="fn">Search</span>(aop, low, mid-<span class="num">1</span>, key);
+    <span class="kw">else</span>                            <span class="kw">return</span> <span class="fn">Search</span>(aop, mid+<span class="num">1</span>, high, key);
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">FILE</span> *fr = <span class="fn">fopen</span>(<span class="str">"sorted_data.csv"</span>, <span class="str">"r"</span>);
+    <span class="kw">if</span> (!fr) { <span class="fn">printf</span>(<span class="str">"Can't open\n"</span>); <span class="fn">exit</span>(<span class="num">1</span>); }
+    <span class="kw">char</span> a[<span class="num">200</span>]; <span class="fn">fgets</span>(a, <span class="num">200</span>, fr); <span class="cmt">// skip header</span>
+    STUDENT s[<span class="num">100</span>]; <span class="kw">int</span> i = <span class="num">0</span>;
+    <span class="kw">while</span> (<span class="fn">fgets</span>(a, <span class="num">200</span>, fr)) {
+        <span class="kw">char</span> *item = <span class="fn">strtok</span>(a, <span class="str">","</span>);
+        s[i].roll  = <span class="fn">atoi</span>(item);
+        item       = <span class="fn">strtok</span>(NULL, <span class="str">","</span>);
+        <span class="fn">strcpy</span>(s[i].name, item);
+        i++;
+    }
+    <span class="kw">int</span> n = i; <span class="fn">fclose</span>(fr);
+
+    STUDENT *p[<span class="num">100</span>];
+    <span class="fn">init_ptr</span>(s, p, n);
+    <span class="fn">disp</span>(p, n);
+
+    <span class="kw">int</span> key;
+    <span class="fn">printf</span>(<span class="str">"Enter roll number to search: "</span>);
+    <span class="fn">scanf</span>(<span class="str">"%d"</span>, &amp;key);
+    <span class="kw">int</span> res = <span class="fn">Search</span>(p, <span class="num">0</span>, n-<span class="num">1</span>, key);
+    <span class="kw">if</span> (res == -<span class="num">1</span>)
+        <span class="fn">printf</span>(<span class="str">"Student not found\n"</span>);
+    <span class="kw">else</span>
+        <span class="fn">printf</span>(<span class="str">"Roll: %d, Name: %s"</span>, p[res]-&gt;roll, p[res]-&gt;name);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- LECTURE 5: SORT WITH AOP -->
+  <!-- ═══════════════════════════════════════════════════ -->
+
+  <div id="sort-intro" class="topic-section">
+    <div class="section-label"><span class="sbar-pill pill-l4">Lecture 5</span></div>
+    <h2 class="section-heading">Sorting File Data using Array of Pointers</h2>
+    <p>When sorting file content with an AOP, we <strong>swap pointers</strong>, not the actual data. This reduces memory operations and improves performance significantly on large datasets.</p>
+
+    <div class="callout callout-key">
+      <div class="callout-title">Key Idea</div>
+      Read data → store in dynamic array → point AOP elements to each item → sort AOP (swap pointers only) → write sorted AOP to new file.
+    </div>
+  </div>
+
+  <div id="sort-ints" class="topic-section">
+    <h2 class="section-heading">Sort Integers from File</h2>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 1 — Selection Sort integers using AOP, write to sorted file</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="pp">#include</span><span class="str">&lt;stdlib.h&gt;</span>
+
+<span class="kw">void</span> <span class="fn">swap</span>(<span class="kw">int</span> **lhs, <span class="kw">int</span> **rhs) {
+    <span class="kw">int</span> *temp = *lhs;  *lhs = *rhs;  *rhs = temp;
+}
+<span class="kw">void</span> <span class="fn">sort</span>(<span class="kw">int</span> **aop, <span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n-<span class="num">1</span>; i++) {
+        <span class="kw">int</span> pos = i;
+        <span class="kw">for</span> (<span class="kw">int</span> j = i+<span class="num">1</span>; j &lt; n; j++)
+            <span class="kw">if</span> (*aop[pos] &gt; *aop[j])  pos = j;
+        <span class="kw">if</span> (pos != i)  <span class="fn">swap</span>(&amp;aop[pos], &amp;aop[i]);
+    }
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">FILE</span> *fp = <span class="fn">fopen</span>(<span class="str">"numbers.txt"</span>, <span class="str">"r"</span>);
+    <span class="kw">int</span> a, n = <span class="num">0</span>;
+    <span class="kw">while</span> (<span class="fn">fscanf</span>(fp, <span class="str">"%d"</span>, &amp;a) != -<span class="num">1</span>)  n++;
+
+    <span class="kw">int</span>  *p   = <span class="fn">malloc</span>(n * <span class="kw">sizeof</span>(<span class="kw">int</span>));
+    <span class="kw">int</span> **aop = (<span class="kw">int</span> **)<span class="fn">malloc</span>(n * <span class="kw">sizeof</span>(<span class="kw">int</span> *));
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++)  aop[i] = &amp;p[i];
+
+    <span class="fn">rewind</span>(fp);
+    <span class="kw">int</span> i = <span class="num">0</span>;
+    <span class="kw">while</span> (<span class="fn">fscanf</span>(fp, <span class="str">"%d"</span>, &amp;p[i]) != -<span class="num">1</span>)  i++;
+
+    <span class="fn">sort</span>(aop, n);
+
+    <span class="fn">FILE</span> *fpw = <span class="fn">fopen</span>(<span class="str">"sorted_data.txt"</span>, <span class="str">"w"</span>);
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++)
+        <span class="fn">fprintf</span>(fpw, <span class="str">"%d\t"</span>, *aop[i]);
+    <span class="fn">printf</span>(<span class="str">"Writing done.\n"</span>);
+    <span class="fn">fclose</span>(fp); <span class="fn">fclose</span>(fpw);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+  </div>
+
+  <div id="sort-structs" class="topic-section">
+    <h2 class="section-heading">Sort Structs — by roll / by name</h2>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Example 2 — Menu-driven sort (roll_no / name) on student CSV</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="pp">#include</span><span class="str">&lt;string.h&gt;</span>
+<span class="pp">#include</span><span class="str">&lt;stdlib.h&gt;</span>
+<span class="kw">struct</span> student { <span class="kw">int</span> roll; <span class="kw">char</span> name[<span class="num">20</span>]; };
+
+<span class="kw">void</span> <span class="fn">swap</span>(<span class="kw">struct</span> student **lhs, <span class="kw">struct</span> student **rhs) {
+    <span class="kw">struct</span> student *t = *lhs;  *lhs = *rhs;  *rhs = t;
+}
+<span class="kw">void</span> <span class="fn">selection_sort_roll_no</span>(<span class="kw">struct</span> student *s[], <span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n-<span class="num">1</span>; i++) {
+        <span class="kw">int</span> pos = i;
+        <span class="kw">for</span> (<span class="kw">int</span> j = i+<span class="num">1</span>; j &lt; n; j++)
+            <span class="kw">if</span> (s[pos]-&gt;roll &gt; s[j]-&gt;roll)  pos = j;
+        <span class="kw">if</span> (pos != i)  <span class="fn">swap</span>(&amp;s[pos], &amp;s[i]);
+    }
+}
+<span class="kw">void</span> <span class="fn">selection_sort_names</span>(<span class="kw">struct</span> student *s[], <span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n-<span class="num">1</span>; i++) {
+        <span class="kw">int</span> pos = i;
+        <span class="kw">for</span> (<span class="kw">int</span> j = i+<span class="num">1</span>; j &lt; n; j++)
+            <span class="kw">if</span> (<span class="fn">strcmp</span>(s[pos]-&gt;name, s[j]-&gt;name) &gt; <span class="num">0</span>)  pos = j;
+        <span class="kw">if</span> (pos != i)  <span class="fn">swap</span>(&amp;s[pos], &amp;s[i]);
+    }
+}
+<span class="cmt">/* main(), init_ptr(), disp() similar to search example — write sorted output to student_sorted.csv */</span></pre>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- LECTURE 7: HEADER FILES -->
+  <!-- ═══════════════════════════════════════════════════ -->
+
+  <div id="header-intro" class="topic-section">
+    <div class="section-label"><span class="sbar-pill pill-l5">Lecture 7</span></div>
+    <h2 class="section-heading">Header Files in C</h2>
+    <p>Header files enable <strong>modular programming</strong> by separating <em>interface</em> (declarations) from <em>implementation</em> (definitions).</p>
+
+    <div class="callout callout-key">
+      <div class="callout-title">Advantages</div>
+      <ul>
+        <li>Avoid rewriting code across multiple <code>.c</code> files</li>
+        <li>Separate declarations from definitions — clean &amp; organized</li>
+        <li>Easier maintenance &amp; collaboration on large projects</li>
+      </ul>
+    </div>
+
+    <h4 class="mini-heading">Execution Steps with Header Files:</h4>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-title">Compilation &amp; Linking Commands</span></div>
+      <pre><span class="cmt"># Step 1: Compile each .c file into an object file</span>
+gcc -c palin.c palin_client.c      <span class="cmt"># produces palin.o and palin_client.o</span>
+
+<span class="cmt"># Step 2: Link all .o files into executable</span>
+gcc palin.o palin_client.o         <span class="cmt"># produces a.out or a.exe</span>
+
+<span class="cmt"># Step 3: Run</span>
+./a.out</pre>
+    </div>
+  </div>
+
+  <div id="header-example" class="topic-section">
+    <h2 class="section-heading">Palindrome Example — Client / Server Split</h2>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">palin.h — Interface (Header File)</span>
+        <div class="code-actions">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="cmt">// palin.h — contains only the declaration (interface)</span>
+<span class="kw">int</span> <span class="fn">is_palin</span>(<span class="kw">int</span>);</pre>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">palin.c — Server (Implementation)</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="cmt">// palin.c — implementation of is_palin</span>
+<span class="kw">int</span> <span class="fn">is_palin</span>(<span class="kw">int</span> n) {
+    <span class="kw">int</span> rev = <span class="num">0</span>, num = n;
+    <span class="kw">while</span> (n &gt; <span class="num">0</span>) {
+        rev = rev * <span class="num">10</span> + n % <span class="num">10</span>;
+        n  /= <span class="num">10</span>;
+    }
+    <span class="kw">return</span> num == rev;
+}</pre>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">palin_client.c — Client Code</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="pp">#include</span><span class="str">"palin.h"</span>   <span class="cmt">// user-defined header — double quotes</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">int</span> n;
+    <span class="fn">printf</span>(<span class="str">"Enter number: "</span>);
+    <span class="fn">scanf</span>(<span class="str">"%d"</span>, &amp;n);
+    <span class="kw">if</span> (<span class="fn">is_palin</span>(n))
+        <span class="fn">printf</span>(<span class="str">"%d is a palindrome\n"</span>, n);
+    <span class="kw">else</span>
+        <span class="fn">printf</span>(<span class="str">"%d is not a palindrome\n"</span>, n);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      <div class="output-box">
+        <div class="output-label">Sample Outputs</div>
+Enter number: 121  →  121 is a palindrome
+Enter number: 123  →  123 is not a palindrome</div>
+    </div>
+  </div>
+
+  <div id="employee-example" class="topic-section">
+    <h2 class="section-heading">Employee App — Client / Server Architecture</h2>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">employee.h — Header File</span>
+        <div class="code-actions">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="cmt">// employee.h</span>
+<span class="kw">typedef struct</span> employee {
+    <span class="kw">char</span> name[<span class="num">20</span>];
+    <span class="kw">int</span>  id;
+    <span class="kw">int</span>  basic_salary;
+    <span class="kw">int</span>  total_salary;
+} employee_t;
+
+<span class="kw">void</span>       <span class="fn">scan_details</span>(employee_t*, <span class="kw">int</span>);
+<span class="kw">void</span>       <span class="fn">display_details</span>(<span class="kw">const</span> employee_t*, <span class="kw">int</span>);
+<span class="kw">int</span>        <span class="fn">calculate_total_salary</span>(employee_t*, <span class="kw">int</span>, <span class="kw">int</span>);
+employee_t <span class="fn">max</span>(employee_t*, <span class="kw">int</span>);</pre>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">employee_server.c — Implementation</span>
+        <div class="code-actions">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">"employee.h"</span>
+<span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+
+<span class="kw">void</span> <span class="fn">scan_details</span>(employee_t *e, <span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++)
+        <span class="fn">scanf</span>(<span class="str">"%s %d %d"</span>, (e+i)-&gt;name, &amp;(e+i)-&gt;id, &amp;(e+i)-&gt;basic_salary);
+}
+<span class="kw">void</span> <span class="fn">display_details</span>(<span class="kw">const</span> employee_t *e, <span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++)
+        <span class="fn">printf</span>(<span class="str">"%s\t%d\t%d\n"</span>, (e+i)-&gt;name, (e+i)-&gt;id, (e+i)-&gt;basic_salary);
+}
+employee_t <span class="fn">max</span>(employee_t *e, <span class="kw">int</span> n) {
+    <span class="kw">int</span> mx = <span class="num">0</span>; employee_t emax;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++)
+        <span class="kw">if</span> ((e+i)-&gt;basic_salary &gt; mx) {
+            mx = (e+i)-&gt;basic_salary;  emax = *(e+i);
+        }
+    <span class="kw">return</span> emax;
+}</pre>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">employee_client.c — Client Code</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="pp">#include</span><span class="str">"employee.h"</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+    employee_t e[<span class="num">1000</span>]; <span class="kw">int</span> n;
+    <span class="fn">printf</span>(<span class="str">"Enter number of employees: "</span>);
+    <span class="fn">scanf</span>(<span class="str">"%d"</span>, &amp;n);
+    <span class="fn">printf</span>(<span class="str">"Enter name, id, salary for %d employees:\n"</span>, n);
+    <span class="fn">scan_details</span>(e, n);
+    <span class="fn">display_details</span>(e, n);
+    employee_t emax = <span class="fn">max</span>(e, n);
+    <span class="fn">printf</span>(<span class="str">"Max salary employee: %s\n"</span>, emax.name);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- ENVIRONMENT VARIABLES -->
+  <!-- ═══════════════════════════════════════════════════ -->
+
+  <div id="env-intro" class="topic-section">
+    <div class="section-label"><span class="sbar-pill pill-l2">Env Vars</span></div>
+    <h2 class="section-heading">Environment Variables</h2>
+    <p>Environment variables are <strong>dynamic named values</strong> that affect running processes. Programs inherit them from the shell.</p>
+    <p>Context of program execution can be known via two ways: <strong>command-line arguments</strong> and <strong>environment variables</strong>.</p>
+    <div class="code-wrap">
+      <div class="code-header"><span class="code-title">Extended main signature</span></div>
+      <pre><span class="kw">int</span> <span class="fn">main</span>(<span class="kw">int</span> argc, <span class="kw">char</span> *argv[], <span class="kw">char</span> *envp[])</pre>
+    </div>
+  </div>
+
+  <div id="env-fns" class="topic-section">
+    <h2 class="section-heading">Environment Access Functions (stdlib.h)</h2>
+    <table class="fn-table">
+      <tr><th>Function</th><th>Prototype</th><th>Description</th></tr>
+      <tr><td class="fn-name">setenv</td><td class="fn-ret">int setenv(const char *name, const char *value, int replace)</td><td>Set/overwrite env variable; replace=1 overwrites</td></tr>
+      <tr><td class="fn-name">getenv</td><td class="fn-ret">char* getenv(const char *name)</td><td>Returns pointer to variable's value, or NULL</td></tr>
+      <tr><td class="fn-name">putenv</td><td class="fn-ret">int putenv(char *string)</td><td>Adds/changes variable using "name=value" string</td></tr>
+    </table>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Program 3 — Display all environment variables via envp[]</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>(<span class="kw">int</span> argc, <span class="kw">char</span> *argv[], <span class="kw">char</span> *envp[])
+{
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; envp[i] != NULL; i++)
+        <span class="fn">printf</span>(<span class="str">"%d: %s\n"</span>, i, envp[i]);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-title">💡 Important Notes</div>
+      <ul>
+        <li>Names are <strong>case-sensitive</strong> and cannot contain <code>=</code></li>
+        <li>Values can be any string; no embedded null characters</li>
+        <li>On Linux: paths separated by <code>:</code>; on Windows: <code>;</code></li>
+        <li>Setting PATH directly can break execution — concatenate to existing PATH</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- PREPROCESSOR DIRECTIVES -->
+  <!-- ═══════════════════════════════════════════════════ -->
+
+  <div id="pp-intro" class="topic-section">
+    <div class="section-label"><span class="sbar-pill pill-l1">Preprocessor</span></div>
+    <h2 class="section-heading">Preprocessor Directives</h2>
+    <p>C compilation is a multi-stage process: <strong>Preprocessing → Compilation → Loading → Linking → Execution</strong>. The C Preprocessor (CPP) is a <em>text substitution tool</em> that runs before compilation.</p>
+
+    <table class="fn-table">
+      <tr><th>#</th><th>Directive</th><th>Purpose</th></tr>
+      <tr><td>1</td><td class="fn-name">#define</td><td>Substitutes a preprocessor macro</td></tr>
+      <tr><td>2</td><td class="fn-name">#include</td><td>Inserts a header file</td></tr>
+      <tr><td>3</td><td class="fn-name">#undef</td><td>Undefines a macro</td></tr>
+      <tr><td>4</td><td class="fn-name">#ifdef</td><td>True if macro is defined</td></tr>
+      <tr><td>5</td><td class="fn-name">#ifndef</td><td>True if macro is NOT defined</td></tr>
+      <tr><td>6</td><td class="fn-name">#if / #else / #elif / #endif</td><td>Conditional compilation</td></tr>
+      <tr><td>7</td><td class="fn-name">#error</td><td>Prints error to stderr</td></tr>
+      <tr><td>8</td><td class="fn-name">#pragma</td><td>Compiler-specific special commands</td></tr>
+    </table>
+
+    <div class="callout callout-info">
+      <div class="callout-title">Tip</div>
+      Use <code>gcc -E file.c</code> to see the effect of the preprocessor — it shows you exactly what code gets compiled after all substitutions.
+    </div>
+  </div>
+
+  <div id="macros" class="topic-section">
+    <h2 class="section-heading">Macros with #define</h2>
+    <p>A macro is a <strong>named piece of code</strong>. When CPP encounters the name, it performs <em>plain text substitution</em> — no type, no memory allocation.</p>
+
+    <div class="callout callout-warn">
+      <div class="callout-title">⚠️ Macro vs Variable</div>
+      No memory is allocated for a macro. <code>&amp;MAX</code> is an <strong>error</strong>. Macros cannot be changed with <code>=</code>.
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Programs 1–7 — Macro examples</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="pp">#define</span> PI        3.14              <span class="cmt">// symbolic constant</span>
+<span class="pp">#define</span> MAX       10               <span class="cmt">// no memory, &amp;MAX is ERROR</span>
+<span class="pp">#define</span> STR       <span class="str">"Hello All"</span>     <span class="cmt">// string macro</span>
+<span class="pp">#define</span> SUM(a,b)  a+b             <span class="cmt">// macro with parameter</span>
+<span class="pp">#define</span> sqr(x)   (x)*(x)         <span class="cmt">// always wrap args in () !</span>
+<span class="pp">#define</span> cube(x)  sqr(x)*(x)      <span class="cmt">// macro inside macro</span>
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">printf</span>(<span class="str">"PI = %f\n"</span>, PI);
+    <span class="fn">printf</span>(<span class="str">"STR = %s\n"</span>, STR);
+    <span class="fn">printf</span>(<span class="str">"SUM(3,4) = %d\n"</span>, SUM(<span class="num">3</span>,<span class="num">4</span>));
+    <span class="fn">printf</span>(<span class="str">"sqr(5) = %d\n"</span>, sqr(<span class="num">5</span>));
+    <span class="fn">printf</span>(<span class="str">"sqr(2+3) = %d\n"</span>, sqr(<span class="num">2</span>+<span class="num">3</span>));  <span class="cmt">// (2+3)*(2+3) = 25</span>
+    <span class="fn">printf</span>(<span class="str">"cube(3) = %d\n"</span>, cube(<span class="num">3</span>));
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      <div class="output-box">
+        <div class="output-label">Output</div>
+PI = 3.140000
+STR = Hello All
+SUM(3,4) = 7
+sqr(5) = 25
+sqr(2+3) = 25
+cube(3) = 27</div>
+    </div>
+  </div>
+
+  <div id="predefined" class="topic-section">
+    <h2 class="section-heading">Pre-defined Macros in C</h2>
+    <table class="fn-table">
+      <tr><th>Macro</th><th>Expands to</th></tr>
+      <tr><td class="fn-name">__FILE__</td><td>Current source file name (string)</td></tr>
+      <tr><td class="fn-name">__DATE__</td><td>Compilation date (string)</td></tr>
+      <tr><td class="fn-name">__TIME__</td><td>Compilation time (string)</td></tr>
+      <tr><td class="fn-name">__LINE__</td><td>Current line number (int)</td></tr>
+      <tr><td class="fn-name">__STDC__</td><td>1 if compiler conforms to ISO C</td></tr>
+      <tr><td class="fn-name">__STDC_VERSION__</td><td>C standard version (e.g., 199901L)</td></tr>
+    </table>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Pre-defined Macros Demo</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">printf</span>(<span class="str">"File: %s\n"</span>, __FILE__);
+    <span class="fn">printf</span>(<span class="str">"Date: %s\n"</span>, __DATE__);
+    <span class="fn">printf</span>(<span class="str">"Time: %s\n"</span>, __TIME__);
+    <span class="fn">printf</span>(<span class="str">"Line: %d\n"</span>, __LINE__);
+    <span class="fn">printf</span>(<span class="str">"STDC: %d\n"</span>, __STDC__);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-title">Enum vs Macros</div>
+      <ul>
+        <li>Macro has <strong>no type</strong>; enum constants have type <code>int</code></li>
+        <li>Macro substitution happens at <strong>preprocessing</strong>; enum at compilation</li>
+        <li>Macro can be redefined (warning); enum constants <strong>cannot</strong> be redefined</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="cond-compile" class="topic-section">
+    <h2 class="section-heading">Conditional Compilation</h2>
+    <p>Compile only specific blocks of code based on conditions — especially useful for platform-specific code.</p>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Programs 1–6 — #ifdef, #ifndef, #if, #elif</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="pp">#define</span> MAX 20
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="cmt">/* #ifdef: included only if MAX is defined */</span>
+<span class="pp">#ifdef</span> MAX
+    <span class="fn">printf</span>(<span class="str">"MAX defined\n"</span>);
+<span class="pp">#endif</span>
+
+    <span class="cmt">/* #ifndef: included only if MAX is NOT defined */</span>
+<span class="pp">#ifndef</span> MIN
+    <span class="fn">printf</span>(<span class="str">"MIN not defined\n"</span>);
+<span class="pp">#endif</span>
+
+    <span class="cmt">/* #if with expression */</span>
+<span class="pp">#if</span> (2 &gt; 1)
+    <span class="fn">printf</span>(<span class="str">"2 &gt; 1 is true\n"</span>);
+<span class="pp">#endif</span>
+
+    <span class="cmt">/* #if + #else */</span>
+<span class="pp">#if</span> ((2+3) &lt; 2)
+    <span class="fn">printf</span>(<span class="str">"Hello\n"</span>);
+<span class="pp">#else</span>
+    <span class="fn">printf</span>(<span class="str">"Hi\n"</span>);
+<span class="pp">#endif</span>
+
+    <span class="cmt">/* #elif chain */</span>
+<span class="pp">#if</span> (12 % 5 == 0)
+    <span class="fn">printf</span>(<span class="str">"Multiple of 5\n"</span>);
+<span class="pp">#elif</span> (12 % 3 == 0)
+    <span class="fn">printf</span>(<span class="str">"Multiple of 3\n"</span>);
+<span class="pp">#endif</span>
+
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      <div class="output-box">
+        <div class="output-label">Output</div>
+MAX defined
+MIN not defined
+2 > 1 is true
+Hi
+Multiple of 3</div>
+    </div>
+  </div>
+
+  <div id="pragma" class="topic-section">
+    <h2 class="section-heading">Pragma Directives</h2>
+    <p>Compiler-specific directives — ignored if not supported (no error).</p>
+
+    <table class="fn-table">
+      <tr><th>Pragma</th><th>Purpose</th></tr>
+      <tr><td class="fn-name">#pragma startup / exit</td><td>Run functions before/after main()</td></tr>
+      <tr><td class="fn-name">#pragma warn -rvl</td><td>Suppress "missing return value" warning</td></tr>
+      <tr><td class="fn-name">#pragma warn -par</td><td>Suppress "unused parameter" warning</td></tr>
+      <tr><td class="fn-name">#pragma warn -rch</td><td>Suppress "unreachable code" warning</td></tr>
+      <tr><td class="fn-name">#pragma pack(n)</td><td>Align struct members to n bytes (1/2/4/8)</td></tr>
+    </table>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Pragma 1 — #pragma startup and exit</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">void</span> <span class="fn">func1</span>(); <span class="kw">void</span> <span class="fn">func2</span>();
+<span class="pp">#pragma</span> startup func1
+<span class="pp">#pragma</span> exit func2
+<span class="kw">void</span> <span class="fn">func1</span>() { <span class="fn">printf</span>(<span class="str">"Inside func1()\n"</span>); }
+<span class="kw">void</span> <span class="fn">func2</span>() { <span class="fn">printf</span>(<span class="str">"Inside func2()\n"</span>); }
+<span class="kw">int</span> <span class="fn">main</span>()  { <span class="fn">printf</span>(<span class="str">"Inside main()\n"</span>);  <span class="kw">return</span> <span class="num">0</span>; }</pre>
+      <div class="output-box">
+        <div class="output-label">Output</div>
+Inside func1()
+Inside main()
+Inside func2()</div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Pragma 3 — #pragma pack(1): struct size = 9 bytes</span>
+        <div class="code-actions">
+          <button class="run-btn" onclick="sendToCompiler(this)">▶ Run</button>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="pp">#pragma</span> pack(<span class="num">1</span>)    <span class="cmt">// align to 1 byte → no padding</span>
+<span class="kw">struct</span> sample {
+    <span class="kw">int</span>  a;   <span class="cmt">// 4 bytes</span>
+    <span class="kw">char</span> b;   <span class="cmt">// 1 byte (normally +3 padding without pragma)</span>
+    <span class="kw">int</span>  x;   <span class="cmt">// 4 bytes</span>
+};
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="fn">printf</span>(<span class="str">"%lu\n"</span>, <span class="kw">sizeof</span>(<span class="kw">struct</span> sample));  <span class="cmt">// 9 (not 12)</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+      <div class="output-box">
+        <div class="output-label">Output</div>
+9</div>
+    </div>
+  </div>
+
+  <div id="portable" class="topic-section">
+    <h2 class="section-heading">Portable Program Development</h2>
+    <p>Using conditional compilation and pre-defined platform macros, code can adapt to different operating systems at compile time.</p>
+
+    <table class="fn-table">
+      <tr><th>System</th><th>Macro</th><th>Value</th></tr>
+      <tr><td>Windows (MinGW)</td><td class="fn-name">__MINGW32__</td><td>1</td></tr>
+      <tr><td>Linux/Unix</td><td class="fn-name">__unix__</td><td>1</td></tr>
+      <tr><td>macOS</td><td class="fn-name">__APPLE__</td><td>1</td></tr>
+    </table>
+
+    <div class="code-wrap">
+      <div class="code-header">
+        <span class="code-title">Portable Program — Platform-specific fflush / fpurge</span>
+        <div class="code-actions">
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+      </div>
+      <pre><span class="pp">#include</span><span class="str">&lt;stdio.h&gt;</span>
+<span class="kw">int</span> <span class="fn">main</span>() {
+<span class="pp">#ifdef</span> __MINGW32__
+    <span class="fn">printf</span>(<span class="str">"Windows system\n"</span>);
+    <span class="kw">char</span> c, d;
+    <span class="fn">scanf</span>(<span class="str">"%c"</span>, &amp;c);  <span class="fn">fflush</span>(stdin);
+    <span class="fn">scanf</span>(<span class="str">"%c"</span>, &amp;d);
+    <span class="fn">printf</span>(<span class="str">"%c %c\n"</span>, c, d);
+<span class="pp">#elif</span> __unix__
+    <span class="fn">printf</span>(<span class="str">"Unix/Linux system\n"</span>);
+    <span class="kw">char</span> c, d;
+    <span class="fn">scanf</span>(<span class="str">"%c"</span>, &amp;c);  <span class="cmt">// use fpurge(stdin) on Linux</span>
+    <span class="fn">scanf</span>(<span class="str">"%c"</span>, &amp;d);
+    <span class="fn">printf</span>(<span class="str">"%c %c\n"</span>, c, d);
+<span class="pp">#elif</span> __APPLE__
+    <span class="fn">printf</span>(<span class="str">"macOS system\n"</span>);
+<span class="pp">#else</span>
+    <span class="fn">printf</span>(<span class="str">"Other system\n"</span>);
+<span class="pp">#endif</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-title">💡 Check with gcc -E</div>
+      Run <code>gcc -E portable.c</code> to see exactly which branch CPP selects for your system before actual compilation.
+    </div>
+
+    <a href="#" class="back-top">↑ Back to top</a>
+  </div>
+
+</main>
+</div>
+
+<!-- COMPILER FAB -->
+<button id="compiler-fab" onclick="openCompiler()">
+  ⚙
+  <span class="fab-tooltip">Open C Compiler</span>
+</button>
+
+<!-- COMPILER MODAL -->
+<div id="compiler-modal">
+  <div id="compiler-box">
+    <div id="compiler-bar">
+      <span class="ctitle">C Compiler <span>— Online (JDoodle API)</span></span>
+      <button id="close-compiler" onclick="closeCompiler()">✕</button>
+    </div>
+    <div id="compiler-body">
+      <textarea id="code-input" spellcheck="false" placeholder="Write your C code here…">
+#include&lt;stdio.h&gt;
+
+int main() {
+    printf("Hello from Unit 4!\n");
+    return 0;
+}
+</textarea>
+      <div id="compiler-right">
+        <div id="run-area">
+          <button id="compiler-run-btn" onclick="runCode()">▶ Compile &amp; Run</button>
+          <span id="compiler-status"></span>
+          <label id="stdin-label">Standard Input (stdin):</label>
+          <textarea id="stdin-input" placeholder="Enter program input here…"></textarea>
+        </div>
+        <div class="out-label" style="padding:10px 14px 2px;">Output</div>
+        <div id="output-area">Ready to run…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SIDEBAR ACTIVE LINK ──────────────────────────────────────────────
+const sections = document.querySelectorAll('.topic-section[id]');
+const sbarLinks = document.querySelectorAll('.sbar-link[href]');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) cur = s.id; });
+  sbarLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
+  });
+});
+
+// ── SEARCH ───────────────────────────────────────────────────────────
+let marks = [], markIdx = 0;
+const countEl = document.getElementById('search-count');
+const searchInput = document.getElementById('search');
+
+function clearMarks() {
+  document.querySelectorAll('mark').forEach(m => {
+    const p = m.parentNode;
+    p.replaceChild(document.createTextNode(m.textContent), m);
+    p.normalize();
+  });
+  marks = []; markIdx = 0; countEl.textContent = '';
+}
+
+function doSearch(q) {
+  clearMarks();
+  if (!q || q.length < 2) return;
+  const walker = document.createTreeWalker(
+    document.getElementById('main'), NodeFilter.SHOW_TEXT
+  );
+  const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi');
+  const nodes = [];
+  let n;
+  while ((n = walker.nextNode())) {
+    if (n.parentElement.closest('#topbar,script,style,pre code,.code-header')) continue;
+    if (re.test(n.textContent)) nodes.push(n);
+  }
+  nodes.forEach(node => {
+    re.lastIndex = 0;
+    const frag = document.createDocumentFragment();
+    let last = 0, m;
+    while ((m = re.exec(node.textContent)) !== null) {
+      frag.appendChild(document.createTextNode(node.textContent.slice(last, m.index)));
+      const mark = document.createElement('mark');
+      mark.textContent = m[0];
+      frag.appendChild(mark);
+      marks.push(mark);
+      last = re.lastIndex;
+    }
+    frag.appendChild(document.createTextNode(node.textContent.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  });
+  if (marks.length) {
+    countEl.textContent = `${marks.length} match${marks.length>1?'es':''}`;
+    scrollToMark(0);
+  } else {
+    countEl.textContent = 'No matches';
+  }
+}
+
+function scrollToMark(i) {
+  marks.forEach(m => m.classList.remove('active-mark'));
+  if (!marks.length) return;
+  markIdx = (i + marks.length) % marks.length;
+  marks[markIdx].classList.add('active-mark');
+  marks[markIdx].scrollIntoView({behavior:'smooth', block:'center'});
+  countEl.textContent = `${markIdx+1} / ${marks.length}`;
+}
+
+let searchTimeout;
+searchInput.addEventListener('input', () => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => doSearch(searchInput.value.trim()), 250);
+});
+document.getElementById('prev-btn').addEventListener('click', () => scrollToMark(markIdx - 1));
+document.getElementById('next-btn').addEventListener('click', () => scrollToMark(markIdx + 1));
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); scrollToMark(markIdx + 1); }
+  if (e.key === 'Escape') { searchInput.value = ''; clearMarks(); }
+});
+
+// ── COMPILER ─────────────────────────────────────────────────────────
+function openCompiler() {
+  document.getElementById('compiler-modal').classList.add('open');
+}
+function closeCompiler() {
+  document.getElementById('compiler-modal').classList.remove('open');
+}
+document.getElementById('compiler-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('compiler-modal')) closeCompiler();
+});
+
+function sendToCompiler(btn) {
+  const pre = btn.closest('.code-wrap').querySelector('pre');
+  document.getElementById('code-input').value = pre.textContent;
+  openCompiler();
+}
+
+async function runCode() {
+  const code  = document.getElementById('code-input').value;
+  const stdin = document.getElementById('stdin-input').value;
+  const out   = document.getElementById('output-area');
+  const status = document.getElementById('compiler-status');
+
+  out.className = '';
+  out.textContent = '⏳ Compiling…';
+  status.textContent = 'Running…';
+
+  try {
+    const res = await fetch('https://api.jdoodle.com/v1/execute', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        clientId:     '3b5e8b3f2d7b42d8b14b4a3a5e2b3d8f',
+        clientSecret: 'a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2',
+        script:       code,
+        stdin:        stdin,
+        language:     'c',
+        versionIndex: '5'
+      })
+    });
+    const data = await res.json();
+    if (data.output !== undefined) {
+      out.textContent = data.output || '(no output)';
+      out.className = '';
+    } else if (data.error) {
+      out.textContent = '⚠️ API Error: ' + data.error;
+      out.className = 'err';
+    } else {
+      throw new Error(JSON.stringify(data));
+    }
+  } catch (e) {
+    // Fallback: use wandbox
+    try {
+      const r2 = await fetch('https://wandbox.org/api/compile.json', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ code, compiler:'gcc-head', stdin, options:'warning,gnu++1y' })
+      });
+      const d2 = await r2.json();
+      out.textContent = (d2.program_output || '') + (d2.compiler_error || '') || '(no output)';
+      out.className = d2.compiler_error ? 'err' : '';
+    } catch (e2) {
+      out.textContent = '⚠️ Network error. Check connection or try copy-pasting into ideone.com\n\n' + e2;
+      out.className = 'err';
+    }
+  }
+  status.textContent = '';
+}
+
+// ── COPY CODE ────────────────────────────────────────────────────────
+function copyCode(btn) {
+  const pre = btn.closest('.code-wrap').querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = orig, 1500);
+  });
+}
+
+// ── KEYBOARD SHORTCUT ────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  }
+});
+</script>
+</body>
+</html>
