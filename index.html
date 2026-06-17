@@ -633,11 +633,12 @@ mark { background: rgba(232,168,56,0.3); color: inherit; border-radius: 2px; pad
   </div>
 <div id="nav-tree">
     <!-- UNIT 1 (M1 + M2) -->
-<div class="nav-unit">
-  <div class="nav-unit-header" style="color:white; display:flex; align-items:center; gap:10px; padding:10px 14px; font-weight:500;">
-    <span class="unit-badge" style="background:transparent; color:#a5b4fc; font-size:18px; font-weight:1600;">Unit 1</span>
-  </div>
-
+<div id="nav-tree">
+    <!-- UNIT 1 (M1 + M2) -->
+    <div class="nav-unit">
+        <div class="nav-unit-header" style="color:white; display:flex; align-items:center; gap:10px; padding:10px 14px; font-weight:500;">
+            <span class="unit-badge" style="background:transparent; color:#a5b4fc; font-size:18px; font-weight:1600;">Unit 1</span>
+        </div>
         
         <!-- Module 1 (M1) -->
         <div class="nav-module">
@@ -691,10 +692,9 @@ mark { background: rgba(232,168,56,0.3); color: inherit; border-radius: 2px; pad
 
     <!-- UNIT 2 (M0 + M3 + M6) -->
     <div class="nav-unit">
-<div class="nav-unit">
-  <div class="nav-unit-header" style="color:white; display:flex; align-items:center; gap:10px; padding:10px 14px; font-weight:500;">
-    <span class="unit-badge" style="background:transparent; color:#a5b4fc; font-size:18px; font-weight:1600;">Unit 2</span>
-  </div>
+        <div class="nav-unit-header" style="color:white; display:flex; align-items:center; gap:10px; padding:10px 14px; font-weight:500;">
+            <span class="unit-badge" style="background:transparent; color:#a5b4fc; font-size:18px; font-weight:1600;">Unit 2</span>
+        </div>
 
         <!-- Module 0 (M0) -->
         <div class="nav-module">
@@ -777,68 +777,80 @@ mark { background: rgba(232,168,56,0.3); color: inherit; border-radius: 2px; pad
                 <a href="#impressed-current" class="nav-topic-link">Impressed Current Method</a>
             </div>
         </div>
-  <!-- UNIT 3 -->
-<!--
-  <div class="nav-unit">
-  <div class="nav-unit-header" style="color:white; display:flex; align-items:center; gap:10px; padding:10px 14px; font-weight:500;">
-    <span class="unit-badge" style="background:transparent; color:#a5b4fc; font-size:18px; font-weight:1600;">Unit 3</span>
-  </div>-->
+    </div>
 
-  <!-- Module 1 -->
- <!-- <div class="nav-module">
-    <button class="nav-module-btn" data-target="nav-u3m1">
-      <span class="pill">M1</span> Electrochemical Equilibria <span class="chevron">▶</span>
-    </button>
-    <div class="nav-children" id="nav-u3m1">
-      <a href="#intro-electrochemistry" class="nav-topic-link">Introduction</a>
-      <a href="#electrode-potential" class="nav-topic-link">Electrode Potential</a>
-      <a href="#origin-electrode-potential" class="nav-topic-link">Origin of Electrode Potential</a>
-      <a href="#standard-electrode-potential" class="nav-topic-link">Standard Electrode Potential</a>
-      <a href="#electrochemical-series" class="nav-topic-link">Electrochemical Series</a>
-      <a href="#nernst-equation" class="nav-topic-link">Nernst Equation</a>
-      <a href="#types-electrodes" class="nav-topic-link">Types of Electrodes</a>
-      <a href="#reference-electrodes" class="nav-topic-link">Reference Electrodes</a>
-      <a href="#she" class="nav-topic-link">Standard Hydrogen Electrode</a>
-      <a href="#calomel-electrode" class="nav-topic-link">Calomel Electrode</a>
-      <a href="#concentration-cells" class="nav-topic-link">Concentration Cells</a>
-      <a href="#ise" class="nav-topic-link">Ion Selective Electrodes</a>
-      <a href="#glass-electrode" class="nav-topic-link">Glass Electrode</a>
-      <a href="#ph-determination" class="nav-topic-link">pH Determination</a>
-    </div>
-  </div>
-  -->
+    <!-- UNIT 3 - Energy Storage Devices -->
+    <div class="nav-unit">
+        <div class="nav-unit-header" style="color:white; display:flex; align-items:center; gap:10px; padding:10px 14px; font-weight:500;">
+            <span class="unit-badge" style="background:transparent; color:#a5b4fc; font-size:18px; font-weight:1600;">Unit 3</span>
+        </div>
 
-  <!-- Module 2 -->
-  <!--
-  <div class="nav-module">
-    <button class="nav-module-btn" data-target="nav-u3-m2">
-      <span class="pill">M2</span> Corrosion Chemistry <span class="chevron">▶</span>
-    </button>
-    <div class="nav-children" id="nav-u3-m2">
-      <a href="#corrosion-intro" class="nav-topic-link">Introduction to Corrosion</a>
-      <a href="#why-metals-corrode" class="nav-topic-link">Why Metals Corrode</a>
-      <a href="#types-corrosion" class="nav-topic-link">Types of Corrosion</a>
-      <a href="#electrochemical-theory" class="nav-topic-link">Electrochemical Theory</a>
-      <a href="#corrosion-of-iron" class="nav-topic-link">Corrosion of Iron</a>
-      <a href="#differential-metal" class="nav-topic-link">Differential Metal Corrosion</a>
-      <a href="#differential-aeration" class="nav-topic-link">Differential Aeration Corrosion</a>
-      <a href="#pitting-corrosion" class="nav-topic-link">Pitting Corrosion</a>
-      <a href="#stress-corrosion" class="nav-topic-link">Stress Corrosion</a>
-      <a href="#factors-corrosion" class="nav-topic-link">Factors Affecting Corrosion</a>
-      <a href="#protective-coatings" class="nav-topic-link">Protective Coatings</a>
-      <a href="#galvanizing" class="nav-topic-link">Galvanizing</a>
-      <a href="#anodizing" class="nav-topic-link">Anodizing</a>
-      <a href="#corrosion-inhibitors" class="nav-topic-link">Corrosion Inhibitors</a>
-      <a href="#cathodic-protection" class="nav-topic-link">Cathodic Protection</a>
+        <!-- Batteries -->
+        <div class="nav-module">
+            <button class="nav-module-btn" data-target="nav-batt"><span class="pill">B</span> Batteries <span class="chevron">▶</span></button>
+            <div class="nav-children" id="nav-batt">
+                <a href="#battery-intro" class="nav-topic-link">Battery – Introduction</a>
+                <a href="#battery-components" class="nav-topic-link">Components of a Battery</a>
+                <a href="#primary-secondary" class="nav-topic-link">Primary &amp; Secondary Batteries</a>
+                <a href="#reserve-batteries" class="nav-topic-link">Reserve Batteries</a>
+                <a href="#battery-characteristics" class="nav-topic-link">Battery Characteristics</a>
+                <a href="#modern-batteries" class="nav-topic-link">Modern Batteries – Zinc Air</a>
+                <a href="#lithium-batteries" class="nav-topic-link">Lithium Batteries</a>
+                <a href="#lithium-ion" class="nav-topic-link">Lithium Ion Battery</a>
+            </div>
+        </div>
+
+        <!-- Fuel Cells -->
+        <div class="nav-module">
+            <button class="nav-module-btn" data-target="nav-fc"><span class="pill">FC</span> Fuel Cells <span class="chevron">▶</span></button>
+            <div class="nav-children" id="nav-fc">
+                <a href="#fuel-cells-intro" class="nav-topic-link">Fuel Cells – Introduction</a>
+                <a href="#fc-working" class="nav-topic-link">Working &amp; Efficiency</a>
+                <a href="#alkaline-fc" class="nav-topic-link">Alkaline Fuel Cell</a>
+                <a href="#phosphoric-fc" class="nav-topic-link">Phosphoric Acid Fuel Cell</a>
+                <a href="#molten-carbonate-fc" class="nav-topic-link">Molten Carbonate Fuel Cell</a>
+                <a href="#pem-fc" class="nav-topic-link">Polymer Electrolyte Membrane (PEM)</a>
+                <a href="#solid-oxide-fc" class="nav-topic-link">Solid Oxide Fuel Cell</a>
+                <a href="#dmfc" class="nav-topic-link">Direct Methanol Fuel Cell (DMFC)</a>
+            </div>
+        </div>
+
+        <!-- Supercapacitors -->
+        <div class="nav-module">
+            <button class="nav-module-btn" data-target="nav-scap"><span class="pill">SC</span> Supercapacitors <span class="chevron">▶</span></button>
+            <div class="nav-children" id="nav-scap">
+                <a href="#capacitor" class="nav-topic-link">Capacitor Basics</a>
+                <a href="#supercap-intro" class="nav-topic-link">Supercapacitors – EDLC</a>
+                <a href="#supercap-construction" class="nav-topic-link">Construction &amp; Working</a>
+                <a href="#ragone-plot" class="nav-topic-link">Ragone Plot</a>
+            </div>
+        </div>
+
+        <!-- Hydrogen Energy -->
+        <div class="nav-module">
+            <button class="nav-module-btn" data-target="nav-h2"><span class="pill">H₂</span> Hydrogen Energy <span class="chevron">▶</span></button>
+            <div class="nav-children" id="nav-h2">
+                <a href="#h2-intro" class="nav-topic-link">Introduction &amp; Advantages</a>
+                <a href="#h2-production" class="nav-topic-link">Production Methods</a>
+                <a href="#steam-reforming" class="nav-topic-link">Steam Reforming</a>
+                <a href="#green-h2" class="nav-topic-link">Green Hydrogen – Electrolysis</a>
+                <a href="#h2-storage" class="nav-topic-link">Hydrogen Storage</a>
+            </div>
+        </div>
+
+        <!-- Electrochemical Sensors -->
+        <div class="nav-module">
+            <button class="nav-module-btn" data-target="nav-sens"><span class="pill">S</span> Electrochemical Sensors <span class="chevron">▶</span></button>
+            <div class="nav-children" id="nav-sens">
+                <a href="#sensor-types" class="nav-topic-link">Types of Sensors</a>
+                <a href="#potentiometric" class="nav-topic-link">Potentiometric Sensors</a>
+                <a href="#amperometric" class="nav-topic-link">Amperometric Sensors</a>
+                <a href="#oxygen-sensor" class="nav-topic-link">Oxygen Sensor</a>
+                <a href="#glucose-sensor" class="nav-topic-link">Glucose Biosensor</a>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-      -->
-    </div>
-</div>
-    
-    
-  </div>
 </nav>
 
 <div id="overlay"></div>
@@ -3711,1245 +3723,1001 @@ mark { background: rgba(232,168,56,0.3); color: inherit; border-radius: 2px; pad
     </section>
     
     
-        <!-- <div class="module-header">
-      <div class="module-eyebrow">Module I</div>
-      <h1>Electrochemical Equilibria</h1>
-      <p>Electrode potentials, Nernst equation, types of electrodes, reference electrodes, concentration cells, ion selective electrodes and pH determination.</p>
-          <button class="pdf-btn" onclick="window.open('./chem/u3.pdf', '_blank')">
+<!--UNIT 3-->
+    
+    
+    
+    
+    
+    
+    <div class="module-header">
+      <div class="module-eyebrow">Energy Storage Devices</div>
+      <h1>Batteries</h1>
+      <p>Device which stores chemical energy and converts it into electrical energy on demand</p><button class="pdf-btn" onclick="window.open('./chem/u3.pdf', '_blank')">
     📄 Unit 3 PDF
 </button>
-        </div>
-    
-    
-    
-    
-    <!-- UNIT 3-->
-        <!-- Introduction --><!--
-    <section class="section-anchor" id="intro-electrochemistry">
-      <h2>Electrochemical Studies</h2>
-      <p>Electrochemistry involves the study of:</p>
-      <ul>
-        <li><span class="key-term">Redox reaction</span> — reactions involving simultaneous oxidation and reduction.</li>
-        <li><span class="key-term">Electrodes</span> — Anode (oxidation) and Cathode (reduction).</li>
-        <li><span class="key-term">Electrolytic conductance through electrolyte due to movement of ions</span> — through acid, alkali or salt solutions; molten electrolytes; solid electrolytes.</li>
-      </ul>
-
-      
-    </section> -->
-
-    <!-- Electrode Potential --><!--
-    <section class="section-anchor" id="electrode-potential">
-      <h2>Electrode Potential</h2>
-      <ul>
-        <li>When a metal rod is dipped in a solution of its own ions, the <span class="key-term">electrical potential developed at the interface of the metal and its solution</span> is called the electrode potential.</li>
-        <li>It is denoted by <strong>E</strong>.</li>
-      </ul>
-    </section> -->
-
-    <!-- Origin of Electrode Potential --><!--
-    <section class="section-anchor" id="origin-electrode-potential">
-      <h2>Origin of Electrode Potential</h2>
-      <p>When a metal M is in contact with solution containing its ions M<sup>n+</sup>, two reactions are possible:</p>
-
-      <h3>1. Ionisation (Oxidation)</h3>
-      <div class="formula-block">
-        \[ M \rightleftharpoons M^{n+} + ne^- \]
-      </div>
-
-      <h3>2. Deposition (Reduction)</h3>
-      <div class="formula-block">
-        \[ M^{n+} + ne^- \rightleftharpoons M \]
-      </div>
-
-      <h3>Case I: If Ionization is Faster than Deposition</h3>
-      <ul>
-        <li>The metal acquires net negative charge, consequently retards the rate of ionization and increases the rate of deposition. This ultimately leads to the establishment of equilibrium.</li>
-        <li>The metal electrode gets negatively charged and attracts the layer of positive ions at the interface.</li>
-        <li>An electrical double layer is formed at the interface of metal and solution known as <span class="key-term">Helmholtz electrical double layer</span>.</li>
-      </ul>
-
-      <div class="fig-desc">
-        <strong>[Helmholtz Electrical Double Layer — Case I]</strong> The metal (blue) becomes negatively charged (−) and attracts a layer of positive ions (+) from the solution at the interface. This forms the Helmholtz electrical double layer. Reaction: M ⇌ M<sup>n+</sup> + ne<sup>−</sup>
-      </div>
-
-      <h3>Case II: If Deposition is Faster than Ionization</h3>
-      <ul>
-        <li>The metal acquires net positive charge, consequently retards the rate of deposition and increases rate of ionization. This ultimately leads to the establishment of equilibrium.</li>
-        <li>The metal electrode gets positively charged and attracts the layer of negative ions at the interface.</li>
-        <li>An electrical double layer is formed at the interface of metal and solution known as <span class="key-term">Helmholtz electrical double layer</span>.</li>
-      </ul>
-
-      <div class="fig-desc">
-        <strong>[Helmholtz Electrical Double Layer — Case II]</strong> The metal (blue) becomes positively charged (+) and attracts a layer of negative ions (−) from the solution at the interface. Reaction: M<sup>n+</sup> + ne<sup>−</sup> ⇌ M
-      </div>
-    </section> -->
-
-    <!-- Standard Electrode Potential --><!--
-    <section class="section-anchor" id="standard-electrode-potential">
-      <h2>Standard Electrode Potential</h2>
-      <ul>
-        <li>The potential developed at the interface of metal and solution, when the metal is in contact with a solution of its own ions having <span class="key-term">unit concentration at 298 K</span>.</li>
-        <li>In case of gas electrodes the partial pressure of gas is maintained at <span class="key-term">1 atmospheric pressure</span>.</li>
-        <li>It is represented as <strong>E°</strong>.</li>
-      </ul>
-
-      <h3>Electrochemical Cell</h3>
-      <p>Single electrode potentials cannot be measured; hence two electrodes are coupled together to form a cell.</p>
-
-      <h3>Cell Notation</h3>
-      <p>e.g., Daniel cell:</p>
-      <div class="formula-block">
-        \[ Zn(s)/Zn^{2+}(1M)//Cu^{2+}(1M)/Cu(s) \]
-      </div>
-
-      <h3>Cell Potential</h3>
-      <ul>
-        <li>The <span class="key-term">difference in electrode potentials of the electrodes constituting the cell</span>.</li>
-        <li>It is denoted by E<sub>cell</sub>.</li>
-      </ul>
-
-      <h3>Standard Cell Potential</h3>
-      <ul>
-        <li>E<sub>cell</sub> depends on concentration of the ions in the cell, temperature and the partial pressures of any gases involved in the cell reaction.</li>
-        <li>When all the concentrations are 1M, all partial pressures of gases are 1 atm and temperature is 298 K, the emf is called <span class="key-term">Standard cell potential, E°<sub>cell</sub></span>.</li>
-      </ul>
-
-      <h3>Calculation of E<sub>cell</sub></h3>
-      <div class="formula-block">
-        \[ E_{cell} = E_{rhs} - E_{lhs} = E_{cathode} - E_{anode} \]
-      </div>
-      <ul>
-        <li>E<sub>cell</sub> represents the driving force for the cell reaction to take place.</li>
-      </ul>
-      <div class="formula-block">
-        \[ \Delta G = -nFE_{CELL} \]
-      </div>
-      <ul>
-        <li>If reaction is spontaneous: ΔG is negative, thus E<sub>CELL</sub> should be <span class="key-term">positive</span>.</li>
-        <li>If reaction is non-spontaneous: ΔG is positive, thus E<sub>CELL</sub> should be <span class="key-term">negative</span>.</li>
-      </ul>
-    </section> -->
-
-    <!-- Electrochemical Series --><!--
-    <section class="section-anchor" id="electrochemical-series">
-      <h2>Electrochemical Series</h2>
-      <ul>
-        <li>In order to predict the electrochemical behavior of an electrode–electrolyte system, elements are arranged in the order of their <span class="key-term">standard reduction potentials</span>.</li>
-        <li>This arrangement is known as the <span class="key-term">electrochemical series</span>.</li>
-        <li>A <span class="key-term">negative value</span> indicates oxidation tendency while a <span class="key-term">positive value</span> indicates a reduction tendency.</li>
-      </ul>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Electrode Reaction</th><th>E° (volts)</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Li⁺(aq) + e⁻ ⇌ Li(s)</td><td>−3.03</td></tr>
-            <tr><td>K⁺(aq) + e⁻ ⇌ K(s)</td><td>−2.92</td></tr>
-            <tr><td>Ca²⁺(aq) + 2e⁻ ⇌ Ca(s)</td><td>−2.87</td></tr>
-            <tr><td>Na⁺(aq) + e⁻ ⇌ Na(s)</td><td>−2.71</td></tr>
-            <tr><td>Mg²⁺(aq) + 2e⁻ ⇌ Mg(s)</td><td>−2.37</td></tr>
-            <tr><td>Al³⁺(aq) + 3e⁻ ⇌ Al(s)</td><td>−1.66</td></tr>
-            <tr><td>Zn²⁺(aq) + 2e⁻ ⇌ Zn(s)</td><td>−0.76</td></tr>
-            <tr><td>Fe²⁺(aq) + 2e⁻ ⇌ Fe(s)</td><td>−0.44</td></tr>
-            <tr><td>Pb²⁺(aq) + 2e⁻ ⇌ Pb(s)</td><td>−0.13</td></tr>
-            <tr><td>2H⁺(aq) + 2e⁻ ⇌ H₂(g)</td><td>0.00</td></tr>
-            <tr><td>Cu²⁺(aq) + 2e⁻ ⇌ Cu(s)</td><td>+0.34</td></tr>
-            <tr><td>Ag⁺(aq) + e⁻ ⇌ Ag(s)</td><td>+0.80</td></tr>
-            <tr><td>Au³⁺(aq) + 3e⁻ ⇌ Au(s)</td><td>+1.50</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p style="font-size:0.82rem; color: var(--text-muted);">Metal reducing activity increases upward; metal oxidizing activity increases downward.</p>
-    </section> -->
-
-    <!-- Nernst Equation --><!--
-    <section class="section-anchor" id="nernst-equation">
-      <h2>Nernst Equation for a Single Electrode</h2>
-      <p>A quantitative relationship between electrode potential and concentration of species with which the electrode is reversible.</p>
-      <p>The reaction at the electrode is:</p>
-      <div class="formula-block">
-        \[ M^{n+} + ne^- \rightleftharpoons M \]
-      </div>
-      <p>The maximum work that can be obtained is: \( -\Delta G = W_{max} \)</p>
-      <p>For an electrochemical system, maximum work done is:</p>
-      <div class="callout callout-formula">
-        <div class="callout-title">Maximum Work</div>
-        <p>\( W_{max} = \text{Total charge available} \times \text{Energy available per unit charge} \)</p>
-        <ul>
-          <li><span class="key-term2">Total charge available</span>: No. of moles of electrons exchanged in redox reaction (n) multiplied by charge carried per mole of electrons, F (96,500 C/mol) = nF</li>
-          <li><span class="key-term2">Energy available per unit charge</span>: electrode potential E</li>
-        </ul>
-        <p>Therefore: \( W_{max} = nFE \) ; \( \Delta G = -nFE \)</p>
-        <p>Under standard conditions: \( \Delta G° = -nFE° \)</p>
-      </div>
-
-      <h3>Derivation of Nernst Equation</h3>
-      <p>A thermodynamic equation relates reaction quotient and decrease in free energy:</p>
-      <div class="formula-block">
-        \[ \Delta G = \Delta G° + RT \ln Q \quad \text{where Q is the reaction quotient} \]
-      </div>
-      <p>The reaction quotient for the reaction \(M^{n+} + ne^- \rightleftharpoons M\) is: \( Q = \dfrac{[M]}{[M^{n+}]} \)</p>
-      <p>Substituting for ΔG, ΔG° and Q, we get:</p>
-      <div class="formula-block">
-        \[ -nFE = -nFE° + RT\ln\left(\frac{[M]}{[M^{n+}]}\right) \]
-      </div>
-      <p>Since [M] = 1 for pure substances:</p>
-      <div class="formula-block">
-        \[ E = E° + \frac{RT}{nF}\ln([M^{n+}]) \]
-      </div>
-      <p>At 298 K:</p>
-      <div class="formula-block" style="font-size:1.05rem;">
-        \[ \boxed{E = E° + \frac{0.0591}{n}\log([M^{n+}])} \]
-      </div>
-
-      <h3>Nernst Equation for a Cell Reaction</h3>
-      <p>For the cell reaction: \( aA + bB \rightleftharpoons cC + dD \)</p>
-      <div class="formula-block">
-        \[ Q = \frac{[C]^c[D]^d}{[A]^a[B]^b} \]
-      </div>
-      <div class="formula-block">
-        \[ E = E° - \frac{0.0591}{n}\log\left(\frac{[C]^c[D]^d}{[A]^a[B]^b}\right) \]
-      </div>
-      <p>where n = no. of electrons transferred, E°<sub>cell</sub> = standard emf of the cell.</p>
-    </section> -->
-
-    <!-- Types of Electrodes --><!--
-    <section class="section-anchor" id="types-electrodes">
-      <h2>Types of Electrodes</h2>
-      <ul>
-        <li>In order to form a cell, 2 half cells or 2 electrodes are required.</li>
-        <li>Various types of electrodes are available which are constructed based on the application.</li>
-      </ul>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>1. Metal–Metal Ion Electrode</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <ul>
-            <li>Metal in contact with a solution of its own ions.</li>
-            <li>e.g., Zn/Zn²⁺, Cu/Cu²⁺, Ag/Ag⁺</li>
-            <li>Reaction: \( M^{n+} + ne^- \rightleftharpoons M \)</li>
-          </ul>
-          <p>Nernst equation:</p>
-          <div class="formula-block">
-            \[ E_{M/M^{n+}} = E°_{M/M^{n+}} + \frac{2.303RT}{nF}\log[M^{n+}] \]
-          </div>
-        </div>
-      </div>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>2. Metal–Metal Insoluble Salt–Ion Electrode</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <ul>
-            <li>A metal in contact with a sparingly soluble salt of the same metal dipped in a solution of soluble salt of the same anion.</li>
-            <li>e.g., Calomel electrode Hg/Hg₂Cl₂/KCl, Ag/AgCl(s)/HCl</li>
-            <li>For silver–silver chloride electrode: \( AgCl + e^- \rightleftharpoons Ag + Cl^- \)</li>
-          </ul>
-          <p>Nernst equation:</p>
-          <div class="formula-block">
-            \[ E_{Ag/AgCl/Cl^-} = E°_{Ag/AgCl/Cl} - \frac{0.0591}{1}\log[Cl^-] \]
-          </div>
-        </div>
-      </div>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>3. Gas Electrode</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <ul>
-            <li>Gas bubbling about an inert metal foil, immersed in solution containing ions to which the gas is reversible.</li>
-            <li>The metal provides electrical contact and facilitates the establishment of equilibrium between the gas and its ions.</li>
-            <li>e.g., Hydrogen electrode Pt/H₂/H⁺, Chlorine electrode Pt/Cl₂/Cl⁻</li>
-            <li>For a hydrogen electrode: \( 2H^+ + 2e^- \rightleftharpoons H_2 \)</li>
-          </ul>
-          <p>Nernst equation:</p>
-          <div class="formula-block">
-            \[ E_{Pt/H_2/H^+} = E°_{Pt/H_2/H^+} - \frac{0.0591}{2}\log\left(\frac{p_{H_2}}{[H^+]^2}\right) \]
-          </div>
-        </div>
-      </div>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>4. Amalgam Electrode</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <ul>
-            <li>Similar to metal-metal ion electrode in which metal amalgam is in contact with a solution containing its own ions.</li>
-            <li>e.g., Lead amalgam electrode Pb-Hg/Pb²⁺</li>
-            <li>For lead amalgam electrode: \( Pb^{2+} + 2e^- \rightleftharpoons Pb\text{-}Hg \)</li>
-          </ul>
-          <p>Nernst equation:</p>
-          <div class="formula-block">
-            \[ E_{Pb^{2+}/Pb-Hg} = E°_{Pb^{2+}/Pb-Hg} - \frac{0.0591}{2}\log\left(\frac{[Pb-Hg]}{[Pb^{2+}]}\right) \]
-          </div>
-        </div>
-      </div>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>5. Oxidation–Reduction Electrode</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <ul>
-            <li>An inert metal such as platinum immersed in a solution containing an appropriate oxidized and reduced form of redox system.</li>
-            <li>The metal merely acts as electrical contact.</li>
-            <li>The potential arises due to the tendency of one form to change to the other form.</li>
-            <li>e.g., Pt/Fe²⁺,Fe³⁺; Pt/Ce³⁺,Ce⁴⁺; Pt/Sn²⁺,Sn⁴⁺</li>
-            <li>For stannous-stannic electrode: \( Sn^{4+} + 2e^- \rightleftharpoons Sn^{2+} \)</li>
-          </ul>
-          <p>Nernst equation:</p>
-          <div class="formula-block">
-            \[ E_{Pt/Sn^{4+}/Sn^{2+}} = E°_{Pt/Sn^{4+}/Sn^{2+}} - \frac{0.0591}{2}\log\left(\frac{[Sn^{2+}]}{[Sn^{4+}]}\right) \]
-          </div>
-        </div>
-      </div>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>Quinhydrone Electrode</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <ul>
-            <li>An inert metal such as platinum immersed in a solution containing quinone and hydroquinone.</li>
-            <li>The metal merely acts as electrical contact.</li>
-            <li>The potential arises due to the tendency of quinone to change to hydroquinone.</li>
-            <li>Notation: Pt/Q,QH₂</li>
-            <li>Reaction: Quinone + 2H⁺ + 2e⁻ → Hydroquinone</li>
-          </ul>
-          <p>Nernst equation:</p>
-          <div class="formula-block">
-            \[ E_{Pt/Q/QH_2} = E°_{Pt/Q/QH_2} - \frac{0.0591}{2}\log\left(\frac{[QH_2]}{[Q][H^+]^2}\right) \]
-          </div>
-        </div>
-      </div>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>6. Ion Selective Electrode (Membrane Electrode)</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <ul>
-            <li>A membrane in contact with a solution, with which it can exchange ions.</li>
-            <li>e.g., <span class="key-term">glass electrode</span>: selective to H⁺, Na⁺, K⁺ etc.</li>
-          </ul>
-          <p>Equation for determining potential for pH sensitive Glass electrode:</p>
-          <div class="formula-block">
-            \[ E_G = E°_G + 0.0591\log_{10}[H^+] \]
-          </div>
-        </div>
-      </div>
-    </section> -->
-
-    <!-- Reference Electrodes --><!--
-    <section class="section-anchor" id="reference-electrodes">
-      <h2>Reference Electrodes</h2>
-      <ul>
-        <li>Electrodes whose potentials are <span class="key-term">accurately known, stable</span> and with reference to which the electrode potential of any electrode can be measured.</li>
-        <li>Reference electrode is combined with indicator electrode and emf of the cell is measured.</li>
-      </ul>
-
-      <div class="callout callout-def">
-        <div class="callout-title">Types of Reference Electrodes</div>
-        <p><strong>Primary reference electrodes:</strong> Standard Hydrogen Electrode (SHE)</p>
-        <p><strong>Secondary reference electrodes:</strong> Calomel electrode, Silver-silver chloride electrode</p>
-      </div>
-    </section>-->
-
-    <!-- SHE --><!--
-    <section class="section-anchor" id="she">
-      <h2>Primary Reference Electrode: Standard Hydrogen Electrode (SHE)</h2>
-      <ul>
-        <li>Electrode potential is assigned a value of <span class="key-term">0.0 V</span>.</li>
-        <li>Gas electrode: Pt/H₂/H⁺</li>
-        <li>Reaction: \( 2H^+ + 2e^- \rightleftharpoons H_2 \)</li>
-        <li>Used to measure potential of other electrodes.</li>
-      </ul>
-
-      <div class="example-block">
-        <div class="example-header">📐 Example — Measuring Electrode Potentials Using SHE</div>
-        <div class="example-body">
-          <p><strong>For Zinc:</strong> Cell: Zn/Zn²⁺//H⁺(1M)/H₂(1atm),Pt</p>
-          <div class="formula-block">
-            \[ E_{cell} = E_{cathode} - E_{anode} \]
-            \[ 0.76 = 0.0 - E_{Zn/Zn^{2+}} \]
-            \[ E_{Zn/Zn^{2+}} = -0.76\text{ V} \]
-          </div>
-          <p><strong>For Copper:</strong> Cell: Pt,H₂(1atm)/H⁺(1M)//Cu²⁺/Cu</p>
-          <div class="formula-block">
-            \[ 0.34 = E_{Cu/Cu^{2+}} - 0.0 \]
-            \[ E_{Cu/Cu^{2+}} = +0.34\text{ V} \]
-          </div>
-        </div>
-      </div>
-
-      <h3>Disadvantages of SHE</h3>
-      <ul>
-        <li>Maintaining concentration of H⁺ ions at 1M and pressure of H₂ gas at 1 atm is difficult.</li>
-        <li>Platinum is highly susceptible to poisoning by different impurities in gas.</li>
-        <li>It cannot be used with oxidizing and reducing environments.</li>
-      </ul>
-
-      <h3>Secondary Reference Electrodes</h3>
-      <p>Due to the limitations of SHE, some other electrodes whose electrode potentials are accurately known and remain stable over a long period of time and can be easily assembled are used. With respect to these electrodes, electrode potentials of other electrodes can be assigned. e.g., <span class="key-term">Calomel electrode, silver-silver chloride electrode</span>.</p>
-    </section> -->
-
-    <!-- Calomel Electrode --> <!--
-    <section class="section-anchor" id="calomel-electrode">
-      <h2>Secondary Reference Electrode: Calomel Electrode</h2>
-      <ul>
-        <li>Most widely used reference electrode.</li>
-        <li>Metal-insoluble salt–ion electrode: <strong>Hg/Hg₂Cl₂(s)/Cl⁻</strong></li>
-      </ul>
-
-      <h3>Construction</h3>
-      <ul>
-        <li>A glass tube containing a layer of mercury over which a paste of insoluble salt Hg₂Cl₂ (calomel) + Hg and the next layer is a solution of KCl.</li>
-        <li>A Pt wire dipped in Hg provides electrical contact.</li>
-        <li>Tube is fitted with a side tube to fill KCl solution of known concentration and another side tube which connects to the salt bridge.</li>
-      </ul>
-
-      <h3>Working</h3>
-      <p>Can act as anode or cathode depending on the nature of the electrode with which it is coupled.</p>
-
-      <h4>As Anode:</h4>
-      <div class="formula-block">
-        \[ 2Hg \rightleftharpoons Hg_2^{2+} + 2e^- \]
-        \[ Hg_2^{2+} + 2Cl^- \rightleftharpoons Hg_2Cl_2 \]
-        \[ \hline 2Hg + 2Cl^- \rightleftharpoons Hg_2Cl_2 + 2e^- \]
-      </div>
-
-      <h4>As Cathode:</h4>
-      <div class="formula-block">
-        \[ Hg_2^{2+} + 2e^- \rightleftharpoons 2Hg \]
-        \[ Hg_2Cl_2 \rightleftharpoons Hg_2^{2+} + 2Cl^- \]
-        \[ \hline Hg_2Cl_2 + 2e^- \rightleftharpoons 2Hg + 2Cl^- \]
-      </div>
-
-      <p>Applying Nernst's equation:</p>
-      <div class="formula-block">
-        \[ E = E° - \frac{2.303RT}{2F}\log[Cl^-]^2 \]
-      </div>
-      <p>At 298 K:</p>
-      <div class="formula-block">
-        \[ E = E° - 0.0591\log[Cl^-] \]
-      </div>
-      <ul>
-        <li>Electrode is <span class="key-term">reversible to chloride ions</span>.</li>
-        <li>Electrode potential depends on chloride ion concentration.</li>
-      </ul>
-
-      <h3>Types of Calomel Electrodes</h3>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>[KCl]</th><th>Name</th><th>Electrode Potential at 298 K</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>0.1 M</td><td>Decinormal electrode</td><td>0.3358 V</td></tr>
-            <tr><td>1 M</td><td>Normal electrode</td><td>0.2824 V</td></tr>
-            <tr><td>Saturated solution of KCl</td><td>Saturated Calomel Electrode (SCE)</td><td>0.2422 V</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section> -->
-
-    <!-- Concentration Cells --><!--
-    <section class="section-anchor" id="concentration-cells">
-      <h2>Concentration Cells</h2>
-      <div class="callout callout-def">
-        <div class="callout-title">Definition</div>
-        <p>An <span class="key-term">electrochemical cell in which identical electrodes are in contact with a solution of identical species but of different concentration</span>.</p>
-      </div>
-
-      <p>In this cell 2 copper electrodes are immersed in copper sulphate solutions of concentration c₁ &amp; c₂, such that c₂ &gt; c₁.</p>
-      <ul>
-        <li>An electrolyte has spontaneous tendency to diffuse from a solution of higher concentration to a solution of lower concentration which is the <span class="key-term">driving force</span> for development of potential.</li>
-        <li>Oxidation takes place at anode and reduction takes place at cathode.</li>
-        <li>e.g., Cu/Cu²⁺(c₁)//Cu²⁺(c₂)/Cu</li>
-      </ul>
-
-      <h3>Reactions and Cell Potential</h3>
-      <p>At anode: Cu → Cu²⁺(c₁) + 2e⁻</p>
-      <p>At cathode: Cu²⁺(c₂) + 2e⁻ → Cu</p>
-      <div class="formula-block">
-        \[ E_{cell} = \frac{2.303RT}{nF}\log\frac{c_2}{c_1} \]
-      </div>
-      <p>At 298 K:</p>
-      <div class="formula-block">
-        \[ E_{cell} = \frac{0.0591}{n}\log\frac{c_2}{c_1} \]
-      </div>
-      <ul>
-        <li>The emf of the cell is positive only if c₂ &gt; c₁ (i.e., conc. of metal ion at cathode &gt; conc. of metal ion at anode).</li>
-        <li>When c₂ = c₁, the emf of the cell becomes zero.</li>
-        <li>During working of the cell, concentration of ions increases at anode and decreases at cathode.</li>
-        <li>The cell can operate only as long as the concentration terms are different.</li>
-      </ul>
-
-      <h3>Types of Concentration Cells</h3>
-
-      <h4>Electrolyte Concentration Cell</h4>
-      <p>Consists of two same electrodes dipped in the same electrolyte but with different concentrations of electrolytes.</p>
-      <p>e.g., Cu/Cu²⁺(c₁)//Cu²⁺(c₂)/Cu</p>
-      <div class="formula-block">
-        \[ E_{cell} = \frac{2.303RT}{nF}\log\frac{c_2}{c_1} \]
-      </div>
-
-      <h4>Electrode Concentration Cell</h4>
-      <p>Consists of two identical electrodes of different activity dipped in the same solution of electrolyte.</p>
-      <p>e.g., Na-Hg(c₁)/Na⁺/Na-Hg(c₂)</p>
-      <div class="formula-block">
-        \[ E_{cell} = \frac{2.303RT}{nF}\log\frac{Na\text{-}Hg(c_1)}{Na\text{-}Hg(c_2)} \]
-      </div>
-
-      <p>For Na-Hg(c₁)/Na⁺/Na-Hg(c₂):</p>
-      <p>At anode: Na-Hg(c₁) → Na⁺ + e⁻</p>
-      <p>At cathode: Na⁺ + e⁻ → Na-Hg(c₂)</p>
-
-      <h4>Gas Electrode Concentration Cells</h4>
-      <p>For Pt/H₂(p₁ atm)/H⁺/H₂(p₂ atm)/Pt:</p>
-      <div class="formula-block">
-        \[ E_{cell} = \frac{2.303RT}{nF}\log\frac{p_1}{p_2} \]
-      </div>
-      <p>For Pt/Cl₂(p₁ atm)/Cl⁻/Cl₂(p₂ atm)/Pt:</p>
-      <div class="formula-block">
-        \[ E_{cell} = \frac{2.303RT}{nF}\log\frac{p_2}{p_1} \]
-      </div>
-    </section> -->
-
-    <!-- Ion Selective Electrodes --><!--
-    <section class="section-anchor" id="ise">
-      <h2>Ion Selective Electrodes (ISE)</h2>
-      <ul>
-        <li>Selectively respond to a <span class="key-term">specific ion</span> in a mixture.</li>
-        <li>Potential developed is a function of concentration of that ion.</li>
-        <li>Have a membrane which is capable of exchanging the specific ion with solution with which it is in contact.</li>
-        <li><span class="key-term">Membrane electrodes</span>, e.g., glass electrode.</li>
-      </ul>
-    </section>-->
-
-    <!-- Glass Electrode --><!--
-    <section class="section-anchor" id="glass-electrode">
-      <h2>Glass Electrode</h2>
-      <ul>
-        <li>Ion-selective electrode.</li>
-        <li>Responds to Hydrogen ion.</li>
-        <li>pH sensitive; can be used to determine pH of a solution.</li>
-        <li>Consists of a glass membrane which is capable of exchanging H⁺ ions.</li>
-      </ul>
-
-      <h3>Construction</h3>
-      <ul>
-        <li>Glass tube, the end of which is a bulb of <span class="key-term">very thin glass membrane</span>.</li>
-        <li>Glass bulb is made up of special type of glass, <strong>CORNING 015</strong>.</li>
-        <li>The glass bulb is filled with <span class="key-term">solution of known pH</span> which is the reference solution.</li>
-        <li>A <span class="key-term">silver–silver chloride electrode</span> is dipped inside the reference solution — serves as internal reference electrode and also provides external electrical contact.</li>
-        <li>The electrode is immersed in a <span class="key-term">solution containing H⁺</span> which is the analyte.</li>
-        <li>Notation: <strong>Ag/AgCl/HCl/glass</strong></li>
-      </ul>
-
-      <h3>Working</h3>
-      <p>The inner and outer surfaces of the glass membrane can exchange H⁺ ions with the solution they are in contact with.</p>
-      <div class="formula-block">
-        \[ H^+_{solution} + Na^+Gl^- \rightleftharpoons Na^+_{solution} + H^+Gl^- \]
-      </div>
-      <ul>
-        <li>The hydrated glass membrane brings about ion exchange reaction between singly charged cations in the interstices of glass lattice and protons from the solution.</li>
-        <li>A potential is developed, which is a function of H⁺ of the solution.</li>
-      </ul>
-
-      <h3>Electrode Potential of a Glass Electrode</h3>
-      <p>Boundary potential is:</p>
-      <div class="formula-block">
-        \[ E_b = \frac{2.303RT}{nF}\log\frac{C_1}{C_2} \]
-      </div>
-      <p>Since concentration of reference solution, C₂ is constant:</p>
-      <div class="formula-block">
-        \[ E_b = L' + \frac{2.303RT}{nF}\log C_1 \quad \text{where} \quad L' = -\frac{2.303RT}{nF}\log C_2 \]
-      </div>
-      <p>At 298 K (since for H⁺, n = 1):</p>
-      <div class="formula-block">
-        \[ E_b = L' + 0.0591\log[H^+] \]
-        \[ \boxed{E_b = L' - 0.0591\text{pH}} \]
-      </div>
-
-      <h3>Components of Glass Electrode Potential</h3>
-      <p>The glass electrode potential has 3 components:</p>
-      <ol>
-        <li><span class="key-term">The boundary potential</span></li>
-        <li><span class="key-term">The potential of internal reference electrode</span></li>
-        <li><span class="key-term">Asymmetric potential</span> — arises due to difference in responses of inner and outer surfaces of the glass bulb, due to differing conditions of stress on two glass surfaces.</li>
-      </ol>
-      <div class="formula-block">
-        \[ E_G = E_b + E_{ref} + E_{asymmetric} \]
-        \[ = L' + \frac{0.0591}{n}\log[H^+] + E_{ref} + E_{asymmetric} \]
-        \[ = E°_G + 0.0591\log[H^+] \quad \text{where } E°_G = L' + E_{ref} + E_{asymmetric} \]
-        \[ \boxed{E_G = E°_G - 0.0591\text{pH}} \]
-      </div>
-    </section> -->
-
-    <!-- pH Determination --><!--
-    <section class="section-anchor" id="ph-determination">
-      <h2>Determination of pH using Glass Electrode</h2>
-      <ul>
-        <li>Glass electrode is combined with an external reference electrode.</li>
-      </ul>
-      <div class="formula-block">
-        \[ Hg/Hg_2Cl_2/Cl^-//\text{analyte solution}/glass/0.1N\text{ HCl}/AgCl/Ag \]
-      </div>
-      <ul>
-        <li>The emf of the cell is determined potentiometrically.</li>
-      </ul>
-      <div class="formula-block">
-        \[ E_{cell} = E_G - E_{calomel} \]
-        \[ E_G = E°_G - 0.0591\text{pH} \]
-        \[ E_{cell} = E°_G - 0.0591\text{pH} - E_{calomel} \]
-        \[ \boxed{\text{pH} = \frac{E°_G - E_{calomel} - E_{cell}}{0.0591}} \]
-      </div>
-      <ul>
-        <li>To evaluate E°<sub>G</sub>, the glass electrode is dipped in a <span class="key-term">solution of known pH (buffer solution)</span> and combined with calomel electrode, the emf of the cell is measured from which E°<sub>G</sub> can be evaluated.</li>
-      </ul>
-
-      <h3>Applications of Glass Electrode</h3>
-      <p>Used extensively in chemical, industrial, agricultural and biological labs.</p>
-
-      <h3>Advantages of Glass Electrode</h3>
-      <ul>
-        <li>Can be used in oxidizing and reducing environments and metal ions.</li>
-        <li>Does not get poisoned.</li>
-        <li>Can be used for very small volumes.</li>
-        <li>Accurate results can be obtained between pH 1 to 9 by ordinary electrodes. However by using special glass electrodes pH 1 to 14 can be measured with accuracy.</li>
-        <li>Simple to operate and can be used with portable instruments.</li>
-      </ul>
-
-      <h3>Disadvantages of Glass Electrode</h3>
-      <ul>
-        <li>Because of high resistance of glass, a simple potentiometer cannot be used. It requires sensitive potentiometer for emf measurements.</li>
-        <li>Glass membrane is very delicate, hence has to be handled carefully.</li>
-        <li>At very high pH levels usually over a pH of 9, <span class="key-term">Alkaline error</span> is observed. When the Sodium ion level is relatively high, some of the H⁺ ions in the gel layer around the sensitive electrode membrane are replaced by Na⁺ ions. The electrode may eventually respond to Na⁺ instead of H⁺ ions, giving a <span class="key-term">false lower pH value</span> than the actual value.</li>
-      </ul>
-    </section>
--->
-    <!-- ===================== MODULE 2: CORROSION CHEMISTRY ===================== --><!--
-    <div class="module-sep">
-      <div class="module-sep-line"></div>
-      <span class="module-sep-label">Module II</span>
-      <div class="module-sep-line"></div>
     </div>
 
+    <section class="section-anchor" id="battery-intro">
+      <h2>Battery</h2>
+      <ul>
+        <li>Device which stores chemical energy and converts it into electrical energy on demand</li>
+        <li>Alternate sources of energy – Variable sizes and shapes – Portable</li>
+        <li>Applications: Consumer goods – mobiles, laptops, calculators, flash lights – emergency lighting, space vehicles, electric vehicles, pacemakers</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="battery-components">
+      <h2>Components of a battery</h2>
+      <p><strong>Anode:</strong> Oxidation takes place – Electroactive material: metals which can undergo oxidation easily – Zn, Pb, Li</p>
+      <p><strong>Cathode:</strong> Reduction takes place – Electroactive material: compounds which can undergo reduction easily – PbO₂, MnO₂, O₂</p>
+      <p><strong>Electrolyte:</strong> Substance with good ionic conductivity – Acid, alkali or salt solutions; solids – doped oxides, polymers – H₂SO₄, KOH, Nafion</p>
+      <p><strong>Separator:</strong> Insulator which separates anode and cathode compartment – Role – To prevent internal short circuit – Transport ions from anode to cathode compartments and vice versa – Polypropylene, Cellophane</p>
+    </section>
+
+    <section class="section-anchor" id="primary-secondary">
+      <h2>Based on working, two types of batteries:</h2>
+      <h3>Primary battery</h3>
+      <ul>
+        <li>Electroactive material cannot be regenerated</li>
+        <li>Discarded after electroactive species is consumed</li>
+        <li>Galvanic cell – Dry cell, Li-MnO₂</li>
+      </ul>
+      <h3>Secondary battery</h3>
+      <ul>
+        <li>Electroactive material can be regenerated</li>
+        <li>Can be used several times</li>
+        <li>Galvanic as well as electrolytic cell – Storage battery – Li-ion, Pb-acid, Ni-Cd</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="reserve-batteries">
+      <h2>Reserve batteries</h2>
+      <ul>
+        <li>One of the key component is kept separated from the rest of the battery allowed to come in contact with other components when required</li>
+        <li>Usually the electrolyte is the component that is isolated – When one of the key components of the cell is separated from the rest of the cell, chemical reaction between the cell components (self discharge) is prevented</li>
+        <li>Has unlimited shelf life – Usually designed for emergency use e.g mid-air crisis</li>
+        <li>Examples: Mg-AgCl (water activated), Zn-Ag₂O (KOH activated)</li>
+        <li>Applications: Sonobuoys, Weather balloons, Emergency lights etc.</li>
+      </ul>
+      <h3>Salient features:</h3>
+      <ul>
+        <li>Quick activation – Deliver high power for a short time – many kW for several minutes</li>
+        <li>No self-discharge – Unlimited shelf life – High reliability</li>
+        <li>Examples: Mg-AgCl (water activated), Zn-Ag₂O (KOH activated)</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="battery-characteristics">
+      <h2>Battery characteristics</h2>
+      <h3>Voltage:</h3>
+      <p>Emf of the cell → ΔG → reaction → choice of electrodes</p>
+      <div class="formula-block">\[ E_{cell} = E^{o}_{cell} - \frac{2.303RT}{nF} \log Q \]</div>
+      <p><strong>Factors affecting voltage of a battery:</strong></p>
+      <ul>
+        <li>\( E_{cell} \) ; higher the difference between \( E_{cathode} \) and \( E_{anode} \), higher is the voltage of the cell</li>
+        <li>Temperature (T); with increase in temperature voltage of the cell decreases</li>
+        <li>Reaction quotient (Q); as the value of Q increases, the voltage of the cell changes marginally</li>
+      </ul>
+      <h3>Current:</h3>
+      <ul>
+        <li>Measure of the rate at which battery is discharging – Amperes, milliamperes</li>
+        <li>Depends on rapid electron transfer reaction – Amount of electroactive species – Conductivity of electrolyte – Inter-electrode distance</li>
+      </ul>
+      <h3>Capacity:</h3>
+      <ul>
+        <li>Charge or amount of electricity that may be obtained from the battery and is given in Ah</li>
+        <li>Faraday's relation \( C = \frac{wnF}{M} \) – C is the capacity, w is the mass and M is the molar mass of active material</li>
+        <li>Capacity depends on: Size of the battery, Discharge conditions of the battery</li>
+        <li>\( C = I t \) – The time period, t, for which the battery will last when a constant current, I, is drawn – Longer the flat portion of the curve better is the capacity</li>
+      </ul>
+      <h3>Electricity Storage density:</h3>
+      <ul>
+        <li>Amount of charge or electricity per unit weight which the battery can hold</li>
+        <li>Weight includes weight of all the components of the battery – electrodes, electrolyte, case, current collectors, terminals etc</li>
+        <li>To get high electricity storage density, use of right kind of material for all the components is important. e.g., 7g of Li is required at anode to give 1F of charge whereas 104g of Pb is required for the same amount of charge</li>
+      </ul>
+      <h3>Cycle life:</h3>
+      <ul>
+        <li>Number of charge/discharge cycles that are possible before failure occurs</li>
+        <li>Applicable only to secondary batteries</li>
+        <li>Reasons for limited cycle life: Corrosion at contact points – Shedding of active material from the plates – Shorting between electrodes due to irregular crystal growth and changes in morphology</li>
+      </ul>
+      <h3>Energy efficiency:</h3>
+      <ul>
+        <li>Percentage of Energy efficiency = (Energy released on discharge / Energy required for charging) × 100</li>
+        <li>Depends on efficiency of electrode reactions</li>
+      </ul>
+      <h3>Shelf life:</h3>
+      <ul>
+        <li>Maximum time for which a battery can be stored without loss of performance</li>
+        <li>Low shelf life due to self-discharge</li>
+      </ul>
+      <h3>Tolerance to service conditions:</h3>
+      <ul>
+        <li>The battery has to be tolerant to different service conditions such as variation in temperature, vibration and shock</li>
+      </ul>
+      <h3>Energy density:</h3>
+      <div class="formula-block">\[ \text{Energy density} = \frac{\text{Energy available from the battery}}{\text{Mass of the battery}} = \frac{i \times E_{cell} \times t}{W} \]</div>
+      <p>where W is mass of the battery, i and E_cell are current and EMF and t is time – watt-hr/kg</p>
+      <h3>Power density:</h3>
+      <div class="formula-block">\[ \text{Power density} = \frac{\text{Power available from the battery}}{\text{Mass of the battery}} = \frac{i \times E_{cell}}{W} \]</div>
+      <p>where W is mass of the battery, i and E_cell are current and EMF – watt/kg</p>
+    </section>
+
+    <section class="section-anchor" id="modern-batteries">
+      <h2>Modern batteries – Zinc air batteries</h2>
+      <ul>
+        <li>Metal-air battery – Anode: Zn; Cathode: O₂ – Alkaline battery; electrolyte: alkali</li>
+        <li>Uses oxygen directly from the atmosphere to produce electrochemical energy</li>
+        <li>Cathode active material need not be stored inside the battery – Energy density is very high</li>
+      </ul>
+      <h3>Construction:</h3>
+      <ul>
+        <li><strong>Anode:</strong> Zinc granules with gelling agent (to immobilize the composite and ensure adequate contact with Zinc granules) and a small amount of electrolyte</li>
+        <li><strong>Cathode:</strong> Carbon (graphite) blended with MnO₂ (catalyst) with a wet proofing agent coated on nickel wire mesh support and an outer layer of air permeable Teflon layer. Air access holes on the cathode provide pathway for O₂ to enter the battery</li>
+        <li><strong>Electrolyte:</strong> 30% KOH</li>
+        <li><strong>Separator:</strong> Polypropylene membrane soaked in electrolyte</li>
+      </ul>
+<h3>Working:</h3>
+<ul>
+  <li><strong>At Anode:</strong></li>
+</ul>
+<div class="formula-block">
+  Zn → Zn²⁺ + 2e⁻<br>
+  Zn²⁺ + 2OH⁻ → ZnO + H₂O<br>
+  <strong>Overall:</strong> Zn + 2OH⁻ → ZnO + H₂O + 2e⁻
+</div>
+<ul>
+  <li><strong>At Cathode:</strong></li>
+</ul>
+<div class="formula-block">
+  ½O₂ + H₂O + 2e⁻ → 2OH⁻
+</div>
+<ul>
+  <li><strong>Overall Reaction:</strong></li>
+</ul>
+<div class="formula-block">
+  Zn + ½O₂ → ZnO
+</div>
+<p><strong>Emf:</strong> 1.4 V</p>
+<p></p>
+      <h3>Advantages:</h3>
+      <ul>
+        <li>High energy density: Air is taken directly from atmosphere and need not be stored; doesn't contribute to the mass of the battery</li>
+        <li>Very long shelf life: It can be kept sealed</li>
+        <li>No ecological problems – Low cost</li>
+      </ul>
+      <h3>Disadvantages:</h3>
+      <ul>
+        <li>Limited power output</li>
+        <li>Along with air, CO₂ may enter the battery. It reacts with KOH to form K₂CO₃, which will reduce the efficiency</li>
+      </ul>
+      <div class="formula-block">\[ CO_2 + 2KOH \rightarrow K_2CO_3 + H_2O \]</div>
+      <h3>Applications:</h3>
+      <ul>
+        <li>As power source in hearing aids</li>
+        <li>In various medical devices</li>
+        <li>In voice transmitters</li>
+        <li>Large zinc-air batteries are used in rail-road signaling</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="lithium-batteries">
+      <h2>Lithium batteries</h2>
+      <ul>
+        <li>Lithium is a popular anodic material: Light weight metal. The electrochemical equivalence of lithium is high (7g of lithium can give 1F of charge). High negative standard reduction potential of –3.05V; when coupled with other electrodes gives high voltage (about 4V).</li>
+        <li>Aqueous electrolytes cannot be used as Lithium is very reactive and it reacts vigorously with water. So organic and inorganic electrolytes are used.</li>
+      </ul>
+      <h3>Components of Lithium batteries:</h3>
+      <p>Lithium is used as anode; Cathode can be MnO₂, SO₂Cl₂. Electrolyte can be Li salt in organic solvents like acetonitrile, propylene carbonate or inorganic solvents like SOCl₂.</p>
+      <h3>Types of Lithium batteries:</h3>
+      <ul>
+        <li>Primary batteries which are not rechargeable, e.g. Li-MnO₂</li>
+        <li>Secondary batteries which are rechargeable, e.g. Li-ion battery</li>
+      </ul>
+      <h3>Advantages:</h3>
+      <ul>
+        <li>High Voltage up to 4V</li>
+        <li>High energy density – Lightest metal</li>
+        <li>High tolerance to service conditions (-40 °C to 70 °C)</li>
+        <li>High electricity storage density</li>
+        <li>Flat discharge characteristics</li>
+      </ul>
+      <h3>Disadvantages:</h3>
+      <ul>
+        <li>Safety concerns due to high reactivity of Lithium metal</li>
+        <li>Poor cycle life – due to dendrite formation</li>
+        <li>Transportation limit</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="lithium-ion">
+      <h2>Lithium ion battery</h2>
+      <h3>Principle:</h3>
+      <ul>
+        <li>Lithium ion moves from anode to cathode while discharging and from cathode to anode while charging</li>
+        <li>Materials used as anode and cathode should be capable of lodging Lithium ions</li>
+        <li>Anode material: Lithiated graphite</li>
+      </ul>
+      <h3>Construction:</h3>
+      <ul>
+        <li><strong>Anode:</strong> Lithiated – Carbon (Graphite) coated on Copper current collector</li>
+        <li><strong>Cathode:</strong> Lithiated transition metal oxide coated on Aluminium current collector e.g. Lithium cobalt oxide (LiCoO₂)</li>
+        <li><strong>Electrolyte:</strong> The electrolyte is typically a mixture of organic carbonate solvents such as ethylene carbonate or diethyl carbonate containing lithium salts like LiPF₆, LiClO₄</li>
+        <li><strong>Separator:</strong> It is a very thin sheet of micro perforated polypropylene membrane</li>
+      </ul>
+      <h3>During Discharging:</h3>
+      <ul>
+        <li>At Anode: xLiC₆ → xLi⁺ + xe⁻ + xC₆</li>
+        <li>At Cathode: Li₁₋ₓCoO₂ + xLi⁺ + xe⁻ → LiCoO₂</li>
+      </ul>
+      <h3>During Charging:</h3>
+      <ul>
+        <li>At Anode: LiCoO₂ → Li₁₋ₓCoO₂ + xLi⁺ + xe⁻</li>
+        <li>At Cathode: xLi⁺ + xe⁻ + xC₆ → xLiC₆</li>
+      </ul>
+      <h3>Advantages:</h3>
+      <ul>
+        <li>Lighter than other rechargeable batteries for a given capacity</li>
+        <li>Li-ion chemistry delivers a high open-circuit voltage 3.7 V</li>
+        <li>Low self-discharge rate</li>
+        <li>Do not suffer from battery memory effect</li>
+        <li>Good cycle life as the problem of dendrite formation is eliminated (at no point, neither charging nor discharging, Lithium metal is formed)</li>
+      </ul>
+      <h3>Disadvantages:</h3>
+      <ul>
+        <li>Rising internal resistance with cycling and age</li>
+        <li>Safety concerns if overheated or overcharged</li>
+      </ul>
+    </section>
+
+    <!-- ===================== FUEL CELLS ===================== -->
+    <div class="module-sep"><div class="module-sep-line"></div><span class="module-sep-label">Fuel Cells</span><div class="module-sep-line"></div></div>
+
     <div class="module-header">
-      <div class="module-eyebrow">Module II</div>
-      <h1>Corrosion Chemistry</h1>
-      <p>Types of corrosion, electrochemical theory, factors affecting corrosion, protective coatings, inhibitors, and cathodic protection.</p>
-    </div> -->
+      <div class="module-eyebrow">Energy Storage Devices</div>
+      <h1>Fuel cells</h1>
+      <p>Chemical energy → Thermal energy → Mechanical energy → Electrical energy</p>
+    </div>
 
-    <!-- Corrosion Introduction --><!--
-    <section class="section-anchor" id="corrosion-intro">
-      <h2>Corrosion</h2>
-      <div class="callout callout-def">
-        <div class="callout-title">Definition</div>
-        <p>The <span class="key-term">destruction or deterioration &amp; consequent loss of metal through direct chemical or electrochemical attack</span> by the environment.</p>
+    <section class="section-anchor" id="fuel-cells-intro">
+      <h2>Fuel cells</h2>
+      <p>Galvanic cell which converts chemical energy of a fuel oxidant system directly into electrical energy by means of redox reactions</p>
+      <ul>
+        <li>Do not store energy but convert chemical energy in the fuel to electrical energy</li>
+        <li>Fuel and oxidising agents have to be continuously supplied at the respective electrodes</li>
+        <li>Generate power as long as the electroactive material is supplied</li>
+      </ul>
+      <h3>Working:</h3>
+      <ul>
+        <li>Anode: Fuel → Oxidation product + ne⁻</li>
+        <li>Cathode: Oxidant + ne⁻ → Reduction products</li>
+        <li>Fuels: H₂, CO, CH₃OH, C₂H₅OH, HCHO, N₂H₄ – Oxidants: O₂, H₂O₂, halogens</li>
+      </ul>
+      <h3>Advantages:</h3>
+      <ul>
+        <li>High power efficiency (about 50 – 80%)</li>
+        <li>Ecofriendly – products formed are not toxic</li>
+        <li>Silent operation</li>
+      </ul>
+      <h3>Disadvantages:</h3>
+      <ul>
+        <li>Cost of the power is high as a result of the use of expensive electrodes and catalysts</li>
+        <li>Power output is moderate</li>
+        <li>Fuels in the form of gases and oxygen need to be stored in tanks under high pressure – special equipment is required</li>
+      </ul>
+      <h3>Applications:</h3>
+      <ul>
+        <li>Space exploration; as auxiliary power generators in space vehicles</li>
+        <li>Vehicle traction for cars, buses and commercial vehicles</li>
+        <li>Large scale power generation</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="fc-working">
+      <h2>Efficiency of a fuel cell</h2>
+      <ul>
+        <li>Thermodynamic efficiency is given by the ratio of work output to heat input</li>
+        <li>Work output is Gibb's free energy; heat input is enthalpy change of the cell reaction</li>
+        <li>Gibb's free energy, ΔG – Measure of the electrical work done</li>
+        <li>Enthalpy change, ΔH – Measure of the heat released during the reaction</li>
+      </ul>
+      <div class="formula-block">\[ \eta \% = \frac{\Delta G}{\Delta H} \times 100 = \frac{-nFE}{\Delta H} \times 100 \]</div>
+    </section>
+
+    <section class="section-anchor" id="alkaline-fc">
+      <h2>Alkaline fuel cell</h2>
+      <ul>
+        <li>Aqueous solution of KOH is used as electrolyte</li>
+        <li>Low temperature fuel cell (operates at 100°C)</li>
+        <li>Oxygen reduction is more rapid in alkaline electrolytes than in acid electrolytes</li>
+        <li>Use of non noble metal electro-catalyst is feasible</li>
+        <li>Carbon containing fuels cannot be used as CO₂ is formed as product which reacts with the electrolyte, KOH, to form K₂CO₃ which reduces efficiency of the cell</li>
+      </ul>
+      <div class="formula-block">\[ CO_2 + 2KOH \rightarrow K_2CO_3 + H_2O \]</div>
+    </section>
+
+    <section class="section-anchor" id="phosphoric-fc">
+      <h2>Phosphoric acid fuel cell</h2>
+      <ul>
+        <li>Concentrated phosphoric acid is used as electrolyte</li>
+        <li>Intermediate temperature fuel cell (operates between 160 – 220°C)</li>
+        <li>Platinum is used as electro-catalyst</li>
+        <li>Use only H₂ as fuel – H₂ used as fuel must be very pure as sulphur compounds and CO poison the Pt catalyst</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="molten-carbonate-fc">
+      <h2>Molten carbonate fuel cell</h2>
+      <ul>
+        <li>Molten carbonates (mixture of LiAlO₂ + K₂CO₃ + Li₂CO₃) used as electrolyte</li>
+        <li>High temperature fuel cell (operates between 600 – 650°C)</li>
+        <li>Catalyst is not required since it operates at high temperature</li>
+        <li>H₂ or CO can be used as fuel</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="pem-fc">
+      <h2>Polymer electrolyte membrane fuel cell (PEMFC)</h2>
+      <ul>
+        <li>Known as proton exchange membrane fuel cell</li>
+        <li>Polymer membrane or proton exchange membrane is used as electrolyte</li>
+        <li>Fluorocarbon backbone (-CF₂–CF₂–) similar to Teflon to which sulphonic acid groups (-SO₃H) are attached. The protons on sulphonic acid group are free to migrate through the hydrated membrane. e.g., (A) Aquivion and (B) Nafion</li>
+        <li>New membranes are being used especially when CH₃OH is used as fuel – Polyelectrolyte membranes e.g., SPEEK – sulphonated poly(ether ether ketone)</li>
+        <li>Low temperature fuel cell (60–90 °C)</li>
+        <li>Polymer membrane must remain hydrated to maintain H⁺ conductivity</li>
+        <li>Water produced from the reaction must be removed from the cathode</li>
+        <li>High temperatures may dehydrate the polymer so H⁺ conductivity cannot take place and the polymer may degrade and crack resulting in short circuit</li>
+        <li>Low temperatures will result in flooding of the cell thereby reducing efficiency of the cell and a higher catalyst loading will be required</li>
+        <li>Low weight and volume – High energy density – Noble metal catalyst usually Pt is used – CO, if present poisons the catalyst, so pure fuel and oxidant should be used</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="solid-oxide-fc">
+      <h2>Solid oxide fuel cell</h2>
+      <ul>
+        <li>Ceramic oxide capable of conducting oxide ions is used as electrolyte, e.g. ZrO₂ doped with Y₂O₃</li>
+        <li>Very high temperature fuel cell (operates at 650 – 1000°C)</li>
+        <li>Due to high temperature, expensive catalyst need not be used</li>
+        <li>CO can also be used as a fuel</li>
+        <li>Slow start-up</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="dmfc">
+      <h2>Direct CH₃OH–O₂ Polymer electrolyte membrane fuel cells (DMFC)</h2>
+      <ul>
+        <li>Known as proton exchange membrane fuel cells</li>
+        <li>Polymer membrane or proton exchange membrane is used as electrolyte</li>
+        <li>Ease of transport and storage of methanol, an energy-dense yet reasonably stable liquid at all environmental conditions</li>
+        <li>Low temperature fuel cell (60–90 °C)</li>
+        <li>Low weight and volume – High energy density – Noble metal catalyst usually Pt – CO, if present poisons the catalyst, so pure fuel and oxidant should be used</li>
+      </ul>
+      <h3>Construction:</h3>
+      <ul>
+        <li>Anode: Porous carbon electrode containing platinum</li>
+        <li>Cathode: Porous carbon electrode containing platinum</li>
+        <li>Fuel: Solution of CH₃OH</li>
+        <li>Oxidant: Oxygen gas</li>
+        <li>Electrolyte: proton conducting polymer membrane</li>
+        <li>Membrane should be an electronic insulator but an excellent conductor of H⁺ ions</li>
+      </ul>
+      <h3>Electrolyte:</h3>
+      <ul>
+        <li>Fluorocarbon backbone (-CF₂–CF₂–) similar to Teflon to which sulphonic acid groups (-SO₃H) are attached</li>
+        <li>The protons on sulphonic acid group are free to migrate through the hydrated membrane. e.g., Nafion – most popular because of high proton conductivity, good mechanical strength, good chemical stability</li>
+      </ul>
+      <p><strong>For DMFC:</strong> Nafion not suitable as it has high permeability for CH₃OH, hence methanol crossover happens – CH₃OH diffuses through the membrane to cathode without undergoing oxidation at anode resulting in low performance. New membranes are being used – Polyelectrolyte membranes e.g., SPEEK – sulphonated poly(ether ether ketone).</p>
+      <h3>Working:</h3>
+      <ul>
+        <li>At Anode: CH₃OH + H₂O → 6H⁺ + 6e⁻ + CO₂</li>
+        <li>At Cathode: 3/2 O₂ + 6H⁺ + 6e⁻ → 3H₂O</li>
+        <li>Overall: CH₃OH + 3/2 O₂ → 2H₂O + CO₂</li>
+      </ul>
+      <p>A aqueous solution of methanol is fed at the anode. Common operating temperatures are in the range 60–90 °C. Oxidation of methanol on a catalyst layer takes place to form carbon dioxide, protons and electrons. Protons H⁺ are transported across the proton exchange membrane to the cathode where they react with oxygen to produce water. Water is consumed at the anode and produced at the cathode. Electrons are forced to travel through an external circuit from anode to cathode, providing power to connected devices.</p>
+      <p><strong>Water management</strong> is very important for Proton exchange membrane fuel cells. Temperature has to be maintained constant (60–90°C). Polymer membrane must remain hydrated to maintain H⁺ conductivity – Water produced from the reaction must be removed from the cathode.</p>
+      <h3>Advantages:</h3>
+      <ul>
+        <li>High energy density – due to the low weight of the polymer</li>
+        <li>Long life – Low temperature operation allows them to start quickly and results in less wear on system components, resulting in better durability</li>
+        <li>No free corrosive liquid in the cell</li>
+      </ul>
+      <h3>Disadvantages:</h3>
+      <ul>
+        <li>Noble metal catalysts have to be used (Pt) and electrolyte is expensive so cell cost is high</li>
+        <li>CO, if present, poisons the Pt catalyst, hence pure reactants should be used</li>
+        <li>Management of carbon dioxide created at the anode and water management pose problems</li>
+      </ul>
+    </section>    <!-- ===================== ALKALINE FUEL CELL ===================== -->
+    <section class="section-anchor" id="alkaline-fc-detail">
+      <h2>Alkaline Fuel Cell</h2>
+      <ul>
+        <li>Aqueous solution of <strong>KOH</strong> is used as electrolyte</li>
+        <li><strong>Low temperature fuel cell</strong> (operates at 100°C)</li>
+        <li>Oxygen reduction is <strong>more rapid</strong> in alkaline electrolytes than in acid electrolytes</li>
+        <li>Use of <strong>non noble metal electro-catalyst</strong> is feasible</li>
+        <li><strong>Carbon containing fuels cannot be used</strong> as CO₂ is formed as product which reacts with the electrolyte, KOH, to form K₂CO₃ which reduces efficiency of the cell</li>
+      </ul>
+      <div class="formula-block">
+        CO₂ + 2KOH → K₂CO₃ + H₂O
+      </div>
+
+      <h3>Construction:</h3>
+      <ul>
+        <li><strong>Anode:</strong> Porous carbon impregnated with Pt catalyst</li>
+        <li><strong>Cathode:</strong> Porous carbon impregnated with Ag catalyst</li>
+        <li><strong>Fuel:</strong> Hydrogen gas</li>
+        <li><strong>Oxidant:</strong> Oxygen gas</li>
+        <li><strong>Electrolyte:</strong> 30-45% KOH (warm)</li>
+      </ul>
+
+      <h3>Cell Representation:</h3>
+      <div class="formula-block">
+        H₂ | Pt || KOH || Ag | O₂
+      </div>
+      <p></p>
+
+      <h3>Working:</h3>
+      <ul>
+        <li><strong>At Anode:</strong></li>
+      </ul>
+      <div class="formula-block">
+        H₂ + 2OH⁻ → 2H₂O + 2e⁻
       </div>
       <ul>
-        <li>Most metals except very noble ones, corrode on contact with water (and moisture in the air), acids, bases, salts, oils, aggressive metal polishes, and other solid and liquid chemicals.</li>
-        <li>It is a <span class="key-term">spontaneous process</span>.</li>
-        <li>Causes <span class="key-term">indirect losses</span>.</li>
+        <li><strong>At Cathode:</strong></li>
+      </ul>
+      <div class="formula-block">
+        ½O₂ + H₂O + 2e⁻ → 2OH⁻
+      </div>
+      <ul>
+        <li><strong>Overall Reaction:</strong></li>
+      </ul>
+      <div class="formula-block">
+        H₂ + ½O₂ → H₂O
+      </div>
+      <ul>
+        <li>H₂ gas diffuses through anode, gets adsorbed on the electrode surface, reacts with OH⁻ to form water</li>
+        <li>At cathode O₂ diffuses through electrode, is adsorbed and reduced to OH⁻</li>
+        <li>Product is water which dilutes the KOH</li>
+        <li>Cell operates at 100°C, so that water from KOH escapes as steam</li>
+        <li>The water was used by astronauts for drinking on Apollo spacecraft</li>
+      </ul>
+      <p><strong>Emf = 1.23 V</strong></p>
+
+      <h3>Advantages:</h3>
+      <ul>
+        <li>Operates at low temperature</li>
+        <li>Alkali is used as electrolyte hence non noble metal catalyst can be used so less expensive</li>
       </ul>
 
-      <h3>Examples of Corrosion Products</h3>
+      <h3>Disadvantages:</h3>
       <ul>
-        <li><span class="key-term">Rusting of iron</span> — a reddish brown scale formation on iron and steel objects; due to formation of <span class="key-term">hydrated ferric oxide</span> (Fe₂O₃.xH₂O).</li>
-        <li><span class="key-term">Scaling of Copper</span> — green scales formed on copper articles; due to formation of <span class="key-term">basic cupric carbonate</span> (CuCO₃ + Cu(OH)₂).</li>
+        <li>Reactants must be free from carbon compounds, because on oxidation CO₂ is formed. The alkali reacts with CO₂ to form carbonates which reduce efficiency of the cells; pure fuel and oxidant which are free of carbon compounds must be used</li>
+        <li>Liquid electrolytes pose handling problems</li>
       </ul>
-    </section>-->
+    </section>
 
-    <!-- Why metals corrode --><!--
-    <section class="section-anchor" id="why-metals-corrode">
-      <h2>Why Do Metals Undergo Corrosion?</h2>
+    <!-- ===================== SUPERCAPACITORS ===================== -->
+    <div class="module-sep"><div class="module-sep-line"></div><span class="module-sep-label">Supercapacitors</span><div class="module-sep-line"></div></div>
+
+    <div class="module-header">
+      <div class="module-eyebrow">Energy Storage Devices</div>
+      <h1>Supercapacitors</h1>
+    </div>
+
+    <section class="section-anchor" id="capacitor">
+      <h2>Capacitor</h2>
       <ul>
-        <li>Most metals occur in nature in the <span class="key-term">form of their compounds</span> such as oxides, sulfides, carbonates, chlorides.</li>
-        <li>Metals are extracted from these ores by reduction which is an <span class="key-term">endothermic process</span>, energy being supplied in the form of heat or electrical energy.</li>
-        <li>Pure metals are relatively at a <span class="key-term">higher energy state</span> compared to their corresponding ores, and they have a natural tendency to revert back to their combined state.</li>
+        <li>A two-terminal electrical component that has the ability to store energy in the form of electrical charge</li>
+        <li>Has two conducting plates separated by a dielectric</li>
+        <li>When a DC voltage is connected across the capacitor, one plate becomes positive and the other negative</li>
+        <li>The charge accumulation on the plates causes a voltage or potential difference across the capacitor</li>
       </ul>
+      <p>Capacitance is the charge accumulation capability of a capacitor. Charge (Q) stored in a capacitor is directly proportional to the voltage (V) developed across the capacitor; \( Q \propto V \), \( Q = C \times V \), where C is the capacitance measured in farads. Capacitance is directly proportional to area of plates (A) and inversely proportional to the distance between the two plates (D); \( C \propto \frac{A}{d} \).</p>
+    </section>
+
+    <section class="section-anchor" id="supercap-intro">
+      <h2>Supercapacitors</h2>
+      <ul>
+        <li>Also known as ultra capacitors or electrochemical double-layer capacitors (EDLC)</li>
+        <li>Are energy storage devices that have high capacitance and are used to store large amounts of electrical charge</li>
+        <li>Charge and discharge very quickly</li>
+        <li>Capacitance is several thousand times that of a Capacitor – Capacitor — μF – Supercapacitor — thousands of Farads</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="supercap-construction">
+      <h2>Construction:</h2>
+      <ul>
+        <li><strong>Electrodes:</strong> made of high surface area materials such as porous carbon, graphene, carbon nanotubes and certain conducting polymers or carbon aerogel</li>
+        <li><strong>Electrolyte:</strong> KOH, H₂SO₄, Na₂SO₄</li>
+        <li><strong>Separator:</strong> an ion permeable separator is placed between the electrodes in order prevent electrical contact, but still allows ions from electrolyte to pass through e.g., porous polypropylene</li>
+        <li>Separator is sandwiched between the electrodes. This is placed into a case, impregnated with electrolyte and sealed. The electrodes are flanked with current collectors.</li>
+      </ul>
+      <h3>Working:</h3>
+      <ul>
+        <li>When a potential is applied, the positive electrode attracts negative ions in the electrolyte, while negative electrode attracts the positive ions</li>
+        <li>Formation of electrical double layer at entire electrode/electrolyte interface with a charge separation in nanometer scale</li>
+        <li>Only absorption and desorption of ions takes place at the electrode during charging and discharging and there are no redox reactions</li>
+        <li>Distance between the charged layers in nanorange, d is very small and use of porous electrodes gives very high surface area, A is large</li>
+        <li>\( C \propto \frac{A}{d} \); Capacitance is very high</li>
+        <li>Formation of the electrical double-layer at each electrode/electrolyte interface, overall capacitance \( C_T \) is expressed as: \( \frac{1}{C_T} = \frac{1}{C_+} + \frac{1}{C_-} \)</li>
+      </ul>
+      <h3>Advantages:</h3>
+      <ul>
+        <li>Rapid charging; charge in a few seconds</li>
+        <li>High power density as they discharge very fast</li>
+        <li>High cycle life, can be cycled millions of time</li>
+        <li>Safe as extremely low internal resistance and extremely low heating rates</li>
+      </ul>
+      <h3>Applications:</h3>
+      <ul>
+        <li>Memory back-up</li>
+        <li>Hybrid cars for start-stop application</li>
+        <li>Flash photography devices in digital cameras, flash lights, portable media players</li>
+        <li>As an intermediate energy storage for FM radios, cell phones, and emergency kits</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="ragone-plot">
+      <h2>Ragone Plot</h2>
+      <ul>
+        <li>Energy density (Wh/kg) is plotted against Power density (W/kg)</li>
+        <li>To compare performance of various energy storage devices</li>
+        <li>Since it uses a double-logarithmic chart, storage technologies with very different storage properties can be compared in one plot</li>
+        <li>Fuel cells have high energy density as the electroactive species can be continuously supplied but the power density is low due to slow kinetics of redox reactions at electrodes</li>
+        <li>Battery systems offer moderate energy density and power density</li>
+        <li>Ultracapacitors (supercapacitors) can deliver very high power density as they can discharge a large amount of charge quickly (because no redox reaction is involved) but energy density is very limited because the charge cannot be stored for a long time</li>
+      </ul><ul>
+  <li>Fuel cells have high energy density as the electroactive species can be continuously supplied but the power density is low due to slow kinetics of redox reactions at electrodes</li>
+  <li>Battery systems offer moderate energy density and power density</li>
+  <li>Ultracapacitors (supercapacitors) can deliver very high power density as they can discharge a large amount of charge quickly (because no redox reaction is involved) but energy density is very limited because the charge cannot be stored for a long time</li>
+</ul>
+    </section>
+
+    <!-- ===================== HYDROGEN ENERGY ===================== -->
+    <div class="module-sep"><div class="module-sep-line"></div><span class="module-sep-label">Hydrogen Energy</span><div class="module-sep-line"></div></div>
+
+    <div class="module-header">
+      <div class="module-eyebrow">Hydrogen Energy</div>
+      <h1>Hydrogen Energy Production and Storage</h1>
+    </div>
+
+    <section class="section-anchor" id="h2-intro">
+      <h2>Hydrogen Energy</h2>
+      <ul>
+        <li>The Hydrogen energy has been identified as one of potential sources of fuel in the state-of-art technological era</li>
+        <li>Hydrogen production, storage and transportation has become the focus of science and technology</li>
+        <li>Sustainable production of Hydrogen from renewable feedstocks and electrolysis of water has taken lead role in technology development</li>
+        <li>More emphasis is provided to understanding and engineering the production and storage of Hydrogen produced by Electrolysis method</li>
+      </ul>
+      <h3>Advantages</h3>
+      <ul>
+        <li>Abundant availability in earth crust</li>
+        <li>Compatibility of hydrogen with fuel cell</li>
+        <li>High efficiency (65%) than diesel (45%) and gasoline (22%)</li>
+      </ul>
+      <h3>Disadvantages</h3>
+      <ul>
+        <li>High cost – Highly flammable – It is still dependent on fossil fuels</li>
+      </ul>
+      <h3>Hydrogen Economy</h3>
+      <ul>
+        <li>Hydrogen used as fuel reduces pollution – It is carbon free energy source</li>
+        <li>Hydrogen economy is a vision of an energy delivery infrastructure based on hydrogen as a carbon-free energy carrier</li>
+        <li>It provides alternative energy economy in the form of a parallel power and transportation infrastructure technical solutions for energy-efficient hydrogen production, storage technology and delivery infrastructure</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="h2-production">
+      <h2>Hydrogen Production methods</h2>
+      <ul>
+        <li><strong>Steam reforming (steam methane reforming – Grey Hydrogen):</strong> Natural gas is used to produce Hydrogen – Most widespread process for generation of hydrogen</li>
+        <li><strong>Gasification process (Black Hydrogen):</strong> Hydrogen is produced from coal by gasification process – Coal is converted into CO₂ and subjected to gasification process to produce Carbon monoxide which is subjected to water gas shift process to produce mixture of CO₂ and H₂ is purified to get pure H₂</li>
+        <li><strong>Thermolysis (Green Hydrogen):</strong> involves thermochemical water splitting at high temperature 500°C – 2000°C to produce hydrogen – carried in a closed system – the chemical used in the process are reused within each cycle consumed only water and produces hydrogen and oxygen</li>
+        <li><strong>Photolysis:</strong> Processes use light energy to split water into hydrogen and oxygen – One of the potential for sustainable hydrogen production – Low environmental impact – Yet in early stage of research</li>
+        <li><strong>Electrolysis:</strong> uses electricity to split water into hydrogen and oxygen – Electrolysis reaction takes place in a unit called an electrolyzer – Method is promising option for carbon-free hydrogen production from renewable and nuclear resources</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="steam-reforming">
+      <h2>Steam reforming (Steam methane reforming)</h2>
+      <p>Process involves four important steps:</p>
+      <ul>
+        <li><strong>Desulphurization:</strong> removal of sulphur form the feedstocks – Sulphur tends to poison catalysts used in the steam reforming</li>
+        <li><strong>Steam reforming:</strong> Steam, fuel and air in the reform chamber in presence of catalyst form syngas – CH₄ + H₂O → CO + 3H₂ – 850–900°C – Ni catalyst – Endothermic reaction (ΔH° = +206 kJ/mol) – High temperature and low pressure is favoured</li>
+        <li><strong>Shift reforming (Water Gas shift reactions):</strong> CO + H₂O → CO₂ + H₂ – Catalyst: Fe₃O₄ / Cr₂O₃ – Exothermic reaction (ΔH° = –41.0 kJ/mol) – Favoured at low temperature (350°C) – H₂ produced will have traces of Carbon monoxide as impurities</li>
+        <li><strong>Purification:</strong> CO₂ is removed to produce pure Hydrogen – Traces of CO is removed by methanation (350–450°C): CO + 3H₂O → CH₄ + H₂O</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="green-h2">
+      <h2>Green Hydrogen production</h2>
+      <ul>
+        <li>Green Hydrogen refers to production of Hydrogen gas from renewable resources</li>
+        <li>Green Hydrogen production will help us reach both the momentum and promise for greener mobility and industry</li>
+        <li>Hydrogen production through Electrolysis produces clean energy with pollution free process by using electricity</li>
+        <li>Hydrogen production by electrolysis can be achieved by three methods: 1. Alkaline Electrolysis, 2. Proton Membrane Electrolysis, 3. High temperature Electrolysis</li>
+      </ul>
+      <h3>Alkaline electrolyte process:</h3>
+      <ul>
+        <li>aqueous solution containing either NaOH or KOH used – typical concentration of 20–40 wt% – operation temperatures are between 343–363 K – operating pressure up to 3 MPa</li>
+        <li>Charge carrier: OH⁻</li>
+        <li>Anodic materials: Ni and its alloys</li>
+        <li>Cathodic materials: Cd, Pb, Cu, Ag, Pt, Pd</li>
+        <li>Electrolyte materials: KOH, NaOH</li>
+        <li>Catalyst materials: Ni-Zn, Ni-Co-Au, RuO₂, LaCoO₃</li>
+        <li>Zero emission of CO₂ (if this process combined with renewable energy sources like electricity form solar or wind energy)</li>
+        <li>Alkaline water electrolysis is conventional methods with easiest, simplest, and suitable methods for Hydrogen production</li>
+        <li>Electrolysis requires Direct current supply – Electrolyser split water into Hydrogen and Oxygen gas</li>
+      </ul>
+      <p>Splitting of water is very small approximately 7–10 moles/litre because pure water is the very poor conductor of electricity hence acid (H₂SO₄ in acid electrolyzer) or base (KOH or NaOH in Alkaline electrolyzer) is used to improve the conductivity. Solutions split into ions which improving conductivity of the electrolyte.</p>
+      <p><strong>The Reaction of water splitting:</strong></p>
+      <ul>
+        <li>At Anode: 2OH⁻ → ½ O₂ + H₂O + 2e⁻</li>
+        <li>At Cathode: 2H₂O + 2e⁻ → H₂ + 2OH⁻</li>
+      </ul>
+      <div class="formula-block">\[ 2H_2O(\text{liquid}) + \text{Energy} \rightarrow 2H_2(\text{gas}) + O_2(\text{gas}) \]</div>
+      <h3>Conclusion:</h3>
+      <ul>
+        <li>The Hydrogen energy has been identified as one of potential sources of fuel, Production of Green Hydrogen is the key focus to meet the sustainable development.</li>
+        <li>Hydrogen is not available as a pure gas, it must be produced from other compounds like fossil fuels, biomass, electrolysis, etc.</li>
+        <li>Electrolysis of water to produce hydrogen is one of the most viable technology</li>
+        <li>Hydrogen evolution takes place at cathode materials, whereas oxygen evolution takes place at anode materials.</li>
+        <li>Catalysts improve the performance of the electrode materials to generate high and pure hydrogen gas.</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="h2-storage">
+      <h2>Hydrogen Energy – Storage</h2>
+      <ul>
+        <li>The Hydrogen storage is crucial for effective utilization of Hydrogen for its versatile applications.</li>
+        <li>Methods used for hydrogen storage: Liquid form, Gaseous, Solid State</li>
+        <li>Hydrogen can be physically stored as either a gas or a liquid – Storage of hydrogen in the form of gas usually requires high-pressure tanks (350–700 bar tank pressure) – Storage of hydrogen as a liquid requires cryogenic temperatures because the boiling point of hydrogen is –252.8°C at an atmospheric pressure – Hydrogen can also be stored on the surfaces of solids (adsorption) or within solids (absorption)</li>
+      </ul>
+      <h3>Solid state hydrogen storage:</h3>
+      <ul>
+        <li>Depending on the type of hydrogen being stored in host materials, solid-state hydrogen storage can be classified into two categories: Chemisorption of hydrogen atoms, Physisorption of intact hydrogen molecules</li>
+        <li>In chemisorption (absorption into matter), binding of hydrogen atoms occur into the surface – In case of physisorption (adsorption on surface), the Hydrogen molecule is bound onto the surface of adsorbent</li>
+      </ul>
+      <p><strong>Some of the most prominent materials for Hydrogen Storage includes:</strong></p>
+      <ul>
+        <li>Metal organic framework (MOF) as absorbent</li>
+        <li>Liquid organic hydrogen carriers (LOHC)</li>
+        <li>Interstitial hydride – Complex hydride – Chemical Hydrogen storage</li>
+      </ul>
+      <p><strong>Metal Organic Frame as Adsorbent (MOF):</strong> representing a novel class of porous materials feature unique pore structure, such as exceptional porosity, tunable pore structures – Enables high density energy storage of clean fuel gas in MOF adsorbents – Zn-MOF (MOF-5) remains an attractive hydrogen storage material due to its balanced gravimetric and volumetric hydrogen uptake.</p>
+      <p><strong>Liquid organic hydrogen carriers (LOHC):</strong> LOHC technology has shown great potential for efficient and stable hydrogen storage and transport – This technology allows for safe and economical large-scale transoceanic transportation and long-cycle hydrogen storage – LOHCs can be used as storage media for hydrogen – Organic compounds that can absorb and release hydrogen through chemical reactions – Methyl cyclopentane, Dibenzyl toluene.</p>
+      <p><strong>Interstitial hydride:</strong> Contain a larger quantity of hydrogen than the same volume of liquid hydrogen – Have advantage in the amount of hydrogen on a weight basis – Certain interstitial hydrides are very suitable for hydrogen storage and transportation – Example: LiNi₅H₆.</p>
+      <p><strong>Complex hydrides:</strong> Composed of metal cations (such as Li, Mg, Na, etc.) and hydrogen-containing coordination anions (such as AlH₄⁻, NH₂⁻, BH₄⁻) – On heating, the metallic hydride decomposes to hydrogen and finely divided metal – Example: Sodium aluminate can release up to 7.4% of Hydrogen when heated at 200°C: 3NaAlH₄ → Na₃AlH₆ + 2Al + 3H₂.</p>
+      <p><strong>Chemical Hydrogen:</strong> Hydrogen is released from a material through a chemical reaction – Hydrogen is restored through a chemical reaction when the material is being recharged – Ammonia Borane (NH₃–BH₃) has exceptional properties for chemical hydrogen gas storage – Hydrolysis of NH₃–BH₃ releases hydrogen stored in it in presence of catalyst.</p>
+      <h3>Advantages and Disadvantages of Storage Methods</h3>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Storage Method</th>
+        <th>Advantages</th>
+        <th>Disadvantages</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Liquid form</strong></td>
+        <td>
+          <ul style="margin:0;padding-left:18px;">
+            <li>Liquid H₂ exists at low temperature 20K (-253K)</li>
+            <li>Stored in cryogenic tanks</li>
+            <li>Low volume compared to gaseous H₂</li>
+            <li>Involves less infrastructure</li>
+            <li>More cost effective</li>
+            <li>Can be compressed into high pressure in gas form</li>
+          </ul>
+        </td>
+        <td>
+          <ul style="margin:0;padding-left:18px;">
+            <li>Reinforced & insulated storage tank required</li>
+            <li>Cooling and compression process consume energy (net loss about 30%)</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Gaseous form</strong></td>
+        <td>
+          <ul style="margin:0;padding-left:18px;">
+            <li>Simple storage method</li>
+          </ul>
+        </td>
+        <td>
+          <ul style="margin:0;padding-left:18px;">
+            <li>Needs extra energy</li>
+            <li>Space occupied is large</li>
+            <li>Leak proof tanks needed</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Solid form</strong></td>
+        <td>
+          <ul style="margin:0;padding-left:18px;">
+            <li>Hydrogen can be released whenever required by thermal stimulation or any other technique</li>
+            <li>Ease of handling</li>
+            <li>Safety</li>
+          </ul>
+        </td>
+        <td>
+          <ul style="margin:0;padding-left:18px;">
+            <li>Under R & D trials</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+      <h3>Key challenges of the materials and their solutions</h3>
+      <ul>
+        <li>All the materials used in storing hydrogen have high specific surface areas, but exhibit weak binding forces with Hydrogen (mostly by Van der Waals forces)</li>
+        <li>A great deal of research show that metal decorations are effective to increase the bonding energy of hydrogen on sorption-based materials</li>
+        <li>Hydrogen storage in carbon materials is increased by decorations of these materials with transition metal because of hydrogen spillover phenomenon</li>
+        <li>Hydrogen spillover is the migration/transfer of hydrogen atom from metal surface into the non-metal support or absorbent</li>
+      </ul>
+      <h3>Conclusion:</h3>
+      <ul>
+        <li>The Hydrogen storage technology is rapidly emerging as a fast alternative to fossil fuel but it needs further improvements in terms of infrastructure. Two mechanism are involved in the hydrogen storage, physisorption and chemical absorption.</li>
+        <li>A wide variety of carbonaceous materials, metal organic frameworks hydrates etc are used as hydrogen storage materials</li>
+        <li>The extensive and increasing research effort in hydrogen storage materials represents an exciting long-term research frontier</li>
+        <li>Physical and material-based methods of storage of Hydrogen</li>
+      </ul>
+    </section>
+
+    <!-- ===================== ELECTROCHEMICAL SENSORS ===================== -->
+    <div class="module-sep"><div class="module-sep-line"></div><span class="module-sep-label">Electrochemical Sensors</span><div class="module-sep-line"></div></div>
+
+    <div class="module-header">
+      <div class="module-eyebrow">Sensors</div>
+      <h1>Electrochemical Sensors</h1>
+    </div>
+
+    <section class="section-anchor" id="sensor-types">
+      <h2>TYPES OF SENSORS</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>SI No</th><th>Types of Sensors</th><th>Monitored property</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Electrochemical Sensors<br>a. Potentiometric Sensors<br>b. Amperometric Sensors</td>
+              <td>a. Potentiometric – Voltage<br>b. Amperometric – Current</td>
+              <td>Potentiometric – Ion selective electrode – pH sensor – Glass electrode / Oxygen Sensor<br>Amperometric – Biosensors – Glucose sensors (measures current)</td>
+            </tr>
+            <tr><td>2</td><td>Mass-Sensitive Sensors</td><td>Mass Sensing</td><td>Piezoelectric material – Quartz Crystal microbalance, piezoresistive – Silicon Carbide</td></tr>
+            <tr><td>3</td><td>Conductivity Sensors</td><td>Conductance (Resistance Sensing)</td><td>Platinum electrode – Probe with two electrode (Pt)</td></tr>
+            <tr><td>4</td><td>Capacitive Sensors</td><td>Capacitance (Potential Load Sensing)</td><td>Touchscreens – glass/polyester/polycarbonate/polyethylene</td></tr>
+            <tr><td>5</td><td>Thermometric Sensors</td><td>Heat Sensing</td><td>Thermistors – Semiconductors (ceramics/polymers), Thermocouple – iron-constantan & copper-constantan Alloys, Resistance Temperature Detectors (RTDs) – Platinum metal RTDs</td></tr>
+            <tr><td>6</td><td>Calorimetric Sensors</td><td>Enthalpy Change / Heat transfer</td><td>Differential Scanning Calorimetry (DSC) – Thermocouples – metal/metal alloys (Pt-Pt/Rh) / (Ni-Cr/Ni-Al) Microcalorimeters – Aluminium, steel, Quartz.</td></tr>
+            <tr><td>7</td><td>Optical Sensors</td><td>Photon/Light</td><td>Photo detectors – photodiodes and phototransistors Optical fibre sensor – silica glass/Plastic Optical fibres (POFs), Gallium Arsinide, Ge-Si Solar Cells</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul>
+        <li>ELECTROCHEMICAL SENSORS: A class of chemical sensors in which an electrode is used as a transducer element in the presence of an analyte.</li>
+        <li>Electrochemical sensors transfers the effect of the electrochemical interaction of the analyte-electrode into a useful electric signal.</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="potentiometric">
+      <h2>1. POTENTIOMETRIC SENSORS</h2>
+      <ul>
+        <li>Sensors that use the effect of concentration on the equilibrium of redox reactions occurring at the electrode-electrolyte interface of an electrochemical cell.</li>
+        <li>The redox reaction takes place on the electrode surface: Oxidant + ne⁻ → Reduced product</li>
+        <li>Mainly determine the analyte concentration by measuring the variation of potential difference between working and reference electrodes at different analyte concentrations.</li>
+      </ul>
+      <h3>Examples of Potentiometric Sensors</h3>
+      <ul>
+        <li><strong>Ion Selective Electrode Sensors:</strong> Glass electrodes (e.g. pH-meter, Na⁺, K⁺, Li⁺ Sensors), Solid membrane electrodes (e.g. based on AgX for X⁻, and Ag₂S for other M⁺), Liquid membrane electrodes (e.g. containing a ligand for M⁺ complexation e.g. Ca²⁺ and K⁺ sensors).</li>
+        <li><strong>Gas Potentiometric Sensors:</strong> pH-meter-based gas detectors (e.g. CO₂, NH₃ etc), Solid oxide sensors (e.g. zirconia-based O₂ sensor (λ-sensor)).</li>
+      </ul>
+      <h3>Advantages</h3>
+      <ul>
+        <li>Applied to detect various analytes qualitatively and quantitatively.</li>
+        <li>Easy to Construct and operate, more accuracy, sensitive and highly selective determination.</li>
+        <li>Smaller Volumes of analytes can be estimated.</li>
+        <li>Economically Viable</li>
+      </ul>
+      <h3>Limitations</h3>
+      <ul>
+        <li>Requires calibration During estimation</li>
+        <li>In Presence of other impurities can affect the potential Values</li>
+        <li>By varying the temperature potential values also varies.</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="amperometric">
+      <h2>AMPEROMETRIC SENSORS</h2>
+      <ul>
+        <li>Measure the current in response to detect the concentration of the analyte at a fixed potential.</li>
+        <li>The applied potential drives the electron transfer reaction of the analytes, and the measured current indicates the analyte concentration.</li>
+        <li>Amperometric sensors quantify the current output between Working and the reference electrode. The sensor is usually composed of 3 electrodes, that is working, auxiliary, and reference electrode</li>
+      </ul>
+      <h3>Working of Amperometric Sensors</h3>
+      <ul>
+        <li>The working electrode is the electrode at which the reaction of interest occurs, the reference electrode (e.g.; Ag/AgCl, Hg/Hg₂Cl₂) provides a stable potential compared to the working electrode.</li>
+        <li>An inert conducting material (e.g.; platinum, graphite) is usually used as auxiliary electrode.</li>
+        <li>A supporting electrolyte is used in controlled-potential experiments to eliminate electromigration effects, decrease the resistance of the solution and maintain the ionic strength constant.</li>
+      </ul>
+<h3>ADVANTAGES &amp; LIMITATIONS</h3>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Advantages</th>
+        <th>Limitations</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <ul style="margin:0;padding-left:18px;">
+            <li>It can be used for estimation of reducible and non-reducible (Mg²⁺, PO₄³⁻, SO₄²⁻) analytes</li>
+            <li>More accurate and sensitive</li>
+            <li>Traces of reducible species can be determined accurately</li>
+            <li>Simple to operate and Easy to Construct</li>
+          </ul>
+        </td>
+        <td>
+          <ul style="margin:0;padding-left:18px;">
+            <li>Working potential applied should be for limited time or may lead to damage of the electrode</li>
+            <li>Coprecipitation gives inaccurate results</li>
+            <li>These sensors cannot be used with applied voltage more negative than –2V because hydrogen will be evolved</li>
+            <li>Consumes more time to remove dissolved oxygen</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+    </section>
+
+    <section class="section-anchor" id="oxygen-sensor">
+      <h2>Oxygen sensor</h2>
+      <p>An electronic device that measures the proportion of O₂ in the gas or liquid being analysed</p>
+      <h3>Applications of O₂ sensor:</h3>
+      <ul>
+        <li>Divers use to measure partial pressure of O₂ in their breathing gas</li>
+        <li>Scientists use as probes to measure respiration or production of O₂</li>
+        <li>O₂ analyzers used in medical applications such as anesthesia monitors, respirators etc</li>
+        <li>Used to measure exhaust gas concentrations of O₂ in IC engines</li>
+      </ul>
+      <h3>Role of oxygen sensor in automobiles</h3>
+      <ul>
+        <li>Stoichiometric air/fuel ratio ideal for combustion of gasoline is 14.7:1</li>
+        <li>Located in the exhaust stream and indirectly determine air to fuel ratio</li>
+        <li>O₂ sensor allows engine control system to maintain ideal ratio across various engine operating systems</li>
+        <li>It compares the amount of O₂ in the exhaust to the amount of O₂ in the atmosphere</li>
+        <li>An output voltage is generated based on the difference in O₂ concentration in the exhaust and atmosphere</li>
+        <li>An output voltage of 0.2V represents a lean mixture and 0.8V represents a rich mixture. Ideal set point is around 0.45V</li>
+        <li>The voltage is sent as feedback to Engine control unit which adjusts the air/fuel ratio back to stoichiometric value</li>
+        <li>Lean mixture results in more of NOₓ emissions. Rich mixture leads to more of CO, C particles and unburnt fuel emissions</li>
+        <li>Based on solid state electrochemical fuel cell – Operates at a minimum temperature of 360°C</li>
+      </ul>
+      <h3>Construction:</h3>
+      <ul>
+        <li>Anode: Pt</li>
+        <li>Cathode: Pt</li>
+        <li>Electrolyte: Zirconium oxide (ZrO₂) doped with Yttrium oxide (Y₂O₃)</li>
+      </ul>
+      <h3>Working:</h3>
+      <ul>
+        <li>At Anode: 2O²⁻ → O₂ + 4e⁻</li>
+        <li>At Cathode: O₂ + 4e⁻ → 2O²⁻</li>
+      </ul>
+      <div class="formula-block">\[ E_{cell} = \frac{2.303RT}{4F} \log \frac{P_1}{P_2} \]</div>
+      <p>where P₁ and P₂ are the partial pressures of O₂ in reference air and exhaust gas respectively.</p>
+      <ul>
+        <li>Automobiles fitted with O₂ sensor must use unleaded gasoline as lead poisons the Pt catalyst and reduces its efficiency</li>
+        <li>Symptoms of failure are – increased tail pipe emissions, increased fuel consumption and hesitation on acceleration</li>
+      </ul>
+    </section>
+        <!-- ===================== GLUCOSE BIOSENSOR ===================== -->
+    <section class="section-anchor" id="glucose-sensor">
+      <h2>Biosensors – Glucose Sensor</h2>
+      
+      <h3>What is a Biosensor?</h3>
+      <p>A biosensor is an analytical device which is used to determine the presence and concentration of a specific substance in a biological analyte.</p>
+      
       <div class="fig-desc">
-        <strong>[Mineral-Metal Cycle]</strong> Mineral (metal ore) → Extraction (Endothermic process) → Metal → Corrosion (Spontaneous process) → back to Mineral (metal ore). This illustrates why corrosion is thermodynamically spontaneous.
+        <strong>Components of a Biosensor:</strong><br>
+        • Analyte → Bioselective material (Enzyme, Antibody, DNA, Organelle, Microorganism, Cell) → Transducer (Electrode, Piezoelectric device, Thermistor, pH electrode) → Electronics & Display
       </div>
-    </section> -->
 
-    <!-- Types of Corrosion --><!--
-    <section class="section-anchor" id="types-corrosion">
-      <h2>Types of Corrosion</h2>
-
-      <h3>Dry Corrosion</h3>
+      <h3>Blood Glucose Monitoring</h3>
       <ul>
-        <li><span class="key-term">Direct chemical attack</span> due to affinity of the metal to certain gases.</li>
-        <li>In the <span class="key-term">absence of the electrolytic medium</span>.</li>
-        <li>Caused by gases: O₂, F₂, H₂S, NH₃</li>
+        <li>Blood Glucose Monitoring is a way of checking the concentration of glucose in the blood using a glucometer</li>
+        <li>Provides quick response to tell if the sugar is high or low indicating a change in diet, exercise or insulin</li>
+        <li>Over time, it reveals individual blood glucose changes</li>
       </ul>
 
-      <h3>Wet Corrosion</h3>
+      <h3>Why Monitor Blood Glucose?</h3>
       <ul>
-        <li><span class="key-term">Electrochemical attack</span> on the metal.</li>
-        <li>In the <span class="key-term">presence of moisture or conducting medium</span>.</li>
+        <li>Reduces risk of developing complications with diabetes</li>
+        <li>Allows diabetics to see if the insulin and other medications they are taking are working</li>
+        <li>Gives diabetics an idea as to how exercise and food affect their blood sugar</li>
+        <li>May prevent hypoglycemia or hyperglycemia</li>
+      </ul>
+
+      <h3>Blood Sugar Level Chart</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th>FASTING</th>
+              <th>JUST ATE</th>
+              <th>3 HOURS AFTER EATING</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>NORMAL</strong></td>
+              <td>80-100</td>
+              <td>170-200</td>
+              <td>120-140</td>
+            </tr>
+            <tr>
+              <td><strong>PRE-DIABETIC</strong></td>
+              <td>101-125</td>
+              <td>190-230</td>
+              <td>140-160</td>
+            </tr>
+            <tr>
+              <td><strong>DIABETIC</strong></td>
+              <td>126+</td>
+              <td>220-300</td>
+              <td>200+</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Components of Glucose Sensor</h3>
+      <ul>
+        <li><strong>Analyte:</strong> Glucose in blood</li>
+        <li><strong>Bioreceptor:</strong> Enzyme (Glucose Oxidase)</li>
+        <li><strong>Transducer:</strong> Electrode (Platinum electrode)</li>
+        <li><strong>Electronics and Display:</strong> Meter to read glucose level</li>
+      </ul>
+
+      <h3>Working of Glucose Biosensor</h3>
+      <ul>
+        <li>Developed by Updike and Hicks</li>
+        <li>Enzyme Glucose oxidase (GOx) catalyzes the oxidation of glucose by molecular oxygen producing glucolactone and hydrogen peroxide</li>
+        <li>In order to work as a catalyst, GOx requires a redox cofactor – flavin adenine dinucleotide (FAD), works as an initial electron acceptor and is reduced to FADH₂</li>
+      </ul>
+      <div class="formula-block">
+        Glucose + GOx – FAD⁺ → Glucolactone + GOx – FADH₂
+      </div>
+      <ul>
+        <li>The cofactor is regenerated by reacting with oxygen, leading to the formation of hydrogen peroxide</li>
+      </ul>
+      <div class="formula-block">
+        GOx – FADH₂ + O₂ → GOx – FAD + H₂O₂
+      </div>
+      <ul>
+        <li>Hydrogen peroxide is oxidized at a platinum electrode</li>
+        <li>The number of electron transfers at electrode surface is directly proportional to the number of glucose molecules present in the blood</li>
+      </ul>
+      <div class="formula-block">
+        H₂O₂ → 2H⁺ + O₂ + 2e⁻
+      </div>
+
+      <h3>Limitations of Glucose Sensors</h3>
+      <ul>
+        <li>Extreme environmental conditions like haematocrit values, or medication interferences may potentially falsify blood glucose readings</li>
+        <li>Incorrect blood glucose readings may lead to treatment errors, for example, incorrect insulin dosing</li>
       </ul>
     </section>
--->
-    <!-- Electrochemical Theory of Corrosion --><!--
-    <section class="section-anchor" id="electrochemical-theory">
-      <h2>Electrochemical Theory of Corrosion</h2>
-      <ul>
-        <li>A large number of <span class="key-term">tiny galvanic cells</span> are formed due to the formation of separate anodic and cathodic regions on the metal surface.</li>
-        <li><span class="key-term">At the anodic region</span>, metal undergoes oxidation and gets converted into its ions, liberating electrons and the <span class="key-term">metal undergoes corrosion</span>.</li>
-        <li><span class="key-term">At the cathodic region</span>, reduction takes place but since the metal cannot be reduced further, metal atoms are <span class="key-term">unaffected by corrosion</span>.</li>
-        <li>The electrons liberated at the anodic region <span class="key-term">migrate</span> to the cathodic region constituting a <span class="key-term">small corrosion current</span>.</li>
-        <li>The metal ions formed at the anode and some anions formed at the cathode diffuse towards each other through the conducting medium and form a <span class="key-term">corrosion product</span> somewhere between anode and cathode.</li>
-        <li>Corrosion of metal continues as long as both <span class="key-term">anodic and cathodic reactions take place simultaneously</span>.</li>
-      </ul>
-
-      <div class="callout callout-formula">
-        <div class="callout-title">Corrosion Reactions</div>
-        <p>At anode: \( M \rightarrow M^{n+} + ne^- \)</p>
-        <p>At cathode: \( A + ne^- \rightarrow A^{n-} \)</p>
-      </div>
-
-      <h3>Cathodic Reactions</h3>
-
-      <h4>Liberation of Hydrogen</h4>
-      <ul>
-        <li>In acidic medium: \( 2H^+ + 2e^- \rightarrow H_2\uparrow \)</li>
-        <li>In neutral or alkaline medium: \( 2H_2O + 2e^- \rightarrow 2OH^- + H_2\uparrow \)</li>
-      </ul>
-
-      <h4>Absorption of Oxygen</h4>
-      <ul>
-        <li>In acidic medium: \( 4H^+ + O_2 + 4e^- \rightarrow 2H_2O \)</li>
-        <li>In neutral or alkaline medium: \( 2H_2O + O_2 + 4e^- \rightarrow 4OH^- \)</li>
-      </ul>
-    </section> -->
-
-    <!-- Corrosion of Iron --><!--
-    <section class="section-anchor" id="corrosion-of-iron">
-      <h2>Corrosion of Iron (Rusting)</h2>
-      <div class="callout callout-formula">
-        <div class="callout-title">Reactions During Rusting</div>
-        <p>Anode: \( Fe \rightarrow Fe^{2+} + 2e^- \)</p>
-        <p>Cathode: \( 2H_2O + O_2 + 4e^- \rightarrow 4OH^- \)</p>
-        <p>Fe²⁺ and OH⁻ ions move towards one another and Fe(OH)₂ is formed somewhere between anode and cathode:</p>
-        <p>\( 2Fe^{2+} + 4OH^- \rightarrow 2Fe(OH)_2 \)</p>
-      </div>
-
-      <h3>Formation of Yellow Rust</h3>
-      <p>In an <span class="key-term">oxidizing environment</span>, Fe(OH)₂ is oxidized to hydrated ferric oxide:</p>
-      <div class="formula-block">
-        \[ 4Fe(OH)_2 + O_2 + 2H_2O \rightarrow 2[Fe_2O_3.3H_2O] \quad \text{(Yellow rust)} \]
-      </div>
-
-      <h3>Formation of Black Rust</h3>
-      <p>In the <span class="key-term">presence of limited oxygen</span>, 4Fe(OH)₂ is converted into magnetic oxide of iron (Fe₃O₄):</p>
-      <div class="formula-block">
-        \[ 3Fe(OH)_2 + \frac{1}{2}O_2 \rightarrow Fe_3O_4.3H_2O \quad \text{(Black rust)} \]
-      </div>
-    </section> -->
-
-    <!-- Differential Metal Corrosion --><!--
-    <section class="section-anchor" id="differential-metal">
-      <h2>Differential Metal Corrosion (Galvanic Corrosion)</h2>
-      <ul>
-        <li>Also called <span class="key-term">galvanic corrosion</span>.</li>
-        <li>When <span class="key-term">two dissimilar metals</span> are in contact with each other and are exposed to a corrosive environment.</li>
-        <li>The two metals differ in their <span class="key-term">electrode potentials</span>. The metal with lower electrode potential acts as anode and the other metal with higher electrode potential acts as cathode.</li>
-        <li>The anodic metal undergoes oxidation and gets corroded. The cathodic metal remains unaffected.</li>
-        <li>The driving force for corrosion is the <span class="key-term">difference in electrode potentials</span> of the two metals.</li>
-      </ul>
-
-      <div class="callout callout-note">
-        <div class="callout-title">Example</div>
-        <p>Iron in contact with copper: Standard electrode potential of Fe (−0.44 V) vs. Cu (+0.34 V). Iron (lower potential) acts as anode and gets corroded; copper (higher potential) acts as cathode and remains protected.</p>
-      </div>
-
-      <h3>Reactions</h3>
-      <p>At anode: \( M \rightarrow M^{n+} + ne^- \)</p>
-      <p>At cathode: \( 2H_2O + O_2 + 4e^- \rightarrow 4OH^- \)</p>
-    </section>-->
-
-    <!-- Differential Aeration Corrosion --><!--
-    <section class="section-anchor" id="differential-aeration">
-      <h2>Differential Aeration Corrosion</h2>
-      <ul>
-        <li>When a metal is exposed to <span class="key-term">different concentrations of air (O₂)</span>, part of the metal exposed to <span class="key-term">lower concentration of O₂ becomes anodic</span> and undergoes corrosion.</li>
-        <li>Other part of the metal exposed to <span class="key-term">higher concentration of oxygen becomes cathodic</span> and remains unaffected.</li>
-        <li>The difference in oxygen concentration produces a <span class="key-term">potential difference</span> and causes corrosion current to flow.</li>
-      </ul>
-
-      <p>At anode: \( M \rightarrow M^{n+} + ne^- \)</p>
-      <p>At cathode: \( 2H_2O + O_2 + 4e^- \rightarrow 4OH^- \)</p>
-
-      <h3>Waterline Corrosion</h3>
-      <ul>
-        <li>A <span class="key-term">special case of differential aeration corrosion</span>.</li>
-        <li>Observed when metal is <span class="key-term">half immersed in water</span>.</li>
-        <li>The part immersed in water is exposed to less O₂, hence acts as anode and <span class="key-term">gets corroded</span>.</li>
-        <li>The part not in water is exposed to more O₂ and acts as cathode; <span class="key-term">remains unaffected</span> by corrosion.</li>
-      </ul>
-    </section> -->
-
-    <!-- Pitting Corrosion --><!--
-    <section class="section-anchor" id="pitting-corrosion">
-      <h2>Pitting Corrosion</h2>
-      <ul>
-        <li>A <span class="key-term">localized and accelerated corrosion</span>.</li>
-        <li>Results in formation of <span class="key-term">pits or pin holes</span>, around which the metal is relatively unattacked.</li>
-        <li>One of the most <span class="key-term">destructive</span> forms of corrosion.</li>
-        <li>Characterized by <span class="key-term">small anodic area and large cathodic area</span> resulting in accelerated corrosion at the anodic area.</li>
-      </ul>
-
-      <h3>Case I: Dust Particles or Oil Drops on Metal Surface</h3>
-      <ul>
-        <li>When dust particles or oil drops get deposited over the metal surface.</li>
-        <li>The portion of the metal covered by dust which is less aerated becomes anodic.</li>
-        <li>The adjacent area of the metal which is exposed to higher concentration of O₂ becomes cathodic.</li>
-        <li>A small anodic region surrounded by a large cathodic region is formed.</li>
-        <li>The demand for electrons is high from the cathode.</li>
-        <li>Metal underneath the surface of dust particle being anode undergoes accelerated corrosion forming a <span class="key-term">deep and narrow pit</span>.</li>
-      </ul>
-
-      <h3>Case II: Breakdown of the Protective Film</h3>
-      <ul>
-        <li>The breakdown of the protective film on a metal surface.</li>
-        <li>Peeling off of a small tin coating on iron gives rise to a small anodic area (Fe) and large cathodic area (Sn).</li>
-      </ul>
-      <p>Reactions:</p>
-      <p>At anode: Fe → Fe²⁺ + 2e⁻</p>
-      <p>At cathode: 2H₂O + O₂ + 4e⁻ → 4OH⁻</p>
-    </section>-->
-
-    <!-- Stress Corrosion --><!--
-    <section class="section-anchor" id="stress-corrosion">
-      <h2>Stress Corrosion (Stress Corrosion Cracking, SCC)</h2>
-      <ul>
-        <li>A type of corrosion that occurs when some part of the metallic material is <span class="key-term">under stress</span> and exposed to <span class="key-term">specific corrosive environment</span>.</li>
-        <li>During the manufacture or fabrication of articles, when the metals are subjected to <span class="key-term">mechanical operations</span> such as pressing, hammering, rolling, bending, quenching, welding and riveting.</li>
-        <li>The stress can be <span class="key-term">external stress</span> acting on the metal during service conditions or <span class="key-term">residual stress</span> or both.</li>
-        <li>Due to stress, a <span class="key-term">crack is initiated</span>.</li>
-        <li>The metal atoms under stress are always at <span class="key-term">higher energy levels</span>, therefore become <span class="key-term">more reactive</span> than the stress free part.</li>
-        <li>A corrosion cell is formed with the <span class="key-term">stressed part acting as anode</span> and the <span class="key-term">stress free part acting as cathode</span>.</li>
-      </ul>
-
-      <h3>Conditions for Stress Corrosion</h3>
-      <ul>
-        <li>Tensile stress</li>
-        <li>Specific corrosive environment</li>
-      </ul>
-      <p>Under specific corrosive environment, the stressed part undergoes corrosion. The crack deepens and results in the breakdown of the structure.</p>
-
-      <h3>Specific Corrosive Environments</h3>
-      <ul>
-        <li><strong>Brass</strong> — ammoniacal solution or ammonia vapours.</li>
-        <li><strong>Steel</strong> — NaOH and chloride ions.</li>
-      </ul>
-      <p><span class="key-term">Causes serious damage</span> — air crashes, bridge collapses, boiler explosions.</p>
-    </section>
--->
-    <!-- Factors Affecting Corrosion --><!--
-    <section class="section-anchor" id="factors-corrosion">
-      <h2>Factors Affecting Corrosion</h2>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>1. Nature of the Metal</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <ul>
-            <li>Metals with <span class="key-term">lower electrode potential values are more reactive</span> than the metals with higher electrode potential values.</li>
-            <li>More reactive metals are <span class="key-term">more susceptible to corrosion</span>.</li>
-            <li>Metals like K, Na, Mg, Zn etc., with low electrode potential values are highly susceptible for corrosion.</li>
-            <li>Noble metals such as silver, gold, platinum etc., with higher potential values are less susceptible for corrosion.</li>
-            <li>The <span class="key-term">Electrochemical series</span> gives an idea of the order in which metals undergo corrosion.</li>
-            <li>But metals like <span class="key-term">Chromium, Aluminum, Titanium</span> etc. are exceptions as they are passive.</li>
-            <li><span class="key-term">Galvanic series</span> is required which arranges metals and alloys in the order of their tendency to undergo corrosion in a particular environment.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>2. Nature of the Corrosion Product</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <ul>
-            <li>For some metals like Chromium, Aluminum etc., the corrosion product formed on the surface of the metal acts as a <span class="key-term">protective film</span>.</li>
-            <li>If the corrosion product deposited is <span class="key-term">insoluble, stable, uniform, and non-porous</span>, it acts as a protective film preventing further corrosion of metal.</li>
-            <li>A <span class="key-term">thin, invisible, impervious, continuous film</span> formed on the surface acts as a barrier between the fresh metal surface and the corrosion environment.</li>
-            <li>On the other hand, metals like iron, zinc, magnesium, etc., do not form protective film on the surface of the metal.</li>
-            <li>If the corrosion product is <span class="key-term">soluble, unstable, non-uniform, and porous</span>, the corrosion continues unabated.</li>
-            <li>In such cases, the fresh metal surface is continuously exposed to the corrosion environment and corrosion takes place continuously.</li>
-            <li><strong>Steel</strong> gets corroded but <span class="key-term">stainless steel</span> does not.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>3. Hydrogen Overvoltage</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <div class="callout callout-def">
-            <div class="callout-title">Definition</div>
-            <p><span class="key-term">Overvoltage</span> is defined as the <span class="key-term">extra voltage over the theoretical voltage</span> required for an electrode reaction to take place. Applicable especially for evolution of gases. Depends on the surface; if overvoltage of a gas is high on a surface, liberation of the gas on that surface will be less.</p>
-          </div>
-          <ul>
-            <li>A metal with <span class="key-term">low hydrogen overvoltage</span> on its surface is more susceptible to corrosion.</li>
-            <li>Hydrogen evolution is a cathodic reaction.</li>
-            <li>If cathodic reaction is hydrogen evolution type, hydrogen gas is liberated easily and thus the cathodic reaction rate is faster.</li>
-            <li>This will make anodic reaction also fast, thereby promoting overall corrosion reaction.</li>
-            <li>When the hydrogen overvoltage on the metal surface is high, cathodic reaction is slower and the corrosion of the metal also becomes slower.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>4. Temperature</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <ul>
-            <li>The rate of a chemical reaction, in general, increases with rise in temperature.</li>
-            <li>For corrosion process (redox reaction), the rate of corrosion <span class="key-term">increases</span> as the temperature increases due to:
-              <ul>
-                <li>Increase in rate of reaction.</li>
-                <li>Increase in conductance of the medium — ions migrate fast at higher temperature.</li>
-                <li>Decrease in the polarization effects at the anodic and cathodic sites.</li>
-                <li>Increase in solubility of corrosion product in the medium.</li>
-                <li>Breakdown in the protective film that might exist on the surface.</li>
-              </ul>
-            </li>
-            <li>However, if corrosion is due to dissolved gases like O₂, CO₂, etc., the <span class="key-term">rate of corrosion decreases</span> with increase in temperature as the solubility of these gases in the medium decreases.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>5. pH</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <ul>
-            <li>In general, <span class="key-term">lower the pH</span> of the corrosion medium, <span class="key-term">higher</span> is the corrosion rate.</li>
-            <li>At low pH, concentration of H⁺ ions is high; H⁺ ions help for cathodic reaction facilitating anodic oxidation of the metal: \( 2H^+ + 2e^- \rightarrow H_2 \)</li>
-            <li>Corrosion product becomes more soluble in acidic medium.</li>
-            <li>However, some metals like Al undergo fast corrosion in highly alkaline solution as their corrosion product is soluble in alkaline medium.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>6. Polarization at Anodic and Cathodic Region</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <p>Polarisation is the <span class="key-term">drift in electrode potential</span> of an electrode due to <span class="key-term">change in concentration</span> of species.</p>
-
-          <h4>Anodic Polarisation</h4>
-          <ul>
-            <li>At anodic area, metal is oxidized, liberating metal ions which move towards cathodic area.</li>
-            <li>Metal ions liberated at anode cannot move freely towards cathodic area because of opposing factors like lower conductivity of the medium.</li>
-            <li>Metal ions get concentrated at anodic area and this decreases tendency of metal to undergo oxidation; <span class="key-term">corrosion rate falls</span>.</li>
-            <li>Anodic polarisation is <span class="key-term">due to accumulation of ions</span> in the anodic region.</li>
-          </ul>
-
-          <h4>Cathodic Polarisation</h4>
-          <ul>
-            <li>Due to retarded movement of cathodic reactant (O₂, H⁺) towards the cathodic surface or retarded removal of products formed in cathodic region.</li>
-            <li>Hence, the rate of cathodic reaction decreases. A retarded cathodic reaction results in retardation of anodic reaction also which <span class="key-term">slows down the corrosion process</span>.</li>
-            <li>Cathodic polarisation is <span class="key-term">due to depletion of ions</span> in the cathodic region.</li>
-          </ul>
-
-          <h4>Polarisation Effect Can Be Reduced By</h4>
-          <ul>
-            <li>Use of depolarisers — e.g., Anodic polarisers: complexing agents; Cathodic polarisers: cupric ions.</li>
-            <li>Increase in temperature.</li>
-            <li>Stirring the solution.</li>
-          </ul>
-        </div>
-      </div>
-    </section>-->
-
-    <!-- Protective Coatings --><!--
-    <section class="section-anchor" id="protective-coatings">
-      <h2>Protective Coatings</h2>
-
-      <h3>Metallic Coating</h3>
-      <p>Corrosion of base metal is prevented by coating a layer of another metal over it. Metal coated may be anodic or cathodic to the base metal.</p>
-
-      <h4>Anodic Metal Coating</h4>
-      <ul>
-        <li>Coating of a layer of metal which is anodic to base metal.</li>
-        <li>Coating metal is <span class="key-term">more active</span> with respect to the base metal.</li>
-        <li>Even if the base metal is not completely covered, it will <span class="key-term">not undergo pitting corrosion</span>.</li>
-        <li>e.g., Coating of Zn or Mg on iron.</li>
-      </ul>
-
-      <h4>Cathodic Metal Coating</h4>
-      <ul>
-        <li>Coating of a layer of metal which is cathodic to base metal.</li>
-        <li>Coating metal is <span class="key-term">less active</span> with respect to the base metal.</li>
-        <li>Base metal should be <span class="key-term">completely covered</span> and there should not be any gaps in the coating.</li>
-        <li>If some part of the base metal is left uncovered, then it undergoes more <span class="key-term">intense pitting corrosion</span> due to formation of small anodic and large cathodic area.</li>
-        <li>e.g., Coating of Sn or Ni metal over iron.</li>
-      </ul>
-
-      <h3>Inorganic Coating (Chemical Conversion Coating)</h3>
-      <ul>
-        <li>Surface of the base metal is converted into a <span class="key-term">protective coating</span> through appropriate chemical modification.</li>
-        <li>The protective film (corrosion product) is an <span class="key-term">inherent part</span> of the metal.</li>
-        <li>Two methods: <span class="key-term">Anodising and Phosphating</span>.</li>
-      </ul>
-
-      <h3>Organic Coating</h3>
-      <ul>
-        <li>Coating of metal surfaces with <span class="key-term">organic materials</span>, particularly paints and lacquers is the most widely used anti-corrosion coating.</li>
-        <li>The coatings serve to keep out air and moisture from the metal surface or serve as a <span class="key-term">barrier</span> between the metal surface and the corrosion environment.</li>
-      </ul>
-    </section>-->
-
-    <!-- Galvanizing --><!--
-    <section class="section-anchor" id="galvanizing">
-      <h2>Galvanizing</h2>
-      <p>Coating a layer of <span class="key-term">zinc on iron</span> is called galvanization.</p>
-
-      <h3>Process</h3>
-      <ol>
-        <li>Iron sheet is passed through <span class="key-term">organic solvent or caustic solution</span> to remove oil or grease present on it.</li>
-        <li>It is washed with <span class="key-term">dil. H₂SO₄</span> to remove any rust, scale or dust present on the surface (pickling).</li>
-        <li>It is treated with a mixture of aqueous solution of <span class="key-term">ZnCl₂ and NH₄Cl</span> which acts as flux which prevents oxidation and then dried.</li>
-        <li>Finally it is dipped in <span class="key-term">molten zinc</span> at 425–430°C.</li>
-        <li><span class="key-term">Excess zinc</span> present on iron sheet is removed by passing through hot rollers.</li>
-      </ol>
-
-      <h3>Application</h3>
-      <p>Galvanization of iron is carried out to produce roofing sheets, fencing wire, buckets, bolts, nuts, pipes etc.</p>
-
-      <h3>Advantage</h3>
-      <p>Even if the Zn coating peels off or there are gaps at some places, the <span class="key-term">base metal (Fe) does not get corroded</span> because the base metal acts as cathode.</p>
-
-      <h3>Disadvantage</h3>
-      <p>Galvanized articles are <span class="key-term">not used for preparing and storing food</span> because zinc dissolves in dilute acids producing toxic zinc compounds.</p>
-    </section> -->
-
-    <!-- Anodizing --><!--
-    <section class="section-anchor" id="anodizing">
-      <h2>Anodizing</h2>
-      <p><span class="key-term">Induced oxidation</span> in an oxidising environment by <span class="key-term">making the article anode</span> and passing current. Oxidation of outer layer of metal to its metal oxide which covers the metal surface and acts as protective layer. Done for non-ferrous metals like <span class="key-term">Al, Cr, Ti</span>.</p>
-
-      <h3>Anodizing of Aluminum — Process</h3>
-      <ol>
-        <li>Article is cleaned, degreased, and polished and <span class="key-term">taken as anode</span>.</li>
-        <li>It is immersed in an <span class="key-term">electrolyte</span> consisting of 5–10% chromic acid, sulfuric acid, phosphoric acid, oxalic acid or their mixtures maintained at around 40°C.</li>
-        <li>Lead or steel is taken as <span class="key-term">cathode</span>.</li>
-        <li><span class="key-term">Voltage</span> above 40 V is applied.</li>
-        <li>Outer layer of Al is oxidised to Al₂O₃:</li>
-      </ol>
-      <div class="formula-block">
-        \[ 2Al + 3H_2O \rightarrow Al_2O_3 + 3H_2 \]
-      </div>
-
-      <ul>
-        <li>Al₂O₃ formed on the surface is <span class="key-term">slightly porous</span> in nature.</li>
-        <li>The porous layer may be made compact by <span class="key-term">sealing</span> which is done by immersing the anodised article in boiling water or steam.</li>
-        <li>Al₂O₃ is converted into Al₂O₃.H₂O which occupies <span class="key-term">higher volume</span>; the pores are sealed.</li>
-      </ul>
-
-      <h3>Colour Finishes</h3>
-      <p>Anodized articles can be produced in good colour finishes by:</p>
-      <ul>
-        <li>Adsorbing an <span class="key-term">organic dye</span> after anodising and then sealing.</li>
-        <li>Depositing a <span class="key-term">metal like Ni, Co</span> etc., into the pores.</li>
-      </ul>
-
-      <h3>Applications</h3>
-      <p>Anodized Al is used as an attractive, highly durable, corrosion resistant material in exteriors for roofs, walls, buildings and also in window frames, office partitions, tiffin carriers, etc.</p>
-    </section>-->
-
-    <!-- Corrosion Inhibitors -->
-    <!--
-    <section class="section-anchor" id="corrosion-inhibitors">
-      <h2>Corrosion Inhibitors</h2>
-      <div class="callout callout-def">
-        <div class="callout-title">Definition</div>
-        <p><span class="key-term">Chemical substances which are added in small quantities</span> to the corrosive environment to decrease the rate of corrosion.</p>
-      </div>
-      <ul>
-        <li>Inhibitors slow down or inhibit the <span class="key-term">anodic or cathodic reaction</span> and control corrosion.</li>
-        <li>They can be used only in <span class="key-term">confined environment</span>.</li>
-        <li>The action of an inhibitor depends on the <span class="key-term">nature of the metal</span> to be protected as well as corrosive environment.</li>
-      </ul>
-
-      <h3>Types: Anodic Inhibitors and Cathodic Inhibitors</h3>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>Anodic Inhibitors</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <p>Anode reaction: \( M \rightarrow M^{n+} + ne^- \)</p>
-          <ul>
-            <li>If the <span class="key-term">formation of M<sup>n+</sup> is prevented</span>, the corrosion process is retarded.</li>
-            <li>Achieved by the addition of <span class="key-term">large anions</span> such as chromate (CrO₄²⁻), tungstate (WO₄²⁻), etc.</li>
-            <li>These ions combine with M<sup>n+</sup> and <span class="key-term">form a precipitate</span> which covers the surface of the anode.</li>
-            <li>Anodic inhibitors are effective only when <span class="key-term">sufficient amount</span> of the inhibitor is added.</li>
-            <li>If insufficient quantity is added, then a part of the anodic region is exposed to the environment — formation of small anodic area results in <span class="key-term">intense corrosion</span>.</li>
-            <li>Salts like <span class="key-term">Na₂CrO₄, Na₂WO₄</span>.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>Cathodic Inhibitors</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <p>Cathodic reactions involve: liberation of hydrogen and absorption of oxygen. Inhibiting any of these reactions will <span class="key-term">slow down the cathodic reaction</span> which in turn slows down the anodic reaction; corrosion is inhibited.</p>
-
-          <h4>Inhibition of Hydrogen Liberation</h4>
-          <p><strong>By preventing the diffusion of H⁺ ions to the cathode:</strong></p>
-          <ul>
-            <li>By addition of certain <span class="key-term">organic compounds which contain nitrogen or sulfur</span>.</li>
-            <li>Aliphatic amines, urea, thiourea, mercaptans, heterocyclic compounds are widely used as cathodic inhibitors.</li>
-            <li>They get <span class="key-term">adsorbed on the cathodic region</span> forming a protective film, preventing the H⁺ ions from coming in contact with the cathodic metal surface.</li>
-          </ul>
-
-          <p><strong>By increasing the hydrogen overvoltage on the metal surface:</strong></p>
-          <ul>
-            <li>By the addition of <span class="key-term">oxides of arsenic, antimony</span> (As₂O₃, Sb₂O₃) or salts like <span class="key-term">sodium meta-arsenite</span> (NaAsO₂).</li>
-            <li>They deposit on the cathode region. The hydrogen overvoltage on these metals is very high; liberation of H₂ is reduced.</li>
-          </ul>
-
-          <h4>Inhibition of Oxygen Absorption</h4>
-          <p><strong>By removing the oxygen from the corrosive media:</strong></p>
-          <ul>
-            <li>By adding <span class="key-term">Oxygen scavengers</span> like hydrazine: \( N_2H_4 + O_2 \rightarrow N_2 + 2H_2O \)</li>
-            <li>By adding <span class="key-term">reducing agents</span> like sodium sulfite: \( 2Na_2SO_3 + O_2 \rightarrow 2Na_2SO_4 \)</li>
-          </ul>
-
-          <p><strong>By decreasing the diffusion rate of oxygen to cathode:</strong></p>
-          <ul>
-            <li>By adding salts with large cations such as ZnSO₄, MgSO₄, NiSO₄ etc.</li>
-            <li>The cations (Zn²⁺, Mg²⁺) migrate towards the cathode surface and react with the hydroxyl ions formed at the cathode: \( Zn^{2+} + 2OH^- \rightarrow Zn(OH)_2 \)</li>
-            <li>The <span class="key-term">hydroxides get deposited</span> on the cathodic sites.</li>
-            <li>The <span class="key-term">protective film</span> impermeable to oxygen prevents its diffusion to the cathodic region.</li>
-          </ul>
-        </div>
-      </div>
-
-      <h3>Limitations of Corrosion Inhibitors</h3>
-      <ul>
-        <li>They contaminate the environment.</li>
-        <li>Many of the inhibitors are <span class="key-term">toxic</span>, cannot be used in systems which come in contact with humans.</li>
-        <li>Can be used only in <span class="key-term">closed systems</span> in which corrosive environment is either contained or re-circulated.</li>
-      </ul>
-    </section>
--->
-    <!-- Cathodic Protection -->
-    <!--
-    <section class="section-anchor" id="cathodic-protection">
-      <h2>Cathodic Protection</h2>
-      <div class="callout callout-def">
-        <div class="callout-title">Principle</div>
-        <p>By converting the metal structure <span class="key-term">completely into cathode</span> and no part of it is allowed to act as anode. Cathode does not undergo corrosion, so the structure is protected.</p>
-      </div>
-
-      <h3>Methods of Cathodic Protection</h3>
-      <ol>
-        <li>Sacrificial Anode Method</li>
-        <li>Impressed Current Method</li>
-      </ol>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>1. Sacrificial Anode Method</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <ul>
-            <li>Protected metal structure is converted into a cathode by <span class="key-term">connecting it to a more active metal</span>.</li>
-            <li>This active metal (example: zinc, magnesium) acts as an <span class="key-term">auxiliary anode</span>.</li>
-            <li>These metals being more active, act as anode and undergo <span class="key-term">preferential corrosion</span>, protecting the metal structure.</li>
-            <li>Since the <span class="key-term">anodic metals are sacrificed</span> to protect the metal structure, the method is known as sacrificial anode method.</li>
-            <li>Exhausted anodes have to be <span class="key-term">replaced periodically</span>.</li>
-          </ul>
-
-          <h4>Advantages</h4>
-          <ul>
-            <li>The method is simple.</li>
-            <li>Low installation cost.</li>
-            <li>Does not require power supply.</li>
-          </ul>
-
-          <h4>Disadvantages</h4>
-          <ul>
-            <li>Involves recurring expenditure for replacement of consumed anodes.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="topic-block">
-        <div class="topic-block-header">
-          <h3>2. Impressed Current Method</h3>
-          <span class="collapse-icon">▼</span>
-        </div>
-        <div class="topic-block-body">
-          <ul>
-            <li>By applying a <span class="key-term">direct current</span>.</li>
-            <li>The <span class="key-term">protected metal is made cathodic</span> by connecting it to the cathode of the external source of current.</li>
-            <li>Anode of the external source is usually connected to an <span class="key-term">inert electrode</span> like graphite; Platinum, silicon, iron are also used as anodes.</li>
-            <li>A <span class="key-term">backfill of coke, bentonite</span> is used to improve efficiency of the anode (to reduce electrical resistivity — provides lower anode-to-earth resistance and greater current outputs in cases where the surrounding soil is of high resistivity).</li>
-            <li>The metal structure being cathode <span class="key-term">does not undergo corrosion</span>.</li>
-            <li>Anode being inert remains <span class="key-term">unaffected</span>.</li>
-          </ul>
-
-          <h4>Advantages</h4>
-          <ul>
-            <li>One installation can protect large area of metal.</li>
-          </ul>
-
-          <h4>Limitations</h4>
-          <ul>
-            <li>Rather expensive, since it needs <span class="key-term">high current</span> for safe protection of structure.</li>
-            <li>If the impressed current is <span class="key-term">not uniform</span> on the entire surface of the protected structure, <span class="key-term">localized corrosion</span> takes place on the protected metal.</li>
-            <li>If hydrogen liberation is the cathodic reaction on the metal surface, then the protected metal may suffer from <span class="key-term">hydrogen embrittlement</span>.</li>
-          </ul>
-
-          <div class="callout callout-note">
-            <div class="callout-title">Hydrogen Embrittlement</div>
-            <p>H₂ molecule being small <span class="key-term">enters the metal lattice</span> and when the pressure increases, it <span class="key-term">causes blisters</span> and makes the metal brittle.</p>
-          </div>
-        </div>
-      </div>
-    </section> 
-    -->
-    
-    
     
     
     
