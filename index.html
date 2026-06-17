@@ -1,0 +1,2292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engineering Chemistry — PES University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script>
+MathJax = {
+  tex: { inlineMath: [['\\(','\\)'], ['$','$']], displayMath: [['\\[','\\]'], ['$$','$$']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<style>
+/* ===== TOKENS ===== */
+:root {
+  --bg: #f8f7f4;
+  --surface: #ffffff;
+  --sidebar-bg: #1c1c20;
+  --sidebar-text: #c9c7c0;
+  --sidebar-hover: #2a2a30;
+  --sidebar-active: #3d3d45;
+  --sidebar-accent: #e8a838;
+  --text-primary: #1a1a1e;
+  --text-secondary: #52505a;
+  --text-muted: #8b8894;
+  --border: #e4e1da;
+  --accent: #c0531a;
+  --accent-soft: #fdf0e8;
+  --accent2: #2e6da4;
+  --accent2-soft: #eaf2fb;
+  --green: #2d7a47;
+  --green-soft: #eaf5ee;
+  --sidebar-width: 280px;
+  --header-height: 56px;
+  --content-max: 780px;
+  --radius: 6px;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Lora', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+[data-theme="dark"] {
+  --bg: #111114;
+  --surface: #18181c;
+  --text-primary: #e8e6e0;
+  --text-secondary: #a09da8;
+  --text-muted: #5e5c66;
+  --border: #2a2a32;
+  --accent-soft: #2a1a0e;
+  --accent2-soft: #0e1e2e;
+  --green-soft: #0d1f14;
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.7;
+  display: flex;
+  min-height: 100vh;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* ===== READING PROGRESS ===== */
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: var(--sidebar-accent);
+  z-index: 9999; width: 0; transition: width 0.1s;
+}
+
+/* ===== SIDEBAR ===== */
+#sidebar {
+  position: fixed; top: 0; left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--sidebar-bg);
+  display: flex; flex-direction: column;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+#sidebar-header {
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+}
+  
+  
+  
+  
+  
+  
+  .pdf-btn{display:inline-block;
+    padding:8px 12px;
+    background:var(--sidebar-accent);
+    color:#1c1c20;
+    border:none;
+    border-radius:6px;
+    font-size:0.78rem;
+    font-weight:700;
+    cursor:pointer;
+    margin:8px 16px;
+}
+
+.pdf-btn:hover{
+    opacity:0.9;
+    transform:translateY(-1px);
+}
+#sidebar-logo {
+  font-family: var(--font-sans);
+  font-weight: 700; font-size: 0.78rem;
+  color: var(--sidebar-accent);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+#sidebar-title {
+  font-size: 0.92rem;
+  color: #e8e6e0;
+  font-weight: 600;
+  line-height: 1.3;
+}
+#sidebar-subtitle {
+  font-size: 0.72rem;
+  color: var(--sidebar-text);
+  margin-top: 2px;
+}
+
+/* Search */
+#search-wrap {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
+  position: relative;
+}
+#search-input {
+  width: 100%;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius);
+  color: #e8e6e0;
+  font-size: 0.82rem;
+  font-family: var(--font-sans);
+  padding: 7px 10px 7px 32px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+#search-input::placeholder { color: #666; }
+#search-input:focus { border-color: var(--sidebar-accent); }
+#search-icon {
+  position: absolute; left: 26px; top: 50%;
+  transform: translateY(-50%);
+  color: #666; font-size: 0.8rem; pointer-events: none;
+}
+#search-results {
+  display: none;
+  position: absolute;
+  left: 12px; right: 12px; top: 100%;
+  background: #23232a;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius);
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 200;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.search-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.15s;
+}
+.search-item:last-child { border-bottom: none; }
+.search-item:hover { background: rgba(255,255,255,0.07); }
+.search-item-title { font-size: 0.82rem; color: #e8e6e0; font-weight: 500; }
+.search-item-ctx { font-size: 0.72rem; color: #888; margin-top: 2px; }
+.search-item-match { color: var(--sidebar-accent); font-weight: 600; }
+
+/* Nav tree */
+#nav-tree {
+  flex: 1; overflow-y: auto; padding: 10px 0 20px;
+}
+#nav-tree::-webkit-scrollbar { width: 4px; }
+#nav-tree::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+.nav-module {
+  margin-bottom: 2px;
+}
+.nav-module-btn {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%; padding: 8px 16px;
+  background: none; border: none;
+  color: var(--sidebar-text);
+  font-size: 0.78rem; font-weight: 600;
+  font-family: var(--font-sans);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+}
+.nav-module-btn:hover { background: var(--sidebar-hover); color: #e8e6e0; }
+.nav-module-btn .chevron {
+  margin-left: auto; font-size: 0.65rem;
+  transition: transform 0.2s;
+}
+.nav-module-btn.open .chevron { transform: rotate(90deg); }
+.nav-module-btn .pill {
+  font-size: 0.6rem; padding: 1px 5px;
+  background: var(--sidebar-accent);
+  color: #1a1a1e;
+  border-radius: 3px; font-weight: 700;
+}
+.nav-children { display: none; }
+.nav-children.open { display: block; }
+.nav-topic-link {
+  display: block;
+  padding: 5px 16px 5px 32px;
+  font-size: 0.78rem;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+  border-left: 2px solid transparent;
+  margin-left: 0;
+}
+.nav-topic-link:hover { background: var(--sidebar-hover); color: #e8e6e0; }
+.nav-topic-link.active {
+  color: var(--sidebar-accent);
+  background: rgba(232,168,56,0.08);
+  border-left-color: var(--sidebar-accent);
+}
+
+/* ===== OVERLAY ===== */
+#overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5); z-index: 90;
+}
+#overlay.show { display: block; }
+
+/* ===== MAIN ===== */
+#main {
+  margin-left: var(--sidebar-width);
+  flex: 1; display: flex; flex-direction: column;
+  min-width: 0;
+}
+
+/* ===== HEADER ===== */
+#header {
+  position: sticky; top: 0;
+  height: var(--header-height);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 24px;
+  gap: 12px;
+  z-index: 50;
+  transition: transform 0.25s, background 0.2s;
+}
+#header.hidden { transform: translateY(-100%); }
+#menu-btn {
+  display: none;
+  background: none; border: none;
+  color: var(--text-secondary);
+  font-size: 1.1rem; cursor: pointer;
+  padding: 4px;
+}
+#page-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  flex: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+#theme-toggle {
+  background: none; border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  padding: 5px 10px;
+  font-size: 0.78rem; cursor: pointer;
+  font-family: var(--font-sans);
+  transition: border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+#theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+#back-top {
+  position: fixed; bottom: 28px; right: 28px;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-accent);
+  border: none; border-radius: 50%;
+  width: 42px; height: 42px;
+  font-size: 1rem; cursor: pointer;
+  display: none; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 80;
+  transition: opacity 0.2s;
+}
+#back-top.show { display: flex; }
+
+/* ===== CONTENT ===== */
+#content {
+  flex: 1; padding: 40px 24px 80px;
+  max-width: calc(var(--content-max) + 48px);
+  margin: 0 auto; width: 100%;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1 {
+  font-family: var(--font-serif);
+  font-size: 2rem; font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+h2 {
+  font-family: var(--font-serif);
+  font-size: 1.45rem; font-weight: 600;
+  color: var(--text-primary);
+  margin: 44px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+  letter-spacing: -0.01em;
+}
+h3 {
+  font-size: 1.1rem; font-weight: 600;
+  color: var(--text-primary);
+  margin: 28px 0 10px;
+}
+h4 {
+  font-size: 0.95rem; font-weight: 600;
+  color: var(--text-secondary);
+  margin: 20px 0 8px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  font-family: var(--font-sans);
+}
+p {
+  margin: 0 0 14px;
+  color: var(--text-primary);
+  font-size: 0.96rem;
+}
+ul, ol {
+  margin: 0 0 14px 0;
+  padding-left: 22px;
+}
+li {
+  margin-bottom: 5px;
+  font-size: 0.96rem;
+  color: var(--text-primary);
+}
+li::marker { color: var(--accent); }
+strong { font-weight: 600; }
+em { color: var(--text-secondary); }
+
+/* Module header */
+.module-header {
+  background: linear-gradient(135deg, var(--sidebar-bg) 0%, #2a2230 100%);
+  color: white;
+  border-radius: 10px;
+  padding: 32px 28px;
+  margin-bottom: 36px;
+  position: relative;
+  overflow: hidden;
+}
+.module-header::after {
+  content: '';
+  position: absolute; top: -20px; right: -20px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: rgba(232,168,56,0.15);
+}
+.module-eyebrow {
+  font-size: 0.7rem; letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sidebar-accent);
+  font-weight: 700; margin-bottom: 8px;
+}
+.module-header h1 {
+  color: white; margin: 0 0 6px;
+  font-size: 1.7rem;
+}
+.module-header p {
+  color: rgba(255,255,255,0.65);
+  font-size: 0.88rem; margin: 0;
+}
+
+/* Section anchor */
+.section-anchor { scroll-margin-top: calc(var(--header-height) + 16px); }
+
+/* Topic card */
+.topic-block {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 28px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.topic-block-header {
+  padding: 14px 18px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.topic-block-header h3 {
+  margin: 0; font-size: 1rem;
+  color: var(--text-primary);
+}
+.topic-block-header .collapse-icon {
+  margin-left: auto;
+  color: var(--text-muted); font-size: 0.75rem;
+  transition: transform 0.2s;
+}
+.topic-block-header.collapsed .collapse-icon { transform: rotate(-90deg); }
+.topic-block-body { padding: 18px 18px; }
+.topic-block-body.collapsed { display: none; }
+
+/* Key term */
+.key-term {
+  display: inline;
+  color: var(--accent);
+  font-weight: 600;
+}
+.key-term2 { color: var(--accent2); font-weight: 600; }
+.key-term3 { color: var(--green); font-weight: 600; }
+
+/* Callout boxes */
+.callout {
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin: 16px 0;
+  border-left: 3px solid;
+  font-size: 0.91rem;
+}
+.callout-formula {
+  background: var(--accent2-soft);
+  border-color: var(--accent2);
+}
+.callout-note {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+.callout-def {
+  background: var(--green-soft);
+  border-color: var(--green);
+}
+.callout-title {
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+.callout-formula .callout-title { color: var(--accent2); }
+.callout-note .callout-title { color: var(--accent); }
+.callout-def .callout-title { color: var(--green); }
+
+/* Formulas */
+.formula-block {
+  background: var(--accent2-soft);
+  border: 1px solid #c0d8f0;
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 14px 0;
+  text-align: center;
+  overflow-x: auto;
+}
+[data-theme="dark"] .formula-block {
+  border-color: #2a4060;
+}
+
+/* Tables */
+.table-wrap { overflow-x: auto; margin: 16px 0; }
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.88rem;
+  background: var(--surface);
+}
+th {
+  background: var(--sidebar-bg);
+  color: #e8e6e0;
+  padding: 9px 14px;
+  text-align: left;
+  font-weight: 600; font-size: 0.8rem;
+  letter-spacing: 0.03em;
+}
+td {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-primary);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:nth-child(even) td { background: var(--bg); }
+
+/* Figure description */
+.fig-desc {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin: 14px 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+.fig-desc strong { color: var(--text-primary); font-style: normal; }
+
+/* Diagram ASCII */
+.diagram {
+  background: var(--sidebar-bg);
+  color: #c9c7c0;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  margin: 14px 0;
+  line-height: 1.5;
+}
+
+/* Solved examples */
+.example-block {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 20px 0;
+  overflow: hidden;
+}
+.example-header {
+  background: var(--sidebar-bg);
+  color: var(--sidebar-accent);
+  padding: 10px 16px;
+  font-size: 0.82rem; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 8px;
+}
+.example-body { padding: 16px 18px; }
+.example-q { margin-bottom: 12px; font-weight: 600; font-size: 0.94rem; }
+.example-sol-label {
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--green); margin-bottom: 8px;
+}
+
+/* Code */
+pre, code {
+  font-family: var(--font-mono);
+}
+code {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 0.85em;
+  color: var(--accent);
+}
+pre {
+  background: var(--sidebar-bg);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  overflow-x: auto;
+  margin: 14px 0;
+  position: relative;
+}
+pre code {
+  background: none; border: none;
+  padding: 0; color: #c9c7c0;
+  font-size: 0.84rem; line-height: 1.6;
+}
+
+/* Divider */
+.divider {
+  border: none; border-top: 1px solid var(--border);
+  margin: 36px 0;
+}
+
+/* Module separator */
+.module-sep {
+  display: flex; align-items: center; gap: 16px;
+  margin: 52px 0 36px;
+}
+.module-sep-line { flex: 1; border-top: 2px solid var(--border); }
+.module-sep-label {
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  #sidebar { transform: translateX(-100%); }
+  #sidebar.open { transform: translateX(0); }
+  #main { margin-left: 0; }
+  #menu-btn { display: flex; }
+  #content { padding: 24px 16px 60px; }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.2rem; }
+  .module-header { padding: 22px 18px; }
+  .module-header h1 { font-size: 1.3rem; }
+  #back-top { bottom: 20px; right: 16px; width: 38px; height: 38px; }
+}
+
+/* ===== PRINT ===== */
+@media print {
+  #sidebar, #header, #progress-bar, #back-top { display: none !important; }
+  #main { margin-left: 0; }
+  #content { max-width: 100%; padding: 0; }
+  .topic-block-body.collapsed { display: block !important; }
+}
+
+/* highlight for search */
+mark { background: rgba(232,168,56,0.3); color: inherit; border-radius: 2px; padding: 0 1px; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- SIDEBAR -->
+<nav id="sidebar" aria-label="Course navigation">
+  <div id="sidebar-header">
+    <div id="sidebar-logo">PES University</div>
+    <div id="sidebar-title">Engineering Chemistry</div>
+    <div id="sidebar-subtitle">Complete Study Notes</div>
+  </div>
+  <div id="search-wrap">
+    <span id="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="Search topics, formulas…" autocomplete="off" aria-label="Search notes">
+    <div id="search-results" role="listbox"></div>
+  </div>
+  <div id="nav-tree">
+    <!-- Module 1 -->
+    <div class="nav-module">
+      <button class="nav-module-btn open" data-target="nav-m1">
+        <span class="pill">M1</span> Molecular Spectroscopy <span class="chevron">▶</span>
+      </button>
+      <div class="nav-children open" id="nav-m1">
+        <a href="#intro-spectroscopy" class="nav-topic-link">Introduction</a>
+        <a href="#em-radiation" class="nav-topic-link">EM Radiation Properties</a>
+        <a href="#atomic-vs-molecular" class="nav-topic-link">Atomic vs Molecular Spectra</a>
+        <a href="#quantisation" class="nav-topic-link">Quantisation of Energy</a>
+        <a href="#absorption-emission" class="nav-topic-link">Absorption &amp; Emission</a>
+        <a href="#spectroscopic-units" class="nav-topic-link">Spectroscopic Units</a>
+        <a href="#em-spectrum-table" class="nav-topic-link">EM Spectrum Regions</a>
+        <a href="#raman" class="nav-topic-link">Raman Spectroscopy</a>
+        <a href="#mol-energies" class="nav-topic-link">Energies of Molecules</a>
+        <a href="#born-oppenheimer" class="nav-topic-link">Born-Oppenheimer</a>
+        <a href="#rotational" class="nav-topic-link">Rotational Spectroscopy</a>
+        <a href="#rot-energy-levels" class="nav-topic-link">Rotational Energy Levels</a>
+        <a href="#vibrational" class="nav-topic-link">Vibrational Spectroscopy</a>
+        <a href="#sho" class="nav-topic-link">Simple Harmonic Oscillator</a>
+        <a href="#anharmonic" class="nav-topic-link">Anharmonic Oscillator</a>
+        <a href="#electronic-spec" class="nav-topic-link">Electronic Spectroscopy</a>
+        <a href="#franck-condon" class="nav-topic-link">Franck-Condon Principle</a>
+        <a href="#solved-examples" class="nav-topic-link">Solved Examples</a>
+      </div>
+    </div>
+    <!-- Module 2 -->
+    <div class="nav-module">
+      <button class="nav-module-btn open" data-target="nav-m2">
+        <span class="pill">M2</span> Phase Equilibria <span class="chevron">▶</span>
+      </button>
+      <div class="nav-children open" id="nav-m2">
+        <a href="#free-energy-phase" class="nav-topic-link">Free Energy &amp; Chemical Potential</a>
+        <a href="#phase-equilibria-def" class="nav-topic-link">Phase Equilibria</a>
+        <a href="#phase-def" class="nav-topic-link">Phases</a>
+        <a href="#components-def" class="nav-topic-link">Components</a>
+        <a href="#degrees-freedom" class="nav-topic-link">Degrees of Freedom</a>
+        <a href="#phase-rule" class="nav-topic-link">Gibbs Phase Rule</a>
+        <a href="#phase-rule-derivation" class="nav-topic-link">Derivation of Phase Rule</a>
+        <a href="#phase-diagram-1c" class="nav-topic-link">Phase Diagram – Water</a>
+        <a href="#water-curves" class="nav-topic-link">Water Curves Explained</a>
+        <a href="#phase-diagram-2c" class="nav-topic-link">Two-Component System</a>
+        <a href="#eutectic" class="nav-topic-link">Eutectic System (Pb-Ag)</a>
+        <a href="#thermal-analysis" class="nav-topic-link">Thermal Analysis</a>
+        <a href="#pattinson" class="nav-topic-link">Pattinson's Process</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div id="overlay"></div>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- HEADER -->
+  <header id="header">
+    <button id="menu-btn" aria-label="Toggle menu">☰</button>
+    <span id="page-title">Engineering Chemistry</span>
+    <button id="theme-toggle" aria-label="Toggle dark mode">🌙 Dark</button>
+  </header>
+
+  <!-- CONTENT -->
+  <main id="content">
+
+    <!-- ===================== MODULE 1 ===================== -->
+    <div class="module-header">
+      <div class="module-eyebrow">Module I</div>
+      <h1>Molecular Spectroscopy</h1>
+<button class="pdf-btn" onclick="window.open('./chem/u1.pdf', '_blank')">
+    📄 Unit 1 PDF
+</button>
+      <p>Electromagnetic radiation, rotational, vibrational, and electronic spectra of molecules.</p>
+    </div>
+
+    <!-- Introduction -->
+    <section class="section-anchor" id="intro-spectroscopy">
+      <h2>Introduction to Molecular Spectroscopy</h2>
+      <p>
+        <span class="key-term">Molecular spectroscopy</span> is that branch of science which deals with the study of
+        <span class="key-term">interaction of electromagnetic radiation with matter (molecules)</span>.
+      </p>
+      <p>
+        The basic experimental setup involves: <strong>Incident radiation → sample → detector → diffraction grating → recorder (spectrum)</strong>
+      </p>
+    </section>
+
+    <!-- EM Radiation Properties -->
+    <section class="section-anchor" id="em-radiation">
+      <h2>Properties of Electromagnetic Radiation</h2>
+      <p>Some important features of <span class="key-term">electromagnetic radiations</span> are:</p>
+      <ul>
+        <li>They have <span class="key-term">dual character</span> — particle character as well as wave character. For example, a beam of light is a stream of particles called <em>photons</em> moving through space in the form of waves.</li>
+        <li>These waves are associated with <span class="key-term">electric and magnetic fields</span> oscillating perpendicular to each other and also perpendicular to the direction of propagation.</li>
+        <li>All electromagnetic radiations travel with the <span class="key-term">velocity of light</span>.</li>
+      </ul>
+
+      <div class="fig-desc">
+        <strong>[Electromagnetic Wave Diagram]</strong> An EM wave propagates along a direction with the Electric Field (E) oscillating in one plane and the Magnetic Field (B) oscillating perpendicular to it. The wavelength λ is the distance between successive crests.
+      </div>
+
+      <h3>Wave Characteristics</h3>
+      <p>Waves can be characterised by the following <span class="key-term">properties</span>:</p>
+      <ul>
+        <li><span class="key-term">Wavelength</span>: The distance between two successive crests and troughs of the wave; symbol <strong>λ</strong>; units: m, nm, or Å.</li>
+        <li><span class="key-term">Frequency</span>: The number of cycles completed in a certain amount of time; symbol <strong>ν</strong>; units: Hz or s⁻¹.</li>
+        <li><span class="key-term">Wave number</span>: Number of complete waves or cycles contained in unit distance; symbol <strong>ν̄</strong>; units: cm⁻¹.</li>
+      </ul>
+
+      <div class="callout callout-formula">
+        <div class="callout-title">Key Formulas</div>
+        <p><strong>Energy of electromagnetic radiation:</strong> \( E = h\nu \)</p>
+        <p>where E is energy, h is Planck's constant (h = 6.625 × 10⁻³⁴ Js), and ν is frequency.</p>
+        <p><strong>Wavelength–Frequency relation:</strong> \( \nu = \frac{c}{\lambda} \)</p>
+        <p>where c is the speed of light, λ is wavelength, and ν is frequency.</p>
+        <p><strong>Wave number–Wavelength relation:</strong> \( \bar{\nu} = \frac{1}{\lambda} \)</p>
+      </div>
+    </section>
+
+    <!-- Atomic vs Molecular Spectra -->
+    <section class="section-anchor" id="atomic-vs-molecular">
+      <h2>Comparison: Atomic Spectra vs Molecular Spectra</h2>
+      <h3>Atomic Spectra</h3>
+      <ul>
+        <li>Due to <span class="key-term">electronic transitions from one atomic orbital to another</span>.</li>
+        <li>Gives rise to <span class="key-term">line spectra</span>.</li>
+      </ul>
+
+      <div class="fig-desc">
+        <strong>[Atomic Energy Level Diagram]</strong> Electrons in a hydrogen atom can occupy shells n = 1, 2, 3, 4, 5... The Lyman series (ultraviolet), Balmer series (visible), Paschen, Brackett, and Pfund series (infrared) arise from transitions to different levels. The Hydrogen Emission Spectrum shows discrete lines at 410 nm, 434 nm, 486 nm, and 656 nm (Balmer series).
+      </div>
+
+      <h3>Molecular Spectra</h3>
+      <ul>
+        <li>Due to electronic transitions from the <span class="key-term">Highest Occupied Molecular Orbital (HOMO)</span> to the <span class="key-term">Lowest Unoccupied Molecular Orbital (LUMO)</span>.</li>
+        <li>Gives rise to <span class="key-term">band spectra</span> due to rotational and vibrational transitions possible in molecules along with electronic transitions.</li>
+      </ul>
+
+      <div class="fig-desc">
+        <strong>[Molecular Orbital Energy Diagram — N₂]</strong> Molecular orbitals of N₂ formed from combination of 1×Nitrogen atomic orbitals (left) and 1×Nitrogen atomic orbitals (right). From bottom to top: 1σg, 1σu*, 2σg, 2σu*, 1πx and 1πy (bonding), 1πx* and 1πy* (antibonding), 2σg*. Electronic transitions occur between HOMO and LUMO.
+      </div>
+      <div class="fig-desc">
+        <strong>[Visible Band System of I₂]</strong> The molecular spectrum shows a progression of bands converging at higher wavenumbers, with the (26,0) band at 543.47 nm shown as the most prominent. The spectrum shows regions of allowed v′=0 and v′=1 transitions.
+      </div>
+    </section>
+
+    <!-- Quantisation -->
+    <section class="section-anchor" id="quantisation">
+      <h2>Quantisation of Energy</h2>
+      <ul>
+        <li>Energy levels in atoms or molecules are discrete or <span class="key-term">quantised</span>.</li>
+        <li>Energy can be absorbed only in packets called <span class="key-term">quanta</span>.</li>
+        <li>Frequency of light absorbed when there is a transition between two energy levels depends on the <span class="key-term">difference in energy</span> between the two energy levels.</li>
+        <li>If an atom or molecule in the ground state absorbs energy there exists a higher energy level corresponding to the frequency of light absorbed.</li>
+      </ul>
+
+      <div class="formula-block">
+        \[ \Delta E = E_2 - E_1 = h\nu \]
+      </div>
+
+      <p>where E₂ is the upper energy level and E₁ is the lower energy level.</p>
+    </section>
+
+    <!-- Absorption and Emission -->
+    <section class="section-anchor" id="absorption-emission">
+      <h2>Absorption and Emission Spectrum</h2>
+      <ul>
+        <li><span class="key-term">Absorption spectrum</span> is observed when an atom or molecule absorbs energy and moves from a lower energy level to a higher energy level.</li>
+        <li><span class="key-term">Emission spectrum</span> arises when a molecule comes from a higher energy level to a lower energy level.</li>
+      </ul>
+
+      <div class="formula-block">
+        \[ \Delta E = E_2 - E_1 = h\nu \]
+      </div>
+
+      <div class="fig-desc">
+        <strong>[Hydrogen Emission and Absorption Spectra]</strong> The emission spectrum shows bright lines on a dark background. The absorption spectrum shows dark lines on a bright background. Both appear at the same wavelengths (410 nm, 434 nm, 486 nm, 656 nm) representing Balmer series transitions between energy levels n = 2 (ground state) and n = 6, 5, 4, 3 (excited states).
+      </div>
+    </section>
+
+    <!-- Spectroscopic Units -->
+    <section class="section-anchor" id="spectroscopic-units">
+      <h2>Spectroscopic Units</h2>
+      <p>\( E = h\nu \) where Energy is expressed in Joules.</p>
+      <p>Wave number is related to wavelength by: \( \bar{\nu} = \frac{1}{\lambda} \)</p>
+      <p>Since \( c = \lambda\nu \),</p>
+
+      <div class="formula-block">
+        \[ \bar{\nu} = \frac{\nu}{c} \]
+      </div>
+
+      <p>Therefore:</p>
+      <div class="formula-block">
+        \[ E = hc\bar{\nu} \quad \text{or} \quad \bar{\nu} = \frac{E}{hc} \]
+      </div>
+
+      <ul>
+        <li>The <span class="key-term">spectroscopic unit</span> for energy of a radiation is <strong>cm⁻¹</strong>.</li>
+        <li>It is <span class="key-term">energy expressed in wave numbers</span>.</li>
+        <li>It is used for <span class="key-term">convenience</span> of using small numerals.</li>
+        <li>Example: 1 cm⁻¹ = 1.99 × 10⁻²³ J</li>
+      </ul>
+    </section>
+
+    <!-- EM Spectrum Table -->
+    <section class="section-anchor" id="em-spectrum-table">
+      <h2>Electromagnetic Spectrum and Information Obtained</h2>
+
+      <div class="fig-desc">
+        <strong>[Electromagnetic Spectrum Diagram]</strong> The spectrum spans from Gamma rays (10⁻¹⁶ m) through X-rays, UV, Visible light (400–700 nm), Infrared, to Radio waves (10⁸ m). The visible region is expanded showing the color progression from violet (400 nm) to red (700 nm).
+      </div>
+
+      <h3>Information from Different Regions</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Spectral Region</th><th>Wavelength</th><th>Technique</th><th>Information</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Radiofrequency</strong></td>
+              <td>10 m – 1 cm</td>
+              <td>NMR, ESR</td>
+              <td>Nuclear and electron spin reversal</td>
+            </tr>
+            <tr>
+              <td><strong>Microwave</strong></td>
+              <td>1 cm – 100 μm</td>
+              <td>Rotational spectroscopy</td>
+              <td>Rotational levels</td>
+            </tr>
+            <tr>
+              <td><strong>Infra Red (IR)</strong></td>
+              <td>100 μm – 1 μm</td>
+              <td>Vibrational spectroscopy</td>
+              <td>Vibrational levels</td>
+            </tr>
+            <tr>
+              <td><strong>Visible and UV</strong></td>
+              <td>1 μm – 10 nm</td>
+              <td>UV-Visible spectroscopy</td>
+              <td>Electronic states; change in electronic distribution of valence electrons</td>
+            </tr>
+            <tr>
+              <td><strong>X-ray</strong></td>
+              <td>10 nm – 100 pm</td>
+              <td>X-ray spectroscopy</td>
+              <td>Change in electronic distribution of inner electrons</td>
+            </tr>
+            <tr>
+              <td><strong>γ-ray</strong></td>
+              <td>100 pm – 1 pm</td>
+              <td>γ-ray spectroscopy</td>
+              <td>Rearrangement of nuclear particles</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Detailed Table of Spectral Regions</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Spectral region</th><th>VHF</th><th>UHF</th><th>Microwave</th><th>Infrared</th><th>Visible</th><th>Ultraviolet</th><th>X-rays</th><th>γ-rays</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Common usage</td>
+              <td>NMR</td>
+              <td>EPR</td>
+              <td>rotational transitions</td>
+              <td>vibrational transitions</td>
+              <td colspan="2">electronic transitions</td>
+              <td>ionisation</td>
+              <td>nuclear effects</td>
+            </tr>
+            <tr>
+              <td>Frequency (Hz)</td>
+              <td>5×10⁸</td>
+              <td>3×10¹⁰</td>
+              <td>3×10¹¹</td>
+              <td>3×10¹³</td>
+              <td>6×10¹⁴</td>
+              <td>1.2×10¹⁵</td>
+              <td>3.0×10¹⁷</td>
+              <td>1.5×10¹⁹</td>
+            </tr>
+            <tr>
+              <td>Wavelength</td>
+              <td>0.6 m</td>
+              <td>1 cm</td>
+              <td>1 mm</td>
+              <td>10 μm</td>
+              <td>500 nm</td>
+              <td>250 nm</td>
+              <td>1 nm</td>
+              <td>20 pm</td>
+            </tr>
+            <tr>
+              <td>Wavenumber (cm⁻¹)</td>
+              <td>0.017</td>
+              <td>1.0</td>
+              <td>10.0</td>
+              <td>1000</td>
+              <td>20,000</td>
+              <td>40,000</td>
+              <td>1.0×10⁷</td>
+              <td>5.0×10⁸</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Raman Spectroscopy -->
+    <section class="section-anchor" id="raman">
+      <h2>Raman Spectroscopy: Scattering of Light</h2>
+      <p>When monochromatic radiation is passed through a transparent medium:</p>
+      <ul>
+        <li>Most of the scattered radiation consists of radiation of incident wavelength — <span class="key-term">Rayleigh scattering</span>.</li>
+        <li>Some of the scattered radiation consists of radiation with different wavelength from incident wavelength — <span class="key-term">Raman scattering</span>.</li>
+        <li>When the wavelength of scattered radiation is <em>more</em> than that of incident radiation — <span class="key-term">Stokes lines</span>.</li>
+        <li>When the wavelength of scattered radiation is <em>less</em> than that of incident radiation — <span class="key-term">anti-Stokes lines</span>.</li>
+      </ul>
+
+      <div class="fig-desc">
+        <strong>[Raman Scattering Diagram]</strong> A laser (λ_laser) hits the molecule. Anti-Stokes Raman Scattering exits with λ_scatter &lt; λ_laser. Rayleigh Scattering exits with λ_scatter = λ_laser. Stokes Raman Scattering exits with λ_scatter &gt; λ_laser.
+      </div>
+
+      <div class="fig-desc">
+        <strong>[Energy Transition Diagram for Rayleigh and Raman Scattering]</strong> Energy levels: Ground state E₀ and excited state E₀ + hν_m. Rayleigh Scattering (elastic): molecule goes to virtual state with hν₀ and returns emitting hν₀. Stokes Scattering (inelastic): molecule goes to virtual state with hν₀ and returns to higher level emitting hν₀ − hν_m. Anti-Stokes Scattering: molecule starts from higher level, goes to virtual state and returns to ground state emitting hν₀ + hν_m.
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">Key Principle</div>
+        <p>There is an <span class="key-term">exchange of energy</span> between the molecules and radiation in Raman scattering.</p>
+        <p><span class="key-term">Homonuclear diatomic molecules</span> which are microwave and Infra-red inactive are <strong>Raman active</strong>.</p>
+      </div>
+    </section>
+
+    <!-- Molecular Energies -->
+    <section class="section-anchor" id="mol-energies">
+      <h2>Different Types of Energies Possessed by a Molecule</h2>
+      <ul>
+        <li><span class="key-term">Translational energy (E_trans)</span>: by virtue of translatory motion of the molecule.</li>
+        <li><span class="key-term">Rotational energy (E_rot)</span>: by virtue of rotation of a molecule about its centre of gravity.</li>
+        <li><span class="key-term">Vibrational energy (E_vib)</span>: by virtue of periodic displacement of the atoms of a molecule about its equilibrium position.</li>
+        <li><span class="key-term">Electronic energy (E_elec)</span>: due to the different electronic arrangements in the molecule.</li>
+      </ul>
+    </section>
+
+    <!-- Born-Oppenheimer -->
+    <section class="section-anchor" id="born-oppenheimer">
+      <h2>Born-Oppenheimer Approximation</h2>
+      <ul>
+        <li><span class="key-term">Total energy</span> of a molecule is the sum of translational, rotational, vibrational and electronic energies:</li>
+      </ul>
+
+      <div class="formula-block">
+        \[ E = E_{trans} + E_{rot} + E_{vib} + E_{elec} \]
+      </div>
+
+      <ul>
+        <li>Translational energy is negligibly small. Hence the Born-Oppenheimer approximation can be written as:</li>
+      </ul>
+
+      <div class="formula-block">
+        \[ E = E_{rot} + E_{vib} + E_{elec} \]
+      </div>
+
+      <ul>
+        <li>Electronic, vibrational and rotational energies of a molecule are <span class="key-term">completely independent</span> of each other.</li>
+        <li>Because the electronic energy levels are much farther apart than the vibrational energy levels which are again much farther apart than the rotational energy levels.</li>
+        <li>This can be written as:</li>
+      </ul>
+
+      <div class="formula-block">
+        \[ E_{rot} \ll E_{vib} \ll E_{elec} \]
+      </div>
+
+      <div class="fig-desc">
+        <strong>[Energy Level Diagram for a Diatomic Molecule]</strong> A potential energy curve (Morse curve) shows energy vs. internuclear separation. The ground state and excited electronic state are shown as two Morse potential wells. Within each electronic state, multiple vibrational levels are shown as horizontal lines. Within each vibrational level, closely spaced rotational sub-levels exist. Transitions: electronic (optical/UV region), vibrational (infrared), rotational (microwave).
+      </div>
+    </section>
+
+    <!-- Rotational Spectroscopy -->
+    <section class="section-anchor" id="rotational">
+      <h2>Rotational Spectroscopy</h2>
+      <ul>
+        <li>A molecule undergoing rotation absorbs in the <span class="key-term">microwave region</span>.</li>
+        <li>For a molecule to be rotationally active or <span class="key-term">microwave active</span>, the molecule has to possess a <span class="key-term">permanent dipole moment</span>.</li>
+        <li>Rotations of a molecule having permanent dipole moment will cause changes in <span class="key-term">electric dipoles</span> that will interact with the <span class="key-term">electrical component</span> of the electromagnetic radiation.</li>
+      </ul>
+
+      <div class="fig-desc">
+        <strong>[H–Cl Rotation Diagram]</strong> The H–Cl molecule rotates end-over-end. As it rotates, the direction of the dipole moment changes periodically. The vertical component of the dipole oscillates as a sinusoidal wave with time (shown in the bottom panel), with the molecule shown at 5 orientations during one full rotation cycle. This oscillating dipole interacts with the EM radiation.
+      </div>
+
+      <ul>
+        <li>When the frequencies match, <span class="key-term">resonance occurs</span> and the molecule absorbs energy and goes to the higher rotational levels and a rotational spectrum can be recorded.</li>
+        <li>Molecules such as <span class="key-term">HCl and CO</span> show rotational spectra as they possess permanent dipole moment while <span class="key-term">H₂, Cl₂ and CO₂</span> do not.</li>
+      </ul>
+    </section>
+
+    <!-- Rotational Energy Levels -->
+    <section class="section-anchor" id="rot-energy-levels">
+      <h2>Expressions for Rotational Energy Levels (Rigid Rotor Model)</h2>
+
+      <h3>Derivation of Moment of Inertia for a Heteronuclear Diatomic Molecule</h3>
+
+      <div class="fig-desc">
+        <strong>[Rigid Rotor Diagram]</strong> A rigid diatomic molecule with masses m₁ (left) and m₂ (right) joined by a thin rod of length r₀ = r₁ + r₂. The centre of mass C is located at distance r₁ from m₁ and r₂ from m₂.
+      </div>
+
+      <p>The molecule rotates end-over-end about point C (the centre of gravity). This is defined by the moment, or balancing, equation:</p>
+
+      <div class="formula-block">
+        \[ m_1 r_1 = m_2 r_2 \]
+      </div>
+
+      <p>The <span class="key-term">moment of inertia</span> about C is defined by:</p>
+
+      <div class="formula-block">
+        \[ I = m_1 r_1^2 + m_2 r_2^2 \]
+      </div>
+
+      <p>Expanding:</p>
+      <div class="formula-block">
+        \[ I = m_2 r_2 r_1 + m_1 r_1 r_2 = r_1 r_2 (m_1 + m_2) \]
+      </div>
+
+      <p>Since \( m_1 r_1 = m_2 r_2 = m_2(r_o - r_1) \), we get: \( r_1 = \dfrac{m_2 r_o}{m_1 + m_2} \)</p>
+
+      <p>Since \( m_1 r_1 = m_2 r_2 = m_1(r_o - r_2) \), we get: \( r_2 = \dfrac{m_1 r_o}{m_1 + m_2} \)</p>
+
+      <p>Therefore:</p>
+      <div class="formula-block">
+        \[ I = \frac{m_1 m_2}{m_1 + m_2} r_o^2 = \mu r_o^2 \]
+      </div>
+
+      <p>Where μ is the <span class="key-term">reduced mass</span> given by:</p>
+      <div class="formula-block">
+        \[ \mu = \frac{m_1 m_2}{m_1 + m_2} \]
+      </div>
+
+      <h3>Rotational Energy and Quantum Numbers</h3>
+
+      <p>Rotational energy is given by:</p>
+      <div class="formula-block">
+        \[ E_r = \frac{1}{2} I\omega^2 = \frac{L^2}{2I} \quad \text{(since } L = I\omega \text{)} \]
+      </div>
+
+      <p>Solving the Schrödinger equation for a rigid rotor shows that angular momentum is quantised and is given by:</p>
+      <div class="formula-block">
+        \[ L = \frac{\sqrt{J(J+1)}}{2\pi} h \]
+      </div>
+
+      <p>where J is the <span class="key-term">rotational quantum number</span>.</p>
+
+      <p>The quantity J, the <span class="key-term">rotational quantum number</span>, can take integral values from zero upwards: <strong>J = 0, 1, 2, 3, ...</strong></p>
+
+      <p>Hence the rotational energy levels are quantised and given by the expression:</p>
+      <div class="formula-block">
+        \[ E_J = \frac{h^2}{8\pi^2 I} J(J+1) \text{ Joules} \]
+      </div>
+
+      <p>h = Planck's constant = 6.626 × 10⁻³⁴ Js and I is the moment of inertia.</p>
+
+      <h3>Energy in Spectroscopic Units (cm⁻¹)</h3>
+
+      <div class="formula-block">
+        \[ \varepsilon_J = \frac{h}{8\pi^2 Ic} J(J+1) \text{ cm}^{-1} \]
+      </div>
+
+      <p>Which can be written as:</p>
+      <div class="formula-block">
+        \[ \varepsilon_J = BJ(J+1) \text{ cm}^{-1} \]
+      </div>
+
+      <p>where:</p>
+      <div class="formula-block">
+        \[ B = \frac{h}{8\pi^2 Ic} \text{ cm}^{-1} \]
+      </div>
+
+      <p><strong>B</strong> is known as the <span class="key-term">rotational constant</span>.</p>
+
+      <h3>Rotational Energy Level Table</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>J</th><th>ε_J</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td>0</td></tr>
+            <tr><td>1</td><td>2B</td></tr>
+            <tr><td>2</td><td>6B</td></tr>
+            <tr><td>3</td><td>12B</td></tr>
+            <tr><td>4</td><td>20B</td></tr>
+            <tr><td>5</td><td>30B</td></tr>
+            <tr><td>6</td><td>42B</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="fig-desc">
+        <strong>[Rotational Energy Level Diagram]</strong> Horizontal lines at heights 0, 2B, 6B, 12B, 20B, 30B, 42B cm⁻¹ represent J = 0, 1, 2, 3, 4, 5, 6. The levels are spaced increasingly further apart as J increases.
+      </div>
+
+      <h3>Selection Rules for Rigid Rotor</h3>
+
+      <p>The <span class="key-term">selection rules</span> for the rigid rotor model obtained after solving the Schrödinger equation are:</p>
+      <ul>
+        <li><span class="key-term">Gross selection rule</span>: molecule should possess permanent dipole moment.</li>
+        <li>\( \Delta J = \pm 1 \)</li>
+      </ul>
+
+      <p>For rotational transition of a molecule from level J → J+1, the energy absorbed is given by:</p>
+      <div class="formula-block">
+        \[ \Delta\varepsilon_{J \to (J+1)} = \bar{\nu} = 2B(J+1) \text{ cm}^{-1} \]
+      </div>
+
+      <p>Substituting for values J = 0, 1, 2, 3, ...:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>J</th><th>Δε (J→J+1)</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td>2B cm⁻¹</td></tr>
+            <tr><td>1</td><td>4B cm⁻¹</td></tr>
+            <tr><td>2</td><td>6B cm⁻¹</td></tr>
+            <tr><td>3</td><td>8B cm⁻¹</td></tr>
+            <tr><td>4</td><td>10B cm⁻¹</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="fig-desc">
+        <strong>[Rotational Energy Levels and Spectrum of a Diatomic Molecule]</strong> Left panel: Energy levels J=0 through J=5 at 0, 2B, 6B, 12B, 20B, 30B with upward arrows showing allowed transitions. Right panel: The resulting rotational spectrum shows equally spaced lines at 4B, 8B, 12B cm⁻¹.
+      </div>
+
+      <h3>Information from the Rotational Spectrum</h3>
+      <ul>
+        <li>The <span class="key-term">first line in the spectrum</span> appears at 2B cm⁻¹ and the <span class="key-term">distance between any two consecutive lines</span> is constant and is equal to 2B cm⁻¹.</li>
+        <li>We can get the value of 'B' from the spectrum and calculate I, the moment of inertia, using the expression: \( B = \dfrac{h}{8\pi^2 Ic} \text{ cm}^{-1} \).</li>
+        <li>Since I = μr₀², r₀ can be determined: \( r_o = \sqrt{\dfrac{I}{\mu}} \) — r₀ is the <span class="key-term">bond length</span> of the molecule.</li>
+        <li>The spectrum also reveals that some <span class="key-term">higher rotational levels are also populated at room temperature</span>.</li>
+      </ul>
+    </section>
+
+    <!-- Vibrational Spectroscopy -->
+    <section class="section-anchor" id="vibrational">
+      <h2>Vibrational Spectroscopy</h2>
+      <ul>
+        <li>When a molecule undergoes vibrational changes it absorbs <span class="key-term">IR radiation</span>.</li>
+        <li>For a molecule to be vibrationally active (IR active) the vibration of a molecule must be associated with <span class="key-term">change in dipole moment</span>.</li>
+        <li>Vibrations of molecules can result in changes in electric dipoles that can interact with the <span class="key-term">electrical component</span> of the electromagnetic radiation.</li>
+        <li>When the frequencies match, <span class="key-term">resonance occurs</span> and the molecule absorbs energy and goes to the higher vibrational levels and exhibits <span class="key-term">vibrational spectrum</span>.</li>
+        <li>Molecules such as <span class="key-term">HCl, CO and H₂O</span> will show vibrational spectra while <span class="key-term">H₂, Cl₂</span> will not.</li>
+        <li><span class="key-term">CO₂</span> molecule does not possess permanent dipole moment but is IR active as when it vibrates asymmetrically or in bending mode, there is change in dipole moment.</li>
+      </ul>
+
+      <h3>Vibrational Modes of CO₂</h3>
+      <p><span class="key-term">CO₂ molecule</span> although does not possess permanent dipole moment is IR active because some of its vibrational modes are IR active:</p>
+      <ul>
+        <li><span class="key-term">CO₂ symmetric stretch</span> is IR inactive as there is no change in dipole moment when the molecule vibrates in this mode.</li>
+        <li><span class="key-term">CO₂ asymmetric stretch</span> is IR active.</li>
+        <li><span class="key-term">CO₂ bending mode</span> is IR active.</li>
+      </ul>
+
+      <div class="fig-desc">
+        <strong>[CO₂ Vibrational Modes]</strong> Three vibrational modes are illustrated: (1) Symmetrical stretching — both O atoms move symmetrically away from central C; no change in dipole moment, therefore IR inactive. (2) Asymmetrical stretching — one O moves outward while the other moves inward relative to C; change in dipole moment, therefore IR active. (3) In-plane bending — both O atoms move in the same direction perpendicular to the bond axis; change in dipole moment, therefore IR active.
+      </div>
+    </section>
+
+    <!-- SHO -->
+    <section class="section-anchor" id="sho">
+      <h2>Vibrational Spectroscopy of Diatomic Molecule: Simple Harmonic Oscillator (SHO) Model</h2>
+      <ul>
+        <li>Every type of bond in a molecule has a unique natural <span class="key-term">vibrational frequency</span>.</li>
+        <li>Therefore the IR spectrum of every molecule is <span class="key-term">unique</span> — as much as the fingerprint of human beings.</li>
+        <li>Bonds are not static but <span class="key-term">vibrating in different ways</span>.</li>
+        <li>A vibrating bond can therefore be considered a spring with its ends tethered to two atoms — it obeys <span class="key-term">Hooke's law</span>.</li>
+      </ul>
+
+      <div class="fig-desc">
+        <strong>[Spring Model of a Diatomic Bond]</strong> Three diagrams: (1) Equilibrium — atoms at rest, spring at natural length (equilibrium bond length). (2) Stretched — atoms pulled apart, spring elongated, spring restoring force pulls inward. (3) Compressed — atoms pushed together, spring compressed, spring restoring force pushes outward.
+      </div>
+
+      <p>The vibrating bond obeys Hooke's law: \( F = -k(r - r_{eq}) \)</p>
+      <p>where k is a force constant, r is the internuclear distance, r_eq is the equilibrium internuclear distance or bond length.</p>
+
+      <p>Energy is given by:</p>
+      <div class="formula-block">
+        \[ E = \frac{1}{2} k(r - r_{eq})^2 \]
+      </div>
+      <p>Hence the energy curve is <span class="key-term">parabolic</span>.</p>
+
+      <div class="fig-desc">
+        <strong>[Parabolic Potential Energy Curve]</strong> A U-shaped (parabolic) curve of energy vs. internuclear distance, centred at r_eq (the equilibrium position). Two energy levels ε₁ and ε₂ are shown as horizontal lines within the parabolic well. At each energy level, the molecule oscillates between turning points B' and B''.
+      </div>
+
+      <h3>Oscillation Frequency</h3>
+
+      <p>The <span class="key-term">oscillation frequency</span> is given by:</p>
+      <div class="formula-block">
+        \[ \nu_{osc} = \frac{1}{2\pi} \sqrt{\frac{k}{\mu}} \text{ Hz} \]
+      </div>
+      <p>where μ is the <span class="key-term">reduced mass</span>.</p>
+
+      <p>Expressing frequency of oscillation in terms of wave number:</p>
+      <div class="formula-block">
+        \[ \bar{\nu}_{osc} = \frac{1}{2\pi c} \sqrt{\frac{k}{\mu}} \text{ cm}^{-1} \]
+      </div>
+
+      <p>Solving the <span class="key-term">Schrödinger equation for harmonic oscillator</span> shows vibrational energy levels are quantised and are given by the expression:</p>
+      <div class="formula-block">
+        \[ E_V = \left(v + \frac{1}{2}\right) h\nu_{osc} \text{ Joules} \]
+      </div>
+
+      <p>where <span class="key-term">v = vibrational quantum number</span>, which can take up values zero upwards: <strong>v = 0, 1, 2, 3, ...</strong></p>
+
+      <p><span class="key-term">Vibrational energy</span> expressed in terms of wave number is given by:</p>
+      <div class="formula-block">
+        \[ \varepsilon_v = \left(v + \frac{1}{2}\right) \bar{\nu}_{osc} \text{ cm}^{-1} \]
+      </div>
+
+      <h3>Vibrational Energy Level Table (SHO)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>v</th><th>ε_v</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td>\( \varepsilon_0 = \frac{1}{2}\bar{\nu}_{osc} \text{ cm}^{-1} \)</td></tr>
+            <tr><td>1</td><td>\( \varepsilon_1 = \frac{3}{2}\bar{\nu}_{osc} \text{ cm}^{-1} \)</td></tr>
+            <tr><td>2</td><td>\( \varepsilon_2 = \frac{5}{2}\bar{\nu}_{osc} \text{ cm}^{-1} \)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>\( \varepsilon_0 \) is called the <span class="key-term">zero point energy</span>.</p>
+
+      <p>The <span class="key-term">difference between any two consecutive energy levels</span> is equal to \( \bar{\nu}_{osc} \text{ cm}^{-1} \). Hence the energy levels are <strong>equally spaced</strong>.</p>
+
+      <h3>Selection Rules for SHO</h3>
+      <ul>
+        <li><span class="key-term">Gross selection rule</span>: When the molecule vibrates there should be a change in the dipole moment.</li>
+        <li>\( \Delta v = \pm 1 \)</li>
+      </ul>
+
+      <p>Therefore transition between any two consecutive vibrational levels are allowed and only <span class="key-term">one line</span> is observed in the vibrational spectrum at \( \bar{\nu}_{osc} \text{ cm}^{-1} \).</p>
+
+      <div class="fig-desc">
+        <strong>[Vibrational Energy Levels and Spectrum for SHO]</strong> The parabolic potential contains equally spaced energy levels v=0,1,2,...,9. All transitions (indicated by upward arrows) are equal in energy, giving a single line at ω̄_osc in the spectrum below.
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">Application</div>
+        <p>From the spectrum, \( \bar{\nu}_{osc} \) can be obtained, and using the expression \( \bar{\nu}_{osc} = \dfrac{1}{2\pi c}\sqrt{\dfrac{k}{\mu}} \), k can be determined, which is the <span class="key-term">bond strength (force constant)</span> of the molecule.</p>
+      </div>
+    </section>
+
+    <!-- Anharmonic Oscillator -->
+    <section class="section-anchor" id="anharmonic">
+      <h2>Vibrational Spectroscopy — Anharmonic Oscillator Model</h2>
+      <ul>
+        <li>In actual diatomics, the potential is <span class="key-term">anharmonic</span> because the bond when stretched beyond a point breaks and the molecule dissociates.</li>
+        <li>A good description of an anharmonic oscillator is given by the <span class="key-term">Morse function</span>:</li>
+      </ul>
+
+      <div class="formula-block">
+        \[ \text{P.E.} = D_{eq} \left[1 - \exp\{a(r_o - r)\}\right]^2 \]
+      </div>
+
+      <p>where D_eq is the depth of the PE curve and r₀ is the bond length.</p>
+
+      <div class="fig-desc">
+        <strong>[Morse Potential vs. Harmonic Approximation]</strong> A plot of potential energy in units of D_e vs. bond length in units of a(r-r_e). The green curve (Morse potential) is U-shaped but asymmetric: steep on the compressed side and gradually levelling off (reaching the dissociation limit D_e = 1.0) on the stretched side. The red curve (harmonic approximation) is a perfect parabola that diverges at large distances, unlike the Morse curve. The minimum of both curves is at the equilibrium bond length r_e.
+      </div>
+
+      <h3>Energy Levels of an Anharmonic Oscillator</h3>
+      <p>Solving the Schrödinger equation for anharmonic oscillator, the vibrational energy levels are given by the expression:</p>
+
+      <div class="formula-block">
+        \[ \varepsilon_v = \frac{E_V}{hc} = \left(v + \frac{1}{2}\right)\bar{\nu}_e - \left(v + \frac{1}{2}\right)^2 \bar{\nu}_e x_e \text{ cm}^{-1} \]
+      </div>
+
+      <ul>
+        <li>\( x_e \) is called the <span class="key-term">anharmonicity constant</span> whose value for bond stretching vibrations is always small and positive.</li>
+        <li>\( \bar{\nu}_e \) is the <span class="key-term">oscillation frequency</span> expressed in wavenumbers.</li>
+        <li>v is the <span class="key-term">vibrational quantum number</span> which can take up values 0, 1, 2, 3, …</li>
+        <li>Substituting values for v we get the energy levels for an anharmonic oscillator.</li>
+      </ul>
+
+      <p>The <span class="key-term">spacing between energy levels decreases</span> as v, the vibrational quantum number, increases.</p>
+
+      <div class="fig-desc">
+        <strong>[Anharmonic Oscillator Energy Level Diagram]</strong> A Morse potential curve showing energy levels v=0,1,2,3,4,5,6,7 becoming progressively more closely spaced as v increases. Above the dissociation energy D₀ lies the continuum. D_e is the depth of the potential well from the bottom. The distance between turning points A and B at a given energy level represents the vibrational amplitude.
+      </div>
+
+      <h3>Selection Rules for Anharmonic Oscillator</h3>
+      <ul>
+        <li><span class="key-term">Gross selection rule</span>: When a molecule vibrates there should be change in dipole moment.</li>
+        <li>\( \Delta v = \pm 1, \pm 2, \pm 3, \ldots \)</li>
+        <li>Most of the transitions start from <span class="key-term">v = 0 level</span> because this state is most populated.</li>
+      </ul>
+
+      <p>The transitions observed are:</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Transition</th><th>Name</th><th>Energy Gap</th></tr></thead>
+          <tbody>
+            <tr><td>v = 0 → v = 1</td><td><span class="key-term">Fundamental absorption</span></td>
+              <td>\( \Delta\varepsilon_{1\leftarrow 0} = \bar{\nu}_e(1 - 2x_e) \text{ cm}^{-1} \)</td></tr>
+            <tr><td>v = 0 → v = 2</td><td><span class="key-term">First overtone</span></td>
+              <td>\( \Delta\varepsilon_{2\leftarrow 0} = 2\bar{\nu}_e(1 - 3x_e) \text{ cm}^{-1} \)</td></tr>
+            <tr><td>v = 0 → v = 3</td><td><span class="key-term">Second overtone</span></td>
+              <td>\( \Delta\varepsilon_{3\leftarrow 0} = 3\bar{\nu}_e(1 - 4x_e) \text{ cm}^{-1} \)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="fig-desc">
+        <strong>[Anharmonic Vibrational Transitions]</strong> The Morse potential shows transitions: fundamental (v=0→1, green arrow), 1st overtone (v=0→2, orange arrow), 2nd overtone (v=0→3, red arrow). The resulting spectrum (bottom) shows lines that are not equally spaced — the spacing decreases as we go to higher values of v (higher wavenumbers), showing convergence.
+      </div>
+
+      <h3>Hot Bands</h3>
+      <p>At <span class="key-term">higher temperatures</span> additional lines are visible in the spectrum as higher vibrational levels may also get populated. These lines originating from the higher vibrational levels are called <span class="key-term">hot bands</span>.</p>
+
+      <p>For example, energy absorbed for the transition from v = 1 to v = 2 is given by:</p>
+      <div class="formula-block">
+        \[ \Delta\varepsilon_{2\leftarrow 1} = \bar{\nu}_e(1 - 4x_e) \text{ cm}^{-1} \]
+      </div>
+
+      <p>The expression shows that this line will appear to the <strong>left</strong> of the fundamental absorption in the spectrum.</p>
+    </section>
+
+    <!-- Electronic Spectroscopy -->
+    <section class="section-anchor" id="electronic-spec">
+      <h2>Electronic Spectroscopy</h2>
+
+      <h3>Electronic Transitions</h3>
+      <ul>
+        <li><span class="key-term">Highest Occupied Molecular Orbitals (HOMO)</span> → <span class="key-term">Lowest Unoccupied Molecular Orbitals (LUMO)</span>.</li>
+        <li>Transitions in <span class="key-term">UV-Visible region</span>.</li>
+        <li>Transition types: σ → σ*, π → π*, n → π*.</li>
+        <li>If transitions are in the visible region, <span class="key-term">colour</span> can be seen.</li>
+        <li>Electron redistribution causes <span class="key-term">change in electric field</span>.</li>
+        <li><span class="key-term">All molecules</span> can undergo electronic transitions.</li>
+      </ul>
+
+      <div class="fig-desc">
+        <strong>[Electronic Transition Energy Diagram]</strong> Molecular orbital energy levels from bottom to top: σ(bonding), π(bonding), n(non-bonding), π*(anti-bonding), σ*(anti-bonding). Arrows indicate the possible transitions: n→π* (lowest energy, UV), π→π* (UV), n→σ* (UV), σ→σ* (highest energy, vacuum UV). Each transition requires absorption of a photon of the corresponding energy.
+      </div>
+
+      <h3>Born-Oppenheimer Approximation in Electronic Spectroscopy</h3>
+      <p>According to Born-Oppenheimer approximation, the <span class="key-term">total energy</span> of a molecule is:</p>
+      <div class="formula-block">
+        \[ E_{Total} = E_t + E_r + E_v + E_e \]
+      </div>
+
+      <p>which implies that electronic, vibrational and rotational energies are <span class="key-term">completely independent</span> of each other.</p>
+
+      <p>The change in total energy of the molecule is given by:</p>
+      <div class="formula-block">
+        \[ \Delta E_{Total} = \Delta E_{Rot} + \Delta E_{Vib} + \Delta E_{Electronic} \quad \text{in Joules} \]
+      </div>
+      <div class="formula-block">
+        \[ \Delta\varepsilon_{Total} = \Delta\varepsilon_{Rot} + \Delta\varepsilon_{Vib} + \Delta\varepsilon_{Electronic} \quad \text{in cm}^{-1} \]
+      </div>
+
+      <p>The approximate orders of magnitude are:</p>
+      <div class="formula-block">
+        \[ \Delta\varepsilon_{Rot} \times 10^6 \approx \Delta\varepsilon_{Vib} \times 10^3 \approx \Delta\varepsilon_{Electronic} \]
+      </div>
+
+      <ul>
+        <li>Electronic transitions involve <span class="key-term">electronic redistribution</span>, hence electrostatic forces experienced by the molecule which <span class="key-term">vibrates in response</span> and this in turn <span class="key-term">affects rotation</span> of the molecule.</li>
+        <li>Electronic transitions are accompanied by vibrational and rotational changes. Hence vibrational changes will produce <span class="key-term">"coarse structure"</span> and rotational changes will produce <span class="key-term">"fine structure"</span> in the electronic spectra of molecules.</li>
+        <li>Information about vibrational and rotational structure of <span class="key-term">homonuclear molecules</span> like H₂, N₂ (which are inactive in IR and Microwave region) can be obtained from their electronic spectra.</li>
+      </ul>
+
+      <h3>Vibrational Coarse Structure</h3>
+      <ul>
+        <li>The <span class="key-term">ground state</span> energy levels are denoted by ε″ and v″, while the <span class="key-term">excited state</span> energy levels are denoted by ε′ and v′.</li>
+        <li>There are <span class="key-term">no selection rules</span> for vibrational transitions during electronic transition.</li>
+        <li>Most of the transitions start from <span class="key-term">v″ = 0</span> as it is the most populated level.</li>
+      </ul>
+
+      <div class="fig-desc">
+        <strong>[Vibrational Coarse Structure During Electronic Transition]</strong> Energy level diagram showing ground electronic state ε″ with vibrational levels v″=0,1,2,3,4 and excited electronic state ε′ with vibrational levels v′=0,1,2,3,4,5,6. Vertical arrows from v″=0 point to v′=0,1,2,3,4,5,6 indicating all allowed transitions. The resulting spectrum (bottom) shows lines at 0,0; 1,0; 2,0; 3,0; 4,0; 5,0; 6,0 (notation: v′,v″) with decreasing spacing (convergence) toward higher energy, demonstrating anharmonicity in the excited state.
+      </div>
+
+      <ul>
+        <li>The lines in the resulting spectrum are denoted by <span class="key-term">(v′, v″)</span>.</li>
+        <li>The resulting spectrum is called <span class="key-term">progression</span>.</li>
+        <li>The lines <span class="key-term">converge</span> at higher energy levels showing <span class="key-term">anharmonicity</span> in the excited electronic state.</li>
+      </ul>
+
+      <h3>Intensity of Spectral Lines</h3>
+      <ul>
+        <li>There are <span class="key-term">no selection rules</span> for vibrational changes during an electronic transition.</li>
+        <li>Most of the <span class="key-term">transitions start from v″=0</span> as it is most populated level.</li>
+        <li>The excited state usually has <span class="key-term">longer internuclear distance</span> because of antibonding character.</li>
+      </ul>
+
+      <div class="fig-desc">
+        <strong>[Potential Energy Curves for Ground and Excited Electronic States]</strong> Two Morse potential curves: lower curve (ε″, ground state) has minimum at smaller r; upper curve (ε′, excited state) is shifted to larger r due to antibonding character. Vertical arrows (Franck-Condon transitions) go from v″=0 level upward to different vibrational levels in the excited state. The arrow reaching the classical turning point of the upper potential has the highest probability and hence highest intensity.
+      </div>
+
+      <p>The transitions arise from the <span class="key-term">centre of v″=0</span> because the maximum probability of finding the nuclei is at the centre of v″=0 (according to quantum theory for the ground vibrational state).</p>
+
+      <div class="fig-desc">
+        <strong>[Probability Distribution for a Diatomic Molecule]</strong> Wavefunction probability |ψ|² plots for v=0,1,2,3,4 are shown inside the Morse potential well. For v=0, the maximum probability is at the centre (equilibrium position). For higher v values, the maximum probability shifts to the turning points (classical behaviour). This explains why Franck-Condon transitions originate from the centre of v″=0.
+      </div>
+    </section>
+
+    <!-- Franck-Condon -->
+    <section class="section-anchor" id="franck-condon">
+      <h2>Franck-Condon Principle</h2>
+      <ul>
+        <li>All lines in the spectra are <span class="key-term">not of the same intensity</span> though no selection rule for vibrational transitions exist.</li>
+      </ul>
+
+      <div class="callout callout-def">
+        <div class="callout-title">Statement of Franck-Condon Principle</div>
+        <p>"An electronic transition takes place so rapidly that a vibrating molecule does not change its internuclear distance appreciably during the transition."</p>
+      </div>
+
+      <ul>
+        <li>This implies that the electronic transitions are always <span class="key-term">vertical transitions</span>.</li>
+      </ul>
+
+      <p>r_e″ and r_e′ are the internuclear distances of the ground and excited states respectively.</p>
+
+      <h3>Three Possibilities of Vibrational-Electronic Transitions</h3>
+
+      <h4>Case 1: r_e″ &lt; r_e′ (Excited state has larger internuclear distance)</h4>
+      <p>The spectrum shows <span class="key-term">maximum intensity for (v′, 0) line</span> where v′ is the vibrational level in the excited state to which the electronic transition takes place.</p>
+
+      <div class="fig-desc">
+        <strong>[Franck-Condon — Case 1: r_e″ &lt; r_e′]</strong> The excited state potential curve is shifted to the right (larger r). A vertical transition from v″=0 reaches an inner turning point of one of the higher vibrational levels (v′=2 or 3) in the excited state. The spectrum shows maximum intensity for the line corresponding to that v′ level, with intensity falling on both sides.
+      </div>
+
+      <h4>Case 2: r_e″ = r_e′ (No change in internuclear distance)</h4>
+      <p>The spectrum shows <span class="key-term">maximum intensity for (0,0) line</span> and intensity falls for the remaining lines.</p>
+
+      <div class="fig-desc">
+        <strong>[Franck-Condon — Case 2: r_e″ = r_e′]</strong> Both potential curves are aligned (same equilibrium internuclear distance). A vertical transition from v″=0 goes directly to v′=0. The (0,0) line has maximum intensity; intensity drops off rapidly for (1,0), (2,0), (3,0) lines.
+      </div>
+
+      <h4>Case 3: r_e″ &lt;&lt; r_e′ (Excited state has very much larger internuclear distance)</h4>
+      <p>The spectrum shows <span class="key-term">continuum</span> since the transition results in the molecule going beyond dissociation energy. The molecule dissociates into atoms which gain kinetic energy. Since this energy is not quantised, a continuum is seen in the spectrum.</p>
+
+      <div class="fig-desc">
+        <strong>[Franck-Condon — Case 3: r_e″ &lt;&lt; r_e′]</strong> The excited state potential curve is displaced far to the right. A vertical Franck-Condon transition from v″=0 goes above the dissociation limit of the excited state. The spectrum shows discrete lines followed by a continuum region at higher energies, as the molecule dissociates.
+      </div>
+    </section>
+
+    <!-- Solved Examples -->
+    <section class="section-anchor" id="solved-examples">
+      <h2>Solved Numerical Examples</h2>
+
+      <div class="example-block">
+        <div class="example-header">📐 Example 1 — Rotational Constant</div>
+        <div class="example-body">
+          <div class="example-q">Calculate the rotational constant for an NO molecule. Given atomic masses of N and O are 14.004 amu and 15.9994 amu respectively. The bond length of NO is 115 pm. (1 amu = 1.66 × 10⁻²⁷ kg, c = 3 × 10⁸ ms⁻¹, h = 6.6 × 10⁻³⁴ Js)</div>
+          <div class="example-sol-label">Solution</div>
+          <p><strong>Step 1: Calculate reduced mass μ</strong></p>
+          <div class="formula-block">
+            \[ \mu = \frac{m_1 m_2}{m_1 + m_2} = \frac{(14.004 \times 1.66 \times 10^{-27})(15.9994 \times 1.66 \times 10^{-27})}{(14.004 \times 1.66 \times 10^{-27}) + (15.9994 \times 1.66 \times 10^{-27})} \]
+          </div>
+          <p>\( \mu = 12.3963 \times 10^{-27} \text{ kg} \)</p>
+
+          <p><strong>Step 2: Calculate moment of inertia I</strong></p>
+          <div class="formula-block">
+            \[ I = \mu r^2 = 12.3963 \times 10^{-27} \text{ kg} \times (115 \times 10^{-12} \text{ m})^2 = 1.63941 \times 10^{-46} \text{ kg·m}^2 \]
+          </div>
+
+          <p><strong>Step 3: Calculate rotational constant B</strong></p>
+          <div class="formula-block">
+            \[ B = \frac{h}{8\pi^2 Ic} = \frac{6.6 \times 10^{-34}}{8 \times (3.14)^2 \times 1.63941 \times 10^{-46} \times 3 \times 10^8} = 170.13 \text{ m}^{-1} \]
+          </div>
+          <p><strong>B = 1.70 cm⁻¹</strong></p>
+        </div>
+      </div>
+
+      <div class="example-block">
+        <div class="example-header">📐 Example 2 — Bond Length of HCl</div>
+        <div class="example-body">
+          <div class="example-q">The first line in the pure rotational spectrum of HCl appears at 21.18 cm⁻¹. Calculate the bond length of the molecule. Given atomic masses of H and Cl are 1.008 amu and 35.45 amu respectively. (1 amu = 1.66 × 10⁻²⁷ kg, c = 3 × 10⁸ ms⁻¹, h = 6.6 × 10⁻³⁴ Js)</div>
+          <div class="example-sol-label">Solution</div>
+
+          <p>\( 2B = 21.18 \text{ cm}^{-1} \Rightarrow B = 10.59 \text{ cm}^{-1} = 10.59 \times 10^2 \text{ m}^{-1} \)</p>
+
+          <p><strong>Step 1: Calculate μ</strong></p>
+          <div class="formula-block">
+            \[ \mu = \frac{(1.008 \times 1.66 \times 10^{-27})(35.45 \times 1.66 \times 10^{-27})}{(1.008 \times 1.66 \times 10^{-27}) + (35.45 \times 1.66 \times 10^{-27})} = 1.627 \times 10^{-27} \text{ kg} \]
+          </div>
+
+          <p><strong>Step 2: Calculate I from B</strong></p>
+          <div class="formula-block">
+            \[ I = \frac{h}{8\pi^2 Bc} = \frac{6.6 \times 10^{-34}}{8 \times (3.14)^2 \times 10.59 \times 10^2 \times 3 \times 10^8} = 2.634 \times 10^{-47} \text{ kg·m}^2 \]
+          </div>
+
+          <p><strong>Step 3: Calculate bond length r</strong></p>
+          <div class="formula-block">
+            \[ r^2 = \frac{I}{\mu} = \frac{2.634 \times 10^{-47}}{1.627 \times 10^{-27}} = 1.619 \times 10^{-20} \text{ m}^2 \]
+          </div>
+          <p><strong>r = 127 pm</strong></p>
+        </div>
+      </div>
+
+      <div class="example-block">
+        <div class="example-header">📐 Example 3 — HBr: Bond Length and Anharmonicity Constant</div>
+        <div class="example-body">
+          <div class="example-q">For HBr molecule: (i) The rotational spectrum shows the first line at 17.19 cm⁻¹. Calculate the bond length of HBr molecule (Use rigid rotor model). (ii) The vibrational spectrum shows fundamental and first overtone at 2559.08 cm⁻¹ and 5027.54 cm⁻¹ respectively. Calculate the anharmonicity constant for the molecule. (Use anharmonic oscillator model). (1 amu = 1.66 × 10⁻²⁷ kg, h = 6.627 × 10⁻³⁴ Js, c = 3 × 10¹⁰ cms⁻¹, N = 6.023 × 10²³ mol⁻¹, Gram molar mass of H = 1.0 and Br = 79.9)</div>
+          <div class="example-sol-label">Solution</div>
+
+          <p><strong>Part (i): Bond length</strong></p>
+          <p>\( 2B = 17.19 \text{ cm}^{-1} \Rightarrow B = 8.595 \text{ cm}^{-1} \)</p>
+
+          <div class="formula-block">
+            \[ \mu = \frac{(0.001/6.023 \times 10^{23})(0.0799/6.023 \times 10^{23})}{(0.001/6.023 \times 10^{23}) + (0.0799/6.023 \times 10^{23})} = 1.6395 \times 10^{-27} \text{ kg} \]
+          </div>
+
+          <div class="formula-block">
+            \[ I = \frac{h}{8\pi^2 Bc} = \frac{6.627 \times 10^{-34}}{8(3.14)^2 \times 8.595 \times 3 \times 10^{10}} = 3.2583 \times 10^{-47} \text{ kg·m}^2 \]
+          </div>
+
+          <div class="formula-block">
+            \[ r = \sqrt{\frac{I}{\mu}} = 0.141 \text{ nm} \]
+          </div>
+
+          <p><strong>Part (ii): Anharmonicity constant</strong></p>
+          <p>Using the ratio of first overtone to fundamental:</p>
+          <div class="formula-block">
+            \[ \frac{2\bar{\nu}(1 - 3x_e)}{\bar{\nu}(1 - 2x_e)} = \frac{5027.54}{2559.08} = 1.9646 \]
+          </div>
+          <p><strong>x_e = 0.0171</strong></p>
+        </div>
+      </div>
+
+      <div class="example-block">
+        <div class="example-header">📐 Example 4 — KCl: Reduced Mass, Force Constant, Zero Point Energy</div>
+        <div class="example-body">
+          <div class="example-q">For a KCl molecule undergoing simple harmonic motion the vibrational spectrum shows a fundamental frequency at 378 cm⁻¹. (i) Calculate the reduced mass of KCl (ii) Determine force constant of KCl (iii) Determine zero point energy for KCl molecule. (c = 3 × 10¹⁰ cms⁻¹, N = 6.023 × 10²³ mol⁻¹, Gram molar mass of K = 39 and Cl = 35.5)</div>
+          <div class="example-sol-label">Solution</div>
+
+          <p><strong>Part (i): Reduced mass μ</strong></p>
+          <div class="formula-block">
+            \[ \mu = \frac{(0.039/6.023 \times 10^{23})(0.0355/6.023 \times 10^{23})}{(0.039/6.023 \times 10^{23}) + (0.0355/6.023 \times 10^{23})} = 3.085 \times 10^{-26} \text{ kg} \]
+          </div>
+
+          <p><strong>Part (ii): Force constant k</strong></p>
+          <div class="formula-block">
+            \[ \bar{\nu} = \frac{1}{2\pi c}\sqrt{\frac{k}{\mu}} \Rightarrow k = 4\pi^2 \bar{\nu}^2 c^2 \mu \]
+          </div>
+          <div class="formula-block">
+            \[ k = 4 \times (3.14)^2 \times (378 \times 10^2)^2 \times (3 \times 10^8)^2 \times 3.085 \times 10^{-26} = 156.313 \text{ N·m}^{-1} \]
+          </div>
+
+          <p><strong>Part (iii): Zero point energy</strong></p>
+          <div class="formula-block">
+            \[ \text{Zero point energy} = \frac{1}{2}\bar{\nu} = \frac{1}{2} \times 378 = 189 \text{ cm}^{-1} \]
+          </div>
+        </div>
+      </div>
+
+      <div class="example-block">
+        <div class="example-header">📐 Example 5 — CO: Force Constant → Oscillation Frequency</div>
+        <div class="example-body">
+          <div class="example-q">The force constant of CO is 1840 Nm⁻¹. Calculate the oscillation frequency and wave number in cm⁻¹. (1 amu = 1.66 × 10⁻²⁷ kg, c = 3 × 10⁸ ms⁻¹, Gram molar mass of C = 12.000 and O = 15.9994)</div>
+          <div class="example-sol-label">Solution</div>
+
+          <p><strong>Step 1: Reduced mass μ</strong></p>
+          <div class="formula-block">
+            \[ \mu = \frac{(12.000 \times 1.66 \times 10^{-27})(15.9994 \times 1.66 \times 10^{-27})}{(12.000 \times 1.66 \times 10^{-27}) + (15.9994 \times 1.66 \times 10^{-27})} = 11.3827 \times 10^{-27} \text{ kg} \]
+          </div>
+
+          <p><strong>Step 2: Oscillation frequency ν</strong></p>
+          <div class="formula-block">
+            \[ \nu = \frac{1}{2\pi}\sqrt{\frac{k}{\mu}} = \frac{1}{2 \times 3.14}\sqrt{\frac{1840}{11.3827 \times 10^{-27}}} = 6.402 \times 10^{13} \text{ s}^{-1} \]
+          </div>
+
+          <p><strong>Step 3: Wavenumber</strong></p>
+          <div class="formula-block">
+            \[ \bar{\nu} = \frac{\nu}{c} = \frac{6.402 \times 10^{13}}{3 \times 10^8} = 2.134 \times 10^5 \text{ m}^{-1} \]
+          </div>
+          <p><strong>ν̄ = 2134 cm⁻¹</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== MODULE 2 ===================== -->
+    <div class="module-sep">
+      <div class="module-sep-line"></div>
+      <span class="module-sep-label">Module II</span>
+      <div class="module-sep-line"></div>
+    </div>
+
+    <div class="module-header">
+      <div class="module-eyebrow">Module II</div>
+      <h1>Phase Equilibria</h1>
+      <p>Gibbs phase rule, phase diagrams, eutectic systems, and Pattinson's process.</p>
+    </div>
+
+    <!-- Free Energy -->
+    <section class="section-anchor" id="free-energy-phase">
+      <h2>Free Energy in Phase Equilibria</h2>
+      <ul>
+        <li>All substances have tendency to <span class="key-term">minimize their Gibbs energy</span> at constant temperature and pressure to attain a stable state.</li>
+        <li><span class="key-term">Phase transformations</span> from one phase to another occur to reduce the free energy of the system.</li>
+        <li>Gibbs energy is an <span class="key-term">extensive property</span>.</li>
+      </ul>
+
+      <h3>Chemical Potential</h3>
+      <p><span class="key-term">Chemical potential</span> is defined as the <span class="key-term">partial molar Gibbs energy</span> for a component i in a mixture, and is denoted by μ:</p>
+
+      <div class="formula-block">
+        \[ \mu_i = \left(\frac{\partial G}{\partial n_i}\right)_{p,T,n_{j\neq i}} \]
+      </div>
+    </section>
+
+    <!-- Phase Equilibria Definition -->
+    <section class="section-anchor" id="phase-equilibria-def">
+      <h2>Phase Equilibria</h2>
+      <ul>
+        <li>Phase equilibria between phases exist when <span class="key-term">chemical potential of a component is equal in all the phases</span> in equilibrium.</li>
+      </ul>
+
+      <p>For example, for water at the triple point:</p>
+      <p style="text-align:center">Solid ⇌ liquid ⇌ vapour</p>
+      <p style="text-align:center; color: var(--accent); font-weight: 600;">The chemical potential of water will be equal in all the three phases</p>
+
+      <ul>
+        <li>For systems <em>not</em> at equilibrium, the chemical potential will point to the <span class="key-term">direction in which the system can move</span> in order to achieve equilibrium — the system moves from higher chemical potential to lower chemical potential.</li>
+        <li>When various phases are in equilibrium with one another in a heterogeneous system, there can be <span class="key-term">no transfer of energy or mass</span> from one phase to another.</li>
+        <li>For a system at equilibrium, the various phases must have the <span class="key-term">same temperature and pressure</span> and their respective <span class="key-term">compositions must remain constant</span> all along.</li>
+      </ul>
+
+      <div class="callout callout-formula">
+        <div class="callout-title">Equilibrium Condition (Chemical Potential)</div>
+        <p>Mathematically: \( \mu_i^\alpha = \mu_i^\beta = \mu_i^\gamma = \ldots \)</p>
+      </div>
+    </section>
+
+    <!-- Phase Definition -->
+    <section class="section-anchor" id="phase-def">
+      <h2>Phase</h2>
+      <div class="callout callout-def">
+        <div class="callout-title">Definition</div>
+        <p>A <span class="key-term">phase</span> is defined as any <strong>homogeneous and physically distinct part of a system</strong> bounded by a surface and is mechanically separable from other parts of the system. It is denoted by <strong>P</strong>.</p>
+      </div>
+
+      <ul>
+        <li><span class="key-term">Gaseous state</span>: P = 1 (gases are completely miscible).</li>
+        <li><span class="key-term">Liquid state</span>: P = number of layers when liquids are immiscible; P = 1 when liquids are completely miscible.</li>
+        <li><span class="key-term">Solid state</span>: Each solid constitutes a separate phase; each polymorphic form constitutes a separate phase; P = 1 for solid solution.</li>
+      </ul>
+
+      <h3>Counting the Number of Phases — Examples</h3>
+
+      <p><strong>1)</strong> Solid ⇌ liquid ⇌ vapour ; <strong>P = 3</strong></p>
+      <ul>
+        <li>Ice in the system is a single phase even if it is present as a number of pieces.</li>
+      </ul>
+
+      <p><strong>2)</strong> Calcium carbonate thermal decomposition:</p>
+      <p style="margin-left:16px">CaCO₃(s) ⇌ CaO(s) + CO₂(g)</p>
+      <ul>
+        <li>P = 3: 2 solid phases (CaCO₃ and CaO) and one gaseous phase (CO₂).</li>
+      </ul>
+
+      <p><strong>3)</strong> Ammonium chloride thermal decomposition:</p>
+      <p style="margin-left:16px">NH₄Cl(s) ⇌ NH₃(g) + HCl(g)</p>
+      <ul>
+        <li>P = 2: one solid (NH₄Cl) and one gaseous (a mixture of NH₃ and HCl).</li>
+      </ul>
+    </section>
+
+    <!-- Components -->
+    <section class="section-anchor" id="components-def">
+      <h2>Components</h2>
+      <div class="callout callout-def">
+        <div class="callout-title">Definition</div>
+        <p>A <span class="key-term">component</span> is defined as the <strong>smallest number of independently varying chemical constituents</strong> using which the composition of <strong>each and every phase</strong> in the system can be expressed.</p>
+      </div>
+
+      <ul>
+        <li>When no reaction is taking place in a system, the number of components is the same as the number of constituents.</li>
+        <li>While expressing in terms of constituents, <span class="key-term">zero and negative values</span> are allowed.</li>
+      </ul>
+
+      <h3>Counting the Number of Components</h3>
+
+      <h4>1-Component System</h4>
+      <p><strong>Pure water; C = 1</strong></p>
+      <p>solid water ⇌ liquid water</p>
+      <p>All the different phases can be expressed in terms of the single constituent water.</p>
+
+      <h4>2-Component System — Salt Hydrate</h4>
+      <p><strong>Na₂SO₄·10H₂O; C = 2</strong></p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Phase</th><th>Expression in terms of Na₂SO₄ and H₂O</th></tr></thead>
+          <tbody>
+            <tr><td>Na₂SO₄·10H₂O</td><td>= Na₂SO₄ + 10H₂O</td></tr>
+            <tr><td>Na₂SO₄·7H₂O</td><td>= Na₂SO₄ + 7H₂O</td></tr>
+            <tr><td>Na₂SO₄</td><td>= Na₂SO₄ + 0H₂O</td></tr>
+            <tr><td>H₂O</td><td>= 0 Na₂SO₄ + H₂O</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The composition of all the phases can be expressed in terms of 2 components.</p>
+
+      <h4>Thermal Decomposition of CaCO₃ in a Closed Container; C = 2</h4>
+      <p>CaCO₃(s) ⇌ CaO(s) + CO₂(g)</p>
+      <ul>
+        <li>Though there are 3 species present, the number of components is only two.</li>
+        <li>Phases are: CaCO₃(s), CaO(s) and CO₂(g).</li>
+        <li>Any two of the three constituents may be chosen as the components.</li>
+      </ul>
+      <p><strong>If CaO and CO₂ are chosen:</strong></p>
+      <ul>
+        <li>CaCO₃(s) = CaO + CO₂</li>
+        <li>CaO(s) = CaO + 0 CO₂</li>
+        <li>CO₂(g) = 0 CaO + CO₂</li>
+      </ul>
+      <p><strong>If CaCO₃ and CO₂ are chosen:</strong></p>
+      <ul>
+        <li>CaCO₃(s) = CaCO₃ + 0 CO₂</li>
+        <li>CaO(s) = CaCO₃ − CO₂</li>
+        <li>CO₂(g) = 0 CaCO₃ + CO₂</li>
+      </ul>
+
+      <h4>Thermal Decomposition of Ammonium Chloride in a Closed System; C = 1</h4>
+      <p>NH₄Cl(s) ⇌ NH₃(g) + HCl(g)</p>
+      <ul>
+        <li>Phases are: solid phase of NH₄Cl(s) and gaseous phase of NH₃(g) and HCl(g).</li>
+        <li>solid: NH₄Cl(s) = NH₄Cl</li>
+        <li>gas: NH₃(g) + HCl(g) = NH₄Cl</li>
+        <li>The composition of both the solid and gaseous phases can be expressed in terms of NH₄Cl. Hence C = 1.</li>
+        <li>If additional HCl (or NH₃) were added to the system, then <span class="key-term">C = 2</span> because the decomposition of NH₄Cl would not give the correct composition of the gas phase. A second component, HCl (or NH₃), would be needed to describe the gas phase.</li>
+      </ul>
+    </section>
+
+    <!-- Degrees of Freedom -->
+    <section class="section-anchor" id="degrees-freedom">
+      <h2>Degrees of Freedom (or Variance)</h2>
+      <div class="callout callout-def">
+        <div class="callout-title">Definition</div>
+        <p>The <span class="key-term">degrees of freedom or variance</span> of a system is defined as the <strong>minimum number of intensive variables</strong> such as temperature, pressure, concentration, which must be fixed in order to define the system completely; it is denoted by <strong>F</strong>.</p>
+        <p>OR: The degree of freedom of a system may also be defined as the number of variables, such as temperature, pressure and concentration that can be <strong>varied independently</strong> without altering the number of phases.</p>
+      </div>
+
+      <h3>Example: Water System</h3>
+
+      <p><strong>Only 1 phase (solid, liquid or gas):</strong></p>
+      <ul>
+        <li>Both temperature and pressure need to be mentioned in order to define the system; <span class="key-term">F = 2</span>.</li>
+      </ul>
+
+      <p><strong>2 phases in equilibrium:</strong></p>
+      <ul>
+        <li>Only one variable, either temperature or pressure need to be specified in order to define the system; <span class="key-term">F = 1</span>.</li>
+        <li>solid water ⇌ liquid water: If the pressure on the system is maintained at 1 atm, then the temperature gets automatically fixed at 0°C (the normal melting point of ice).</li>
+      </ul>
+
+      <p><strong>3 phases in equilibrium:</strong></p>
+      <ul>
+        <li>No variable can be changed; temperature and pressure are fixed; <span class="key-term">F = 0</span>.</li>
+        <li>solid water ⇌ liquid water ⇌ water vapour: Three phases (ice, water, vapour) can coexist in equilibrium at the triple point of water at 0.0098°C and 4.58 mm Hg pressure only.</li>
+      </ul>
+    </section>
+
+    <!-- Phase Rule -->
+    <section class="section-anchor" id="phase-rule">
+      <h2>Gibbs Phase Rule</h2>
+      <ul>
+        <li>It was given by <span class="key-term">Williams Gibbs</span> in 1874.</li>
+      </ul>
+
+      <div class="callout callout-def">
+        <div class="callout-title">Statement of Gibbs Phase Rule</div>
+        <p>Provided the equilibrium in a heterogeneous system is not influenced by external forces (gravity, electrical or magnetic forces), the number of degrees of freedom (F) of the system is related to number of components (C) and number of phases (P) existing at equilibrium to one another by the equation:</p>
+      </div>
+
+      <div class="formula-block" style="font-size: 1.3rem;">
+        \[ F = C - P + 2 \]
+      </div>
+    </section>
+
+    <!-- Phase Rule Derivation -->
+    <section class="section-anchor" id="phase-rule-derivation">
+      <h2>Derivation of the Phase Rule</h2>
+      <p>A system at equilibrium satisfies the following conditions:</p>
+      <ul>
+        <li><span class="key-term">Thermal equilibrium</span> — Temperature is constant.</li>
+        <li><span class="key-term">Mechanical equilibrium</span> — Pressure is constant.</li>
+        <li><span class="key-term">Chemical or material equilibrium</span> — Chemical potential of a substance is same in all the phases.</li>
+      </ul>
+
+      <p>Mathematically: \( \mu_i^\alpha = \mu_i^\beta = \mu_i^\gamma = \ldots \)</p>
+      <p>The system considered is: all C components distributed between P phases.</p>
+
+      <h3>Total Number of Intensive Variables</h3>
+      <ul>
+        <li>Temperature: 1</li>
+        <li>Pressure: 1</li>
+        <li>Composition: mole fraction of each component in every phase</li>
+      </ul>
+
+      <p>For each phase, the sum of mole fractions equals unity:</p>
+      <div class="formula-block">
+        \[ \chi_1^\alpha + \chi_2^\alpha + \chi_3^\alpha + \ldots + \chi_c^\alpha = 1 \quad (C-1 \text{ terms}) \]
+      </div>
+      <p>…and similarly for phases β, γ, …, P.</p>
+
+      <ul>
+        <li>In each phase, (C-1) mole fraction terms need to be defined.</li>
+        <li>Number of phases: P → Number of composition variables = P(C-1).</li>
+        <li><span class="key-term">Total number of intensive variables = P(C-1) + 2</span>.</li>
+      </ul>
+
+      <h3>Total Number of Equations (Constraints)</h3>
+      <p>At equilibrium the chemical potential of a particular component is same in every phase:</p>
+      <div class="formula-block">
+        \[ \mu_1^\alpha = \mu_1^\beta = \mu_1^\gamma = \ldots \quad (P-1 \text{ equations}) \]
+      </div>
+      <p>…and similarly for components 2, 3, …, C.</p>
+
+      <ul>
+        <li>For C components: <span class="key-term">C(P-1) total constraints</span>.</li>
+      </ul>
+
+      <h3>Derivation Result</h3>
+      <div class="formula-block">
+        \[ F = \text{Total variables} - \text{Total equations} \]
+        \[ F = P(C-1) + 2 - C(P-1) \]
+        \[ \boxed{F = C - P + 2} \]
+      </div>
+      <p>This is <strong>Gibbs Phase Rule</strong>.</p>
+    </section>
+
+    <!-- Phase Diagram 1-component -->
+    <section class="section-anchor" id="phase-diagram-1c">
+      <h2>Phase Diagram of a 1-Component System</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-title">Phase Diagram</div>
+        <p>A <span class="key-term">phase diagram</span> is a diagram which represents the conditions under which a substance exists in different phases in a system.</p>
+      </div>
+
+      <p>For a 1-component system: \( F = C - P + 2 = 3 - P \)</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Condition</th><th>F</th><th>Representation</th></tr></thead>
+          <tbody>
+            <tr><td>Single phase</td><td>F = 2</td><td>Area in a diagram</td></tr>
+            <tr><td>Two phases in equilibrium</td><td>F = 1</td><td>Line in a diagram</td></tr>
+            <tr><td>Three phases in equilibrium</td><td>F = 0</td><td>Point in a diagram</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>General Features of a 1-Component Phase Diagram</h3>
+      <ul>
+        <li>High pressure, low temperature: <span class="key-term">solid phase</span>.</li>
+        <li>High temperature, low pressure: <span class="key-term">vapour phase</span>.</li>
+        <li>In between: <span class="key-term">liquid phase</span>.</li>
+      </ul>
+
+      <p>Equilibria present:</p>
+      <ul>
+        <li>solid ⇌ liquid (fusion curve)</li>
+        <li>liquid ⇌ vapour (vaporisation curve)</li>
+        <li>vapour ⇌ solid (sublimation curve)</li>
+        <li>Solid ⇌ liquid ⇌ vapour (triple point)</li>
+      </ul>
+
+      <h3>Application of Phase Rule to Water System</h3>
+
+      <p><strong>When only 1 phase is present (C = 1, P = 1):</strong></p>
+      <ul>
+        <li>F = 2; Temperature and Pressure can be varied independently — <span class="key-term">Bivariant system</span>.</li>
+      </ul>
+
+      <p><strong>When 2 phases are in equilibrium (C = 1, P = 2):</strong></p>
+      <ul>
+        <li>F = 1; Temperature or Pressure can be varied independently — <span class="key-term">Univariant system</span>.</li>
+      </ul>
+
+      <p><strong>When all 3 phases are in equilibrium (C = 1, P = 3):</strong></p>
+      <ul>
+        <li>F = 0; Neither Temperature nor Pressure can be varied — <span class="key-term">Invariant system</span>.</li>
+      </ul>
+    </section>
+
+    <!-- Water Curves -->
+    <section class="section-anchor" id="water-curves">
+      <h2>Phase Diagram of Water — Curves Explained</h2>
+
+      <div class="fig-desc">
+        <strong>[Phase Diagram of Water]</strong> The diagram plots Pressure (y-axis) vs. Temperature (x-axis). Key features: Three regions (Ice, Water, Water vapour). Three boundary curves: OC (melting point/fusion curve, negative slope), OA (vaporisation curve, positive slope from 0.0099°C to 374°C), OB (sublimation curve, positive slope). Point O = Triple Point at 0.0099°C and 4.58 mmHg. Point A = Critical Point at 374°C and 218 atm. Curve OA′ = metastable equilibrium (supercooled water). Pressure axis shows 218 atm at top, 1 atm and 4.58 mm as reference points.
+      </div>
+
+      <h3>Curve OC: Fusion Curve (Solid ⇌ Liquid)</h3>
+      <ul>
+        <li>Represents: ice ⇌ water.</li>
+        <li>F = 1, <span class="key-term">monovariant system</span>.</li>
+        <li>Shows variation of melting point of ice with pressure.</li>
+        <li><span class="key-term">Slope is negative</span>: as ice melts its volume decreases or density increases.</li>
+      </ul>
+      <p>Clausius-Clapeyron equation:</p>
+      <div class="formula-block">
+        \[ \frac{dp}{dT} = \frac{\Delta H_{Fusion}}{T\Delta V} = \text{negative} \]
+      </div>
+      <p>Where: ΔV = decrease in volume as ice melts is −ve; ΔH_fusion = endothermic, +ve → overall result is negative.</p>
+
+      <h3>Curve OB: Sublimation Curve (Solid ⇌ Vapour)</h3>
+      <ul>
+        <li>Represents: ice ⇌ water vapour.</li>
+        <li>F = 1, <span class="key-term">monovariant system</span>.</li>
+        <li>Shows variation of sublimation temperature of ice with pressure.</li>
+        <li><span class="key-term">Slope is positive</span>.</li>
+      </ul>
+      <p>Clausius-Clapeyron equation:</p>
+      <div class="formula-block">
+        \[ \frac{dp}{dT} = \frac{\Delta H_{sub}}{T\Delta V} = \text{positive} \]
+      </div>
+      <p>Where: ΔV = increase in volume as ice sublimates, +ve; ΔH_sublimation = endothermic, +ve → positive overall.</p>
+
+      <h3>Curve OA: Vaporisation Curve (Liquid ⇌ Vapour)</h3>
+      <ul>
+        <li>Represents: liquid water ⇌ vapour.</li>
+        <li>F = 1, <span class="key-term">monovariant system</span>.</li>
+        <li>Shows variation of boiling temperature of water with pressure.</li>
+        <li><span class="key-term">Slope is positive</span>.</li>
+      </ul>
+      <div class="formula-block">
+        \[ \frac{dp}{dT} = \frac{\Delta H_{Vapourisation}}{T\Delta V} = \text{positive} \]
+      </div>
+      <p>Where: ΔV = increase in volume as liquid water vapourises, +ve; ΔH_Vapourisation = endothermic, +ve → positive overall.</p>
+
+      <h3>Triple Point "O"</h3>
+      <ul>
+        <li>Represents equilibrium between liquid, vapour and solid water (ice).</li>
+        <li>All three phases are present together.</li>
+        <li>F = 0, <span class="key-term">invariant system</span>.</li>
+        <li>Triple point for water lies at <span class="key-term">0.0098°C and 4.58 mmHg</span>.</li>
+      </ul>
+
+      <h3>Critical Point "A"</h3>
+      <ul>
+        <li>The interface between liquid water and water vapour vanishes.</li>
+        <li>A point above which water does not exist in liquid state.</li>
+        <li>Critical point lies at <span class="key-term">374°C and 220 atm pressure</span>.</li>
+      </ul>
+
+      <h3>Metastable Equilibrium (OA′)</h3>
+      <ul>
+        <li>Ice fails to form at the triple point and water continues to exist in liquid phase.</li>
+        <li>The vapour pressure of the liquid continues along OA′.</li>
+        <li>This is called <span class="key-term">super cooled water</span> and represents metastable equilibrium involving liquid and vapour phases.</li>
+        <li>Any disturbance will cause the system to go back to stable equilibrium (OB).</li>
+        <li>The vapour pressure of the system in the metastable region is <span class="key-term">more than that of the stable system ice</span> at the same temperature.</li>
+      </ul>
+    </section>
+
+    <!-- Phase Diagram 2-component -->
+    <section class="section-anchor" id="phase-diagram-2c">
+      <h2>Phase Diagram of a Two-Component System</h2>
+      <ul>
+        <li>The phase rule equation is F = C – P + 2.</li>
+        <li>For a 2-component system, the ordinary phase rule cannot be used because C = 2 → F = 2 – P + 2 = 4 – P.</li>
+        <li>The minimum number of phases is 1; F = 4 – 1 = 3. This requires <span class="key-term">3 dimensional space</span> which cannot be shown on the plane of paper.</li>
+        <li><span class="key-term">One of the three variables is kept constant</span>.</li>
+        <li>Measurements in these systems are generally carried out <span class="key-term">at atmospheric pressure</span>.</li>
+        <li>Pressure may be considered constant; degrees of freedom is reduced by 1: <strong>F = C – P + 2 – 1</strong>.</li>
+        <li>The phase rule takes the form <span class="key-term">F = C – P + 1</span> and is known as the <span class="key-term">reduced phase rule</span>.</li>
+        <li>Equilibria such as solid-liquid equilibria in which the gas phase is absent are hardly affected by small changes in pressure. Systems in which the gas phase is absent are called <span class="key-term">condensed systems</span>.</li>
+        <li>F = C – P + 1 is also known as <span class="key-term">condensed phase rule</span>.</li>
+      </ul>
+
+      <h3>Setup of the 2-Component Phase Diagram</h3>
+      <ul>
+        <li>Phase rule for a 2-component system: <strong>F = C – P + 1</strong>.</li>
+        <li>Pressure is constant.</li>
+        <li>Plot is between <span class="key-term">Temperature and Composition</span>.</li>
+        <li>A and B are miscible in all proportions in the liquid (molten) state.</li>
+        <li>In solid state they are completely immiscible.</li>
+      </ul>
+    </section>
+
+    <!-- Eutectic System -->
+    <section class="section-anchor" id="eutectic">
+      <h2>Simple Eutectic System — Pb-Ag System</h2>
+
+      <div class="fig-desc">
+        <strong>[Simple Eutectic Phase Diagram — General A-B System]</strong> The x-axis shows composition (weight percent B) from pure A (left) to pure B (right). The y-axis shows temperature. Melting point of A is marked as M (upper left). Melting point of B is marked as N (upper right). Curve ME shows the liquidus from M descending to the eutectic point E. Curve NE shows the liquidus from N descending to E. The eutectic point E is at temperature T_E. Below the eutectic temperature lies the solidus (horizontal line FEG). Regions: above MEN = Liquid solution; MEF = Liquid + Solid A; NEG = Liquid + Solid B; below FEG = Solid A + Solid B.
+      </div>
+
+      <h3>Description of the Phase Diagram</h3>
+
+      <p>When a mixture of the 2 components is heated till the mixture melts and then cooled:</p>
+      <ul>
+        <li>First crystal of A is formed when the <span class="key-term">freezing point of A in the mixture</span> is reached.</li>
+        <li>On further cooling more solid A precipitates and the <span class="key-term">liquid melt becomes richer in B</span>.</li>
+        <li>With decrease in temperature more and more solid A separates and the liquid melt moves along curve ME.</li>
+        <li>Finally when the temperature reaches F, <span class="key-term">solid B also starts precipitating</span>.</li>
+        <li>Three phases are present at E: <span class="key-term">solid A, solid B and the liquid melt</span>.</li>
+        <li>Further cooling will just result in cooling of solid A and B.</li>
+      </ul>
+
+      <h3>Regions of the A-B Phase Diagram</h3>
+      <ul>
+        <li>A : 100% A</li>
+        <li>B : 100% B</li>
+        <li>Area above MEN : <span class="key-term">Liquid melt</span></li>
+        <li>Area MEF : <span class="key-term">Solid A + Liquid melt</span></li>
+        <li>Area NEG : <span class="key-term">Solid B + Liquid melt</span></li>
+        <li>Below FEG : <span class="key-term">Solid A + Solid B</span></li>
+        <li>Eutectic point — "E"</li>
+        <li>Curves: ME and NE</li>
+      </ul>
+
+      <h3>Eutectic Point</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">Definition</div>
+        <p>A <span class="key-term">eutectic mixture</span> is a mixture of two components which has the <strong>lowest freezing point</strong> of all the possible mixtures of the components.</p>
+      </div>
+
+      <ul>
+        <li>Number of phases at eutectic point = 3.</li>
+        <li>F = C – P + 1; C = 2, P = 3, so <span class="key-term">F = 0</span>; invariant point.</li>
+        <li>It has a <span class="key-term">definite composition</span> and a <span class="key-term">sharp melting point</span>.</li>
+      </ul>
+
+      <div class="callout callout-note">
+        <div class="callout-title">For Pb-Ag System</div>
+        <p>Melting points: <strong>Ag: 961°C</strong>, <strong>Pb: 327°C</strong></p>
+        <p>Eutectic temperature: <strong>303°C</strong></p>
+        <p>Eutectic composition: <strong>97.4% Pb and 2.6% Ag</strong></p>
+      </div>
+
+      <h3>Curve ME: Freezing Point Curve of A</h3>
+      <ul>
+        <li>Shows <span class="key-term">decrease in freezing point / melting point of A</span> due to the addition of B to A.</li>
+        <li>Solid A is in equilibrium with liquid melt of B in A.</li>
+        <li>Here C = 2 and P = 2, then the reduced phase rule is: F = C – P + 1 = 2 – 2 + 1 = 1.</li>
+        <li>Hence the system is <span class="key-term">univariant</span>.</li>
+      </ul>
+
+      <h3>Curve NE: Freezing Point Curve of B</h3>
+      <ul>
+        <li>Shows <span class="key-term">decrease in freezing point of B</span> due to the addition of A to B.</li>
+        <li>Solid B is in equilibrium with liquid melt of A in B.</li>
+        <li>Here C = 2 and P = 2, then the reduced phase rule is: F = C – P + 1 = 2 – 2 + 1 = 1.</li>
+        <li>Hence the system is <span class="key-term">univariant</span>.</li>
+      </ul>
+    </section>
+
+    <!-- Thermal Analysis -->
+    <section class="section-anchor" id="thermal-analysis">
+      <h2>Thermal Analysis and Cooling Curves</h2>
+
+      <h3>Determination of Solid-Liquid Equilibria</h3>
+      <p>For the determination of equilibrium conditions between solid and liquid phases — <span class="key-term">Thermal Analysis</span>.</p>
+
+      <div class="callout callout-def">
+        <div class="callout-title">Thermal Analysis</div>
+        <p>The study of the <span class="key-term">cooling curves</span> of various compositions of a system during solidification.</p>
+      </div>
+
+      <h3>Cooling Curves</h3>
+      <ul>
+        <li>Temperature versus time plots.</li>
+        <li><span class="key-term">Freezing point and eutectic point</span> can be determined from the cooling curves.</li>
+      </ul>
+
+      <p><strong>For pure solid:</strong> Initially the rate of cooling is continuous from 'a' till the point 'b' where the solid begins to appear. Then the temperature remains constant until the liquid is fully solidified and solidification completes at the point 'c'.</p>
+
+      <p><strong>For a mixture of solids:</strong> When crystallisation of one of the components starts, the cooling curve exhibits a break. The temperature decreases continuously until the eutectic point is reached. Now the temperature remains constant, till the completion of solidification.</p>
+
+      <div class="fig-desc">
+        <strong>[Construction of Phase Diagram from Cooling Curves]</strong> Left panel: Six cooling curves (1)–(6) for different compositions. Pure component A (curve 1) shows a flat halt at its melting point θ₁. Mixtures (curves 2–4) show a break at progressively lower temperatures (θ₂, θ₃, θ₄ = liquidus temperatures) followed by a flat halt at the eutectic temperature θ₅ = T_E. For the eutectic composition (curve 5), only a single flat halt at θ₅ is seen. Right panel: The phase diagram constructed by plotting the break temperatures (l, l′, l″) vs. composition gives the liquidus curves, and the halt temperatures (s, s′, s″) give the solidus (eutectic) line.
+      </div>
+    </section>
+
+    <!-- Pattinson's Process -->
+    <section class="section-anchor" id="pattinson">
+      <h2>Pattinson's Process for the Desilverisation of Argentiferous Lead</h2>
+
+      <div class="fig-desc">
+        <strong>[Pb-Ag Phase Diagram]</strong> Temperature (°C) vs. % Composition. Point A at 961°C (100% Ag, 0% Pb) marks the melting point of Ag. Point B at 327°C (100% Pb, 0% Ag) marks the melting point of Pb. The Freezing Curve of Ag descends from A to the eutectic point O. The Freezing Curve of Pb descends from B to O. The eutectic point O is at 303°C with composition 97.4% Pb, 2.6% Ag. Regions: Liquid melt (Ag+Pb) above both curves; Solid Ag + Liquid in the left region; Solid Pb + Liquid in the right region; Solid Eutectic mixture + Solid Ag below the left; Solid Eutectic mixture + Solid Pb below the right.
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">The Process</div>
+        <p>Pattinson's process is the technique of heating argentiferous lead containing a very <span class="key-term">small quantity of silver (~0.1%)</span> and cooling it to get pure lead and a <span class="key-term">liquid melt richer in silver</span>.</p>
+      </div>
+
+      <h3>Step-by-Step Procedure</h3>
+      <ol>
+        <li>Argentiferous lead is heated to a temperature above the melting point of pure lead.</li>
+        <li>The melt is allowed to cool.</li>
+        <li>Temperature of the melt reaches the freezing curve of Pb where <span class="key-term">solid lead starts separating</span>.</li>
+        <li>As the system further cools, more and more lead separates and the liquid in equilibrium with the solid lead <span class="key-term">gets richer in silver</span>.</li>
+        <li>The lead that separates, floats and is <span class="key-term">continuously removed by ladles</span>.</li>
+        <li>When the temperature of the liquid reaches the eutectic temperature, solid lead is in equilibrium with the liquid having the <span class="key-term">eutectic composition</span>.</li>
+        <li>After removing the lead that separates, the liquid is cooled further when it solidifies to give a mixture of lead and silver having the eutectic composition of <span class="key-term">2.6% of silver</span>.</li>
+        <li>This solid mixture of lead and silver is subjected to other processes for the <span class="key-term">recovery of silver</span>.</li>
+      </ol>
+    </section>
+
+  </main>
+</div>
+
+<!-- Back to Top -->
+<button id="back-top" aria-label="Back to top">↑</button>
+
+<script>
+// ========== THEME ==========
+const root = document.documentElement;
+const themeBtn = document.getElementById('theme-toggle');
+const saved = localStorage.getItem('ec-theme') || 'light';
+if (saved === 'dark') { root.setAttribute('data-theme', 'dark'); themeBtn.textContent = '☀️ Light'; }
+themeBtn.addEventListener('click', () => {
+  const isDark = root.getAttribute('data-theme') === 'dark';
+  if (isDark) { root.removeAttribute('data-theme'); themeBtn.textContent = '🌙 Dark'; localStorage.setItem('ec-theme','light'); }
+  else { root.setAttribute('data-theme','dark'); themeBtn.textContent = '☀️ Light'; localStorage.setItem('ec-theme','dark'); }
+});
+
+// ========== MOBILE SIDEBAR ==========
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const menuBtn = document.getElementById('menu-btn');
+menuBtn.addEventListener('click', () => { sidebar.classList.toggle('open'); overlay.classList.toggle('show'); });
+overlay.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); });
+
+// ========== HIDE HEADER ON SCROLL ==========
+const header = document.getElementById('header');
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const cur = window.scrollY;
+  if (cur > 80) {
+    if (cur > lastScroll) header.classList.add('hidden');
+    else header.classList.remove('hidden');
+  } else { header.classList.remove('hidden'); }
+  lastScroll = cur;
+  // progress bar
+  const totalH = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progress-bar').style.width = (cur / totalH * 100) + '%';
+  // back to top
+  const btt = document.getElementById('back-top');
+  if (cur > 400) btt.classList.add('show'); else btt.classList.remove('show');
+}, { passive: true });
+document.getElementById('back-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+// ========== NAV TREE EXPAND/COLLAPSE ==========
+document.querySelectorAll('.nav-module-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = document.getElementById(btn.dataset.target);
+    const isOpen = btn.classList.contains('open');
+    btn.classList.toggle('open');
+    target.classList.toggle('open', !isOpen);
+  });
+});
+
+// ========== SCROLL SPY ==========
+const navLinks = document.querySelectorAll('.nav-topic-link');
+const sections = Array.from(document.querySelectorAll('.section-anchor'));
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.nav-topic-link[href="#${e.target.id}"]`);
+      if (active) {
+        active.classList.add('active');
+        document.getElementById('page-title').textContent = e.target.querySelector('h2')?.textContent || 'Engineering Chemistry';
+        // scroll into view in sidebar
+        active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    }
+  });
+}, { rootMargin: '-60px 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+
+// ========== COLLAPSIBLE TOPIC BLOCKS ==========
+document.querySelectorAll('.topic-block-header').forEach(hdr => {
+  hdr.addEventListener('click', () => {
+    const body = hdr.nextElementSibling;
+    const collapsed = hdr.classList.toggle('collapsed');
+    body.classList.toggle('collapsed', collapsed);
+  });
+});
+
+// ========== SEARCH ==========
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+
+// Build search index from all text content
+const searchIndex = [];
+sections.forEach(section => {
+  const heading = section.querySelector('h2, h3');
+  const text = section.textContent;
+  const id = section.id;
+  searchIndex.push({ id, title: heading?.textContent || id, text, section: section.closest('.module-header')?.querySelector('h1')?.textContent || 'Module' });
+
+  // Also index h3 headings within sections
+  section.querySelectorAll('h3').forEach(h3 => {
+    const slug = h3.textContent.replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+    searchIndex.push({ id, title: h3.textContent, text: h3.parentElement?.textContent || '', section: heading?.textContent || id });
+  });
+});
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  if (q.length < 2) { searchResults.style.display = 'none'; return; }
+  
+  const matches = searchIndex.filter(item => item.text.toLowerCase().includes(q) || item.title.toLowerCase().includes(q)).slice(0, 8);
+  
+  if (!matches.length) {
+    searchResults.innerHTML = '<div class="search-item"><div class="search-item-title" style="color:#888">No results found</div></div>';
+    searchResults.style.display = 'block';
+    return;
+  }
+
+  const seen = new Set();
+  searchResults.innerHTML = matches.filter(m => { if (seen.has(m.id + m.title)) return false; seen.add(m.id + m.title); return true; }).map(m => {
+    const idx = m.text.toLowerCase().indexOf(q);
+    const snippet = idx >= 0 ? '…' + m.text.substring(Math.max(0, idx - 30), idx + 50).trim() + '…' : '';
+    const hilite = snippet.replace(new RegExp(q, 'gi'), match => `<mark>${match}</mark>`);
+    return `<div class="search-item" onclick="goToSection('${m.id}')">
+      <div class="search-item-title">${m.title}</div>
+      <div class="search-item-ctx">${hilite || m.section}</div>
+    </div>`;
+  }).join('');
+  searchResults.style.display = 'block';
+});
+
+function goToSection(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    searchResults.style.display = 'none';
+    searchInput.value = '';
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
+  }
+}
+
+document.addEventListener('click', e => {
+  if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) searchResults.style.display = 'none';
+});
+
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { searchResults.style.display = 'none'; searchInput.value = ''; }
+});
+</script>
+</body>
+</html>
