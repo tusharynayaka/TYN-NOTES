@@ -850,6 +850,64 @@ mark { background: rgba(232,168,56,0.3); color: inherit; border-radius: 2px; pad
             </div>
         </div>
     </div>
+
+    <!-- UNIT 4 - Materials Chemistry -->
+    <div class="nav-unit">
+        <div class="nav-unit-header" style="color:white; display:flex; align-items:center; gap:10px; padding:10px 14px; font-weight:500;">
+            <span class="unit-badge" style="background:transparent; color:#a5b4fc; font-size:18px; font-weight:1600;">Unit 4</span>
+        </div>
+
+        <!-- Nanomaterials (M1) -->
+        <div class="nav-module">
+            <button class="nav-module-btn" data-target="nav-m1-nano"><span class="pill">M1</span> Nanomaterials <span class="chevron">▶</span></button>
+            <div class="nav-children" id="nav-m1-nano">
+                <a href="#nano-intro" class="nav-topic-link">Introduction &amp; Classification</a>
+                <a href="#nano-props" class="nav-topic-link">Properties of Nanoparticles</a>
+                <a href="#nano-surface" class="nav-topic-link">Surface Area Dependent</a>
+                <a href="#nano-thermal" class="nav-topic-link">Thermal Properties</a>
+                <a href="#nano-optical" class="nav-topic-link">Optical Properties</a>
+                <a href="#nano-electrical" class="nav-topic-link">Electrical Properties</a>
+                <a href="#nano-mechanical" class="nav-topic-link">Mechanical Properties</a>
+                <a href="#nano-magnetic" class="nav-topic-link">Magnetic Properties</a>
+                <a href="#nano-apps" class="nav-topic-link">Applications</a>
+            </div>
+        </div>
+
+        <!-- Graphene (M2) -->
+        <div class="nav-module">
+            <button class="nav-module-btn" data-target="nav-m2-graphene"><span class="pill">M2</span> Graphene <span class="chevron">▶</span></button>
+            <div class="nav-children" id="nav-m2-graphene">
+                <a href="#graphene-intro" class="nav-topic-link">Discovery &amp; Structure</a>
+                <a href="#graphene-synth" class="nav-topic-link">Synthesis Methods</a>
+            </div>
+        </div>
+
+        <!-- Polymers (M3) -->
+        <div class="nav-module">
+            <button class="nav-module-btn" data-target="nav-m3-polymers"><span class="pill">M3</span> Polymers <span class="chevron">▶</span></button>
+            <div class="nav-children" id="nav-m3-polymers">
+                <a href="#polymer-intro" class="nav-topic-link">Introduction &amp; Types</a>
+                <a href="#polymer-struct-prop" class="nav-topic-link">Structure-Property</a>
+                <a href="#polymer-pmma" class="nav-topic-link">PMMA</a>
+                <a href="#polymer-epoxy" class="nav-topic-link">Epoxy Resin</a>
+                <a href="#polymer-composites" class="nav-topic-link">Composites: Kevlar</a>
+                <a href="#polymer-carbon" class="nav-topic-link">Carbon Fibre</a>
+                <a href="#polymer-conducting" class="nav-topic-link">Conducting Polymers</a>
+                <a href="#polymer-biodegradable" class="nav-topic-link">Biodegradable Polymers</a>
+                <a href="#polymer-mw" class="nav-topic-link">Molecular Weight</a>
+                <a href="#polymer-oled" class="nav-topic-link">OLEDs</a>
+            </div>
+        </div>
+
+        <!-- Green Chemistry (M4) -->
+        <div class="nav-module">
+            <button class="nav-module-btn" data-target="nav-m4-green"><span class="pill">M4</span> Green Chemistry <span class="chevron">▶</span></button>
+            <div class="nav-children" id="nav-m4-green">
+                <a href="#green-intro" class="nav-topic-link">Definition &amp; Principles</a>
+                <a href="#green-principles" class="nav-topic-link">Twelve Principles</a>
+            </div>
+        </div>
+    </div>
 </div>
 </nav>
 
@@ -4717,6 +4775,780 @@ mark { background: rgba(232,168,56,0.3); color: inherit; border-radius: 2px; pad
         <li>Extreme environmental conditions like haematocrit values, or medication interferences may potentially falsify blood glucose readings</li>
         <li>Incorrect blood glucose readings may lead to treatment errors, for example, incorrect insulin dosing</li>
       </ul>
+    </section>
+    
+    
+    
+    
+    
+    
+    
+    <!-- UNIT 4 -->
+    
+    
+    
+    
+    <div class="module-header">
+      <div class="module-eyebrow">Module I</div>
+      <h1>Nanomaterials</h1>
+      <p>Nanomaterials (classification and deviation of properties from bulk) — Properties of nanoparticles</p><button class="pdf-btn" onclick="window.open('./chem/u4.pdf', '_blank')">
+    📄 Unit 4 PDF
+</button>
+    </div>
+
+    <section class="section-anchor" id="nano-intro">
+      <h2>Nanomaterials</h2>
+<ul> <li>The prefix 'Nano' is derived from the Greek word for dwarf</li> <li>1nm = 10⁻⁹ m</li> <li>1nm is approximately the length of 10 H or 5 Si atoms aligned in a line</li> <li>Dimensions of nanomaterials lie in between bulk material and atoms/molecules</li> <li>Up to μm bulk properties are observed. For smaller sizes quantum effects are seen as the dimensions are closer to atoms or molecules</li> </ul> <ul> <li><strong>Nanomaterials</strong>: Materials with <strong>at least one</strong> external dimension between 1 and 100 nm</li> <li><strong>Nanoscience</strong> is the study of phenomena and synthesis, characterisation, exploration and exploitation of nanostructured materials</li> <li><strong>Nanotechnologies</strong> are the design, characterisation, production and application of structures, devices and systems by controlling shape and size at nanometer scale</li> </ul>
+
+      <h3>Classification of Nanomaterials</h3>
+      <ul>
+        <li><span class="key-term">Zero dimensional nanomaterials (0D):</strong> Materials having all the dimensions within the nanorange where no dimension is allowed to be outside of nanorange. Like quantum dots, nanoclusters e.g. fullerene.</li>
+        <li><span class="key-term">One dimensional nanomaterials (1D):</strong> Materials having one of their dimensions out of the nanorange e.g. nanotubes, nanowires.</li>
+        <li><span class="key-term">Two dimensional nanomaterials (2D):</strong> Materials having two of their dimensions out of the nanorange e.g. Nanofilms, nanocoatings.</li>
+        <li><span class="key-term">Three dimensional nanomaterials (3D):</strong> Materials having all the three dimensions out of the nanorange e.g. Dispersions of nanoparticles, bundles of nanowires.</li>
+      </ul>
+      <div class="fig-desc"><strong>[Diagram]</strong> 0D: quantum dots, nanoclusters (fullerene). 1D: nanotubes, nanowires. 2D: nanofilms, nanocoatings. 3D: dispersions of nanoparticles, bundles of nanowires.</div>
+    </section>
+
+    <section class="section-anchor" id="nano-props">
+      <h2>Properties of Nanoparticles</h2>
+      <ul>
+        <li>Properties of nanomaterials are different from bulk materials</li>
+        <li>Au-bulk is yellowish in colour, and Au-nanoparticles are red in colour</li>
+        <li>Al which is stable becomes combustible in the nanoparticle range and is used as solid fuel in rocket propulsion</li>
+        <li>Melting point of materials is lower in nano-range</li>
+      </ul>
+      <p>Nanomaterials possess specific properties which maybe significantly different from bulk properties</p>
+
+      <h3>Reasons for deviation</h3>
+      <ul>
+        <li><strong>Large fraction of surface atoms / unit volume:</strong> Properties are dictated by surface atoms rather than bulk atoms. Eg Pt sheet versus Pt powder.</li>
+        <li><strong>Large surface energy:</strong> Surface atoms are held with less force as compared to bulk. Surface activity high. Eg Al.</li>
+        <li><strong>Spatial confinement (quantum confinement):</strong> In 3D, all carriers act as free carriers in all three directions. In 2D (Quantum Wells), the carriers act as free carriers in a plane. In 1D (Quantum Wires), the carriers are free to move down the direction of the wire. In 0D (Quantum Dots), systems in which carriers are confined in all directions (no free carriers).</li>
+        <li><strong>Reduced imperfections:</strong> Bulk material has lattice imperfections like dislocations, kinks etc. Nanomaterial has smaller lattice so less possibility of imperfections.</li>
+      </ul>
+      <p>Bulk: 1 mole = 10²³ atoms ; Nanomaterials: 10-1000 atoms</p>
+    </section>
+
+    <section class="section-anchor" id="nano-surface">
+      <h2>Surface Area Dependent Properties</h2>
+      <p>Many physical and chemical properties of a material depend on its surface properties. Surface area is enormously increased on moving from bulk to nano scale. Nanomaterials have a significant proportion of atoms existing at the surface.</p>
+      <ul>
+        <li>Properties like catalytic activity, gas adsorption depend on surface area. e.g. Bulk gold is catalytically inactive but gold nanoparticles are catalytically very active for selective redox reactions.</li>
+        <li>Surface energy is also high so chemical reactivity is high. e.g. Aluminium becomes combustible.</li>
+      </ul>
+      <div class="fig-desc"><strong>[Diagram]</strong> Surface area increases as particle size decreases. Source: https://ninihti.wordpress.com/nano-scale-why-size-matter/</div>
+    </section>
+
+    <section class="section-anchor" id="nano-thermal">
+      <h2>Thermal Properties</h2>
+      <ul>
+        <li><strong>Low melting point and phase transition temperature:</strong> Due to a large fraction of surface atoms compared to bulk. Atoms or molecules on the surface are bound by lesser number of bonds as compared to the atoms in the bulk. The number of bonds need to be broken per atom during melting is less in nanomaterials.</li>
+        <li><strong>Decrease in thermal conductivity:</strong> Size of the particles is smaller than the path length of phonons arising due to lattice vibrations. Phonon scattering results in decrease in thermal conductivity.</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="nano-optical">
+      <h2>Optical Properties</h2>
+      <p>Nanomaterials show unique optical properties. Colour depends on the size of the particles.</p>
+
+      <h3>Surface Plasmon Resonance (SPR)</h3>
+      <ul>
+        <li>Metals have positive lattice points surrounded by a sea of electrons</li>
+        <li>When radiation falls, the surface electrons are polarised</li>
+        <li>These electrons oscillate with a frequency</li>
+        <li>Collective oscillations of these electrons is called Plasmons</li>
+        <li>When the plasmon frequency matches with the frequency of radiation falling, resonance occurs and radiation is absorbed and the material appears coloured</li>
+        <li>Plasmon frequency depends on size, shape and nature of metal</li>
+        <li>As size of nanoparticle changes, colour changes</li>
+      </ul>
+      <div class="fig-desc"><strong>[Diagram]</strong> Gold nanoparticles show different colours depending on size. Source: https://www.cytodiagnostics.com/m/pages/gold-nanoparticle-properties</div>
+
+      <h3>Increase in Energy gap</h3>
+      <ul>
+        <li>Increases in energy gap between the valence band and conduction band</li>
+        <li>As size of nanoparticles decreases the energy gap increases and the wavelength of light absorbed moves towards smaller values. This is referred to as 'blue shift'.</li>
+        <li>e.g. colloidal suspensions of gold nanoparticles: Gold spheres of &gt;50 nm absorb at λ = 575 nm; Gold spheres of 10-20 nm absorb at λ = 524 nm; Gold spheres of 2-5 nm absorb at λ = 517 nm.</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="nano-electrical">
+      <h2>Electrical Properties</h2>
+      <p>Electrical conductivity decreases for nanoparticles as compared to bulk material.</p>
+
+      <h3>Due to spatial confinement</h3>
+      <ul>
+        <li>The electronic bands in bulk material are continuous</li>
+        <li>In nano size materials the electronic bands become discrete and the band gap increases</li>
+        <li>Some metals which are good conductors in bulk become semiconductors and insulators as their size is decreased to nano</li>
+        <li>Band gap increases as particle size decreases</li>
+      </ul>
+      <div class="fig-desc"><strong>[Diagram]</strong> Band gap increases as particle size decreases. Source: https://www.mknano.com/info-guide/what-are-nanoparticles.aspx</div>
+
+      <h3>Due to surface scattering</h3>
+      <ul>
+        <li>Electrical conductivity decreases due to surface scattering</li>
+        <li>Electrons have a mean free path</li>
+        <li>If dimensions of the nanomaterial is smaller than the mean free path of the electron, elastic or inelastic surface scattering can happen</li>
+        <li>Elastic scattering will not affect conductivity but when inelastic scattering happens, the scattered electron loses its velocity and electrical conductivity decreases</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="nano-mechanical">
+      <h2>Mechanical Properties</h2>
+      <p><strong>Strength of nanomaterials is greater than bulk material</strong></p>
+      <ul>
+        <li>Mechanical properties may reach theoretical strength, which is one or two orders of magnitude higher than that of the bulk materials.</li>
+        <li>e.g bending of bulk Cu happens readily but Cu particles &lt; 50 nm are considered super hard materials that do not show same malleability and ductility as bulk Cu.</li>
+        <li>The reason for this high strength is due to reduced probability of defects. Large lattices in bulk materials have imperfections like dislocations, kinks and vacancies but for lattice with smaller cross-section, there is less probability of finding imperfections.</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="nano-magnetic">
+      <h2>Magnetic Properties</h2>
+      <ul>
+        <li>Magnetic properties of nanomaterials are distinctly different from that of the bulk materials.</li>
+        <li>In ferromagnetic materials like Fe, Co, Ni, ferromagnetism changes to superparamagnetism in the nanometer scale due to the high surface energy. The domains can flip directions. In the presence of magnetic field, they get magnetised with high susceptibilities.</li>
+        <li>Bulk gold and platinum are non-magnetic but at the nanosize they act as magnetic particles</li>
+      </ul>
+      <div class="fig-desc"><strong>[Diagram]</strong> Superparamagnetism in nanoparticles.</div>
+    </section>
+
+    <section class="section-anchor" id="nano-apps">
+      <h2>Applications of Nanomaterials</h2>
+      <ul>
+        <li><strong>Medicine:</strong> for targeted drug delivery to enhance effectiveness, injectable nanobots which can serve as detectors, informers of early disease and perhaps repair metabolic defects; antibacterial activity - Ag nanoparticles.</li>
+        <li><strong>Energy storage:</strong> as electrodes in fuel cells - high surface area.</li>
+        <li><strong>Catalysis:</strong> Nanocrystalline materials have very large surface area due to their small size. Therefore, they are very active with regards to their physical, chemical, and mechanical properties. Au, Ag nanoparticles - good catalysts. Oxygen reduction reaction catalysts for fuel cells &amp; metal-air batteries. CO oxidation catalyst.</li>
+        <li><strong>Consumer electronics:</strong> Nanophosphors for good resolution in HDTV. The resolution of a monitor or television is subject to the size of the pixel. These pixels are fundamentally composed of materials known as "phosphors," which glow when struck by a stream of electrons within the cathode ray tube (CRT). The resolution enhances with a reduction in the pixel size or the phosphors. Nanocrystalline zinc selenide, cadmium sulfide, zinc sulfide, and lead telluride are potential materials for enhancing the resolution of monitors. Nanophosphors in white light emitting diode.</li>
+        <li><strong>Environment:</strong> Elimination of pollution using catalytic converters - Owing to their improved chemical activity, nanomaterials can be employed as catalysts to react with toxic and noxious gases such as nitrogen oxide and carbon monoxide, in power generation equipment and automobile catalytic converters, to avoid environmental pollution caused when gasoline and coal are burnt. Water purification by Carbon nanotubes.</li>
+        <li><strong>Cosmetics:</strong> ZnO and TiO₂ in sunblocks.</li>
+      </ul>
+    </section>
+
+    <!-- ==================== MODULE 2: GRAPHENE ==================== -->
+    <div class="module-sep"><div class="module-sep-line"></div><span class="module-sep-label">Module II</span><div class="module-sep-line"></div></div>
+    <div class="module-header">
+      <div class="module-eyebrow">Module II</div>
+      <h1>Graphene — Structure and Synthesis</h1>
+      <p>Graphene — structure and synthesis</p>
+    </div>
+
+    <section class="section-anchor" id="graphene-intro">
+      <h2>Discovery</h2>
+      <p>Studies on graphite layers for past hundred years. Graphene theory first explored by P.R. Wallace (1947).</p>
+
+      <h3>What is graphene?</h3>
+      <p>It is a single layer of Graphite (pure crystalline carbon). Graphite was discovered in 1564 at Seathwaite (Borrowdale), Northumberland.</p>
+      <div class="fig-desc"><strong>[Diagram]</strong> Graphite mine, near Seathwaite, England CA12 5XJ.</div>
+
+      <p>'Graphene' was first isolated in the lab by Professor Andre Geim with former student Konstantin Novoselov at the University of Manchester, England in 2004. 2010 Nobel Prize for "groundbreaking experiments regarding the two-dimensional material graphene".</p>
+
+      <h3>Structure</h3>
+      <p>Graphene is a crystalline allotrope of carbon with 2-dimensional properties. Its carbon atoms are densely packed in a regular atomic-scale chicken wire (hexagonal) pattern. Each atom has four bonds, one σ bond with each of its three neighbors and one π-bond that is oriented out of plane. The atoms are about 1.42 Å apart.</p>
+      <p>Graphene can self-repair holes in its sheets, when exposed to molecules containing carbon, such as hydrocarbons. Bombarded with pure carbon atoms, the atoms perfectly align into hexagons, completely filling the holes.</p>
+      <div class="fig-desc"><strong>[Diagram]</strong> Hexagonal lattice of graphene; σ bonds in plane, π bonds perpendicular.</div>
+
+      <p>Graphene is among several allotropes (forms) of carbon:</p>
+      <ul>
+        <li>a) graphite 3D</li>
+        <li>b) diamond 3D</li>
+        <li>c) Buckminsterfullerene "Buckyballs" 0D</li>
+        <li>d) carbon nanotube 1D</li>
+        <li>e) graphene 2D</li>
+      </ul>
+      <p>Although graphene is the first Two-dimensional crystal ever discovered, there are several new 2D materials including MoS₂, WSe₂, W₂S, BN, and SiC which can be used with graphene to make new hybrid electronic devices.</p>
+    </section>
+
+    <section class="section-anchor" id="graphene-synth">
+      <h2>Methods for Synthesis of Graphene</h2>
+
+      <h3>(1) Epitaxial growth in silicon carbide</h3>
+      <p>High cost, High quality, Low yield.</p>
+
+      <h3>(2) Unzipping of carbon nanotubes</h3>
+      <p>Carbon nanotube unzipping. Schematic representation of the gradual unzipping of one wall of a carbon nanotube to form a nanoribbon. Although depicted here as an internal rather than end-origin of the initial attack, the location of initial attack may vary. Image by: Dmitry V. Kosynkin.</p>
+      <p>High yield, High costs, Still under research.</p>
+
+      <h3>(3) Chemical Vapor Deposition (CVD)</h3>
+      <p>The hot gaseous material naturally forms a coating on the colder substrate, much as water vapor coats the outside of the cold drinking glass on a hot day.</p>
+      <p>High cost, Very high quality, Very low yield.</p>
+
+      <h3>(4) Liquid Phase Exfoliation</h3>
+      <p>Low yield, Low cost, Moderate quality.</p>
+
+      <h3>(5) Hummer's Method (Graphene Oxide)</h3>
+      <ol>
+        <li>Graphite + NaNO₃ are added to cold concentrated H₂SO₄.</li>
+        <li>Stirring is done in an ice bath (temperature &lt; 20°C).</li>
+        <li>Oxidation: KMnO₄ is added slowly—temperature must be controlled (risk of explosion). The mixture thickens and turns dark green/purple. Reaction proceeds at 35–40°C for about 1–2 hours.</li>
+        <li>Exfoliation &amp; Termination: Water is added slowly → the solution heats up. The color changes to brown, indicating graphite oxide formation. H₂O₂ is added → turns the mixture bright yellow. Mn(VII) → Mn(II).</li>
+        <li>Washing &amp; Drying: The product is washed with distilled water, dilute HCl, ethanol. The solid is filtered and dried → Graphite Oxide.</li>
+        <li>Ultrasonication in water → exfoliates sheets into Graphene Oxide (GO).</li>
+        <li>Thermal Annealing (High-Temperature Reduction): at 1000–2000°C. This is the most effective method to convert rGO closer to graphene.</li>
+      </ol>
+    </section>
+
+    <!-- ==================== MODULE 3: POLYMERS ==================== -->
+    <div class="module-sep"><div class="module-sep-line"></div><span class="module-sep-label">Module III</span><div class="module-sep-line"></div></div>
+    <div class="module-header">
+      <div class="module-eyebrow">Module III</div>
+      <h1>Polymers</h1>
+      <p>Polymers, types of polymerization, structure-property relationship, commercial polymers, composites, conducting polymers, molecular weight, OLEDs.</p>
+    </div>
+
+    <section class="section-anchor" id="polymer-intro">
+      <h2>Introduction to Polymers</h2>
+      <p><span class="key-term">Polymer:</span> A giant molecule or a macromolecule formed by repeated joining of several simple molecules.</p>
+      <p>Polymers can be linear, branched or cross-linked.</p>
+      <div class="fig-desc"><strong>[Diagram]</strong> (a) linear polymers, (b) branched polymers, (c) cross-linked polymers.</div>
+
+      <p><span class="key-term">Monomer:</span> A simple molecule, having two or more binding sites, which can be linked together to form a giant molecule.</p>
+
+      <h3>Polymerisation</h3>
+      <p>The process by which monomers of low molecular weight are converted to polymers of high molecular weight.</p>
+
+      <p><span class="key-term">Functionality:</span> The total number of functional groups or bonding sites present in a monomer.</p>
+
+      <p><span class="key-term">Degree of polymerisation (DP):</span> The total number of repeat units in a polymer chain.</p>
+      <div class="formula-block">DP = Molecular weight of polymer / Molecular weight of monomer</div>
+      <p>It can be used to determine length of the polymer chain and molecular weight of the polymer.</p>
+
+      <h3>Addition Polymerisation</h3>
+      <p>Self addition of unsaturated monomers to each other takes place without elimination of by products. Examples: PVC, polystyrene, Teflon, polyethylene.</p>
+      <div class="formula-block">nCH₂=CH₂ → [-CH₂-CH₂-]ₙ</div>
+
+      <ul>
+        <li>Linear or branched polymers are produced</li>
+        <li>Self addition takes place rapidly</li>
+        <li>No elimination of by products</li>
+        <li>Addition polymerisation can take place by: Free radical mechanism (benzoyl peroxide), Cationic mechanism (AlCl₃), Anionic mechanism (BuLi), Coordination mechanism (Zeigler Natta catalyst: Al(C₂H₅)₃ + TiCl₃)</li>
+        <li>Molecular weight is an integral multiple of that of the monomer</li>
+      </ul>
+
+      <h3>Condensation Polymerisation</h3>
+      <p>Intermolecular condensation through functional groups of monomers with continuous elimination of by products. Examples: Nylons, polyesters, phenolformaldehyde resin.</p>
+      <ul>
+        <li>Catalysed by acids or alkali</li>
+        <li>Continuous elimination of by products</li>
+        <li>Linear, branched or cross-linked polymers are formed</li>
+        <li>Chain build-up is stepwise</li>
+        <li>Molecular weight of the polymer is not an integral multiple of that of the monomer</li>
+      </ul>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Addition Polymerization</th><th>Condensation Polymerization</th></tr></thead>
+          <tbody>
+            <tr><td>No elimination of small molecule</td><td>Elimination of small molecules like H₂O, NH₃ etc</td></tr>
+            <tr><td>Initiators are required</td><td>Catalyst is required</td></tr>
+            <tr><td>Linear or branched polymers are formed</td><td>Linear, branched or cross-linked polymers are formed</td></tr>
+            <tr><td>Molecular weight is an integral multiple of the molecular weight of the monomer</td><td>Molecular weight is not integral multiple.</td></tr>
+            <tr><td>Monomers are unsaturated molecule</td><td>Monomer unit must have two active functional groups</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Glass Transition Temperature</h3>
+      <ul>
+        <li>All amorphous polymers, when cooled below a certain temperature, become stiff, hard, brittle and glassy but above this temperature they are soft, flexible and rubbery</li>
+        <li>This transition temperature of a polymer from glassy state to rubbery state is called its glass transition temperature and is denoted by T<sub>g</sub></li>
+        <li>The rubbery state on heating melts and starts flowing. This temperature is the melting point, T<sub>m</sub></li>
+      </ul>
+      <p>glassy state → (T<sub>g</sub>) → rubbery state → (T<sub>m</sub>) → viscous liquid</p>
+      <p>The value of T<sub>g</sub> is a measure of flexibility of a polymer and predicts its response to mechanical stress. Knowledge of T<sub>g</sub> and T<sub>m</sub> is useful in choosing right temperature range for fabrication.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Polymer</th><th>T<sub>g</sub> (°C)</th><th>T<sub>m</sub> (°C)</th></tr></thead>
+          <tbody>
+            <tr><td>Polyethylene</td><td>-125</td><td>137</td></tr>
+            <tr><td>Polysoprene (natural rubber)</td><td>-73</td><td>28</td></tr>
+            <tr><td>Polystyrene</td><td>100</td><td>240</td></tr>
+            <tr><td>Polymethyl methacrylate</td><td>105</td><td>200</td></tr>
+            <tr><td>Polytetrafluoroethylene</td><td>127</td><td>327</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section-anchor" id="polymer-struct-prop">
+      <h2>Structure-Property Relationship of Polymers</h2>
+      <p>Polymers are extremely versatile when it comes to their properties. Some are hard while others are soft and flexible. Some are insoluble and resistant to heat while others are soluble and fusible. Properties of polymers are influenced by their structure.</p>
+
+      <h3>Crystallinity</h3>
+      <ul>
+        <li>The degree of crystallinity of a polymer depends on its structure and configuration</li>
+        <li>Polymers contain both crystalline and amorphous regions</li>
+        <li>Crystalline regions occur when polymer chains are arranged in an orderly fashion parallel and close to each other</li>
+        <li>Polymers made up of linear chains without bulky pendant groups are more crystalline. e.g., Polyethylene(PE) is more crystalline than polyvinylacetate</li>
+        <li>Polymers containing polar groups are more crystalline. A close packing between polymeric chains because of strong secondary forces like dipole-dipole interactions or hydrogen bonding imparts a high degree of crystallinity. e.g., PVC is more crystalline than PE</li>
+        <li>Crystallinity also depends on the stereoregularity of the polymer. Based on stereoregularity polymers are classified as isotactic, syndiotactic and atactic. Isotactic polymers are found to be most crystalline while atactic are found to be least crystalline.</li>
+        <li>High crystallinity leads to sharper melting point, greater rigidity, strength and density</li>
+      </ul>
+
+      <h3>Tensile Strength</h3>
+      <ul>
+        <li>The amount of stress a polymer can take before undergoing permanent deformation</li>
+        <li>Depends on: Molecular mass - low molecular mass polymers are soft and gummy, high molecular mass polymers are tough and heat resistant. By increasing molecular mass the tensile strength increases to a certain extent and then becomes constant. Melt viscosity initially shows gradual increase then increases steeply with high molecular weight.</li>
+        <li>Tensile strength increases when polymer has polar groups. Force of attraction between chains prevents polymer chains from slipping against each other e.g., PVC, Nylon.</li>
+        <li>Cross linking in a polymer also increases its tensile strength</li>
+      </ul>
+
+      <h3>Elasticity</h3>
+      <ul>
+        <li>The property of a polymer by which it deforms on applying force and regains original shape on release of force is called elasticity</li>
+        <li>Elastomers have long coiled and entangled chains which straighten and orient themselves on stretching. When stress is removed they go back to coiled form</li>
+        <li>For a polymer to show elasticity the individual chains should not break on prolonged stretching</li>
+        <li>Presence of polar groups in the polymer chain results in strong secondary force of attraction between the chains making them stiff and inflexible</li>
+        <li>Non polar groups have weak van der Waal's attraction between them and hence they are more elastic</li>
+        <li>Presence of bulky, aromatic and cyclic groups in the polymer decreases the elasticity of the polymer</li>
+        <li>In elastic materials such as natural rubber, elasticity can be improved by introducing cross linking at suitable molecular positions like in vulcanisation</li>
+        <li>In non-elastic materials, elasticity is achieved by using plasticisers, for example (Ph₃PO₄), which enter between the polymer chains and make a hard polymer more flexible</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="polymer-pmma">
+      <h2>Polymethyl Methacrylate (PMMA) or Plexi Glass</h2>
+      <p>It is an addition polymer. Plexi glass is obtained by radical polymerization in bulk, emulsion or suspension from the monomer methyl methacrylate (MMA) using hydrogen peroxide as initiator. The monomer is obtained from acetone.</p>
+      <div class="fig-desc"><strong>[Diagram]</strong> Synthesis of PMMA from MMA.</div>
+
+      <h3>Properties</h3>
+      <ul>
+        <li>Its T<sub>g</sub> 105°C, Colorless, transparent hard solid at room temperature.</li>
+        <li>Amorphous due to the presence of bulky groups</li>
+        <li>Resistant to many chemicals but soluble in organic solvent like acetone and chlorinated hydrocarbons and esters</li>
+        <li>Higher the optical clarity (100% Transparent in visible light radiation)</li>
+        <li>It has a good dimensional stability</li>
+      </ul>
+
+      <h3>Applications</h3>
+      <ul>
+        <li>Due to its optical clarity it is used to make aircraft windows, signal boards etc</li>
+        <li>For Making artificial teeth and contact lens</li>
+        <li>Used in paints and adhesives</li>
+        <li>Making transparent bottles and wash basins. Good substitute for glass but has poor scratch resistance.</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="polymer-epoxy">
+      <h2>Epoxy Resins (Araldite or Epon)</h2>
+      <p>They contain the epoxy group, which is a 3 membered ring of an O atom bonded to carbon atoms.</p>
+      <p><strong>Synthesis:</strong> Epoxy resins can be obtained by the condensation reaction between bisphenol A and epichlorohydrin.</p>
+      <ul>
+        <li>Excess of epichlorohydrin is used so that the end groups are epoxy groups which are very active</li>
+        <li>When curing agents are added immediately three-dimensional crosslinked structure is formed</li>
+        <li>Curing agents are diamines, dicarboxylic acids or acid anhydrides</li>
+      </ul>
+
+      <h3>Properties</h3>
+      <ul>
+        <li>Excellent adhesion</li>
+        <li>Excellent resistance to water, acid, alkali and other corrosive chemicals</li>
+        <li>High mechanical strength</li>
+        <li>Absorb less moisture</li>
+        <li>Good insulation properties</li>
+      </ul>
+
+      <h3>Applications</h3>
+      <ul>
+        <li>Cured epoxies are frequently used in aerospace and defence</li>
+        <li>They can used to bind glass, metal, leather, wood, ceramic etc</li>
+        <li>Coated on floor to give it an antiskid layer</li>
+        <li>Laminating materials</li>
+        <li>Crease and shrinkage resistance fabrics</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="polymer-composites">
+      <h2>Polymer Composites — Kevlar</h2>
+      <p><strong>Polymer composites:</strong> Materials made from two or more constituent materials and their properties are not attainable by any individual component alone are called composites. When one or more of the components are polymers they are called polymer composites. Two components are fibre and matrix. Matrix: polyester, epoxy, phenolic, silicone, melamine, vinyl derivatives. Fibers: glass fiber, boron filaments, carbon/graphite fibers, aramid (aromatic polyamide), aluminum fiber. Polymer composite are produced by suitably bonding a fiber material with a polymer resin matrix and curing the same under pressure and heat. Composites have high strength / unit weight.</p>
+
+      <h3>Kevlar</h3>
+      <ul>
+        <li>An aramid fibre - Aromatic polyamide</li>
+        <li>Chemical name is poly-parahepyleneterephthalamide</li>
+      </ul>
+
+      <h3>Synthesis</h3>
+      <p>Condensation of 1,4 phenylene diamine and 1,4 benzenedicarbonyl chloride.</p>
+      <div class="fig-desc"><strong>[Diagram]</strong> Synthesis of Kevlar.</div>
+
+      <ul>
+        <li>Kevlar is very strong material - about 5 times stronger than steel</li>
+        <li>High strength is due to: Many inter chain hydrogen bonds. The inter-molecular hydrogen bonds formed between the carbonyl groups and NH centers. Additional strength is derived from aromatic stacking interactions between adjacent strands.</li>
+      </ul>
+
+      <h3>Properties</h3>
+      <ul>
+        <li>High tensile strength, high modulus of elasticity</li>
+        <li>High strength to weight ratio</li>
+        <li>High chemical inertness</li>
+        <li>Low co-efficient of thermal expansion</li>
+        <li>Flame resistance</li>
+        <li>High impact and cut resistance</li>
+        <li>Textile processibility</li>
+      </ul>
+
+      <h3>Applications</h3>
+      <ul>
+        <li>Well known component of personal armor such as combat helmets, ballistic face mask and ballistic vest, bullet proof vest</li>
+        <li>Gloves, sleeves, jackets and other articles</li>
+        <li>Inner lining in bicycle tires</li>
+        <li>Light weight boat hulls, aircraft panels, race cars, bridge structure</li>
+        <li>Roto blades, tennis, cricket bats, and hockey sticks</li>
+        <li>Fiber is used in woven rope and in cable</li>
+        <li>As reinforcement in car tires, in car brakes</li>
+        <li>In the strings of archery bows</li>
+      </ul>
+
+      <h3>Disadvantages</h3>
+      <ul>
+        <li>Special cutting scissors and drilling machines are required</li>
+        <li>The fibre is hygroscopic - they absorb moisture</li>
+      </ul>
+
+      <h3>Reinforced Kevlar composites</h3>
+      <p>Kevlar composite is made by combining Kevlar fibre with epoxy resin.</p>
+      <p><strong>Applications:</strong> monocoque bodies of F1 racing cars, helicopter rotor blades, kayaks, tennis and squash rackets.</p>
+    </section>
+
+    <section class="section-anchor" id="polymer-carbon">
+      <h2>Carbon Fibre</h2>
+      <ul>
+        <li>Fibers about 5-10 micrometers in diameter and composed mostly of carbon atoms</li>
+        <li>Several thousand Carbon fibres are twisted together to form a yarn which is used as such or woven into fabric</li>
+      </ul>
+
+      <h3>Synthesis</h3>
+      <p>Each Carbon filament is produced from a precursor polymer like polyacrylonitrile(PAN), pitch blendee etc.</p>
+      <p>Synthesis of C fibre from polyacrylonitrile (PAN):</p>
+      <ol>
+        <li>Polymerisation</li>
+        <li>Cyclisation at low temperature</li>
+        <li>Oxidative treatment at high temperature</li>
+        <li>Graphitisation at 2000°C in an inert atmosphere</li>
+      </ol>
+
+      <h3>Structure</h3>
+      <ul>
+        <li>Consists of sheets of carbon arranged in a regular pattern like graphite but the sheets interlock</li>
+        <li>In turbostratic carbon fibre the sheets of carbon fibre are haphazardly folded or crumpled together</li>
+      </ul>
+
+      <h3>Properties</h3>
+      <ul>
+        <li>High strength to weight ratio</li>
+        <li>Corrosion resistant and chemically stable</li>
+        <li>Good Tensile Strength</li>
+        <li>Non Poisonous, Biologically Inert</li>
+        <li>Low Coefficient of Thermal Expansion</li>
+      </ul>
+
+      <h3>Applications</h3>
+      <ul>
+        <li>Aerospace, road and marine transport, sporting goods</li>
+        <li>Medical applications in prostheses, surgery and x-ray equipment, implants, tendon/ligament repair</li>
+        <li>Automobile hoods, novel tooling, casings and bases for electronic equipments, EMI and RF shielding, brushes</li>
+        <li>Audio equipment, loudspeakers for Hi-fi equipment, pickup arms, robot arms</li>
+      </ul>
+
+      <h3>Disadvantages</h3>
+      <ul>
+        <li>Process of producing Carbon fibre is expensive due to large energy expenditure</li>
+        <li>Volatile by products are formed which include HCN</li>
+      </ul>
+
+      <h3>Carbon fibre reinforced polymer (CFRP)</h3>
+      <p>The composite is made by reinforcing carbon fibre with epoxy resin matrix.</p>
+      <h4>Properties:</h4>
+      <ul>
+        <li>light weight</li>
+        <li>high strength to weight ratio</li>
+        <li>low coefficient of thermal expansion</li>
+        <li>high electrical conductivity</li>
+      </ul>
+      <div class="fig-desc"><strong>[Diagram]</strong> Carbon fibre reinforced polymer composite.</div>
+    </section>
+
+    <section class="section-anchor" id="polymer-conducting">
+      <h2>Conducting Polymers</h2>
+      <ul>
+        <li>Polymers are generally insulators because the organic molecules of which they are composed have no free electrons to carry current</li>
+        <li>An organic polymer with highly delocalized pi-electron system, having electrical conductance of the order of an electrical conductor is called a conducting polymer</li>
+        <li>Also known as synthetic metals</li>
+      </ul>
+
+      <p>1977 - Heeger, Macdiarmid &amp; Shirakawa demonstrated conductivity of polyacetylene can be increased 13 times by doping with electron acceptors and donors. Norman et. al - achieved conductance of polyacetylene equal to copper. Doping with less than 10% of chemical species results in dramatic changes in electrical, electronic, magnetic and optical properties of polymers - hence it is a new class of polymers. 2000 - Heeger, Macdiarmid &amp; Shirakawa won the Nobel prize for Chemistry.</p>
+
+      <p>Examples of polymers which conduct after doping: Polyacetylene, Polyphenylene, Polypyrrole, Polythiophene, Polyaniline, Poly(phenylene-vinylene).</p>
+
+      <ul>
+        <li>Conducting polymers conduct electricity due to delocalization of π electrons</li>
+        <li>An organic polymer can be converted into conducting polymer if it has: linear structure, extensive conjugation in its polymeric back bone</li>
+      </ul>
+
+      <p>These materials in pure form are not conductors but on doping (Introduction of charged chemical species) conduction increases.</p>
+
+      <h3>Types of Doping</h3>
+
+      <h4>Oxidative doping (p-doping)</h4>
+      <p>In this process, pi-backbone of a polymer is partially oxidized using a suitable oxidizing agent. This creates positively charged sites on the polymer backbone which are the current carriers for conduction. The oxidizing agents used are Iodine in CCl₄, HBF₄ etc.</p>
+
+      <h4>Reductive doping (n-doping)</h4>
+      <p>In this process, pi-backbone of a polymer is partially reduced using a suitable reducing agent. This creates negatively charged sites on the polymer backbone which are the current carriers for conduction. The reducing agent used is sodium naphthalide in THF.</p>
+
+      <h4>Protonic acid doping</h4>
+      <p>In this technique, current carrying charged species (+ve and -ve) are created by using a protonic acid as dopant. Doping of polyaniline is a typical example of this type of doping. In polyaniline, current carrying charged species (+ve and -ve) are created by protonation of imine nitrogen.</p>
+      <div class="fig-desc"><strong>[Diagram]</strong> Polyaniline - leucoemeraldine, emeraldine, pernigraniline forms.</div>
+
+      <h3>Applications</h3>
+      <ul>
+        <li>As electrode material for commercial rechargeable batteries, for higher power to weight ratio</li>
+        <li>As conductive tracks on printed circuit boards</li>
+        <li>As sensors - humidity sensor, gas sensor, radiation sensor, biosensor</li>
+        <li>In electrochromic display windows</li>
+        <li>In light emitting diodes</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="polymer-biodegradable">
+      <h2>Biodegradable Polymers</h2>
+      <p>Every year we produce millions of tons of garbage which we dispose off in landfills. Waste disposal problems of these traditional plastics which are resistant to microbial degradation causes them to accumulate in the environment which is a serious threat to global ecology.</p>
+
+      <ul>
+        <li><strong>Biodegradable polymers:</strong> Polymers that can be decomposed by the action of microorganisms into water, carbon dioxide, methane and biomass.</li>
+        <li>Biodegradation is a two step process: The first step is fragmentation where the polymer macromolecule is broken down into smaller chains or monomers by hydrolysis or oxidation. The second step is mineralisation by microorganisms. The products are CO₂, CH₄, H₂O or biomass depending on the structure of the fragmented polymer chains and the environment they are exposed to.</li>
+      </ul>
+
+      <p>The susceptibility of a polymer to undergo degradation depends on:</p>
+      <ul>
+        <li>The structure of the polymer, molecular weight, degree of branching, crystallinity and solubility. Usually polyesters, polyamides, polyurethanes are found to be biodegradable.</li>
+        <li>The environmental conditions like pH, availability of O₂, light, temperature, humidity, microorganism etc.</li>
+      </ul>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Abbreviation</th><th>Name of the polymer</th></tr></thead>
+          <tbody>
+            <tr><td>PVOH</td><td>Polyvinyl Alcohol</td></tr>
+            <tr><td>PLA</td><td>Polylactic acid</td></tr>
+            <tr><td>PHB</td><td>Polyhydroxybutyrate</td></tr>
+            <tr><td>PHBV</td><td>Poly(hydroxybutyrate-co-hydroxyvalerate)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Biodegradable plastics are commonly produced from renewable raw materials, micro-organisms, non-renewable raw materials, Microbial polymers.</p>
+
+      <h3>Advantages of biodegradable polymers:</h3>
+      <ul>
+        <li>Consume less energy during manufacture than the conventional plastic material</li>
+        <li>Do not release harmful products into the environment on decomposition</li>
+        <li>They decompose more quickly as compared to non-biodegradable polymers</li>
+      </ul>
+
+      <h3>Applications:</h3>
+      <ul>
+        <li>Agricultural and horticultural sectors (for example, as mulch-films or plant pots)</li>
+        <li>Food packaging</li>
+        <li>Disposable tableware</li>
+        <li>In medicine for drug delivery and dissolvable sutures</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="polymer-mw">
+      <h2>Molecular Weight of Polymers</h2>
+      <ul>
+        <li>Polymers are a mix of chains of different lengths</li>
+        <li>Weight of polymers is expressed as an average molecular weight</li>
+        <li>The molecular weight is an important characteristic of a polymer sample as several properties of polymers depend on the molecular weight</li>
+        <li>The entire range of mechanical properties like stress-strain, impact, fracture, fatigue, creep, stress relaxation and cracking are influenced by average molecular weight and molecular weight distribution</li>
+      </ul>
+
+      <h3>Number average molecular weight, M̄<sub>n</sub></h3>
+      <p>Obtained by dividing the total weight of the dispersed material with the total number of polymer units present.</p>
+      <div class="formula-block">M̄<sub>n</sub> = (n₁M₁ + n₂M₂ + ...) / (n₁ + n₂ + ...) = Σ nᵢMᵢ / Σ nᵢ</div>
+      <p>where n₁, n₂, n₃... are number of polymer units having molecular weights M₁, M₂, M₃... respectively.</p>
+      <p>It depends only on number of polymer units and not their size. Colligative properties like osmotic pressure, elevation in boiling point or depression in melting point is used to determine number average molecular weight.</p>
+
+      <h3>Weight average molecular weight, M̄<sub>w</sub></h3>
+      <ul>
+        <li>It gives representation to various molecular species in proportion to their masses in the given material</li>
+        <li>In the averaging process, the molecular weight of each individual species is multiplied by its mass</li>
+      </ul>
+      <div class="formula-block">M̄<sub>w</sub> = (m₁M₁ + m₂M₂ + ...) / (m₁ + m₂ + ...)</div>
+      <p>where m₁, m₂, m₃... are masses of polymer units having molecular weights M₁, M₂, M₃... respectively.</p>
+      <p>If n₁, n₂, n₃... are number of polymer units having molecular weights M₁, M₂, M₃... respectively then m₁ = n₁M₁, m₂ = n₂M₂...</p>
+      <div class="formula-block">M̄<sub>w</sub> = (n₁M₁² + n₂M₂² + ...) / (n₁M₁ + n₂M₂ + ...) = Σ nᵢMᵢ² / Σ nᵢMᵢ</div>
+      <p>It depends on size of the polymer units. Properties which depend on size like sedimentation velocity or light scattering are used to determine weight average molecular weight.</p>
+
+      <h3>Polydispersity Index (PDI)</h3>
+      <div class="formula-block">PDI = M̄<sub>w</sub> / M̄<sub>n</sub></div>
+      <p>It is a measure for the broadness of a molecular weight distribution of a polymer, that is, the larger the polydispersity index, the broader the molecular weight distribution. A monodisperse polymer where all the chain lengths are equal has PDI = 1. PDI &gt; 1 shows that the polymeric sample is less homogeneous and polydisperse.</p>
+
+      <h3>Viscosity average molecular weight, M̄<sub>ν</sub></h3>
+      <div class="formula-block">M̄<sub>ν</sub> = [Σ nᵢMᵢ^(1+α) / Σ nᵢMᵢ]^(1/α)</div>
+      <ul>
+        <li>α is the Mark-Houwink parameter</li>
+        <li>its value depends on the polymer-solvent system at a particular temperature and is 0.5 ≤ α ≤ 0.9</li>
+        <li>Viscosity average molecular weight is closer to weight average molecular weight as larger molecules contribute more to viscosity</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="polymer-oled">
+      <h2>Organic Light Emitting Diodes (OLEDs)</h2>
+
+      <h3>Light Emitting Diodes (LEDs)</h3>
+      <p>Consists of a n-type and p-type semiconductor forming a p-n junction. Material like Gallium Arsenide(GaAs) is used. When voltage is applied across the junction, the electrons and holes combine in the depletion layer giving out photons.</p>
+      <div class="fig-desc"><strong>[Diagram]</strong> LED structure and working.</div>
+
+      <h3>Organic Light Emitting Diodes (OLEDs)</h3>
+      <ul>
+        <li>Work in a similar way to conventional diodes and LEDs, but instead of using layers of n-type and p-type semiconductors, they use organic molecules</li>
+        <li>OLEDs have an emissive electroluminescent layer which is a film of organic compound that emits light in response to an electric current</li>
+        <li>Also known as organic EL (electroluminescent) diodes</li>
+        <li>Solid-state devices made of thin films of organic molecules that emit light on application of electricity</li>
+        <li>First OLED device was made by Eastman Kodak in the 1980's</li>
+        <li>Emerging technology for displays</li>
+        <li>Displays which are flexible, very thin, light weight</li>
+        <li>Less power consumption than conventional LEDs and LCDs</li>
+        <li>Offer high contrast, brighter displays with wider viewing angle</li>
+      </ul>
+      <div class="fig-desc"><strong>[Diagram]</strong> Flexible OLED displays.</div>
+
+      <h3>Construction</h3>
+      <ul>
+        <li><strong>Substrate:</strong> glass for support</li>
+        <li><strong>Anode:</strong> transparent usually made of Indium Tin Oxide(ITO)</li>
+        <li><strong>Conductive layer:</strong> Organic molecules or polymers - transports holes from the anode; polyaniline</li>
+        <li><strong>Emissive layer:</strong> organic molecules or polymers - transports electrons from the cathode, recombination of holes and electrons takes place here and light is emitted; polyfluorene, Alq₃</li>
+        <li><strong>Cathode:</strong> injects electrons; metals like Mg</li>
+      </ul>
+      <div class="fig-desc"><strong>[Diagram]</strong> OLED layer structure.</div>
+
+      <h3>Working</h3>
+      <p>A voltage is applied across the anode and cathode of the OLED:</p>
+      <ul>
+        <li>Electrons flows from cathode to anode through the organic layers</li>
+        <li>Electrons are transported to the emissive layer from cathode</li>
+        <li>Holes are transported to the conductive layer from anode</li>
+        <li>Electrons combine with the holes thereby emitting light</li>
+        <li>Recombination happens in the emissive layer</li>
+        <li>Colour of light depends on the organic molecules used and intensity depends on current density</li>
+      </ul>
+
+      <h3>Basic Design</h3>
+      <p>Emissive layer: Light is produced in the emitting layer. Photoluminescent (Fluorescent and phosphorescent) organic materials are used as the emitters. The molecules are electrically conductive as a result of delocalization of pi-electrons caused by conjugation.</p>
+
+      <h3>Emissive layer</h3>
+      <p>These organic materials have electrical conductivity in the range of semiconductors. The concept of highest occupied and lowest unoccupied molecular orbitals (HOMO and LUMO) in molecules is analogous to the valence and conduction bands in bulk materials. We can choose the materials according to the band gap ΔE = hc/λ.</p>
+
+      <h3>Why Multi-Layered Structure?</h3>
+      <ul>
+        <li>Inorganic semiconductors have a higher conductivity than the organic materials, so a layered structure is not needed.</li>
+        <li>Organic materials have a lower conductivity than the inorganic counterparts.</li>
+        <li>HOMOs and LUMOs of the materials in the layered structure act as small steps and guide the charge carriers to the emissive layer.</li>
+        <li>The layered structure helps maintain a smoother carrier flow.</li>
+      </ul>
+
+      <h3>Advantages</h3>
+      <ul>
+        <li>The organic layers of an OLED are thinner, lighter and more flexible than the crystalline layers of LED or LCD.</li>
+        <li>The organic layers are themselves emissive so no back light is required</li>
+        <li>Consume much less power</li>
+        <li>Easier to produce and can be made to larger sizes</li>
+        <li>Have large fields of view; about 170 degrees</li>
+        <li>High color contrast and faster response time</li>
+      </ul>
+
+      <h3>Disadvantages</h3>
+      <ul>
+        <li>Have shorter life span</li>
+        <li>Manufacturing process is expensive</li>
+        <li>Water can easily damage them</li>
+      </ul>
+
+      <h3>Applications</h3>
+      <p>OLEDs are used in displays for smartphones, TVs, wearables, and other electronic devices.</p>
+      <div class="fig-desc"><strong>[Diagram]</strong> OLED applications: flexible displays, TVs, smartphones.</div>
+    </section>
+
+    <!-- ==================== MODULE 4: GREEN CHEMISTRY ==================== -->
+    <div class="module-sep"><div class="module-sep-line"></div><span class="module-sep-label">Module IV</span><div class="module-sep-line"></div></div>
+    <div class="module-header">
+      <div class="module-eyebrow">Module IV</div>
+      <h1>Green Chemistry</h1>
+      <p>Definition and twelve principles of green chemistry.</p>
+    </div>
+
+    <section class="section-anchor" id="green-intro">
+      <h2>Definition</h2>
+      <div class="callout callout-def">
+        <div class="callout-title">Green Chemistry</div>
+        <p>'Green Chemistry' is the utilization of a set of principles that reduces or eliminates the use or generation of hazardous substances in the design, manufacture and application of products.</p>
+        <p style="margin-top:4px;">— Paul T. Anastas and John C. Warner</p>
+      </div>
+
+      <p>Green Chemistry focuses on:</p>
+      <ul>
+        <li>Reduction, recycling and/or eliminating toxic substances</li>
+        <li>Finding creative, alternative routes to minimize impact on the environment</li>
+        <li>More eco-friendly green alternative to conventional chemistry practices</li>
+        <li>Provides sustainable development, sustainable business and sustainable living practices</li>
+      </ul>
+    </section>
+
+    <section class="section-anchor" id="green-principles">
+      <h2>Twelve Principles of Green Chemistry</h2>
+
+      <h3>1. Prevent Waste</h3>
+      <p>Synthesis only targeted product with minimum or no by products/waste. If waste is produced, it involves cost and time to treat and safely dispose it, as a result production cost increases.</p>
+
+      <h3>2. Atom Economy</h3>
+      <p>Synthetic methods should be designed to maximize the incorporation of all materials used into the final product. The chemical processes should have maximum product yield.</p>
+      <div class="formula-block">% Atom Economy = (FW of atoms utilized / FW of all reactants) × 100</div>
+      <ul>
+        <li>Atom Economy in a Substitution Reaction - moderate</li>
+        <li>Atom Economy in Elimination Reactions - low</li>
+        <li>Atom Economy in Addition Reactions - 100%</li>
+        <li>Atom Economy in Rearrangement Reactions - 100%</li>
+        <li>For a green synthesis atom economy must be maximum (100%)</li>
+      </ul>
+
+      <h3>3. Safer Synthesis</h3>
+      <p>The synthetic processes should be designed so as to minimize or prevent the production of hazardous substances. Necessary safety precautions have to be taken while processing to protect human health and environment.</p>
+      <p>e.g., Polyurethane is manufactured conventionally using isocyanate and alcohol. However, isocyanate is produced using phosgene, a toxic gas. The alternative method by green synthesis of polyurethane eliminates the use of phosgene and uses CO₂.</p>
+
+      <h3>4. Safe Products</h3>
+      <p>Chemical products should be designed to preserve efficacy of function while reducing toxicity. Products should not have any side effects on the people using it and on the environment. It is envisaged to produce the chemical products specially those being used in cosmetics, pharmaceuticals, etc.</p>
+
+      <h3>5. Design Benign Chemicals (Safer Solvents)</h3>
+      <p>Use safer solvents and reaction conditions. Avoid using solvents, separation agents, or other auxiliary chemicals. If these chemicals are necessary, use innocuous chemicals.</p>
+      <p>Chemical syntheses are assisted by solvent medium: recommended to use alternative solvents, greener in nature such as aqueous medium, liquid carbon-dioxide, ionic liquids (N-alkyl pyridinium cation with BF₄⁻), or solvent free systems. Avoid harmful solvents like chloroform, pyridine which are known to cause health hazard, are carcinogenic to human beings and animals or cause severe damage to environment.</p>
+
+      <h3>6. Design for Energy Efficiency</h3>
+      <p>Chemical processes are to be designed in such a way that they are less energy intensive. Reactions occurring at mild conditions require less time to complete. For this purpose it is worthwhile to utilize biocatalyst, homogeneous and heterogeneous catalyst which reduces the energy of activation. Modern techniques such as solvent free synthesis, supercritical fluid systems, microwave irradiation, and ultrasound.</p>
+
+      <h3>7. Use of Renewable Feedstock</h3>
+      <p>Raw material or feedstock used as starting material should be renewable rather than depleting wherever technically and economically possible. Use of renewable feedstock such as biomass and agricultural wastes are strongly recommended rather than using non-renewable resources such as coal, petroleum-based raw materials, etc.</p>
+
+      <h3>8. Reduce Derivatives</h3>
+      <p>Avoid unnecessary derivatization - temporary modification should be avoided whenever possible as they generate waste - the atom efficiency is reduced as the protective group is not incorporated in the final product. e.g., blocking group, protection/deprotection.</p>
+
+      <h3>9. Catalysis</h3>
+      <p>Use catalytic reactions, as catalysts speed up the reaction, can be recycled and are highly selective, less energy consumption during reaction obtaining high yield of product of high purity. Unlike stoichiometric reactions which are energy intensive require excessive reagents.</p>
+
+      <h3>10. Design for Degradation</h3>
+      <p>Design chemicals and products to degrade after use to innocuous substances after use so that they do not accumulate in the environment. Especially applicable to insecticides, pesticides, polymers which tend to persist in the environment and are known to cause bioaccumulations.</p>
+
+      <h3>11. Pollution Prevention (Real-time Analysis)</h3>
+      <p>Real-time analysis (quality control) - Continuously monitor and control the formation of hazardous substances. Any unreacted reactant can be recycled in order to minimize the use of chemicals.</p>
+
+      <h3>12. Accident Prevention</h3>
+      <p>Minimize the potential for accidents. Chemicals chosen for processes should be such which minimise accidents in the form of fires, explosions, and toxic releases to the environment. Manufacturing plants should be well equipped with safety mechanisms. The Bhopal gas tragedy is one of the worst industrial disasters.</p>
+
+      <p>Green chemistry is a set of principles which emphasises on environmentally benign chemical synthesis with a view to devise pathways for the prevention of pollution, bringing a paradigm shift in chemical processing to achieve sustainable development. GO GREEN.</p>
     </section>
     
     
