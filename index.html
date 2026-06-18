@@ -686,6 +686,7 @@ mark { background: rgba(232,168,56,0.3); color: inherit; border-radius: 2px; pad
                 <a href="#eutectic" class="nav-topic-link">Eutectic System (Pb-Ag)</a>
                 <a href="#thermal-analysis" class="nav-topic-link">Thermal Analysis</a>
                 <a href="#pattinson" class="nav-topic-link">Pattinson's Process</a>
+                              <a href="#computational_u1" class="nav-topic-link">Computational Chemistry</a>
             </div>
         </div>
     </div>
@@ -2371,6 +2372,175 @@ mark { background: rgba(232,168,56,0.3); color: inherit; border-radius: 2px; pad
         <li>This solid mixture of lead and silver is subjected to other processes for the <span class="key-term">recovery of silver</span>.</li>
       </ol>
     </section>
+    
+    <section class="section-anchor" id="computational_u1">
+  <h2>Module I - Computational Chemistry</h2>
+  
+  <h3>Introduction</h3>
+  <p>Computational chemistry is a set of techniques for investigating chemical problems on a computer rather than using chemicals.</p>
+  <p>It uses the results of theoretical chemistry incorporated into efficient computer programs to calculate the properties of a molecule.</p>
+  <p>The first theoretical investigation was done by Walter Heitler and Fritz London in 1927.</p>
+  
+  <h4>Nobel Prize Recognition</h4>
+  <ul>
+    <li><strong>1998:</strong> Walter Kohn - For the development of density functional theory. John A. Pople - For the development of computational methods in quantum chemistry.</li>
+    <li><strong>2013:</strong> For the development of computer-based methods to model complex systems.</li>
+  </ul>
+  
+  <h3>Objective of Computational Chemistry</h3>
+  <p>To solve chemistry problems by simulating chemical systems (molecular, biological, materials) to provide reliable, accurate and comprehensive information at an atomic level.</p>
+  
+  <h4>Advantages of Computational Chemistry</h4>
+  <ul>
+    <li>Calculations are easier to perform than carrying experiments.</li>
+    <li>Calculations are less costly, whereas experiments are becoming more expensive.</li>
+    <li>Calculations are safer than performing experiments.</li>
+  </ul>
+  
+  <h3>Scope of Computational Modeling</h3>
+  
+  <h4>Molecular Properties</h4>
+  <p>Computational modeling can be used to accurately predict the physical and chemical properties of molecules, such as:</p>
+  <ul>
+    <li>Bond lengths, Bond angles and HOMO/LUMO</li>
+    <li>Can predict the spectra of UV-Vis, IR and NMR</li>
+    <li>Thermodynamic and kinetic properties</li>
+    <li>Electronic structure and mechanical properties</li>
+  </ul>
+  
+  <h4>Reaction Mechanism</h4>
+  <p>To know the underlying reaction mechanism and the kinetics of a reaction mechanism, computational chemistry plays a vital role.</p>
+  
+  <h4>Material Design</h4>
+  <p>Computational modeling enables the rational design of new materials with desired properties such as high electrical conductivity, thermal stability etc. This leads to the development of advanced materials for energy production and storage applications, electronics and much more.</p>
+  
+  <h4>Drug Discovery</h4>
+  <p>Computational chemistry plays a pivotal role in design and screening of potential drug candidates by simulating the interactions between the drug molecules and biological targets.</p>
+  <p><center>All these spectra are generated using Gaussian 16</center></p>
+  
+  <h3>Computational Methods</h3>
+  <p>There are two main methods depending on the starting point theory:</p>
+  
+  <table>
+    <tr>
+      <th>Classical Method</th>
+      <th>Quantum Chemistry Method</th>
+    </tr>
+    <tr>
+      <td>
+        <ul>
+          <li>Use Newton mechanics to model molecular system.</li>
+          <li>Atom – Sphere, Bonds – Springs and Electrons are ignored.</li>
+          <li>Total potential energy of a molecule is given by sum of all the energies of attractive and repulsive forces between atom in structure.</li>
+        </ul>
+        <strong>Sub-methods:</strong>
+        <ul>
+          <li>Molecular mechanics</li>
+          <li>Molecular dynamics</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Use quantum mechanics to model the molecular system.</li>
+          <li>Based on arrangement of electrons in molecules and interaction of these electrons with electron and nuclei of another molecule.</li>
+          <li>Consider that electron and all other particles exhibit both particle and wave nature.</li>
+        </ul>
+        <strong>Sub-methods:</strong>
+        <ul>
+          <li>Semi-empirical methods</li>
+          <li>Ab initio methods</li>
+          <li>Density functional theory</li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+  
+  <h4>Molecular Mechanics</h4>
+  <p>Molecular mechanics programs use equations based on classical physics to calculate force fields. It is based on the model of a molecule as a collection of balls (atoms) held together by springs (bonds). It's very fast, like very large molecules such as steroids can be optimized in seconds and allows geometry optimization.</p>
+  
+  <h4>Molecular Dynamics</h4>
+  <p>Molecular dynamics is a molecular mechanics program designed to mimic the movement of atoms within a molecule. The laws of motion to molecule is the base for it. Molecular dynamics can be carried out on a molecule to generate different conformations which on energy minimization.</p>
+  <p><center>Staggered vs Eclipsed Conformations of Ethane - Master Organic Chem</center></p>
+  
+  <h4>Semi-empirical Methods</h4>
+  <p>Semi-empirical calculations are based on Schrödinger equation. It represents a middle road between the mostly qualitative results available from molecular mechanics and the highly computationally demanding quantitative results from Ab initio methods. Capable of calculating transition states and excited states.</p>
+  
+  <h4>Ab initio Calculations</h4>
+  <p>Ab initio calculations are based on Schrödinger equation and it describes, among other things, how the electrons in a molecule behave. The wave function is a mathematical function that can be used to calculate the electron distribution.</p>
+  
+  <h4>Density Functional Theory (DFT)</h4>
+  <ul>
+    <li>DFT is like Ab initio and semi-empirical calculations, based on Schrödinger equation.</li>
+    <li>However, unlike the other two methods, DFT does not calculate a conventional wave function, but rather derives the electron distribution directly.</li>
+    <li>Density functional calculations are usually faster than Ab initio, but slower than semi-empirical methods.</li>
+  </ul>
+  
+  <h3>Applications of Computational Chemistry</h3>
+  <ul>
+    <li>Electronic structure predictions and energy minimizations.</li>
+    <li>Finding transition structure and reaction paths and molecular docking: protein - protein, protein - ligand interactions.</li>
+    <li>Thermochemistry: heat of reactions, energy of activation, etc.</li>
+    <li>Calculation of many other molecular, physical and chemical properties.</li>
+  </ul>
+  
+  <h3>Electronic Structure Determination - Example: Ethylene (C<sub>2</sub>H<sub>4</sub>)</h3>
+  <ul>
+    <li>Ethylene (C<sub>2</sub>H<sub>4</sub>) is the simplest alkene with a C=C double bond.</li>
+    <li>Electronic structure explains bonding, reactivity, and spectroscopy.</li>
+    <li>Combines experimental (spectroscopy) and theoretical (MO theory, computation) approaches.</li>
+  </ul>
+  
+  <h4>Hybridization and Bonding</h4>
+  <ul>
+    <li>Each carbon atom is sp<sup>2</sup> hybridized.</li>
+    <li>3 sp<sup>2</sup> orbitals → 2 C–H σ bonds + 1 C–C σ bond.</li>
+    <li>1 unhybridized p orbital per C → forms π bond.</li>
+    <li>Double bond (C=C) = 1 σ bond + 1 π bond.</li>
+  </ul>
+  
+  <h4>Molecular Orbital (MO) Description</h4>
+  <ul>
+    <li>σ system: strong localized framework bonds.</li>
+    <li>π system: p-orbitals overlap to form π bonding and π* antibonding orbitals.</li>
+    <li>HOMO = π orbital, LUMO = π* orbital.</li>
+    <li>Basis for chemical reactivity of alkenes.</li>
+  </ul>
+  
+  <h4>Computational Steps for Ethylene</h4>
+  <ol>
+    <li>Define geometry of C<sub>2</sub>H<sub>4</sub>.</li>
+    <li>Select Basis set (Mathematical functions).</li>
+    <li>Apply Method → orbital energies & density.</li>
+    <li>Solve Equations → Get wave function/Electron Density.</li>
+    <li>Visualize Electronic Structure → Orbital diagrams, density maps, HOMO and LUMO orbitals.</li>
+  </ol>
+  
+  <h4>Application in Spectroscopy</h4>
+  <ul>
+    <li>Photoelectron Spectroscopy (PES): measures σ and π orbital energies.</li>
+    <li>UV-Vis: π → π* transition (~165–180 nm)</li>
+    <li>IR: C=C stretch at ~1650 cm<sup>-1</sup></li>
+    <li>NMR: Proton shifts</li>
+  </ul>
+  
+  <h4>Applications of Ethylene Studies</h4>
+  <ul>
+    <li>Explains electrophilic addition reactions.</li>
+    <li>Basis of alkene polymerization.</li>
+    <li>Important in organic, catalytic, and photochemistry.</li>
+    <li>Provides HOMO–LUMO insight for reactivity.</li>
+  </ul>
+  
+  <h3>Conclusion</h3>
+  <ul>
+    <li>Computational chemistry plays a pivotal role in advancing our understanding of chemical systems and accelerating scientific discovery.</li>
+    <li>Its advantages in cost-effectiveness, efficiency, safety, accessibility, versatility, and accuracy make it an indispensable tool in modern research and development.</li>
+    <li>Computational chemistry is not a replacement for experimental studies, but plays an important role in enabling chemists to design and develop the desired chemicals/products.</li>
+  </ul>
+  
+  <p><em>Ref. Book: Introduction to computational chemistry by Frank Jensen, Wiley publications</em></p>
+</section>
+    
 
 
 
