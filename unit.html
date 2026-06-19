@@ -12,6 +12,12 @@
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand">
+        <!-- Mobile sidebar toggle button -->
+        <button id="mobileSidebarToggle" class="mobile-toggle" aria-label="Toggle sidebar">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
         <a href="index.html" class="back-btn" title="Home">←</a>
         <span class="brand-icon">⚙</span>
         <div>
@@ -19,33 +25,23 @@
           <span class="brand-sub" id="unitPageSub">Mechanical Statics</span>
         </div>
       </div>
-      <!-- <div class="topbar-actions">
+      <div class="topbar-actions">
         <div class="search-wrap">
           <input
             id="unitSearch"
             type="search"
-            placeholder="Search questions…"
+            placeholder="Search…"
             autocomplete="off"
             spellcheck="false"
           />
           <span class="search-icon">⌕</span>
-        </div> -->
+        </div>
         <button id="themeToggle" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">
           <span class="theme-icon">◑</span>
         </button>
       </div>
     </div>
     <div id="progressBar" class="progress-bar"></div>
-    <div class="topbar-actions">
-  <!-- <button id="reviewBadge" onclick="showReviewed()" title="View reviewed questions">
-    📋 0 -->
-  <!-- </button>
-  <div class="search-wrap">
-    <input id="unitSearch" type="search" placeholder="Search…" autocomplete="off" spellcheck="false" />
-    <span class="search-icon">⌕</span>
-  </div>
-  <button id="themeToggle" class="icon-btn" title="Toggle theme">◑</button>
-</div> -->
   </header>
 
   <!-- ─── MAIN LAYOUT WITH GRID ON SIDE ─── -->
@@ -60,16 +56,16 @@
       <div id="questionGrid" class="q-grid-container">
         <!-- populated by JS -->
       </div>
-<div class="q-grid-footer">
-  <!-- Review counter at bottom -->
-  <button id="reviewBadge" class="review-badge-bottom" onclick="showReviewed()" title="View reviewed questions">
-    <span class="review-icon">📋</span>
-    <span class="review-count" id="reviewCountDisplay">0</span>
-    <span class="review-label">for review</span>
-  </button>
-  <a id="prevUnitBtn" href="#" class="unit-nav-btn">← Prev</a>
-  <a id="nextUnitBtn" href="#" class="unit-nav-btn">Next →</a>
-</div>
+      <div class="q-grid-footer">
+        <!-- Review counter at bottom -->
+        <button id="reviewBadge" class="review-badge-bottom" onclick="showReviewed()" title="View reviewed questions">
+          <span class="review-icon">📋</span>
+          <span class="review-count" id="reviewCountDisplay">0</span>
+          <span class="review-label">for review</span>
+        </button>
+        <a id="prevUnitBtn" href="#" class="unit-nav-btn">← Prev</a>
+        <a id="nextUnitBtn" href="#" class="unit-nav-btn">Next →</a>
+      </div>
     </aside>
 
     <!-- Main Content -->

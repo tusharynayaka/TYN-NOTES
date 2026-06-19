@@ -109,6 +109,50 @@ async function initHome() {
   initGlobalSearch(results);
 }
 
+/* ─── MOBILE SIDEBAR TOGGLE ─── */
+function initMobileSidebar() {
+  const toggleBtn = document.getElementById('mobileSidebarToggle');
+  const sidebar = document.getElementById('qGridSidebar');
+  
+  if (!toggleBtn || !sidebar) return;
+
+  // Create overlay
+  let overlay = document.getElementById('sidebarOverlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'sidebar-overlay';
+    overlay.id = 'sidebarOverlay';
+    document.body.appendChild(overlay);
+  }
+
+  // Toggle sidebar
+  function toggleSidebar() {
+    sidebar.classList.toggle('mobile-open');
+    overlay.classList.toggle('active');
+    toggleBtn.classList.toggle('active');
+    document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : '';
+  }
+
+  toggleBtn.addEventListener('click', toggleSidebar);
+
+  // Close on overlay click
+  overlay.addEventListener('click', toggleSidebar);
+
+  // Close on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sidebar.classList.contains('mobile-open')) {
+      toggleSidebar();
+    }
+  });
+
+  // Close when a question is clicked (optional)
+  sidebar.addEventListener('click', (e) => {
+    if (e.target.closest('.q-grid-btn') && sidebar.classList.contains('mobile-open')) {
+      toggleSidebar();
+    }
+  });
+}
+
 
 function renderHeroStats(results) {
   let total = 0;
@@ -293,6 +337,7 @@ async function initUnit() {
   initUnitSearch(questions);
   initProgressBar();
   initBackToTop();
+  initMobileSidebar(); // ← ADD THIS LINE
 }
 
 function getUnitIdFromURL() {

@@ -1904,6 +1904,127 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   from { opacity: 0; transform: scale(0.96); }
   to { opacity: 1; transform: scale(1); }
 }
+/* ─── MOBILE SIDEBAR TOGGLE ─── */
+
+/* Hamburger menu button */
+.mobile-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin-right: 4px;
+}
+
+.mobile-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+.mobile-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(4px, 4px);
+}
+
+.mobile-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(4px, -4px);
+}
+
+/* ─── SIDEBAR OVERLAY ─── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 89;
+}
+
+.sidebar-overlay.active {
+  display: block;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .mobile-toggle {
+    display: flex;
+  }
+
+  /* Sidebar slides in from left */
+  .q-grid-sidebar {
+    position: fixed;
+    left: 0;
+    top: var(--topbar-h);
+    height: calc(100vh - var(--topbar-h));
+    width: 280px;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 90;
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.3);
+    border-right: 1px solid var(--border);
+  }
+
+  .q-grid-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Main content takes full width */
+  .question-list {
+    padding: 16px;
+    max-width: 100%;
+  }
+
+  /* Grid becomes smaller */
+  .q-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+  }
+
+  .q-grid-btn {
+    font-size: 12px;
+    min-height: 32px;
+    min-width: 32px;
+  }
+
+  /* Hide the collapse toggle on mobile */
+  .grid-toggle {
+    display: none;
+  }
+
+  /* Hide back button on mobile (hamburger replaces it) */
+  .back-btn {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .q-grid-sidebar {
+    width: 240px;
+  }
+
+  .q-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px;
+  }
+
+  .q-grid-btn {
+    font-size: 11px;
+    min-height: 28px;
+    min-width: 28px;
+  }
+
+  .question-list {
+    padding: 12px;
+  }
+}
 
 /* Responsive */
 @media (max-width: 768px) {
