@@ -1,27 +1,18 @@
 /* ═══════════════════════════════════════════════════════════
    Mechanical Statics Notes — app.js
-   JSON-driven, fully offline, no frameworks.
+   Clean Review/Flagged Questions Feature
    ═══════════════════════════════════════════════════════════ */
 
 'use strict';
 
-/* ─────────────────────────────────────────────
-   CONFIGURATION
-   To add a new unit, add an entry here.
-   No other code changes needed.
-   ───────────────────────────────────────────── */
 const UNITS_CONFIG = [
-  { id: 1, name: 'Force Systems & Resultants',       file: 'data/unit1.json' },
-  { id: 2, name: 'Equilibrium of Rigid Bodies',      file: 'data/unit2.json' },
-  { id: 3, name: 'Analysis of Structures',           file: 'data/unit3.json' },
-  { id: 4, name: 'Friction & Virtual Work',          file: 'data/unit4.json' },
-  // Add more units here:
-  // { id: 5, name: 'Centroids & Distributed Loads', file: 'data/unit5.json' },
+  { id: 1, name: 'Force Systems & Resultants', file: 'data/unit1.json' },
+  { id: 2, name: 'Equilibrium of Rigid Bodies', file: 'data/unit2.json' },
+  { id: 3, name: 'Analysis of Structures', file: 'data/unit3.json' },
+  { id: 4, name: 'Friction & Virtual Work', file: 'data/unit4.json' },
 ];
 
-/* ─────────────────────────────────────────────
-   THEME
-   ───────────────────────────────────────────── */
+/* ─── THEME ─── */
 function initTheme() {
   const saved = localStorage.getItem('statics-theme') || 'dark';
   document.documentElement.setAttribute('data-theme', saved);
@@ -29,14 +20,69 @@ function initTheme() {
 
 function toggleTheme() {
   const current = document.documentElement.getAttribute('data-theme');
-  const next    = current === 'dark' ? 'light' : 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('statics-theme', next);
 }
 
-/* ─────────────────────────────────────────────
-   JSON LOADER — fetch with graceful fallback
-   ───────────────────────────────────────────── */
+/* ─── REVIEW SYSTEM ─── */
+function getReviewedQuestions() {
+  try {
+    const data = localStorage.getItem('reviewed-questions');
+    return data ? JSON.parse(data) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveReviewedQuestions(reviewed) {
+  localStorage.setItem('reviewed-questions', JSON.stringify(reviewed));
+}
+
+function toggleReview(unitId, questionId) {
+  const reviewed = getReviewedQuestions();
+  const key = `${unitId}-${questionId}`;
+  
+  if (reviewed[key]) {
+    delete reviewed[key];
+    saveReviewedQuestions(reviewed);
+    return false;
+  } else {
+    reviewed[key] = {
+      unitId: unitId,
+      questionId: questionId,
+      timestamp: Date.now(),
+      unitName: UNITS_CONFIG.find(u => u.id === unitId)?.name || `Unit ${unitId}`
+    };
+    saveReviewedQuestions(reviewed);
+    return true;
+  }
+}
+
+function isQuestionReviewed(unitId, questionId) {
+  const reviewed = getReviewedQuestions();
+  return !!reviewed[`${unitId}-${questionId}`];
+}
+
+function getReviewCount() {
+  const reviewed = getReviewedQuestions();
+  return Object.keys(reviewed).length;
+}
+
+function getReviewedList() {
+  const reviewed = getReviewedQuestions();
+  return Object.values(reviewed).sort((a, b) => a.timestamp - b.timestamp);
+}
+
+function clearAllReviews() {
+  if (confirm('Remove all questions from review list?')) {
+    localStorage.removeItem('reviewed-questions');
+    updateReviewBadge();
+    window.location.reload();
+  }
+}
+
+/* ─── JSON LOADER ─── */
 async function loadJSON(path) {
   try {
     const res = await fetch(path);
@@ -48,14 +94,12 @@ async function loadJSON(path) {
   }
 }
 
-/* ─────────────────────────────────────────────
-   HOME PAGE
-   ───────────────────────────────────────────── */
+/* ─── HOME PAGE ─── */
 async function initHome() {
   initTheme();
   bindThemeToggle();
+  updateReviewBadge();
 
-  // Load all units in parallel for question counts
   const results = await Promise.all(
     UNITS_CONFIG.map(u => loadJSON(u.file).then(data => ({ unit: u, data })))
   );
@@ -65,20 +109,26 @@ async function initHome() {
   initGlobalSearch(results);
 }
 
+
 function renderHeroStats(results) {
   let total = 0;
   results.forEach(r => { if (r.data) total += r.data.length; });
+  
   const qEl = document.getElementById('totalQ');
   const uEl = document.getElementById('totalU');
+  const rEl = document.getElementById('totalR');
+  
   if (qEl) animateCount(qEl, total);
   if (uEl) animateCount(uEl, UNITS_CONFIG.length);
+  if (rEl) animateCount(rEl, getReviewCount());
 }
+
 
 function animateCount(el, target) {
   let start = 0;
-  const dur  = 800;
+  const dur = 800;
   const step = 16;
-  const inc  = target / (dur / step);
+  const inc = target / (dur / step);
   const timer = setInterval(() => {
     start += inc;
     if (start >= target) { start = target; clearInterval(timer); }
@@ -94,10 +144,14 @@ function renderUnitCards(results) {
   grid.innerHTML = '';
   if (pill) pill.textContent = `${UNITS_CONFIG.length} units`;
 
+  const reviewed = getReviewedQuestions();
+
   results.forEach(({ unit, data }) => {
     const count = data ? data.length : 0;
-    const card  = document.createElement('a');
-    card.href   = `unit.html?unit=${unit.id}`;
+    const unitReviewed = data ? data.filter(q => reviewed[`${unit.id}-${q.id}`]).length : 0;
+    
+    const card = document.createElement('a');
+    card.href = `unit.html?unit=${unit.id}`;
     card.className = 'unit-card';
     card.setAttribute('aria-label', `Open Unit ${unit.id}: ${unit.name}`);
 
@@ -108,6 +162,7 @@ function renderUnitCards(results) {
         <div class="unit-card-count">
           <strong>${count}</strong>
           question${count !== 1 ? 's' : ''}
+          ${unitReviewed > 0 ? `<span class="review-badge">${unitReviewed} for review</span>` : ''}
         </div>
         <div class="unit-card-arrow">→</div>
       </div>
@@ -116,24 +171,30 @@ function renderUnitCards(results) {
   });
 }
 
-/* ─────────────────────────────────────────────
-   GLOBAL SEARCH (home page)
-   ───────────────────────────────────────────── */
+function updateReviewBadge() {
+  const badge = document.getElementById('reviewBadge');
+  if (badge) {
+    const count = getReviewCount();
+    badge.textContent = count > 0 ? `📋 ${count}` : '📋 0';
+  }
+}
+
+/* ─── GLOBAL SEARCH ─── */
 function initGlobalSearch(results) {
-  const input    = document.getElementById('globalSearch');
+  const input = document.getElementById('globalSearch');
   const dropdown = document.getElementById('searchDropdown');
   if (!input || !dropdown) return;
 
-  // Build flat index
   const index = [];
   results.forEach(({ unit, data }) => {
     if (!data) return;
     data.forEach(q => {
       index.push({
-        unitId:   unit.id,
+        unitId: unit.id,
         unitName: unit.name,
-        qId:      q.id,
-        title:    (q.title || `Question ${q.id}`).toLowerCase(),
+        qId: q.id,
+        title: (q.title || `Question ${q.id}`).toLowerCase(),
+        reviewed: isQuestionReviewed(unit.id, q.id)
       });
     });
   });
@@ -144,7 +205,6 @@ function initGlobalSearch(results) {
     debounceTimer = setTimeout(() => runGlobalSearch(input.value, index, dropdown), 180);
   });
 
-  // Close on outside click
   document.addEventListener('click', e => {
     if (!input.contains(e.target) && !dropdown.contains(e.target)) {
       dropdown.classList.add('hidden');
@@ -181,10 +241,10 @@ function runGlobalSearch(query, index, dropdown) {
     el.innerHTML = `
       <span class="sri-unit">Unit ${m.unitId} · ${escHtml(m.unitName)}</span>
       <span class="sri-title">${escHtml(m.title.charAt(0).toUpperCase() + m.title.slice(1))}</span>
-      <span class="sri-num">Question ${m.qId}</span>
+      <span class="sri-num">Q${m.qId} ${m.reviewed ? '📋' : ''}</span>
     `;
     el.addEventListener('click', () => {
-      window.location.href = `unit.html?unit=${m.unitId}#q-${m.qId}`;
+      window.location.href = `unit.html?unit=${m.unitId}&q=${m.qId}`;
     });
     dropdown.appendChild(el);
   });
@@ -192,50 +252,47 @@ function runGlobalSearch(query, index, dropdown) {
   dropdown.classList.remove('hidden');
 }
 
-/* ─────────────────────────────────────────────
-   UNIT PAGE
-   ───────────────────────────────────────────── */
+/* ─── UNIT PAGE ─── */
+let currentQuestions = [];
+let currentUnitId = 1;
+
 async function initUnit() {
   initTheme();
   bindThemeToggle();
+  updateReviewBadge();
 
-  const unitId   = getUnitIdFromURL();
-  const unitCfg  = UNITS_CONFIG.find(u => u.id === unitId);
+  const unitId = getUnitIdFromURL();
+  currentUnitId = unitId;
+  const unitCfg = UNITS_CONFIG.find(u => u.id === unitId);
 
   if (!unitCfg) {
-    renderError('Unit not found', `Unit ${unitId} does not exist in UNITS_CONFIG.`);
+    renderError('Unit not found', `Unit ${unitId} does not exist.`);
     return;
   }
 
-  // Set page title
   updatePageTitle(unitId, unitCfg.name);
+  setPrevNextUnit(unitId);
 
-  // Set prev/next navigation
-  setPrevNext(unitId);
-
-  // Load questions
   const questions = await loadJSON(unitCfg.file);
   if (!questions || !questions.length) {
-    renderError('No questions found', `Could not load ${unitCfg.file} or the file is empty.`);
+    renderError('No questions found', `Could not load ${unitCfg.file}`);
     return;
   }
 
-  renderQuestions(questions, unitCfg, unitId);
-  buildSidebar(questions);
+  currentQuestions = questions;
+
+  const qParam = new URLSearchParams(window.location.search).get('q');
+  let targetQ = qParam ? parseInt(qParam) : questions[0].id;
+
+  if (!questions.find(q => q.id === targetQ)) {
+    targetQ = questions[0].id;
+  }
+
+  renderQuestions(questions, unitCfg, unitId, targetQ);
+  buildQuestionGrid(questions, targetQ);
   initUnitSearch(questions);
-  initScrollSpy();
   initProgressBar();
   initBackToTop();
-  initSidebarToggle();
-
-  // Scroll to anchor after render
-  setTimeout(() => {
-    const hash = window.location.hash;
-    if (hash) {
-      const target = document.querySelector(hash);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, 150);
 }
 
 function getUnitIdFromURL() {
@@ -246,12 +303,12 @@ function getUnitIdFromURL() {
 function updatePageTitle(unitId, unitName) {
   document.title = `Unit ${unitId} – ${unitName} | Mechanical Statics`;
   const titleEl = document.getElementById('unitPageTitle');
-  const subEl   = document.getElementById('unitPageSub');
+  const subEl = document.getElementById('unitPageSub');
   if (titleEl) titleEl.textContent = `Unit ${unitId}: ${unitName}`;
-  if (subEl)   subEl.textContent   = 'Mechanical Statics';
+  if (subEl) subEl.textContent = 'Mechanical Statics';
 }
 
-function setPrevNext(unitId) {
+function setPrevNextUnit(unitId) {
   const prevBtn = document.getElementById('prevUnitBtn');
   const nextBtn = document.getElementById('nextUnitBtn');
   const prevUnit = UNITS_CONFIG.find(u => u.id === unitId - 1);
@@ -261,6 +318,7 @@ function setPrevNext(unitId) {
     if (prevUnit) {
       prevBtn.href = `unit.html?unit=${prevUnit.id}`;
       prevBtn.textContent = `← Unit ${prevUnit.id}`;
+      prevBtn.classList.remove('disabled');
     } else {
       prevBtn.classList.add('disabled');
       prevBtn.textContent = '← Prev Unit';
@@ -271,6 +329,7 @@ function setPrevNext(unitId) {
     if (nextUnit) {
       nextBtn.href = `unit.html?unit=${nextUnit.id}`;
       nextBtn.textContent = `Unit ${nextUnit.id} →`;
+      nextBtn.classList.remove('disabled');
     } else {
       nextBtn.classList.add('disabled');
       nextBtn.textContent = 'Next Unit →';
@@ -278,90 +337,165 @@ function setPrevNext(unitId) {
   }
 }
 
-/* ─────────────────────────────────────────────
-   QUESTION RENDERING
-   ───────────────────────────────────────────── */
-function renderQuestions(questions, unitCfg, unitId) {
+/* ─── RENDER QUESTIONS ─── */
+function renderQuestions(questions, unitCfg, unitId, currentQId) {
   const container = document.getElementById('questionList');
   if (!container) return;
+
+  container.innerHTML = '';
+
+  const currentQ = questions.find(q => q.id === currentQId);
+  if (!currentQ) return;
+
+  const currentIndex = questions.findIndex(q => q.id === currentQId);
+  const prevQ = currentIndex > 0 ? questions[currentIndex - 1] : null;
+  const nextQ = currentIndex < questions.length - 1 ? questions[currentIndex + 1] : null;
+
+  const isReviewed = isQuestionReviewed(unitId, currentQId);
 
   // Info bar
   const infoBar = document.createElement('div');
   infoBar.className = 'unit-info-bar';
   infoBar.innerHTML = `
-    <h1>Unit ${unitId}: ${escHtml(unitCfg.name)}</h1>
-    <span class="q-badge">${questions.length} questions</span>
+    <div class="info-left">
+      <h1>Unit ${unitId}: ${escHtml(unitCfg.name)}</h1>
+      <span class="q-badge">${currentIndex + 1} / ${questions.length}</span>
+    </div>
+    <div class="info-right">
+      <button class="review-toggle ${isReviewed ? 'active' : ''}" 
+              id="reviewToggle"
+              data-unit="${unitId}" 
+              data-q="${currentQId}">
+        <span class="review-icon">${isReviewed ? '✓' : '○'}</span>
+        <span class="review-label">${isReviewed ? 'Reviewed' : 'Mark for Review'}</span>
+      </button>
+      <span class="key-hint">R</span>
+    </div>
   `;
   container.appendChild(infoBar);
 
-  // Question cards
-  const fragment = document.createDocumentFragment();
-  questions.forEach((q, idx) => {
-    const card = createQuestionCard(q, idx + 1);
-    fragment.appendChild(card);
-  });
-  container.appendChild(fragment);
+  // Question card
+  const card = createQuestionCard(currentQ, currentIndex + 1);
+  container.appendChild(card);
+
+  // Navigation
+  const navContainer = document.createElement('div');
+  navContainer.className = 'question-nav';
+
+  const prevBtn = document.createElement('button');
+  prevBtn.className = `nav-btn ${!prevQ ? 'disabled' : ''}`;
+  prevBtn.innerHTML = '← Previous';
+  prevBtn.disabled = !prevQ;
+  if (prevQ) {
+    prevBtn.addEventListener('click', () => {
+      window.location.href = `unit.html?unit=${unitId}&q=${prevQ.id}`;
+    });
+  }
+
+  const counter = document.createElement('span');
+  counter.className = 'nav-counter';
+  counter.textContent = `${currentIndex + 1} / ${questions.length}`;
+
+  const nextBtn = document.createElement('button');
+  nextBtn.className = `nav-btn ${!nextQ ? 'disabled' : ''}`;
+  nextBtn.innerHTML = 'Next →';
+  nextBtn.disabled = !nextQ;
+  if (nextQ) {
+    nextBtn.addEventListener('click', () => {
+      window.location.href = `unit.html?unit=${unitId}&q=${nextQ.id}`;
+    });
+  }
+
+  navContainer.appendChild(prevBtn);
+  navContainer.appendChild(counter);
+  navContainer.appendChild(nextBtn);
+  container.appendChild(navContainer);
+
+  // Review toggle
+  const reviewBtn = document.getElementById('reviewToggle');
+  if (reviewBtn) {
+    reviewBtn.addEventListener('click', function() {
+      const unitId = parseInt(this.dataset.unit);
+      const qId = parseInt(this.dataset.q);
+      const reviewed = toggleReview(unitId, qId);
+      
+      const icon = this.querySelector('.review-icon');
+      const label = this.querySelector('.review-label');
+      
+      if (reviewed) {
+        this.classList.add('active');
+        icon.textContent = '✓';
+        label.textContent = 'Reviewed';
+      } else {
+        this.classList.remove('active');
+        icon.textContent = '○';
+        label.textContent = 'Mark for Review';
+      }
+      
+      updateReviewBadge();
+      updateGridReviewStatus(unitId, qId);
+    });
+  }
+
+  // Keyboard shortcut
+  document.removeEventListener('keydown', handleKeyNavigation);
+  document.addEventListener('keydown', handleKeyNavigation);
+
+  function handleKeyNavigation(e) {
+    if (e.key === 'ArrowLeft' && prevQ) {
+      window.location.href = `unit.html?unit=${unitId}&q=${prevQ.id}`;
+    } else if (e.key === 'ArrowRight' && nextQ) {
+      window.location.href = `unit.html?unit=${unitId}&q=${nextQ.id}`;
+    } else if (e.key === 'r' || e.key === 'R') {
+      reviewBtn?.click();
+      e.preventDefault();
+    }
+  }
 }
 
 function createQuestionCard(q, displayNum) {
   const title = q.title || `Question ${q.id}`;
 
   const card = document.createElement('div');
-  card.className  = 'q-card';
-  card.id         = `q-${q.id}`;
-  card.dataset.qid = q.id;
-  card.dataset.title = title.toLowerCase();
+  card.className = 'q-card';
+  card.id = `q-${q.id}`;
 
   card.innerHTML = `
-    <!-- Header -->
     <div class="q-card-header">
       <span class="q-num">Q ${displayNum}</span>
       <span class="q-title">${escHtml(title)}</span>
     </div>
 
-    <!-- Question image -->
     <div class="q-image-wrap">
       <img
-        loading="lazy"
         alt="Question ${displayNum}: ${escHtml(title)}"
-        data-src="${escHtml(q.question)}"
-        src=""
-        class="lazy-img"
+        src="${escHtml(q.question)}"
+        onerror="this.style.display='none';this.nextElementSibling.classList.add('visible');"
       />
       <div class="img-error-msg">Image not found: ${escHtml(q.question)}</div>
     </div>
 
-    <!-- Solution toggle -->
     <button class="solution-toggle" aria-expanded="false" aria-controls="sol-${q.id}">
       <span class="toggle-arrow">▶</span>
       Show Solution / FBD
     </button>
 
-    <!-- Solution panel -->
     <div class="solution-panel" id="sol-${q.id}" role="region">
       <div class="solution-inner">
         <div class="solution-label">Free Body Diagram · Solution</div>
         <img
-          loading="lazy"
           alt="Solution for Question ${displayNum}"
-          data-src="${escHtml(q.answer)}"
-          src=""
-          class="lazy-img sol-img"
+          src="${escHtml(q.answer)}"
+          onerror="this.style.display='none';this.nextElementSibling.classList.add('visible');"
         />
         <div class="img-error-msg">Image not found: ${escHtml(q.answer)}</div>
       </div>
     </div>
   `;
 
-  // Bind solution toggle
-  const btn    = card.querySelector('.solution-toggle');
-  const panel  = card.querySelector('.solution-panel');
+  const btn = card.querySelector('.solution-toggle');
+  const panel = card.querySelector('.solution-panel');
   btn.addEventListener('click', () => toggleSolution(btn, panel));
-
-  // Handle image errors
-  card.querySelectorAll('.lazy-img').forEach(img => {
-    img.addEventListener('error', handleImgError);
-  });
 
   return card;
 }
@@ -376,177 +510,138 @@ function toggleSolution(btn, panel) {
     panel.classList.add('open');
     btn.setAttribute('aria-expanded', 'true');
     btn.innerHTML = `<span class="toggle-arrow" style="transform:rotate(90deg)">▶</span> Hide Solution`;
-    // Load lazy images inside panel when opened
-    panel.querySelectorAll('img[data-src]').forEach(loadLazy);
   }
 }
 
-function handleImgError(e) {
-  const img      = e.target;
-  const errMsg   = img.nextElementSibling;
-  img.style.display = 'none';
-  if (errMsg && errMsg.classList.contains('img-error-msg')) {
-    errMsg.classList.add('visible');
-  }
-}
+/* ─── GRID NAVIGATOR ─── */
+function buildQuestionGrid(questions, currentQId) {
+  const container = document.getElementById('questionGrid');
+  if (!container) return;
 
-/* ─────────────────────────────────────────────
-   LAZY IMAGE LOADING (IntersectionObserver)
-   ───────────────────────────────────────────── */
-function initLazyImages() {
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          loadLazy(entry.target);
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '300px' }); // preload 300px before visible
+  container.innerHTML = '';
 
-    document.querySelectorAll('img.lazy-img').forEach(img => {
-      // Only observe question images (not solution images, those load on toggle)
-      if (!img.classList.contains('sol-img')) {
-        observer.observe(img);
-      }
-    });
-  } else {
-    // Fallback: load all immediately
-    document.querySelectorAll('img.lazy-img:not(.sol-img)').forEach(loadLazy);
-  }
-}
+  const grid = document.createElement('div');
+  grid.className = 'q-grid';
 
-function loadLazy(img) {
-  if (img.dataset.src && !img.src.endsWith(img.dataset.src)) {
-    img.src = img.dataset.src;
-    delete img.dataset.src;
-  }
-}
-
-// Call after DOM is ready on unit page
-function initLazyAfterRender() {
-  // Use rAF to ensure DOM is painted
-  requestAnimationFrame(() => {
-    requestAnimationFrame(initLazyImages);
-  });
-}
-
-/* ─────────────────────────────────────────────
-   SIDEBAR
-   ───────────────────────────────────────────── */
-function buildSidebar(questions) {
-  const nav = document.getElementById('sidebarNav');
-  if (!nav) return;
-
-  const fragment = document.createDocumentFragment();
   questions.forEach((q, idx) => {
-    const title   = q.title || `Question ${q.id}`;
-    const link    = document.createElement('a');
-    link.href     = `#q-${q.id}`;
-    link.className = 'sidebar-link';
-    link.dataset.qid = q.id;
-    link.setAttribute('title', title);
-    link.innerHTML = `
-      <span class="sidebar-link-num">${idx + 1}</span>
-      <span style="overflow:hidden;text-overflow:ellipsis">${escHtml(title)}</span>
-    `;
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const card = document.getElementById(`q-${q.id}`);
-      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      // Close mobile sidebar
-      document.getElementById('sidebar')?.classList.remove('mobile-open');
+    const btn = document.createElement('button');
+    const reviewed = isQuestionReviewed(currentUnitId, q.id);
+    
+    btn.className = `q-grid-btn ${q.id === currentQId ? 'active' : ''} ${reviewed ? 'reviewed' : ''}`;
+    btn.textContent = idx + 1;
+    btn.title = `${q.title || `Question ${q.id}`}${reviewed ? ' ✓' : ''}`;
+    
+    btn.addEventListener('click', () => {
+      window.location.href = `unit.html?unit=${currentUnitId}&q=${q.id}`;
     });
-    fragment.appendChild(link);
+    
+    grid.appendChild(btn);
   });
-  nav.appendChild(fragment);
 
-  initLazyAfterRender();
+  container.appendChild(grid);
 }
 
-function initSidebarToggle() {
-  const btn     = document.getElementById('sidebarToggle');
-  const sidebar = document.getElementById('sidebar');
-  if (!btn || !sidebar) return;
+function updateGridReviewStatus(unitId, qId) {
+  if (currentQuestions) {
+    buildQuestionGrid(currentQuestions, qId);
+  }
+}
 
-  btn.addEventListener('click', () => {
-    sidebar.classList.toggle('collapsed');
-    btn.title = sidebar.classList.contains('collapsed') ? 'Expand sidebar' : 'Collapse sidebar';
+/* ─── REVIEW LIST MODAL ─── */
+function showReviewed() {
+  const reviewed = getReviewedList();
+  
+  if (reviewed.length === 0) {
+    alert('No questions marked for review.\n\nClick "Mark for Review" on any question to add it here.');
+    return;
+  }
+  
+  const modal = document.createElement('div');
+  modal.className = 'review-modal';
+  modal.innerHTML = `
+    <div class="review-modal-content">
+      <div class="review-modal-header">
+        <h2>📋 Review List</h2>
+        <span class="review-count">${reviewed.length} questions</span>
+        <button class="review-modal-close" onclick="this.closest('.review-modal').remove()">✕</button>
+      </div>
+      <div class="review-modal-body">
+        ${reviewed.map((r, i) => `
+          <div class="review-item">
+            <div class="review-item-info">
+              <span class="review-item-num">${i + 1}.</span>
+              <span class="review-item-unit">Unit ${r.unitId}</span>
+              <span class="review-item-title">${escHtml(r.unitName)}</span>
+              <span class="review-item-q">Q${r.questionId}</span>
+            </div>
+            <div class="review-item-actions">
+              <button onclick="window.location.href='unit.html?unit=${r.unitId}&q=${r.questionId}'">Open</button>
+              <button class="remove" onclick="removeReview(${r.unitId}, ${r.questionId})">✕</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="review-modal-footer">
+        <button class="clear-all" onclick="clearAllReviews()">Clear All</button>
+        <button onclick="this.closest('.review-modal').remove()">Close</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.remove();
   });
 }
 
-/* ─────────────────────────────────────────────
-   SCROLL SPY
-   ───────────────────────────────────────────── */
-function initScrollSpy() {
-  const cards = document.querySelectorAll('.q-card');
-  if (!cards.length) return;
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const qid  = entry.target.dataset.qid;
-        const link = document.querySelector(`.sidebar-link[data-qid="${qid}"]`);
-        // Remove all active
-        document.querySelectorAll('.sidebar-link.active').forEach(l => l.classList.remove('active'));
-        if (link) {
-          link.classList.add('active');
-          // Auto-scroll sidebar to keep active link visible
-          const nav = document.getElementById('sidebarNav');
-          if (nav) {
-            const linkTop    = link.offsetTop;
-            const navScroll  = nav.scrollTop;
-            const navHeight  = nav.clientHeight;
-            if (linkTop < navScroll || linkTop > navScroll + navHeight - 40) {
-              nav.scrollTop = linkTop - navHeight / 2;
-            }
-          }
-        }
-      }
-    });
-  }, { threshold: 0.2, rootMargin: `-${60}px 0px 0px 0px` });
-
-  cards.forEach(card => observer.observe(card));
+function removeReview(unitId, questionId) {
+  const reviewed = getReviewedQuestions();
+  const key = `${unitId}-${questionId}`;
+  delete reviewed[key];
+  saveReviewedQuestions(reviewed);
+  updateReviewBadge();
+  
+  // Refresh modal
+  showReviewed();
+  if (currentQuestions) {
+    const currentQ = new URLSearchParams(window.location.search).get('q');
+    buildQuestionGrid(currentQuestions, parseInt(currentQ) || currentQuestions[0].id);
+  }
 }
 
-/* ─────────────────────────────────────────────
-   READING PROGRESS BAR
-   ───────────────────────────────────────────── */
+/* ─── PROGRESS BAR ─── */
 function initProgressBar() {
-  const bar  = document.getElementById('progressBar');
-  const list = document.getElementById('questionList');
-  if (!bar || !list) return;
+  const bar = document.getElementById('progressBar');
+  if (!bar) return;
 
-  const update = () => {
-    const total   = list.scrollHeight - list.clientHeight;
-    const current = list.scrollTop;
-    const pct     = total > 0 ? Math.round((current / total) * 100) : 0;
+  const total = currentQuestions.length;
+  const current = new URLSearchParams(window.location.search).get('q');
+  const index = currentQuestions.findIndex(q => q.id === parseInt(current));
+
+  if (index >= 0) {
+    const pct = ((index + 1) / total) * 100;
     bar.style.width = `${pct}%`;
-  };
-
-  list.addEventListener('scroll', update, { passive: true });
+  }
 }
 
-/* ─────────────────────────────────────────────
-   BACK TO TOP
-   ───────────────────────────────────────────── */
+/* ─── BACK TO TOP ─── */
 function initBackToTop() {
-  const btn  = document.getElementById('backToTop');
-  const list = document.getElementById('questionList');
-  if (!btn || !list) return;
+  const btn = document.getElementById('backToTop');
+  if (!btn) return;
 
-  list.addEventListener('scroll', () => {
-    btn.classList.toggle('hidden', list.scrollTop < 400);
+  const container = document.getElementById('questionList');
+  if (!container) return;
+
+  container.addEventListener('scroll', () => {
+    btn.classList.toggle('hidden', container.scrollTop < 400);
   }, { passive: true });
 
   btn.addEventListener('click', () => {
-    list.scrollTo({ top: 0, behavior: 'smooth' });
+    container.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
 
-/* ─────────────────────────────────────────────
-   UNIT PAGE SEARCH (filter cards inline)
-   ───────────────────────────────────────────── */
+/* ─── UNIT SEARCH ─── */
 function initUnitSearch(questions) {
   const input = document.getElementById('unitSearch');
   if (!input) return;
@@ -554,50 +649,41 @@ function initUnitSearch(questions) {
   let debounceTimer;
   input.addEventListener('input', () => {
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => filterQuestions(input.value), 160);
+    debounceTimer = setTimeout(() => {
+      const query = input.value.trim().toLowerCase();
+      const cards = document.querySelectorAll('.q-card');
+
+      let visible = 0;
+      cards.forEach(card => {
+        const title = card.querySelector('.q-title')?.textContent?.toLowerCase() || '';
+        const match = !query || title.includes(query);
+        card.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+
+      let noResEl = document.getElementById('searchNoResults');
+      if (!visible && query) {
+        if (!noResEl) {
+          noResEl = document.createElement('div');
+          noResEl.id = 'searchNoResults';
+          noResEl.className = 'search-no-results-inline';
+          document.getElementById('questionList')?.appendChild(noResEl);
+        }
+        noResEl.textContent = `No questions found for "${query}"`;
+      } else if (noResEl) {
+        noResEl.remove();
+      }
+    }, 160);
   });
 }
 
-function filterQuestions(query) {
-  query = query.trim().toLowerCase();
-  const cards   = document.querySelectorAll('.q-card');
-  const noRes   = document.getElementById('searchNoResults');
-  let   visible = 0;
-
-  cards.forEach(card => {
-    const title = card.dataset.title || '';
-    const qid   = String(card.dataset.qid || '');
-    const match = !query || title.includes(query) || qid.includes(query);
-    card.classList.toggle('hidden-by-search', !match);
-    if (match) visible++;
-  });
-
-  // Show/hide no-results message
-  let noResEl = document.getElementById('searchNoResults');
-  if (!visible && query) {
-    if (!noResEl) {
-      noResEl = document.createElement('div');
-      noResEl.id = 'searchNoResults';
-      noResEl.className = 'search-no-results-inline';
-      document.getElementById('questionList')?.appendChild(noResEl);
-    }
-    noResEl.textContent = `No questions found for "${query}"`;
-  } else if (noResEl) {
-    noResEl.remove();
-  }
-}
-
-/* ─────────────────────────────────────────────
-   THEME TOGGLE (shared)
-   ───────────────────────────────────────────── */
+/* ─── THEME TOGGLE ─── */
 function bindThemeToggle() {
   const btn = document.getElementById('themeToggle');
   if (btn) btn.addEventListener('click', toggleTheme);
 }
 
-/* ─────────────────────────────────────────────
-   ERROR STATE RENDERER
-   ───────────────────────────────────────────── */
+/* ─── ERROR STATE ─── */
 function renderError(heading, detail) {
   const container = document.getElementById('questionList');
   if (!container) return;
@@ -605,17 +691,11 @@ function renderError(heading, detail) {
     <div class="state-msg">
       <h3>⚠ ${escHtml(heading)}</h3>
       <p>${escHtml(detail)}</p>
-      <p style="margin-top:8px;font-size:12px;opacity:.6">
-        Make sure you are serving the project through a local server (e.g. Live Server in VS Code).
-        Opening index.html directly as a file:// URL will block JSON fetches.
-      </p>
     </div>
   `;
 }
 
-/* ─────────────────────────────────────────────
-   UTILITIES
-   ───────────────────────────────────────────── */
+/* ─── UTILITIES ─── */
 function escHtml(str) {
   if (typeof str !== 'string') str = String(str ?? '');
   return str
