@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mechanical Statics Notes</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ─── TOP NAV ─── -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-icon">⚙</span>
+        <div>
+          <span class="brand-title">Mechanical Statics</span>
+          <span class="brand-sub">Engineering Notes</span>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <div class="search-wrap">
+          <input
+            id="globalSearch"
+            type="search"
+            placeholder="Search questions, units…"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <span class="search-icon">⌕</span>
+          <div id="searchDropdown" class="search-dropdown hidden"></div>
+        </div>
+        <button id="themeToggle" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">
+          <span class="theme-icon">◑</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-label">PESU · Mechanical Engineering</div>
+      <h1 class="hero-title">Static Equilibrium<br><em>Problem Bank</em></h1>
+      <p class="hero-desc">
+        400+ diagram-based problems with Free Body Diagram solutions.<br>
+        Tap a unit to begin.
+      </p>
+      <div id="heroStats" class="hero-stats">
+        <div class="stat"><span id="totalQ">–</span><label>Questions</label></div>
+        <div class="stat"><span id="totalU">–</span><label>Units</label></div>
+      </div>
+    </div>
+    <!-- decorative grid lines -->
+    <div class="hero-grid" aria-hidden="true"></div>
+  </section>
+
+  <!-- ─── UNIT CARDS ─── -->
+  <main class="dashboard">
+    <div class="section-head">
+      <h2>Units</h2>
+      <span id="unitCount" class="pill">loading…</span>
+    </div>
+    <div id="unitGrid" class="unit-grid">
+      <!-- cards injected by JS -->
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+  </main>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="footer">
+    <span>Mechanical Statics Notes · Offline Study Tool</span>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    initHome();
+  </script>
+</body>
+</html>
