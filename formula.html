@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statics — Formula Sheet</title>
+
+<!-- MathJax -->
+<script>
+MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    tags: 'none'
+  },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] },
+  startup: { typeset: true }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+<style>
+/* ─── DESIGN TOKENS ─── */
+:root {
+  --bg: #f5f5f5;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f0f0f0;
+  --bg-hover: #e8e8e8;
+  --border: #d0d0d0;
+  --text-primary: #1a1a1a;
+  --text-body: #333333;
+  --text-muted: #6e6e6e;
+  --accent: #0066b4;
+  --accent-glow: rgba(0,102,180,0.12);
+  --accent-dim: #007acc;
+  --answer-bg: #f7f9fc;
+  --answer-border: #b0c8e0;
+  --code: #1a1a1a;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.12);
+  --radius: 10px;
+  --radius-lg: 16px;
+  --topbar-h: 60px;
+  --sidebar-w: 240px;
+  --transition: .2s cubic-bezier(.4,0,.2,1);
+
+  /* formula-sheet specifics */
+  --chip-bg: rgba(0,102,180,0.08);
+  --chip-border: rgba(0,102,180,0.25);
+  --tag-eq: #0066b4;
+  --tag-unit: #2e8b57;
+  --tag-cond: #c07d00;
+}
+
+[data-theme="dark"] {
+  --bg: #050508;
+  --bg-card: #0a0a12;
+  --bg-sidebar: #08080e;
+  --bg-hover: #10101e;
+  --border: #1a1a2e;
+  --text-primary: #e8e8f5;
+  --text-body: #b8b8d0;
+  --text-muted: #5a5a7a;
+  --accent: #007acc;
+  --accent-glow: rgba(0,122,204,0.3);
+  --accent-dim: #005a9e;
+  --answer-bg: #0a0a16;
+  --answer-border: #121a2e;
+  --code: #d0d0e0;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.8);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.9);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.95);
+  --chip-bg: rgba(0,122,204,0.1);
+  --chip-border: rgba(0,122,204,0.3);
+  --tag-eq: #4db3ff;
+  --tag-unit: #5fcf8a;
+  --tag-cond: #f0b84b;
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text-body);
+  line-height: 1.6;
+  transition: background var(--transition), color var(--transition);
+  min-height: 100vh;
+}
+
+/* ─── TOPBAR ─── */
+#topbar {
+  position: sticky;
+  top: 0;
+  height: var(--topbar-h);
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 24px;
+  z-index: 1000;
+  box-shadow: var(--shadow-sm);
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  font-size: .85rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  transition: background var(--transition), border-color var(--transition);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.back-btn:hover { background: var(--border); }
+.back-btn svg { width: 14px; height: 14px; }
+
+.topbar-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-primary);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar-title span { color: var(--accent); }
+
+.topbar-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+
+.icon-btn {
+  background: none;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  font-size: .82rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background var(--transition);
+  white-space: nowrap;
+}
+.icon-btn:hover { background: var(--bg-hover); }
+.icon-btn svg { width: 15px; height: 15px; }
+
+/* ─── LAYOUT ─── */
+#layout {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px;
+  gap: 24px;
+}
+
+/* ─── SIDEBAR ─── */
+#sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  position: sticky;
+  top: calc(var(--topbar-h) + 20px);
+  height: calc(100vh - var(--topbar-h) - 40px);
+  overflow-y: auto;
+  padding: 20px 0;
+  scrollbar-width: thin;
+}
+
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.toc-label {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text-muted);
+  padding: 0 12px 8px;
+}
+
+.toc-link {
+  display: block;
+  padding: 6px 12px;
+  font-size: .82rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  border-radius: 0 6px 6px 0;
+  transition: all var(--transition);
+  line-height: 1.4;
+}
+.toc-link:hover { color: var(--accent); background: var(--accent-glow); border-left-color: var(--accent); }
+.toc-link.active { color: var(--accent); background: var(--accent-glow); border-left-color: var(--accent); font-weight: 600; }
+.toc-chapter {
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  padding: 10px 12px 4px;
+  margin-top: 4px;
+}
+
+/* ─── MAIN CONTENT ─── */
+#main {
+  flex: 1;
+  min-width: 0;
+  padding: 28px 0 80px;
+}
+
+/* ─── CHAPTER HEADER ─── */
+.chapter-header {
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--accent);
+}
+.chapter-tag {
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.chapter-title {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+/* ─── SECTION ─── */
+.formula-section {
+  margin-bottom: 40px;
+  scroll-margin-top: calc(var(--topbar-h) + 16px);
+}
+.section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-num {
+  background: var(--accent);
+  color: #fff;
+  font-size: .7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: .04em;
+}
+
+/* ─── FORMULA GRID ─── */
+.formula-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+/* ─── FORMULA CARD ─── */
+.f-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition), border-color var(--transition);
+  overflow: hidden;
+}
+.f-card:hover { box-shadow: var(--shadow-md); border-left-color: var(--accent-dim); }
+
+.f-label {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.f-math {
+  font-size: 1rem;
+  color: var(--text-primary);
+  line-height: 1.9;
+  overflow-x: auto;
+}
+.f-note {
+  font-size: .75rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* wide card spanning full row */
+.f-card.wide {
+  grid-column: 1 / -1;
+}
+
+/* ─── CONDITION BADGE ─── */
+.cond {
+  display: inline-block;
+  font-size: .68rem;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 20px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.cond-eq  { background: var(--chip-bg); color: var(--tag-eq);   border: 1px solid var(--chip-border); }
+.cond-unit{ background: rgba(46,139,87,.1); color: var(--tag-unit); border: 1px solid rgba(46,139,87,.25); }
+.cond-warn{ background: rgba(192,125,0,.1); color: var(--tag-cond); border: 1px solid rgba(192,125,0,.25); }
+
+/* ─── TABLE ─── */
+.f-table-wrap { overflow-x: auto; margin: 14px 0; }
+.f-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .85rem;
+}
+.f-table th {
+  background: var(--accent);
+  color: #fff;
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.f-table td {
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.f-table tr:hover td { background: var(--bg-hover); }
+.f-table tr:last-child td { border-bottom: none; }
+
+/* ─── DIVIDER ─── */
+.ch-divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+/* ─── BACK TO TOP ─── */
+#back-to-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  z-index: 900;
+  transition: opacity var(--transition);
+}
+#back-to-top:hover { opacity: .85; }
+
+/* ─── PROGRESS BAR ─── */
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--accent);
+  width: 0;
+  z-index: 9999;
+  transition: width .1s linear;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  #sidebar { display: none; }
+  .chapter-title { font-size: 1.35rem; }
+  .formula-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  #topbar { padding: 0 14px; gap: 10px; }
+  #layout { padding: 0 10px; }
+  #main { padding: 20px 0 60px; }
+  .back-btn span { display: none; }
+}
+
+@media print {
+  #topbar, #sidebar, #back-to-top, #progress-bar { display: none !important; }
+  #main { padding: 0; }
+  .f-card { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- TOPBAR -->
+<header id="topbar">
+  <a href="index.html" class="back-btn" title="Back to home">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 13L5 8l5-5"/>
+    </svg>
+    <span>Back</span>
+  </a>
+
+  <div class="topbar-title">Engineering Mechanics: <span>Statics — Formula Sheet</span></div>
+
+  <div class="topbar-right">
+    <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme">
+      <svg id="icon-sun" viewBox="0 0 20 20" fill="currentColor" style="display:none">
+        <circle cx="10" cy="10" r="4"/>
+        <path stroke="currentColor" stroke-width="1.5" fill="none" d="M10 2v2M10 16v2M2 10h2M16 10h2M4.22 4.22l1.42 1.42M14.36 14.36l1.42 1.42M4.22 15.78l1.42-1.42M14.36 5.64l1.42-1.42"/>
+      </svg>
+      <svg id="icon-moon" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+      </svg>
+      Theme
+    </button>
+  </div>
+</header>
+
+<div id="layout">
+
+<!-- SIDEBAR TOC -->
+<nav id="sidebar" aria-label="Formula navigation">
+  <div class="toc-label">Formula Sections</div>
+
+  <div class="toc-chapter">Ch 1 — Intro</div>
+  <a class="toc-link" href="#s-vectors">Vectors &amp; Components</a>
+  <a class="toc-link" href="#s-newton">Newton's Laws</a>
+  <a class="toc-link" href="#s-units">Units &amp; Gravity</a>
+
+  <div class="toc-chapter">Ch 2 — Force Systems</div>
+  <a class="toc-link" href="#s-rect2d">Rectangular Components (2D)</a>
+  <a class="toc-link" href="#s-moment">Moment of a Force</a>
+  <a class="toc-link" href="#s-couple">Couple</a>
+  <a class="toc-link" href="#s-resultant">Resultants</a>
+  <a class="toc-link" href="#s-3dforce">3D Force Systems</a>
+
+  <div class="toc-chapter">Ch 3 — Equilibrium</div>
+  <a class="toc-link" href="#s-eq2d">Equilibrium (2D)</a>
+  <a class="toc-link" href="#s-eq3d">Equilibrium (3D)</a>
+  <a class="toc-link" href="#s-springs">Springs</a>
+
+  <div class="toc-chapter">Ch 4 — Structures</div>
+  <a class="toc-link" href="#s-trusses">Truss Criteria</a>
+  <a class="toc-link" href="#s-joints">Method of Joints</a>
+  <a class="toc-link" href="#s-sections">Method of Sections</a>
+
+  <div class="toc-chapter">Ch 5 — Distributed Forces</div>
+  <a class="toc-link" href="#s-centroid">Centroids</a>
+  <a class="toc-link" href="#s-composite">Composite Bodies</a>
+  <!-- <a class="toc-link" href="#s-pappus">Pappus Theorems</a> -->
+  <a class="toc-link" href="#s-beams">Beams — Internal</a>
+
+  <div class="toc-chapter">Ch 6 — Friction</div>
+  <a class="toc-link" href="#s-dry">Dry Friction</a>
+  <a class="toc-link" href="#s-screw">Screws &amp; Wedges</a>
+  <!-- <a class="toc-link" href="#s-bearings">Bearings &amp; Belts</a> -->
+
+  <div class="toc-chapter">App A — Area MOI</div>
+  <a class="toc-link" href="#s-moi-def">Definitions</a>
+  <a class="toc-link" href="#s-parallel">Parallel-Axis Theorem</a>
+  <a class="toc-link" href="#s-shapes">Common Shapes</a>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+
+<!-- ══════════════════════════════════════
+     CHAPTER 1
+══════════════════════════════════════ -->
+<section class="formula-section" id="ch1">
+  <div class="chapter-header">
+    <div class="chapter-tag">Chapter 1</div>
+    <h1 class="chapter-title">Introduction to Statics</h1>
+  </div>
+
+  <!-- Vectors -->
+  <div class="formula-section" id="s-vectors">
+    <h2 class="section-title"><span class="section-num">1/3</span> Vectors &amp; Components</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Vector Sum (Parallelogram)</div>
+        <div class="f-math">$$\mathbf{V} = \mathbf{V}_1 + \mathbf{V}_2$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Magnitude (2D)</div>
+        <div class="f-math">$$V = \sqrt{V_x^2 + V_y^2}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Direction Angle</div>
+        <div class="f-math">$$\theta = \tan^{-1}\!\left(\frac{V_y}{V_x}\right)$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Unit Vector Form</div>
+        <div class="f-math">$$\mathbf{V} = V\,\hat{\mathbf{n}}$$</div>
+        <div class="f-note">$\hat{\mathbf{n}}$ has magnitude 1 in the direction of $\mathbf{V}$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">3D Component Form</div>
+        <div class="f-math">$$\mathbf{V} = V_x\,\mathbf{i} + V_y\,\mathbf{j} + V_z\,\mathbf{k}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Magnitude (3D)</div>
+        <div class="f-math">$$V = \sqrt{V_x^2 + V_y^2 + V_z^2}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Direction Cosines</div>
+        <div class="f-math">$$l = \cos\theta_x,\quad m = \cos\theta_y,\quad n = \cos\theta_z$$</div>
+        <div class="f-math">$$l^2 + m^2 + n^2 = 1$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Components via Direction Cosines</div>
+        <div class="f-math">$$V_x = lV,\quad V_y = mV,\quad V_z = nV$$</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Newton's Laws -->
+  <div class="formula-section" id="s-newton">
+    <h2 class="section-title"><span class="section-num">1/4</span> Newton's Laws</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Newton's 2nd Law <span class="cond cond-eq">Eq 1/1</span></div>
+        <div class="f-math">$$\mathbf{F} = m\mathbf{a}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Law of Gravitation <span class="cond cond-eq">Eq 1/2</span></div>
+        <div class="f-math">$$F = G\,\frac{m_1 m_2}{r^2}$$</div>
+        <div class="f-note">$G = 6.673\times10^{-11}\ \text{m}^3/(\text{kg·s}^2)$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Weight</div>
+        <div class="f-math">$$W = mg$$</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Units -->
+  <div class="formula-section" id="s-units">
+    <h2 class="section-title"><span class="section-num">1/5</span> Units &amp; Gravitational Acceleration</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Newton (SI) Definition</div>
+        <div class="f-math">$$1\,\text{N} = 1\,\text{kg·m/s}^2$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Slug (US) Definition</div>
+        <div class="f-math">$$1\,\text{slug} = \frac{1\,\text{lb·sec}^2}{\text{ft}}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Gravitational Acceleration</div>
+        <div class="f-math">$$g = 9.81\ \text{m/s}^2 \quad \text{(SI)}$$</div>
+        <div class="f-math">$$g = 32.2\ \text{ft/sec}^2 \quad \text{(US)}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Small Angle Approximations (rad)</div>
+        <div class="f-math">$$\sin\theta \approx \theta,\quad \tan\theta \approx \theta,\quad \cos\theta \approx 1$$</div>
+      </div>
+
+    </div>
+
+    <div class="f-table-wrap" style="margin-top:16px;">
+      <table class="f-table">
+        <thead><tr><th>Quantity</th><th>SI Unit</th><th>SI Symbol</th><th>US Unit</th><th>US Symbol</th></tr></thead>
+        <tbody>
+          <tr><td>Mass</td><td>kilogram (base)</td><td>kg</td><td>slug (derived)</td><td>—</td></tr>
+          <tr><td>Length</td><td>meter (base)</td><td>m</td><td>foot (base)</td><td>ft</td></tr>
+          <tr><td>Time</td><td>second (base)</td><td>s</td><td>second (base)</td><td>sec</td></tr>
+          <tr><td>Force</td><td>newton (derived)</td><td>N</td><td>pound (base)</td><td>lb</td></tr>
+          <tr><td>Conversions</td><td colspan="2">$1\,\text{N} = 0.2248\,\text{lb}$</td><td colspan="2">$1\,\text{lb} = 4.448\,\text{N}$</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<hr class="ch-divider">
+
+<!-- ══════════════════════════════════════
+     CHAPTER 2
+══════════════════════════════════════ -->
+<section class="formula-section" id="ch2">
+  <div class="chapter-header">
+    <div class="chapter-tag">Chapter 2</div>
+    <h1 class="chapter-title">Force Systems</h1>
+  </div>
+
+  <!-- 2D Rectangular -->
+  <div class="formula-section" id="s-rect2d">
+    <h2 class="section-title"><span class="section-num">2/3</span> Rectangular Components (2D)</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Force Decomposition <span class="cond cond-eq">Eq 2/1–2</span></div>
+        <div class="f-math">$$\mathbf{F} = F_x\,\mathbf{i} + F_y\,\mathbf{j}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Scalar Components <span class="cond cond-eq">Eq 2/3</span></div>
+        <div class="f-math">$$F_x = F\cos\theta, \qquad F_y = F\sin\theta$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Magnitude &amp; Direction</div>
+        <div class="f-math">$$F = \sqrt{F_x^2 + F_y^2}, \qquad \theta = \tan^{-1}\!\left(\frac{F_y}{F_x}\right)$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Resultant Components <span class="cond cond-eq">Eq 2/4</span></div>
+        <div class="f-math">$$R_x = \textstyle\sum F_x, \qquad R_y = \textstyle\sum F_y$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Resultant Magnitude &amp; Angle</div>
+        <div class="f-math">$$R = \sqrt{(\textstyle\sum F_x)^2 + (\textstyle\sum F_y)^2}$$</div>
+        <div class="f-math">$$\theta = \tan^{-1}\!\left(\frac{\textstyle\sum F_y}{\textstyle\sum F_x}\right)$$</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Moment -->
+  <div class="formula-section" id="s-moment">
+    <h2 class="section-title"><span class="section-num">2/4</span> Moment of a Force</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Scalar Moment <span class="cond cond-eq">Eq 2/5</span></div>
+        <div class="f-math">$$M = F\,d$$</div>
+        <div class="f-note">$d$ = perpendicular (moment arm) distance from axis to line of action</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Cross-Product Moment <span class="cond cond-eq">Eq 2/6</span></div>
+        <div class="f-math">$$\mathbf{M} = \mathbf{r} \times \mathbf{F}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Magnitude via Cross Product <span class="cond cond-eq">Eq 2/7</span></div>
+        <div class="f-math">$$M = Fr\sin\alpha = Fd$$</div>
+        <div class="f-note">$\alpha$ = angle between $\mathbf{r}$ and $\mathbf{F}$</div>
+      </div>
+
+      <div class="f-card wide">
+        <div class="f-label">Cross-Product Expansion (3D)</div>
+        <div class="f-math">
+          $$\mathbf{M}_O = \begin{vmatrix}\mathbf{i} & \mathbf{j} & \mathbf{k}\\ r_x & r_y & r_z\\ F_x & F_y & F_z\end{vmatrix} = (r_y F_z - r_z F_y)\,\mathbf{i} + (r_z F_x - r_x F_z)\,\mathbf{j} + (r_x F_y - r_y F_x)\,\mathbf{k}$$
+        </div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Varignon's Theorem <span class="cond cond-eq">Eq 2/8</span></div>
+        <div class="f-math">$$\mathbf{M}_O = \mathbf{r}\times\mathbf{R} = \mathbf{r}\times\mathbf{P} + \mathbf{r}\times\mathbf{Q}$$</div>
+        <div class="f-note">Moment of resultant = sum of moments of components</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Moment about an Axis</div>
+        <div class="f-math">$$M_\lambda = \hat{\mathbf{n}}_\lambda \cdot (\mathbf{r}\times\mathbf{F})$$</div>
+        <div class="f-note">Scalar triple product; $\hat{\mathbf{n}}_\lambda$ = unit vector along axis $\lambda$</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Couple -->
+  <div class="formula-section" id="s-couple">
+    <h2 class="section-title"><span class="section-num">2/5</span> Couple</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Couple Magnitude</div>
+        <div class="f-math">$$M = Fd$$</div>
+        <div class="f-note">Two equal, opposite, non-collinear forces $F$ separated by distance $d$. Independent of moment center.</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Couple — Vector Form</div>
+        <div class="f-math">$$\mathbf{M} = \mathbf{r}\times\mathbf{F}$$</div>
+        <div class="f-note">$\mathbf{r}$ runs from any point on $-\mathbf{F}$ to any point on $\mathbf{F}$. Couple is a free vector.</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Units of Moment / Couple</div>
+        <div class="f-math">$$\text{SI: } \text{N·m} \qquad \text{US: } \text{lb·ft}$$</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Resultants -->
+  <div class="formula-section" id="s-resultant">
+    <h2 class="section-title"><span class="section-num">2/6</span> Resultants of Force Systems</h2>
+    <div class="formula-grid">
+
+      <div class="f-card wide">
+        <div class="f-label">Coplanar Resultant <span class="cond cond-eq">Eq 2/9</span></div>
+        <div class="f-math">
+          $$\mathbf{R} = \textstyle\sum\mathbf{F}, \qquad R_x = \textstyle\sum F_x, \quad R_y = \textstyle\sum F_y$$
+          $$R = \sqrt{(\textstyle\sum F_x)^2 + (\textstyle\sum F_y)^2}, \qquad \theta = \tan^{-1}\!\left(\frac{\textstyle\sum F_y}{\textstyle\sum F_x}\right)$$
+        </div>
+      </div>
+
+      <div class="f-card wide">
+        <div class="f-label">Principle of Moments <span class="cond cond-eq">Eq 2/10</span></div>
+        <div class="f-math">
+          $$\mathbf{R} = \textstyle\sum\mathbf{F}, \qquad M_O = \textstyle\sum M = \textstyle\sum(Fd)$$
+          $$Rd = M_O \quad\Longrightarrow\quad d = \frac{M_O}{R}$$
+        </div>
+        <div class="f-note">$d$ = perpendicular distance from reference point $O$ to line of action of $\mathbf{R}$</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 3D Forces -->
+  <div class="formula-section" id="s-3dforce">
+    <h2 class="section-title"><span class="section-num">2/7–2/9</span> Three-Dimensional Force Systems</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">3D Force in Components</div>
+        <div class="f-math">$$\mathbf{F} = F_x\,\mathbf{i} + F_y\,\mathbf{j} + F_z\,\mathbf{k}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Unit Vector from Two Points</div>
+        <div class="f-math">$$\hat{\mathbf{n}} = \frac{(x_B - x_A)\mathbf{i} + (y_B - y_A)\mathbf{j} + (z_B - z_A)\mathbf{k}}{|AB|}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">3D Resultant</div>
+        <div class="f-math">$$\mathbf{R} = \textstyle\sum\mathbf{F}, \qquad \mathbf{M}_O = \textstyle\sum(\mathbf{r}\times\mathbf{F})$$</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="ch-divider">
+
+<!-- ══════════════════════════════════════
+     CHAPTER 3
+══════════════════════════════════════ -->
+<section class="formula-section" id="ch3">
+  <div class="chapter-header">
+    <div class="chapter-tag">Chapter 3</div>
+    <h1 class="chapter-title">Equilibrium</h1>
+  </div>
+
+  <!-- 2D Equilibrium -->
+  <div class="formula-section" id="s-eq2d">
+    <h2 class="section-title"><span class="section-num">3/3</span> Equilibrium Conditions (2D)</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">General Equilibrium <span class="cond cond-eq">Eq 3/1</span></div>
+        <div class="f-math">$$\mathbf{R} = \textstyle\sum\mathbf{F} = \mathbf{0}, \qquad \mathbf{M} = \textstyle\sum\mathbf{M} = \mathbf{0}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Scalar Equations (2D) <span class="cond cond-eq">Eq 3/2</span></div>
+        <div class="f-math">$$\sum F_x = 0, \qquad \sum F_y = 0, \qquad \sum M_O = 0$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Alternative Set 1</div>
+        <div class="f-math">$$\sum F_x = 0, \qquad \sum M_A = 0, \qquad \sum M_B = 0$$</div>
+        <div class="f-note">$A$ and $B$ must not lie on a line ⊥ to $x$-direction</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Alternative Set 2 (3 Moments)</div>
+        <div class="f-math">$$\sum M_A = 0, \qquad \sum M_B = 0, \qquad \sum M_C = 0$$</div>
+        <div class="f-note">$A$, $B$, $C$ not collinear</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Two-Force Member</div>
+        <div class="f-math">$$\mathbf{F}_1 = -\mathbf{F}_2 \quad\text{(equal, opposite, collinear)}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Three-Force Member</div>
+        <div class="f-math">$$\text{Lines of action must be concurrent}$$</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 3D Equilibrium -->
+  <div class="formula-section" id="s-eq3d">
+    <h2 class="section-title"><span class="section-num">3/4</span> Equilibrium Conditions (3D)</h2>
+    <div class="formula-grid">
+
+      <div class="f-card wide">
+        <div class="f-label">Six Scalar Equations</div>
+        <div class="f-math">
+          $$\sum F_x = 0, \quad \sum F_y = 0, \quad \sum F_z = 0$$
+          $$\sum M_x = 0, \quad \sum M_y = 0, \quad \sum M_z = 0$$
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Springs -->
+  <div class="formula-section" id="s-springs">
+    <h2 class="section-title"><span class="section-num">3/2</span> Spring Forces</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Linear Spring</div>
+        <div class="f-math">$$F = kx$$</div>
+        <div class="f-note">$k$ = stiffness (N/m or lb/ft); $x$ = deformation from neutral position</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Torsional Spring</div>
+        <div class="f-math">$$M = k_T\,\theta$$</div>
+        <div class="f-note">$k_T$ = torsional stiffness (N·m/rad); $\theta$ = angular deflection (rad)</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="ch-divider">
+
+<!-- ══════════════════════════════════════
+     CHAPTER 4
+══════════════════════════════════════ -->
+<section class="formula-section" id="ch4">
+  <div class="chapter-header">
+    <div class="chapter-tag">Chapter 4</div>
+    <h1 class="chapter-title">Structures</h1>
+  </div>
+
+  <!-- Truss criteria -->
+  <div class="formula-section" id="s-trusses">
+    <h2 class="section-title"><span class="section-num">4/2</span> Plane &amp; Space Truss Criteria</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Plane Truss — Statically Determinate</div>
+        <div class="f-math">$$m + 3 = 2j$$</div>
+        <div class="f-note">$m$ = members, $j$ = joints. &nbsp; If $m+3 > 2j$: indeterminate; $m+3 < 2j$: unstable</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Space Truss — Statically Determinate</div>
+        <div class="f-math">$$m + 6 = 3j$$</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Method of Joints -->
+  <div class="formula-section" id="s-joints">
+    <h2 class="section-title"><span class="section-num">4/3</span> Method of Joints</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Equilibrium at Each Pin (2D)</div>
+        <div class="f-math">$$\sum F_x = 0, \qquad \sum F_y = 0$$</div>
+        <div class="f-note">Arrow away from pin → tension (T); arrow toward pin → compression (C)</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Equilibrium at Each Joint (3D)</div>
+        <div class="f-math">$$\sum F_x = 0, \quad \sum F_y = 0, \quad \sum F_z = 0$$</div>
+      </div>
+
+      <div class="f-card wide">
+        <div class="f-label">Zero-Force Member Conditions</div>
+        <div class="f-math">
+          $$\text{Case 1: Two non-collinear members at unloaded joint} \Rightarrow F_1 = F_2 = 0$$
+          $$\text{Case 2: Two collinear + one non-collinear (unloaded)} \Rightarrow F_3 = 0,\ F_1 = F_2$$
+          $$\text{Case 3: Two pairs of collinear members} \Rightarrow \text{forces in each pair equal &amp; opposite}$$
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Method of Sections -->
+  <div class="formula-section" id="s-sections">
+    <h2 class="section-title"><span class="section-num">4/4</span> Method of Sections</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Three Equilibrium Equations per Cut</div>
+        <div class="f-math">$$\sum F_x = 0, \qquad \sum F_y = 0, \qquad \sum M_O = 0$$</div>
+        <div class="f-note">Cut no more than 3 unknown members. Choose moment center $O$ at intersection of two unknowns.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="ch-divider">
+
+<!-- ══════════════════════════════════════
+     CHAPTER 5
+══════════════════════════════════════ -->
+<section class="formula-section" id="ch5">
+  <div class="chapter-header">
+    <div class="chapter-tag">Chapter 5</div>
+    <h1 class="chapter-title">Distributed Forces</h1>
+  </div>
+
+  <!-- Centroids -->
+  <div class="formula-section" id="s-centroid">
+    <h2 class="section-title"><span class="section-num">5/2–5/3</span> Center of Mass &amp; Centroids</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Center of Mass Coordinates <span class="cond cond-eq">Eq 5/1b</span></div>
+        <div class="f-math">$$\bar{x} = \frac{\int x\,dm}{m}, \quad \bar{y} = \frac{\int y\,dm}{m}, \quad \bar{z} = \frac{\int z\,dm}{m}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Center of Mass — Vector Form <span class="cond cond-eq">Eq 5/2</span></div>
+        <div class="f-math">$$\bar{\mathbf{r}} = \frac{\int \mathbf{r}\,dm}{m}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Variable Density <span class="cond cond-eq">Eq 5/3</span></div>
+        <div class="f-math">$$\bar{x} = \frac{\int x\rho\,dV}{\int\rho\,dV}, \quad \bar{y} = \frac{\int y\rho\,dV}{\int\rho\,dV}, \quad \bar{z} = \frac{\int z\rho\,dV}{\int\rho\,dV}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Centroid of a Line <span class="cond cond-eq">Eq 5/4</span></div>
+        <div class="f-math">$$\bar{x} = \frac{\int x\,dL}{L}, \quad \bar{y} = \frac{\int y\,dL}{L}, \quad \bar{z} = \frac{\int z\,dL}{L}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Centroid of an Area <span class="cond cond-eq">Eq 5/5</span></div>
+        <div class="f-math">$$\bar{x} = \frac{\int x\,dA}{A}, \quad \bar{y} = \frac{\int y\,dA}{A}, \quad \bar{z} = \frac{\int z\,dA}{A}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Centroid of a Volume <span class="cond cond-eq">Eq 5/6</span></div>
+        <div class="f-math">$$\bar{x} = \frac{\int x\,dV}{V}, \quad \bar{y} = \frac{\int y\,dV}{V}, \quad \bar{z} = \frac{\int z\,dV}{V}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Using Centroid of Element <span class="cond cond-eq">Eq 5/5a</span></div>
+        <div class="f-math">$$\bar{x} = \frac{\int x_c\,dA}{A}, \quad \bar{y} = \frac{\int y_c\,dA}{A}$$</div>
+        <div class="f-note">Use the centroidal coordinate $x_c, y_c$ of the differential element, not its boundary coordinate</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Composite -->
+  <div class="formula-section" id="s-composite">
+    <h2 class="section-title"><span class="section-num">5/4</span> Composite Bodies</h2>
+    <div class="formula-grid">
+
+      <div class="f-card wide">
+        <div class="f-label">Composite Mass Center <span class="cond cond-eq">Eq 5/7</span></div>
+        <div class="f-math">$$\bar{X} = \frac{\sum m\bar{x}}{\sum m}, \qquad \bar{Y} = \frac{\sum m\bar{y}}{\sum m}, \qquad \bar{Z} = \frac{\sum m\bar{z}}{\sum m}$$</div>
+        <div class="f-note">Replace $m$ with $L$, $A$, or $V$ for lines, areas, or volumes. Holes/cavities are <strong>negative</strong>.</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Approximation (irregular areas)</div>
+        <div class="f-math">$$\bar{x} = \frac{\sum A\,x_c}{\sum A}, \qquad \bar{y} = \frac{\sum A\,y_c}{\sum A}$$</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Pappus
+  <div class="formula-section" id="s-pappus">
+    <h2 class="section-title"><span class="section-num">5/5</span> Theorems of Pappus</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Surface of Revolution</div>
+        <div class="f-math">$$A = 2\pi\,\bar{y}\,L$$</div>
+        <div class="f-note">$A$ = surface area; $L$ = arc length; $\bar{y}$ = distance from centroid of arc to axis</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Volume of Revolution</div>
+        <div class="f-math">$$V = 2\pi\,\bar{y}\,A$$</div>
+        <div class="f-note">$V$ = volume; $A$ = plane area; $\bar{y}$ = distance from centroid of area to axis</div>
+      </div>
+
+    </div>
+  </div> -->
+
+  <!-- Beams internal -->
+  <div class="formula-section" id="s-beams">
+    <h2 class="section-title"><span class="section-num">5/6–5/7</span> Beams — Distributed Loads &amp; Internal Effects</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Resultant of Distributed Load</div>
+        <div class="f-math">$$R = \int w\,dx, \qquad \bar{x} = \frac{\int x\,w\,dx}{R}$$</div>
+        <div class="f-note">$w$ = load intensity (force/length); resultant acts at centroid of load diagram</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Uniform Load</div>
+        <div class="f-math">$$R = wL \quad\text{at } x = \tfrac{L}{2}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Triangular Load</div>
+        <div class="f-math">$$R = \tfrac{1}{2}w_{\max}L \quad\text{at } x = \tfrac{L}{3}\ (\text{from large end})$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Load–Shear Relationship <span class="cond cond-eq">Eq 5/10</span></div>
+        <div class="f-math">$$w = -\frac{dV}{dx}$$</div>
+        <div class="f-note">Slope of shear diagram = $-w$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Integrated Load–Shear</div>
+        <div class="f-math">$$V = V_0 - \int_{x_0}^{x} w\,dx$$</div>
+        <div class="f-note">Change in shear = $-$(area under load curve)</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Shear–Moment Relationship <span class="cond cond-eq">Eq 5/11</span></div>
+        <div class="f-math">$$V = \frac{dM}{dx}$$</div>
+        <div class="f-note">Slope of moment diagram = $V$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Integrated Shear–Moment</div>
+        <div class="f-math">$$M = M_0 + \int_{x_0}^{x} V\,dx$$</div>
+        <div class="f-note">Change in moment = area under shear diagram</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Load–Moment Relationship <span class="cond cond-eq">Eq 5/12</span></div>
+        <div class="f-math">$$\frac{d^2M}{dx^2} = -w$$</div>
+        <div class="f-note">$M$ is two degrees higher in $x$ than $w$; max/min $M$ occurs where $V = 0$</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="ch-divider">
+
+<!-- ══════════════════════════════════════
+     CHAPTER 6
+══════════════════════════════════════ -->
+<section class="formula-section" id="ch6">
+  <div class="chapter-header">
+    <div class="chapter-tag">Chapter 6</div>
+    <h1 class="chapter-title">Friction</h1>
+  </div>
+
+  <!-- Dry friction -->
+  <div class="formula-section" id="s-dry">
+    <h2 class="section-title"><span class="section-num">6/3</span> Dry (Coulomb) Friction</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Maximum Static Friction <span class="cond cond-eq">Eq 6/1</span></div>
+        <div class="f-math">$$F_{\max} = \mu_s N$$</div>
+        <div class="f-note cond-warn" style="color:var(--tag-cond)">⚠ Applies only at impending motion. Otherwise $F &lt; \mu_s N$.</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Kinetic Friction <span class="cond cond-eq">Eq 6/2</span></div>
+        <div class="f-math">$$F_k = \mu_k N$$</div>
+        <div class="f-note">$\mu_k &lt; \mu_s$ generally</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Friction Angles</div>
+        <div class="f-math">$$\tan\phi_s = \mu_s, \qquad \tan\phi_k = \mu_k$$</div>
+        <div class="f-note">$\phi_s$ = angle of static friction; $\phi_k$ = angle of kinetic friction</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Screws & Wedges -->
+  <div class="formula-section" id="s-screw">
+    <h2 class="section-title"><span class="section-num">6/4–6/5</span> Wedges &amp; Screws</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Wedge Self-Locking Condition</div>
+        <div class="f-math">$$\alpha \leq \phi \quad\Longleftrightarrow\quad \alpha \leq \tan^{-1}\mu$$</div>
+        <div class="f-note">$\alpha$ = wedge angle; $\phi$ = friction angle</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Screw — Lead Angle</div>
+        <div class="f-math">$$\tan\lambda = \frac{l}{2\pi r}$$</div>
+        <div class="f-note">$l$ = lead (advance per revolution); $r$ = mean thread radius</div>
+      </div>
+
+      <!-- <div class="f-card">
+        <div class="f-label">Moment to Raise Load (square thread)</div>
+        <div class="f-math">$$M = Wr\tan(\lambda + \phi)$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Moment to Lower Load (square thread)</div>
+        <div class="f-math">$$M = Wr\tan(\lambda - \phi) \quad (\lambda > \phi)$$</div>
+        <div class="f-note">If $\lambda \leq \phi$: self-locking; need $M = Wr\tan(\phi - \lambda)$ to lower</div>
+      </div> -->
+
+      <div class="f-card">
+        <div class="f-label">Screw Self-Locking Condition</div>
+        <div class="f-math">$$\lambda \leq \phi$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Screw Efficiency</div>
+        <div class="f-math">$$e = \frac{Wl}{2\pi M} = \frac{\tan\lambda}{\tan(\lambda+\phi)}$$</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bearings & Belts
+  <div class="formula-section" id="s-bearings">
+    <h2 class="section-title"><span class="section-num">6/6–6/9</span> Bearings, Belts &amp; Rolling</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Journal Bearing Friction Moment</div>
+        <div class="f-math">$$M_f = \mu W r = W r\sin\phi$$</div>
+        <div class="f-note">$r$ = shaft radius; friction circle radius $= r\sin\phi \approx \mu r$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Disk Friction — New Bearing (uniform pressure)</div>
+        <div class="f-math">$$M = \tfrac{2}{3}\,\mu P R$$</div>
+        <div class="f-note">$P$ = axial load; $R$ = disk radius</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Disk Friction — Worn Bearing (uniform wear)</div>
+        <div class="f-math">$$M = \tfrac{1}{2}\,\mu P R$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Annular Disk — Uniform Pressure</div>
+        <div class="f-math">$$M = \tfrac{2}{3}\,\mu P\,\frac{R_2^3 - R_1^3}{R_2^2 - R_1^2}$$</div>
+        <div class="f-note">$R_1$ = inner radius; $R_2$ = outer radius</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Belt Friction (impending slip)</div>
+        <div class="f-math">$$\frac{T_2}{T_1} = e^{\,\mu\beta}$$</div>
+        <div class="f-note">$T_2$ = tight side; $T_1$ = slack side; $\beta$ = wrap angle (radians)</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Rolling Resistance</div>
+        <div class="f-math">$$M_r = aW, \qquad F = \frac{aW}{r}$$</div>
+        <div class="f-note">$a$ = coefficient of rolling resistance (units of length); $r$ = wheel radius</div>
+      </div>
+
+    </div>
+  </div> -->
+</section>
+
+<hr class="ch-divider">
+
+<!-- ══════════════════════════════════════
+     APPENDIX A
+══════════════════════════════════════ -->
+<section class="formula-section" id="appa">
+  <div class="chapter-header">
+    <div class="chapter-tag">Appendix A</div>
+    <h1 class="chapter-title">Area Moments of Inertia</h1>
+  </div>
+
+  <!-- Definitions -->
+  <div class="formula-section" id="s-moi-def">
+    <h2 class="section-title"><span class="section-num">A/2</span> Definitions &amp; Radius of Gyration</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Rectangular Moments of Inertia <span class="cond cond-eq">Eq A/1</span></div>
+        <div class="f-math">$$I_x = \int y^2\,dA, \qquad I_y = \int x^2\,dA$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Polar Moment of Inertia <span class="cond cond-eq">Eq A/2</span></div>
+        <div class="f-math">$$I_z = J = \int r^2\,dA$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Polar–Rectangular Relation <span class="cond cond-eq">Eq A/3</span></div>
+        <div class="f-math">$$I_z = I_x + I_y$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Radii of Gyration <span class="cond cond-eq">Eq A/4</span></div>
+        <div class="f-math">$$k_x = \sqrt{\frac{I_x}{A}}, \quad k_y = \sqrt{\frac{I_y}{A}}, \quad k_z = \sqrt{\frac{I_z}{A}}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Polar Radius of Gyration <span class="cond cond-eq">Eq A/5</span></div>
+        <div class="f-math">$$k_z^2 = k_x^2 + k_y^2$$</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Parallel-axis -->
+  <div class="formula-section" id="s-parallel">
+    <h2 class="section-title"><span class="section-num">A/2</span> Parallel-Axis Theorem</h2>
+    <div class="formula-grid">
+
+      <div class="f-card">
+        <div class="f-label">Transfer of Rectangular MOI <span class="cond cond-eq">Eq A/6</span></div>
+        <div class="f-math">$$I_x = \bar{I}_x + A\,d_x^2, \qquad I_y = \bar{I}_y + A\,d_y^2$$</div>
+        <div class="f-note">$\bar{I}$ = centroidal MOI; $d$ = distance from centroid to new axis. One axis must pass through centroid.</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Transfer of Polar MOI <span class="cond cond-eq">Eq A/6a</span></div>
+        <div class="f-math">$$I_z = \bar{I}_z + A\,d^2$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Transfer of Radius of Gyration <span class="cond cond-eq">Eq A/6b</span></div>
+        <div class="f-math">$$k^2 = \bar{k}^2 + d^2$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Product of Inertia</div>
+        <div class="f-math">$$I_{xy} = \int xy\,dA$$</div>
+        <div class="f-note">Zero if either axis is an axis of symmetry</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Transfer of Product of Inertia</div>
+        <div class="f-math">$$I_{xy} = \bar{I}_{xy} + A\,d_x\,d_y$$</div>
+      </div>
+
+      <div class="f-card wide">
+        <div class="f-label">Rotation of Axes</div>
+        <div class="f-math">
+          $$I_{x'} = \frac{I_x + I_y}{2} + \frac{I_x - I_y}{2}\cos 2\theta - I_{xy}\sin 2\theta$$
+          $$I_{y'} = \frac{I_x + I_y}{2} - \frac{I_x - I_y}{2}\cos 2\theta + I_{xy}\sin 2\theta$$
+          $$I_{x'y'} = \frac{I_x - I_y}{2}\sin 2\theta + I_{xy}\cos 2\theta$$
+        </div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Principal Axes Angle</div>
+        <div class="f-math">$$\tan 2\theta_0 = \frac{-2I_{xy}}{I_x - I_y}$$</div>
+      </div>
+
+      <div class="f-card">
+        <div class="f-label">Principal Moments of Inertia</div>
+        <div class="f-math">$$I_{\max,\min} = \frac{I_x + I_y}{2} \pm \sqrt{\left(\frac{I_x - I_y}{2}\right)^2 + I_{xy}^2}$$</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Common Shapes -->
+  <div class="formula-section" id="s-shapes">
+    <h2 class="section-title"><span class="section-num">Table D/3</span> Common Plane Figure Properties</h2>
+
+    <div class="f-table-wrap">
+      <table class="f-table">
+        <thead>
+          <tr>
+            <th>Figure</th>
+            <th>Centroid</th>
+            <th>$I_x$</th>
+            <th>$\bar{I}_x$ (centroidal)</th>
+            <th>$I_z$ (polar)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Rectangle ($b \times h$)</td>
+            <td>Center</td>
+            <td>$\dfrac{bh^3}{3}$</td>
+            <td>$\dfrac{bh^3}{12}$</td>
+            <td>$\dfrac{bh(b^2+h^2)}{12}$</td>
+          </tr>
+          <tr>
+            <td>Triangle (base $b$, height $h$)</td>
+            <td>$\bar{y} = \dfrac{h}{3}$</td>
+            <td>$\dfrac{bh^3}{12}$</td>
+            <td>$\dfrac{bh^3}{36}$</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Full Circle (radius $r$)</td>
+            <td>Center</td>
+            <td>$\dfrac{\pi r^4}{4}$</td>
+            <td>$\dfrac{\pi r^4}{4}$</td>
+            <td>$\dfrac{\pi r^4}{2}$</td>
+          </tr>
+          <tr>
+            <td>Semicircle (radius $r$)</td>
+            <td>$\bar{y} = \dfrac{4r}{3\pi}$</td>
+            <td>$\dfrac{\pi r^4}{8}$</td>
+            <td>$\!\left(\dfrac{\pi}{8} - \dfrac{8}{9\pi}\right)\!r^4$</td>
+            <td>$\dfrac{\pi r^4}{4}$</td>
+          </tr>
+          <tr>
+            <td>Quarter-Circle (radius $r$)</td>
+            <td>$\bar{x}=\bar{y}=\dfrac{4r}{3\pi}$</td>
+            <td>$\dfrac{\pi r^4}{16}$</td>
+            <td>$\!\left(\dfrac{\pi}{16} - \dfrac{4}{9\pi}\right)\!r^4$</td>
+            <td>$\dfrac{\pi r^4}{8}$</td>
+          </tr>
+          <tr>
+            <td>Circular Sector (radius $r$, half-angle $\alpha$)</td>
+            <td>$\bar{x}=\dfrac{2r\sin\alpha}{3\alpha}$</td>
+            <td>$\dfrac{r^4}{4}\!\left(\alpha - \tfrac{1}{2}\sin 2\alpha\right)$</td>
+            <td>—</td>
+            <td>$\dfrac{1}{2}r^4\alpha$</td>
+          </tr>
+          <tr>
+            <td>Elliptical Quadrant (semi-axes $a$, $b$)</td>
+            <td>$\bar{x}=\dfrac{4a}{3\pi}$, $\bar{y}=\dfrac{4b}{3\pi}$</td>
+            <td>$\dfrac{\pi ab^3}{16}$</td>
+            <td>$\!\left(\dfrac{\pi}{16} - \dfrac{4}{9\pi}\right)\!ab^3$</td>
+            <td>$\dfrac{\pi ab(a^2+b^2)}{16}$</td>
+          </tr>
+          <tr>
+            <td>Parabolic Area ($A=\tfrac{2ab}{3}$)</td>
+            <td>$\bar{x}=\dfrac{3a}{8}$, $\bar{y}=\dfrac{3b}{5}$</td>
+            <td>$\dfrac{2ab^3}{7}$</td>
+            <td>—</td>
+            <td>$2ab\!\left(\dfrac{a^2}{15}+\dfrac{b^2}{7}\right)$</td>
+          </tr>
+          <tr>
+            <td>Subparabolic Area ($A=\tfrac{ab}{3}$)</td>
+            <td>$\bar{x}=\dfrac{3a}{4}$, $\bar{y}=\dfrac{3b}{10}$</td>
+            <td>$\dfrac{ab^3}{21}$</td>
+            <td>—</td>
+            <td>$ab\!\left(\dfrac{a^2}{5}+\dfrac{b^2}{21}\right)$</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Mass MOI table -->
+    <h2 class="section-title" style="margin-top:28px;"><span class="section-num">Table D/4</span> Homogeneous Solids — Mass Moments of Inertia</h2>
+    <div class="f-table-wrap">
+      <table class="f-table">
+        <thead>
+          <tr><th>Body</th><th>$I_{xx}$ (transverse)</th><th>$I_{zz}$ (axial)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Circular Cylinder (radius $r$, length $l$)</td>
+            <td>$\dfrac{1}{4}mr^2 + \dfrac{1}{12}ml^2$</td>
+            <td>$\dfrac{1}{2}mr^2$</td>
+          </tr>
+          <tr>
+            <td>Cylindrical Shell (radius $r$, length $l$)</td>
+            <td>$\dfrac{1}{2}mr^2 + \dfrac{1}{12}ml^2$</td>
+            <td>$mr^2$</td>
+          </tr>
+          <tr>
+            <td>Sphere (radius $r$)</td>
+            <td colspan="2">$I = \dfrac{2}{5}mr^2$ (all axes through center)</td>
+          </tr>
+          <tr>
+            <td>Rectangular Parallelepiped ($a \times b \times l$)</td>
+            <td>$I_{xx} = \dfrac{1}{12}m(a^2+l^2)$</td>
+            <td>$I_{zz} = \dfrac{1}{12}m(a^2+b^2)$</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+</main>
+</div><!-- end #layout -->
+
+<button id="back-to-top" aria-label="Back to top">↑</button>
+
+<script>
+// ── THEME ──────────────────────────────
+const toggle = document.getElementById('theme-toggle');
+const sun = document.getElementById('icon-sun');
+const moon = document.getElementById('icon-moon');
+let theme = localStorage.getItem('statics-theme') || 'light';
+
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  theme = t;
+  localStorage.setItem('statics-theme', t);
+  if (t === 'dark') { sun.style.display = 'inline'; moon.style.display = 'none'; }
+  else              { sun.style.display = 'none';   moon.style.display = 'inline'; }
+}
+applyTheme(theme);
+toggle.addEventListener('click', () => applyTheme(theme === 'dark' ? 'light' : 'dark'));
+
+// ── PROGRESS BAR ──────────────────────
+const bar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const d = document.documentElement;
+  bar.style.width = (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
+});
+
+// ── BACK TO TOP ───────────────────────
+const btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  btt.style.display = window.scrollY > 400 ? 'flex' : 'none';
+});
+btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+// ── TOC SCROLLSPY ─────────────────────
+const tocLinks = document.querySelectorAll('.toc-link');
+const sections = document.querySelectorAll('.formula-section[id]');
+
+function onScroll() {
+  const scrollY = window.scrollY + 80;
+  let current = '';
+  sections.forEach(s => { if (s.offsetTop <= scrollY) current = s.id; });
+  tocLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+</script>
+</body>
+</html>
