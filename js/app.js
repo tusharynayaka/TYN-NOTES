@@ -13,9 +13,16 @@ const UNITS_CONFIG = [
 ];
 
 /* ─── THEME ─── */
+function trackEvent(name, params) {
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', name, params);
+  }
+}
+
 function initTheme() {
-  const saved = localStorage.getItem('statics-theme') || 'dark';
+  const saved = localStorage.getItem('statics-theme') || 'light';
   document.documentElement.setAttribute('data-theme', saved);
+  trackEvent('theme_active', { theme: saved });
 }
 
 function toggleTheme() {
@@ -23,6 +30,7 @@ function toggleTheme() {
   const next = current === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('statics-theme', next);
+  trackEvent('theme_switch', { theme: next });
 }
 
 /* ─── REVIEW SYSTEM ─── */
@@ -41,7 +49,8 @@ function saveReviewedQuestions(reviewed) {
 
 function toggleReview(unitId, questionId) {
   const reviewed = getReviewedQuestions();
-  const key = `${unitId}-${questionId}`;
+  // Always normalize to strings for consistent key generation
+  const key = `${String(unitId)}-${String(questionId)}`;
 
   if (reviewed[key]) {
     delete reviewed[key];
@@ -49,10 +58,10 @@ function toggleReview(unitId, questionId) {
     return false;
   } else {
     reviewed[key] = {
-      unitId: unitId,
-      questionId: questionId,
+      unitId: String(unitId),
+      questionId: String(questionId),
       timestamp: Date.now(),
-      unitName: UNITS_CONFIG.find(u => u.id === unitId)?.name || `Unit ${unitId}`
+      unitName: UNITS_CONFIG.find(u => u.id === parseInt(unitId, 10))?.name || `Unit ${unitId}`
     };
     saveReviewedQuestions(reviewed);
     return true;
@@ -61,7 +70,7 @@ function toggleReview(unitId, questionId) {
 
 function isQuestionReviewed(unitId, questionId) {
   const reviewed = getReviewedQuestions();
-  return !!reviewed[`${unitId}-${questionId}`];
+  return !!reviewed[`${String(unitId)}-${String(questionId)}`];
 }
 
 function getReviewCount() {
@@ -285,10 +294,11 @@ async function initUnit() {
   currentQuestions = questions;
 
   const qParam = new URLSearchParams(window.location.search).get('q');
-  let targetQ = qParam ? parseInt(qParam) : questions[0].id;
+  // Normalize to string for consistent comparison (q.id may be string or number in JSON)
+  let targetQ = String(qParam ?? questions[0].id);
 
-  if (!questions.find(q => q.id === targetQ)) {
-    targetQ = questions[0].id;
+  if (!questions.find(q => String(q.id) === targetQ)) {
+    targetQ = String(questions[0].id);
   }
 
   renderQuestions(questions, unitCfg, unitId, targetQ);
@@ -370,7 +380,7 @@ function initReviewBadge() {
 
 function getUnitIdFromURL() {
   const params = new URLSearchParams(window.location.search);
-  return parseInt(params.get('unit'), 10) || 1;
+  return parseInt(params.get('unit'), 10) || 1;  // Keep this as integer for unit
 }
 
 function updatePageTitle(unitId, unitName) {
@@ -417,10 +427,11 @@ function renderQuestions(questions, unitCfg, unitId, currentQId) {
 
   container.innerHTML = '';
 
-  const currentQ = questions.find(q => q.id === currentQId);
+  // Normalize currentQId to string for safe comparison regardless of JSON type
+  const currentQ = questions.find(q => String(q.id) === String(currentQId));
   if (!currentQ) return;
 
-  const currentIndex = questions.findIndex(q => q.id === currentQId);
+  const currentIndex = questions.findIndex(q => String(q.id) === String(currentQId));
   const prevQ = currentIndex > 0 ? questions[currentIndex - 1] : null;
   const nextQ = currentIndex < questions.length - 1 ? questions[currentIndex + 1] : null;
 
@@ -488,8 +499,9 @@ function renderQuestions(questions, unitCfg, unitId, currentQId) {
   const reviewBtn = document.getElementById('reviewToggle');
   if (reviewBtn) {
     reviewBtn.addEventListener('click', function () {
-      const unitId = parseInt(this.dataset.unit);
-      const qId = parseInt(this.dataset.q);
+      // Keep unitId as int (UNITS_CONFIG uses integers), but qId as string
+      const unitId = parseInt(this.dataset.unit, 10);
+      const qId = String(this.dataset.q);
       const reviewed = toggleReview(unitId, qId);
 
       const icon = this.querySelector('.review-icon');
@@ -519,7 +531,8 @@ function renderQuestions(questions, unitCfg, unitId, currentQId) {
       window.location.href = `unit.html?unit=${unitId}&q=${prevQ.id}`;
     } else if (e.key === 'ArrowRight' && nextQ) {
       window.location.href = `unit.html?unit=${unitId}&q=${nextQ.id}`;
-    } else if (e.key === 'r' || e.key === 'R') {
+    }
+    else if (e.key === 'r' || e.key === 'R') {
       reviewBtn?.click();
       e.preventDefault();
     }
@@ -545,7 +558,7 @@ function createQuestionCard(q, displayNum) {
         src="${escHtml(q.question)}"
         onerror="this.style.display='none';this.nextElementSibling.classList.add('visible');"
       />
-      <div class="img-error-msg">Image not found: ${escHtml(q.question)}</div>
+      <div class="img-error-msg">Question will be uploaded soon</div>
     </div>
 
     <button class="solution-toggle" aria-expanded="false" aria-controls="sol-${q.id}">
@@ -561,7 +574,7 @@ function createQuestionCard(q, displayNum) {
           src="${escHtml(q.answer)}"
           onerror="this.style.display='none';this.nextElementSibling.classList.add('visible');"
         />
-        <div class="img-error-msg">Image not found: ${escHtml(q.answer)}</div>
+        <div class="img-error-msg">Solution will be uploaded soon</div>
       </div>
     </div>
   `;
@@ -600,8 +613,10 @@ function buildQuestionGrid(questions, currentQId) {
     const btn = document.createElement('button');
     const reviewed = isQuestionReviewed(currentUnitId, q.id);
 
-    btn.className = `q-grid-btn ${q.id === currentQId ? 'active' : ''} ${reviewed ? 'reviewed' : ''}`;
-    btn.textContent = idx + 1;
+    // Compare as strings to handle JSON data where id may be string or number
+    const isActive = String(q.id) === String(currentQId);
+    btn.className = `q-grid-btn ${isActive ? 'active' : ''} ${reviewed ? 'reviewed' : ''}`;
+    btn.textContent = q.title || `Q${q.id}`;
     btn.title = `${q.title || `Question ${q.id}`}${reviewed ? ' ✓' : ''}`;
 
     btn.addEventListener('click', () => {
@@ -616,7 +631,9 @@ function buildQuestionGrid(questions, currentQId) {
 
 function updateGridReviewStatus(unitId, qId) {
   if (currentQuestions) {
-    buildQuestionGrid(currentQuestions, qId);
+    // Use the URL param as the active question, not the one whose review status changed
+    const currentQ = new URLSearchParams(window.location.search).get('q');
+    buildQuestionGrid(currentQuestions, String(currentQ ?? currentQuestions[0].id));
   }
 }
 
@@ -669,16 +686,19 @@ function showReviewed() {
 
 function removeReview(unitId, questionId) {
   const reviewed = getReviewedQuestions();
-  const key = `${unitId}-${questionId}`;
+  // Normalize key the same way toggleReview does
+  const key = `${String(unitId)}-${String(questionId)}`;
   delete reviewed[key];
   saveReviewedQuestions(reviewed);
   updateReviewBadge();
 
-  // Refresh modal
+  // Close existing modal before reopening to avoid duplicates
+  document.querySelector('.review-modal')?.remove();
   showReviewed();
+
   if (currentQuestions) {
     const currentQ = new URLSearchParams(window.location.search).get('q');
-    buildQuestionGrid(currentQuestions, parseInt(currentQ) || currentQuestions[0].id);
+    buildQuestionGrid(currentQuestions, String(currentQ ?? currentQuestions[0].id));
   }
 }
 
@@ -689,7 +709,8 @@ function initProgressBar() {
 
   const total = currentQuestions.length;
   const current = new URLSearchParams(window.location.search).get('q');
-  const index = currentQuestions.findIndex(q => q.id === parseInt(current));
+  // Normalize to string for comparison
+  const index = currentQuestions.findIndex(q => String(q.id) === String(current));
 
   if (index >= 0) {
     const pct = ((index + 1) / total) * 100;

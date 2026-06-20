@@ -4,23 +4,23 @@
    ═══════════════════════════════════════════════════════════ */
 
 /* ─── DESIGN TOKENS ─── */
+/* ─── DESIGN TOKENS ─── */
 :root {
-  /* Light theme */
-  --bg: #f0ede8;
+  /* Light theme - Clean VS Code inspired */
+  --bg: #f5f5f5;
   --bg-card: #ffffff;
-  --bg-sidebar: #f7f5f1;
-  --bg-hover: #ebe8e2;
-  --border: #d8d3ca;
-  --text-primary: #1a1714;
-  --text-body: #3d3830;
-  --text-muted: #7a7268;
-  --accent: #c8620a;
-  /* amber-rust — engineering warmth */
-  --accent-glow: rgba(200, 98, 10, .15);
-  --accent-dim: #e8813a;
-  --answer-bg: #fff8f3;
-  --answer-border: #e8c9a8;
-  --code: #4a3728;
+  --bg-sidebar: #f0f0f0;
+  --bg-hover: #e8e8e8;
+  --border: #d0d0d0;
+  --text-primary: #1a1a1a;
+  --text-body: #333333;
+  --text-muted: #6e6e6e;
+  --accent: #0066b4;
+  --accent-glow: rgba(0, 102, 180, 0.12);
+  --accent-dim: #007acc;
+  --answer-bg: #f7f9fc;
+  --answer-border: #b0c8e0;
+  --code: #1a1a1a;
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, .08);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, .10);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, .12);
@@ -32,22 +32,24 @@
 }
 
 [data-theme="dark"] {
-  --bg: #141210;
-  --bg-card: #1e1b18;
-  --bg-sidebar: #181512;
-  --bg-hover: #252118;
-  --border: #2e2a24;
-  --text-primary: #f0ece6;
-  --text-body: #c8c0b4;
-  --text-muted: #7a7060;
-  --accent: #e8813a;
-  --accent-glow: rgba(232, 129, 58, .18);
-  --accent-dim: #c8620a;
-  --answer-bg: #1f1a14;
-  --answer-border: #3d3020;
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, .4);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, .5);
-  --shadow-lg: 0 8px 32px rgba(0, 0, 0, .6);
+  /* Dark theme - Ultra Dark VS Code Black Blue */
+  --bg: #050508;
+  --bg-card: #0a0a12;
+  --bg-sidebar: #08080e;
+  --bg-hover: #10101e;
+  --border: #1a1a2e;
+  --text-primary: #e8e8f5;
+  --text-body: #b8b8d0;
+  --text-muted: #5a5a7a;
+  --accent: #007acc;
+  --accent-glow: rgba(0, 122, 204, 0.3);
+  --accent-dim: #005a9e;
+  --answer-bg: #0a0a16;
+  --answer-border: #121a2e;
+  --code: #d0d0e0;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, .8);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, .9);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, .95);
 }
 
 /* ─── RESET & BASE ─── */
