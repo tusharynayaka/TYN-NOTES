@@ -1,0 +1,2500 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engineering Mechanics: Statics — Complete Notes</title>
+<style>
+:root {
+  --bg: #f5f5f5;
+  --bg-card: #ffffff;
+  --bg-sidebar: #f0f0f0;
+  --bg-hover: #e8e8e8;
+  --border: #d0d0d0;
+  --text-primary: #1a1a1a;
+  --text-body: #333333;
+  --text-muted: #6e6e6e;
+  --accent: #0066b4;
+  --accent-glow: rgba(0,102,180,0.12);
+  --accent-dim: #007acc;
+  --answer-bg: #f7f9fc;
+  --answer-border: #b0c8e0;
+  --code: #1a1a1a;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.12);
+  --radius: 10px;
+  --radius-lg: 16px;
+  --topbar-h: 60px;
+  --sidebar-w: 260px;
+  --transition: .2s cubic-bezier(.4,0,.2,1);
+}
+[data-theme="dark"] {
+  --bg: #050508;
+  --bg-card: #0a0a12;
+  --bg-sidebar: #08080e;
+  --bg-hover: #10101e;
+  --border: #1a1a2e;
+  --text-primary: #e8e8f5;
+  --text-body: #b8b8d0;
+  --text-muted: #5a5a7a;
+  --accent: #007acc;
+  --accent-glow: rgba(0,122,204,0.3);
+  --accent-dim: #005a9e;
+  --answer-bg: #0a0a16;
+  --answer-border: #121a2e;
+  --code: #d0d0e0;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.8);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.9);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.95);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text-body);line-height:1.7;transition:background var(--transition),color var(--transition)}
+
+/* PROGRESS BAR */
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0%;z-index:9999;transition:width .1s linear}
+
+/* TOPBAR */
+#topbar{position:fixed;top:0;left:0;right:0;height:var(--topbar-h);background:var(--bg-card);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;padding:0 20px;z-index:1000;box-shadow:var(--shadow-sm)}
+#topbar .brand{font-weight:700;font-size:1.05rem;color:var(--text-primary);white-space:nowrap;flex-shrink:0}
+#topbar .brand span{color:var(--accent)}
+#sidebar-toggle{background:none;border:none;cursor:pointer;color:var(--text-primary);padding:6px;border-radius:6px;display:flex;align-items:center;justify-content:center}
+#sidebar-toggle:hover{background:var(--bg-hover)}
+#search-wrap{flex:1;max-width:480px;position:relative}
+#search-input{width:100%;padding:8px 36px 8px 14px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);color:var(--text-body);font-size:.9rem;outline:none;transition:border-color var(--transition)}
+#search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+#search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-muted);display:none;font-size:1rem}
+#search-results-count{font-size:.8rem;color:var(--text-muted);white-space:nowrap;flex-shrink:0}
+.topbar-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+.icon-btn{background:none;border:1px solid var(--border);cursor:pointer;color:var(--text-primary);padding:6px 12px;border-radius:var(--radius);font-size:.8rem;display:flex;align-items:center;gap:5px;transition:background var(--transition),color var(--transition)}
+.icon-btn:hover{background:var(--bg-hover)}
+#theme-toggle svg{width:16px;height:16px}
+#back-to-top{position:fixed;bottom:28px;right:28px;background:var(--accent);color:#fff;border:none;cursor:pointer;width:42px;height:42px;border-radius:50%;font-size:1.2rem;display:none;align-items:center;justify-content:center;box-shadow:var(--shadow-md);z-index:900;transition:opacity var(--transition)}
+#back-to-top:hover{opacity:.85}
+
+/* LAYOUT */
+#layout{display:flex;padding-top:var(--topbar-h)}
+#sidebar{width:var(--sidebar-w);min-height:calc(100vh - var(--topbar-h));background:var(--bg-sidebar);border-right:1px solid var(--border);position:fixed;top:var(--topbar-h);left:0;bottom:0;overflow-y:auto;transition:transform var(--transition);z-index:800}
+#sidebar.collapsed{transform:translateX(calc(-1 * var(--sidebar-w)))}
+#main{margin-left:var(--sidebar-w);flex:1;transition:margin-left var(--transition)}
+#main.sidebar-collapsed{margin-left:0}
+.sidebar-search-wrap{padding:14px;border-bottom:1px solid var(--border)}
+#sidebar-search{width:100%;padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);color:var(--text-body);font-size:.82rem;outline:none}
+#sidebar-search:focus{border-color:var(--accent)}
+
+/* SIDEBAR NAV */
+.sidebar-section{margin:0}
+.sidebar-chapter{width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:10px 16px;color:var(--text-primary);font-size:.88rem;font-weight:600;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);transition:background var(--transition)}
+.sidebar-chapter:hover{background:var(--bg-hover)}
+.sidebar-chapter.active{color:var(--accent);background:var(--accent-glow)}
+.sidebar-arrow{transition:transform var(--transition);font-size:.7rem;opacity:.6}
+.sidebar-chapter.open .sidebar-arrow{transform:rotate(90deg)}
+.sidebar-topics{display:none;list-style:none}
+.sidebar-chapter.open + .sidebar-topics{display:block}
+.sidebar-topics li a{display:block;padding:7px 16px 7px 28px;font-size:.82rem;color:var(--text-muted);text-decoration:none;border-left:2px solid transparent;transition:all var(--transition)}
+.sidebar-topics li a:hover,.sidebar-topics li a.active{color:var(--accent);background:var(--accent-glow);border-left-color:var(--accent)}
+
+/* CONTENT */
+#content{max-width:900px;margin:0 auto;padding:40px 40px 80px}
+.chapter-header{margin-bottom:36px;padding-bottom:20px;border-bottom:2px solid var(--accent)}
+.chapter-num{font-size:.85rem;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.chapter-title{font-size:2rem;font-weight:800;color:var(--text-primary);line-height:1.2}
+.chapter-intro{font-size:1.05rem;color:var(--text-muted);margin-top:10px}
+
+/* SECTIONS */
+.section{margin-bottom:48px;scroll-margin-top:80px}
+.section-title{font-size:1.4rem;font-weight:700;color:var(--text-primary);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.section-num{background:var(--accent);color:#fff;font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:4px}
+.subsection{margin-bottom:32px;scroll-margin-top:80px}
+.subsection-title{font-size:1.1rem;font-weight:700;color:var(--accent);margin-bottom:10px}
+p{margin-bottom:12px}
+
+/* FORMULA CARDS */
+.formula-card{background:var(--answer-bg);border:1px solid var(--answer-border);border-left:4px solid var(--accent);border-radius:var(--radius);padding:16px 20px;margin:16px 0;font-family:'Courier New',monospace}
+.formula-card .formula-label{font-family:'Segoe UI',sans-serif;font-size:.78rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.formula-card .formula-body{font-size:1.05rem;color:var(--text-primary);line-height:1.8}
+.formula-card .eq-num{float:right;font-family:'Segoe UI',sans-serif;font-size:.85rem;color:var(--text-muted)}
+.eq-block{display:block;text-align:center;font-family:'Courier New',monospace;font-size:1rem;margin:10px 0;padding:10px;background:var(--answer-bg);border-radius:var(--radius);color:var(--text-primary)}
+
+/* DEFINITION CARDS */
+.definition-card{background:var(--bg-card);border:1px solid var(--border);border-left:4px solid #2e8b57;border-radius:var(--radius);padding:14px 18px;margin:12px 0}
+.definition-card .def-term{font-weight:700;color:var(--text-primary);margin-bottom:4px}
+.definition-card .def-body{color:var(--text-body);font-size:.95rem}
+
+/* NOTE/IMPORTANT BOXES */
+.note-box{background:var(--answer-bg);border:1px solid var(--answer-border);border-radius:var(--radius);padding:14px 18px;margin:14px 0}
+.note-box.important{border-left:4px solid #c0392b;background:#fef9f9}
+[data-theme="dark"] .note-box.important{background:#1a0a0a}
+.note-box.key{border-left:4px solid var(--accent);background:var(--accent-glow)}
+.note-box-title{font-weight:700;font-size:.85rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;color:var(--text-muted)}
+
+/* TABLES */
+.table-wrap{overflow-x:auto;margin:16px 0}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th{background:var(--accent);color:#fff;padding:10px 14px;text-align:left;font-weight:600}
+td{padding:9px 14px;border-bottom:1px solid var(--border)}
+tr:hover td{background:var(--bg-hover)}
+tr:last-child td{border-bottom:none}
+.table-caption{font-size:.82rem;color:var(--text-muted);margin-top:6px;text-align:center;font-style:italic}
+
+/* SVG DIAGRAMS */
+.diagram-wrap{text-align:center;margin:20px 0;padding:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius)}
+.diagram-wrap svg{max-width:100%;height:auto}
+.diagram-caption{font-size:.82rem;color:var(--text-muted);margin-top:8px;font-style:italic}
+
+/* EXPANDABLE SECTIONS */
+.expand-section{border:1px solid var(--border);border-radius:var(--radius);margin:12px 0;overflow:hidden}
+.expand-header{width:100%;text-align:left;background:var(--bg-card);border:none;cursor:pointer;padding:12px 16px;font-size:.95rem;font-weight:600;color:var(--text-primary);display:flex;justify-content:space-between;align-items:center;transition:background var(--transition)}
+.expand-header:hover{background:var(--bg-hover)}
+.expand-body{display:none;padding:16px;background:var(--bg-card);border-top:1px solid var(--border)}
+.expand-section.open .expand-body{display:block}
+.expand-section.open .expand-arrow{transform:rotate(180deg)}
+.expand-arrow{transition:transform var(--transition)}
+
+/* REVISION CARDS */
+.revision-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:16px 0}
+.revision-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow-sm)}
+.revision-card h4{font-size:.9rem;font-weight:700;color:var(--accent);margin-bottom:6px}
+.revision-card p{font-size:.85rem;color:var(--text-body);margin:0}
+
+/* SEARCH HIGHLIGHT */
+.highlight{background:#ffe082;color:#1a1a1a;border-radius:2px;padding:0 2px}
+[data-theme="dark"] .highlight{background:#7c5c00;color:#ffe082}
+
+/* STEPS */
+.step-list{list-style:none;counter-reset:step-counter}
+.step-list li{counter-increment:step-counter;padding:10px 14px 10px 50px;position:relative;border-left:2px solid var(--border);margin-bottom:8px}
+.step-list li::before{content:counter(step-counter);position:absolute;left:-16px;top:8px;background:var(--accent);color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}
+
+/* PRINT */
+@media print{
+  #topbar,#sidebar,#back-to-top,#progress-bar{display:none!important}
+  #main{margin-left:0!important}
+  #content{max-width:100%;padding:20px}
+  .expand-body{display:block!important}
+}
+@media(max-width:768px){
+  #sidebar{transform:translateX(calc(-1 * var(--sidebar-w)))}
+  #sidebar.mobile-open{transform:translateX(0)}
+  #main{margin-left:0}
+  #content{padding:24px 20px 60px}
+  .chapter-title{font-size:1.5rem}
+  .revision-grid{grid-template-columns:1fr}
+}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- TOPBAR -->
+<header id="topbar">
+  <button id="sidebar-toggle" aria-label="Toggle sidebar">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="3" y1="6" x2="17" y2="6"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="14" x2="17" y2="14"/>
+    </svg>
+  </button>
+  <div class="brand">Engineering Mechanics: <span>Statics</span></div>
+  <div id="search-wrap">
+    <input type="search" id="search-input" placeholder="Search notes... (Ctrl+K)" autocomplete="off" aria-label="Search notes"/>
+    <button id="search-clear" aria-label="Clear search">&#x2715;</button>
+  </div>
+  <span id="search-results-count"></span>
+  <div class="topbar-actions">
+    <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme">
+      <svg id="theme-icon-sun" viewBox="0 0 20 20" fill="currentColor" style="display:none"><circle cx="10" cy="10" r="4"/><path stroke="currentColor" stroke-width="1.5" fill="none" d="M10 2v2M10 16v2M2 10h2M16 10h2M4.22 4.22l1.42 1.42M14.36 14.36l1.42 1.42M4.22 15.78l1.42-1.42M14.36 5.64l1.42-1.42"/></svg>
+      <svg id="theme-icon-moon" viewBox="0 0 20 20" fill="currentColor"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
+      Theme
+    </button>
+    <button class="icon-btn" onclick="window.print()">Print</button>
+  </div>
+</header>
+
+<div id="layout">
+<!-- SIDEBAR -->
+<nav id="sidebar" aria-label="Chapter navigation">
+  <div class="sidebar-search-wrap">
+    <input type="search" id="sidebar-search" placeholder="Filter sections..." aria-label="Filter sidebar sections"/>
+  </div>
+  <div id="sidebar-nav"></div>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+<div id="content">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- CHAPTER 1: INTRODUCTION TO STATICS -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="ch1" class="section" data-chapter="1">
+<div class="chapter-header">
+  <div class="chapter-num">Chapter 1</div>
+  <h1 class="chapter-title">Introduction to Statics</h1>
+  <p class="chapter-intro">Mechanics, fundamental concepts, scalars and vectors, Newton's laws, units, gravitation, and problem-solving methodology.</p>
+</div>
+
+<!-- 1/1 MECHANICS -->
+<div id="ch1-s1" class="subsection">
+<h2 class="section-title"><span class="section-num">1/1</span> Mechanics</h2>
+<p>Mechanics is the physical science which deals with the effects of forces on objects. No other subject plays a greater role in engineering analysis than mechanics. Although the principles of mechanics are few, they have wide application in engineering. The principles of mechanics are central to research and development in the fields of vibrations, stability and strength of structures and machines, robotics, rocket and spacecraft design, automatic control, engine performance, fluid flow, electrical machines and apparatus, and molecular, atomic, and subatomic behavior. A thorough understanding of this subject is an essential prerequisite for work in these and many other fields.</p>
+<p>Mechanics is the oldest of the physical sciences. The early history of this subject is synonymous with the very beginnings of engineering. The earliest recorded writings in mechanics are those of Archimedes (287–212 B.C.) on the principle of the lever and the principle of buoyancy. Substantial progress came later with the formulation of the laws of vector combination of forces by Stevinus (1548–1620), who also formulated most of the principles of statics. The first investigation of a dynamics problem is credited to Galileo (1564–1642) for his experiments with falling stones. The accurate formulation of the laws of motion, as well as the law of gravitation, was made by Newton (1642–1727), who also conceived the idea of the infinitesimal in mathematical analysis. Substantial contributions to the development of mechanics were also made by da Vinci, Varignon, Euler, D'Alembert, Lagrange, Laplace, and others.</p>
+<p>In this book we will be concerned with both the development of the principles of mechanics and their application. The principles of mechanics as a science are rigorously expressed by mathematics, and thus mathematics plays an important role in the application of these principles to the solution of practical problems.</p>
+<p>The subject of mechanics is logically divided into two parts: <strong>statics</strong>, which concerns the equilibrium of bodies under action of forces, and <strong>dynamics</strong>, which concerns the motion of bodies. <em>Engineering Mechanics</em> is divided into these two parts, <em>Vol. 1 Statics</em> and <em>Vol. 2 Dynamics</em>.</p>
+</div>
+
+<!-- 1/2 BASIC CONCEPTS -->
+<div id="ch1-s2" class="subsection">
+<h2 class="section-title"><span class="section-num">1/2</span> Basic Concepts</h2>
+<p>The following concepts and definitions are basic to the study of mechanics, and they should be understood at the outset.</p>
+
+<div class="definition-card">
+  <div class="def-term">Space</div>
+  <div class="def-body">Space is the geometric region occupied by bodies whose positions are described by linear and angular measurements relative to a coordinate system. For three-dimensional problems, three independent coordinates are needed. For two-dimensional problems, only two coordinates are required.</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">Time</div>
+  <div class="def-body">Time is the measure of the succession of events and is a basic quantity in dynamics. Time is not directly involved in the analysis of statics problems.</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">Mass</div>
+  <div class="def-body">Mass is a measure of the inertia of a body, which is its resistance to a change of velocity. Mass can also be thought of as the quantity of matter in a body. The mass of a body affects the gravitational attraction force between it and other bodies. This force appears in many applications in statics.</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">Force</div>
+  <div class="def-body">Force is the action of one body on another. A force tends to move a body in the direction of its action. The action of a force is characterized by its <em>magnitude</em>, by the <em>direction</em> of its action, and by its <em>point of application</em>. Thus force is a vector quantity, and its properties are discussed in detail in Chapter 2.</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">Particle</div>
+  <div class="def-body">A particle is a body of negligible dimensions. In the mathematical sense, a particle is a body whose dimensions are considered to be near zero so that we may analyze it as a mass concentrated at a point. We often choose a particle as a differential element of a body. We may treat a body as a particle when its dimensions are irrelevant to the description of its position or the action of forces applied to it.</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">Rigid Body</div>
+  <div class="def-body">A body is considered rigid when the change in distance between any two of its points is negligible for the purpose at hand. For instance, the calculation of the tension in the cable which supports the boom of a mobile crane under load is essentially unaffected by the small internal deformations in the structural members of the boom. For the purpose of determining the external forces which act on the boom, we may treat it as a rigid body. Statics deals primarily with the calculation of external forces which act on rigid bodies in equilibrium. Determination of the internal deformations belongs to the study of the mechanics of deformable bodies, which normally follows statics in the curriculum.</div>
+</div>
+</div>
+
+<!-- 1/3 SCALARS AND VECTORS -->
+<div id="ch1-s3" class="subsection">
+<h2 class="section-title"><span class="section-num">1/3</span> Scalars and Vectors</h2>
+<p>We use two kinds of quantities in mechanics — scalars and vectors. <strong>Scalar quantities</strong> are those with which only a magnitude is associated. Examples of scalar quantities are time, volume, density, speed, energy, and mass. <strong>Vector quantities</strong>, on the other hand, possess direction as well as magnitude, and must obey the parallelogram law of addition as described later in this article. Examples of vector quantities are displacement, velocity, acceleration, force, moment, and momentum. Speed is a scalar. It is the magnitude of velocity, which is a vector. Thus velocity is specified by a direction as well as a speed.</p>
+
+<p>Vectors representing physical quantities can be classified as free, sliding, or fixed.</p>
+
+<div class="definition-card">
+  <div class="def-term">Free Vector</div>
+  <div class="def-body">A free vector is one whose action is not confined to or associated with a unique line in space. For example, if a body moves without rotation, then the movement or displacement of any point in the body may be taken as a vector. This vector describes equally well the direction and magnitude of the displacement of every point in the body. Thus, we may represent the displacement of such a body by a free vector.</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">Sliding Vector</div>
+  <div class="def-body">A sliding vector has a unique line of action in space but not a unique point of application. For example, when an external force acts on a rigid body, the force can be applied at any point along its line of action without changing its effect on the body as a whole (principle of transmissibility), and thus it is a sliding vector.</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">Fixed Vector</div>
+  <div class="def-body">A fixed vector is one for which a unique point of application is specified. The action of a force on a deformable or nonrigid body must be specified by a fixed vector at the point of application of the force. In this instance the forces and deformations within the body depend on the point of application of the force, as well as on its magnitude and line of action.</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Conventions for Equations and Diagrams</h3>
+<p>A vector quantity <strong>V</strong> is represented by a line segment having the direction of the vector and having an arrowhead to indicate the sense. The length of the directed line segment represents to some convenient scale the magnitude |<strong>V</strong>| of the vector, which is printed with lightface italic type <em>V</em>. For example, we may choose a scale such that an arrow one inch long represents a force of twenty pounds.</p>
+<p>In scalar equations, and frequently on diagrams where only the magnitude of a vector is labeled, the symbol will appear in lightface italic type. Boldface type is used for vector quantities whenever the directional aspect of the vector is a part of its mathematical representation. When writing vector equations, <em>always</em> be certain to preserve the mathematical distinction between vectors and scalars. In handwritten work, use a distinguishing mark for each vector quantity, such as an underline, <u>V</u>, or an arrow over the symbol, to take the place of boldface type in print.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Working with Vectors</h3>
+<p>The direction of the vector <strong>V</strong> may be measured by an angle &theta; from some known reference direction. The negative of <strong>V</strong> is a vector &minus;<strong>V</strong> having the same magnitude as <strong>V</strong> but directed in the sense opposite to <strong>V</strong>.</p>
+<p>Vectors must obey the <strong>parallelogram law of combination</strong>. This law states that two vectors <strong>V</strong><sub>1</sub> and <strong>V</strong><sub>2</sub>, treated as free vectors, may be replaced by their equivalent vector <strong>V</strong>, which is the diagonal of the parallelogram formed by <strong>V</strong><sub>1</sub> and <strong>V</strong><sub>2</sub> as its two sides. This combination is called the <em>vector sum</em> and is represented by the vector equation:</p>
+<div class="formula-card">
+  <div class="formula-label">Vector Sum</div>
+  <div class="formula-body"><strong>V</strong> = <strong>V</strong><sub>1</sub> + <strong>V</strong><sub>2</sub></div>
+</div>
+<p>where the plus sign, when used with the vector quantities (in boldface type), means <em>vector</em> and not <em>scalar</em> addition. The scalar sum of the magnitudes is written as V<sub>1</sub> + V<sub>2</sub>. The geometry of the parallelogram shows that <em>V</em> &ne; V<sub>1</sub> + V<sub>2</sub>.</p>
+<p>The two vectors <strong>V</strong><sub>1</sub> and <strong>V</strong><sub>2</sub>, again treated as free vectors, may also be added head-to-tail by the <strong>triangle law</strong> to obtain the identical vector sum <strong>V</strong>. We see from the diagram that the order of addition of the vectors does not affect their sum, so that <strong>V</strong><sub>1</sub> + <strong>V</strong><sub>2</sub> = <strong>V</strong><sub>2</sub> + <strong>V</strong><sub>1</sub>.</p>
+<p>The difference <strong>V</strong><sub>1</sub> &minus; <strong>V</strong><sub>2</sub> between the two vectors is easily obtained by adding &minus;<strong>V</strong><sub>2</sub> to <strong>V</strong><sub>1</sub>. The difference <strong>V&prime;</strong> between the two vectors is expressed by the vector equation:</p>
+<div class="formula-card">
+  <div class="formula-label">Vector Difference</div>
+  <div class="formula-body"><strong>V&prime;</strong> = <strong>V</strong><sub>1</sub> &minus; <strong>V</strong><sub>2</sub></div>
+</div>
+<p>where the minus sign denotes <em>vector subtraction</em>.</p>
+<p>Any two or more vectors whose sum equals a certain vector <strong>V</strong> are said to be the <em>components</em> of that vector. It is usually most convenient to deal with vector components which are mutually perpendicular; these are called <strong>rectangular components</strong>.</p>
+<p>The vectors <strong>V</strong><sub>x</sub> and <strong>V</strong><sub>y</sub> are the x- and y-components, respectively, of <strong>V</strong>. When expressed in rectangular components, the direction of the vector with respect to the x-axis is clearly specified by the angle &theta;, where:</p>
+<div class="formula-card">
+  <div class="formula-label">Direction Angle</div>
+  <div class="formula-body">&theta; = tan<sup>&minus;1</sup>(V<sub>y</sub> / V<sub>x</sub>)</div>
+</div>
+<p>A vector <strong>V</strong> may be expressed mathematically by multiplying its magnitude V by a vector <strong>n</strong> whose magnitude is one and whose direction coincides with that of <strong>V</strong>. The vector <strong>n</strong> is called a <strong>unit vector</strong>. Thus:</p>
+<div class="formula-card">
+  <div class="formula-label">Unit Vector Form</div>
+  <div class="formula-body"><strong>V</strong> = V<strong>n</strong></div>
+</div>
+<p>In many problems, particularly three-dimensional ones, it is convenient to express the rectangular components of <strong>V</strong> in terms of unit vectors <strong>i</strong>, <strong>j</strong>, and <strong>k</strong>, which are vectors in the x-, y-, and z-directions, respectively, with unit magnitudes. Because the vector <strong>V</strong> is the vector sum of the components in the x-, y-, and z-directions, we can express <strong>V</strong> as follows:</p>
+<div class="formula-card">
+  <div class="formula-label">Vector in Component Form</div>
+  <div class="formula-body"><strong>V</strong> = V<sub>x</sub><strong>i</strong> + V<sub>y</sub><strong>j</strong> + V<sub>z</sub><strong>k</strong></div>
+</div>
+<p>We now make use of the <strong>direction cosines</strong> <em>l</em>, <em>m</em>, and <em>n</em> of <strong>V</strong>, which are defined by:</p>
+<div class="formula-card">
+  <div class="formula-label">Direction Cosines</div>
+  <div class="formula-body">
+    l = cos&theta;<sub>x</sub> &nbsp;&nbsp;&nbsp; m = cos&theta;<sub>y</sub> &nbsp;&nbsp;&nbsp; n = cos&theta;<sub>z</sub>
+  </div>
+</div>
+<p>Thus, we may write the magnitudes of the components of <strong>V</strong> as:</p>
+<div class="formula-card">
+  <div class="formula-label">Components via Direction Cosines</div>
+  <div class="formula-body">
+    V<sub>x</sub> = lV &nbsp;&nbsp;&nbsp; V<sub>y</sub> = mV &nbsp;&nbsp;&nbsp; V<sub>z</sub> = nV
+  </div>
+</div>
+<p>where, from the Pythagorean theorem:</p>
+<div class="formula-card">
+  <div class="formula-label">Magnitude</div>
+  <div class="formula-body">V<sup>2</sup> = V<sub>x</sub><sup>2</sup> + V<sub>y</sub><sup>2</sup> + V<sub>z</sub><sup>2</sup></div>
+</div>
+<p>Note that this relation implies that l<sup>2</sup> + m<sup>2</sup> + n<sup>2</sup> = 1.</p>
+</div>
+
+<!-- SVG: Vector addition diagram -->
+<div class="diagram-wrap">
+<svg viewBox="0 0 500 160" xmlns="http://www.w3.org/2000/svg" width="500" height="160">
+  <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#0066b4"/></marker></defs>
+  <!-- (a) Parallelogram -->
+  <text x="70" y="155" font-size="11" fill="#888" text-anchor="middle">(a) Parallelogram law</text>
+  <line x1="20" y1="120" x2="90" y2="120" stroke="#0066b4" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="55" y="135" font-size="11" fill="#0066b4" text-anchor="middle">V&#x2081;</text>
+  <line x1="20" y1="120" x2="50" y2="60" stroke="#e74c3c" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="28" y="85" font-size="11" fill="#e74c3c">V&#x2082;</text>
+  <line x1="90" y1="120" x2="120" y2="60" stroke="#888" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="50" y1="60" x2="120" y2="60" stroke="#888" stroke-width="1" stroke-dasharray="4"/>
+  <line x1="20" y1="120" x2="120" y2="60" stroke="#2ecc71" stroke-width="2.5" marker-end="url(#arr)"/>
+  <text x="82" y="80" font-size="12" fill="#2ecc71" font-weight="bold">V</text>
+  <!-- (b) Triangle law -->
+  <text x="240" y="155" font-size="11" fill="#888" text-anchor="middle">(b) Triangle law</text>
+  <line x1="160" y1="120" x2="240" y2="120" stroke="#0066b4" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="200" y="135" font-size="11" fill="#0066b4" text-anchor="middle">V&#x2081;</text>
+  <line x1="240" y1="120" x2="270" y2="60" stroke="#e74c3c" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="266" y="90" font-size="11" fill="#e74c3c">V&#x2082;</text>
+  <line x1="160" y1="120" x2="270" y2="60" stroke="#2ecc71" stroke-width="2.5" marker-end="url(#arr)"/>
+  <text x="225" y="78" font-size="12" fill="#2ecc71" font-weight="bold">V</text>
+  <!-- (c) Subtraction -->
+  <text x="420" y="155" font-size="11" fill="#888" text-anchor="middle">(c) Subtraction V&#x2081;-V&#x2082;</text>
+  <line x1="340" y1="120" x2="420" y2="120" stroke="#0066b4" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="380" y="135" font-size="11" fill="#0066b4" text-anchor="middle">V&#x2081;</text>
+  <line x1="420" y1="120" x2="390" y2="60" stroke="#e74c3c" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="415" y="90" font-size="11" fill="#e74c3c">-V&#x2082;</text>
+  <line x1="340" y1="120" x2="390" y2="60" stroke="#2ecc71" stroke-width="2.5" marker-end="url(#arr)"/>
+  <text x="355" y="82" font-size="12" fill="#2ecc71" font-weight="bold">V'</text>
+</svg>
+<div class="diagram-caption">Figure 1: Vector addition and subtraction — parallelogram law, triangle law, and subtraction</div>
+</div>
+</div>
+
+<!-- 1/4 NEWTON'S LAWS -->
+<div id="ch1-s4" class="subsection">
+<h2 class="section-title"><span class="section-num">1/4</span> Newton's Laws</h2>
+<p>Sir Isaac Newton was the first to state correctly the basic laws governing the motion of a particle and to demonstrate their validity. Slightly reworded with modern terminology, these laws are:</p>
+
+<div class="note-box key">
+<div class="note-box-title">Newton's Law I</div>
+<p>A particle remains at rest or continues to move with uniform velocity (in a straight line with a constant speed) if there is no unbalanced force acting on it.</p>
+</div>
+<div class="note-box key">
+<div class="note-box-title">Newton's Law II</div>
+<p>The acceleration of a particle is proportional to the vector sum of forces acting on it and is in the direction of this vector sum.</p>
+</div>
+<div class="note-box key">
+<div class="note-box-title">Newton's Law III</div>
+<p>The forces of action and reaction between interacting bodies are equal in magnitude, opposite in direction, and <em>collinear</em> (they lie on the same line).</p>
+</div>
+
+<p>The correctness of these laws has been verified by innumerable accurate physical measurements. Newton's second law forms the basis for most of the analysis in dynamics. As applied to a particle of mass <em>m</em>, it may be stated as:</p>
+<div class="formula-card">
+  <div class="formula-label">Newton's Second Law</div>
+  <div class="formula-body"><strong>F</strong> = m<strong>a</strong> <span class="eq-num">(1/1)</span></div>
+</div>
+<p>where <strong>F</strong> is the vector sum of forces acting on the particle and <strong>a</strong> is the resulting acceleration. This equation is a <em>vector</em> equation because the direction of <strong>F</strong> must agree with the direction of <strong>a</strong>, and the magnitudes of <strong>F</strong> and m<strong>a</strong> must be equal.</p>
+<p>Newton's first law contains the principle of the equilibrium of forces, which is the main topic of concern in statics. This law is actually a consequence of the second law, since there is no acceleration when the force is zero, and the particle either is at rest or is moving with a uniform velocity.</p>
+<p>The third law is basic to our understanding of force. It states that forces always occur in pairs of equal and opposite forces. In the analysis of bodies under the action of forces, it is absolutely necessary to be clear about which force of each action–reaction pair is being considered. It is necessary first of all to <em>isolate</em> the body under consideration and then to consider only the one force of the pair which acts <em>on</em> the body in question.</p>
+</div>
+
+<!-- 1/5 UNITS -->
+<div id="ch1-s5" class="subsection">
+<h2 class="section-title"><span class="section-num">1/5</span> Units</h2>
+<p>In mechanics we use four fundamental quantities called <em>dimensions</em>. These are length, mass, force, and time. The units used to measure these quantities cannot all be chosen independently because they must be consistent with Newton's second law, Eq. 1/1. Although there are a number of different systems of units, only the two systems most commonly used in science and technology will be used in this text.</p>
+
+<div class="table-wrap">
+<table>
+<caption class="table-caption">Fundamental Dimensions and Units in SI and U.S. Customary Systems</caption>
+<thead>
+<tr><th>Quantity</th><th>Dimensional Symbol</th><th>SI Unit</th><th>SI Symbol</th><th>U.S. Customary Unit</th><th>U.S. Symbol</th></tr>
+</thead>
+<tbody>
+<tr><td>Mass</td><td>M</td><td>kilogram (base)</td><td>kg</td><td>slug (derived)</td><td>—</td></tr>
+<tr><td>Length</td><td>L</td><td>meter (base)</td><td>m</td><td>foot (base)</td><td>ft</td></tr>
+<tr><td>Time</td><td>T</td><td>second (base)</td><td>s</td><td>second (base)</td><td>sec</td></tr>
+<tr><td>Force</td><td>F</td><td>newton (derived)</td><td>N</td><td>pound (base)</td><td>lb</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">SI Units</h3>
+<p>The International System of Units, abbreviated SI (from the French, <em>Système International d'Unités</em>), is accepted in the United States and throughout the world, and is a modern version of the metric system. As shown in the table, in SI, the units kilogram (kg) for mass, meter (m) for length, and second (s) for time are selected as the base units, and the newton (N) for force is derived from the preceding three by Eq. 1/1. Thus, force (N) = mass (kg) × acceleration (m/s<sup>2</sup>) or:</p>
+<div class="formula-card">
+  <div class="formula-label">Newton Definition</div>
+  <div class="formula-body">N = kg&middot;m/s<sup>2</sup></div>
+</div>
+<p>Thus, 1 newton is the force required to give a mass of 1 kg an acceleration of 1 m/s<sup>2</sup>.</p>
+<p>Consider a body of mass <em>m</em> which is allowed to fall freely near the surface of the earth. With only the force of gravitation acting on the body, it falls with an acceleration g toward the center of the earth. This gravitational force is the <strong>weight</strong> W of the body and is found from Eq. 1/1:</p>
+<div class="formula-card">
+  <div class="formula-label">Weight (SI)</div>
+  <div class="formula-body">W(N) = m(kg) &times; g(m/s<sup>2</sup>)</div>
+</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">U.S. Customary Units</h3>
+<p>The U.S. customary, or British system of units, also called the foot-pound-second (FPS) system, has been the common system in business and industry in English-speaking countries. As shown in the table, in the U.S. or FPS system, the units of feet (ft) for length, seconds (sec) for time, and pounds (lb) for force are selected as base units, and the slug for mass is derived from Eq. 1/1. Thus, force (lb) = mass (slugs) × acceleration (ft/sec<sup>2</sup>), or:</p>
+<div class="formula-card">
+  <div class="formula-label">Slug Definition</div>
+  <div class="formula-body">1 slug = lb&middot;sec<sup>2</sup>/ft</div>
+</div>
+<p>Therefore, 1 slug is the mass which is given an acceleration of 1 ft/sec<sup>2</sup> when acted on by a force of 1 lb. If W is the gravitational force or weight and g is the acceleration due to gravity, Eq. 1/1 gives:</p>
+<div class="formula-card">
+  <div class="formula-label">Mass in U.S. Units</div>
+  <div class="formula-body">m(slugs) = W(lb) / g(ft/sec<sup>2</sup>)</div>
+</div>
+<p>Note that seconds is abbreviated as <em>s</em> in SI units, and as <em>sec</em> in FPS units.</p>
+<p>In U.S. units the pound is also used on occasion as a unit of mass, especially to specify thermal properties of liquids and gases. When distinction between the two units is necessary, the force unit is frequently written as <strong>lbf</strong> and the mass unit as <strong>lbm</strong>. Other common units of force in the U.S. system are the <strong>kilopound</strong> (kip), which equals 1000 lb, and the <strong>ton</strong>, which equals 2000 lb.</p>
+<p>The International System of Units (SI) is termed an <em>absolute</em> system because the measurement of the base quantity mass is independent of its environment. On the other hand, the U.S. system (FPS) is termed a <em>gravitational</em> system because its base quantity force is defined as the gravitational attraction (weight) acting on a standard mass under specified conditions (sea level and 45° latitude). In SI units the kilogram is used <em>exclusively</em> as a unit of mass — <em>never</em> force.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Primary Standards</h3>
+<p>Primary standards for the measurements of mass, length, and time have been established by international agreement and are as follows:</p>
+<p><strong>Mass.</strong> The kilogram is defined as the mass of a specific platinum–iridium cylinder which is kept at the International Bureau of Weights and Measures near Paris, France. An accurate copy of this cylinder is kept in the United States at the National Institute of Standards and Technology (NIST), formerly the National Bureau of Standards, and serves as the standard of mass for the United States.</p>
+<p><strong>Length.</strong> The meter, originally defined as one ten-millionth of the distance from the pole to the equator along the meridian through Paris, was later defined as the length of a specific platinum–iridium bar kept at the International Bureau of Weights and Measures. The meter is now defined as 1 650 763.73 wavelengths of a specific radiation of the krypton-86 atom.</p>
+<p><strong>Time.</strong> The second was originally defined as the fraction 1/(86 400) of the mean solar day. The second is now defined as the duration of 9 192 631 770 periods of the radiation of a specific state of the cesium-133 atom.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Gravitational Acceleration Standard Values</h3>
+<p>The standard value for gravitational acceleration g is its value at sea level and at a 45° latitude. In the two systems these values are:</p>
+<div class="formula-card">
+  <div class="formula-label">Standard Gravitational Acceleration</div>
+  <div class="formula-body">
+    SI units: &nbsp;&nbsp;&nbsp; g = 9.806 65 m/s<sup>2</sup> &nbsp;&nbsp; (approx. 9.81 m/s<sup>2</sup>)<br>
+    U.S. units: g = 32.1740 ft/sec<sup>2</sup> &nbsp;&nbsp;&nbsp;&nbsp; (approx. 32.2 ft/sec<sup>2</sup>)
+  </div>
+</div>
+<p>The approximate values of 9.81 m/s<sup>2</sup> and 32.2 ft/sec<sup>2</sup>, respectively, are sufficiently accurate for the vast majority of engineering calculations.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Unit Conversions</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Quantity</th><th>SI to U.S.</th><th>U.S. to SI</th></tr></thead>
+<tbody>
+<tr><td>Force</td><td>1 N = 0.2248 lb</td><td>1 lb = 4.448 N</td></tr>
+<tr><td>Mass</td><td>1 kg = 0.06853 slug</td><td>1 slug = 14.594 kg</td></tr>
+<tr><td>Length</td><td>1 m = 3.281 ft</td><td>1 ft = 0.3048 m</td></tr>
+<tr><td>Mass (alternate)</td><td>1 kg = 2.205 lbm</td><td>1 lbm = 0.4536 kg</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- 1/6 LAW OF GRAVITATION -->
+<div id="ch1-s6" class="subsection">
+<h2 class="section-title"><span class="section-num">1/6</span> Law of Gravitation</h2>
+<p>In statics as well as dynamics we often need to compute the weight of a body, which is the gravitational force acting on it. This computation depends on the <em>law of gravitation</em>, which was also formulated by Newton. The law of gravitation is expressed by the equation:</p>
+<div class="formula-card">
+  <div class="formula-label">Newton's Law of Gravitation</div>
+  <div class="formula-body">
+    F = G (m<sub>1</sub>m<sub>2</sub>) / r<sup>2</sup> <span class="eq-num">(1/2)</span><br><br>
+    where:<br>
+    F = the mutual force of attraction between two particles<br>
+    G = 6.673&times;10<sup>&minus;11</sup> m<sup>3</sup>/(kg&middot;s<sup>2</sup>) — the constant of gravitation<br>
+    m<sub>1</sub>, m<sub>2</sub> = the masses of the two particles<br>
+    r = the distance between the centers of the particles
+  </div>
+</div>
+<p>The mutual forces F obey the law of action and reaction, since they are equal and opposite and are directed along the line joining the centers of the particles. By experiment the gravitational constant is found to be G = 6.673&times;10<sup>&minus;11</sup> m<sup>3</sup>/(kg&middot;s<sup>2</sup>).</p>
+<div class="subsection">
+<h3 class="subsection-title">Gravitational Attraction of the Earth</h3>
+<p>Gravitational forces exist between every pair of bodies. On the surface of the earth the only gravitational force of appreciable magnitude is the force due to the attraction of the earth. The gravitational attraction of the earth on a body (its weight) exists whether the body is at rest or in motion. Because this attraction is a force, the weight of a body should be expressed in newtons (N) in SI units and in pounds (lb) in U.S. customary units.</p>
+<p>Unfortunately, in common practice the mass unit kilogram (kg) has been frequently used as a measure of weight. This usage should disappear in time as SI units become more widely used, because in SI units the kilogram is used exclusively for mass and the newton is used for force, including weight.</p>
+<p>For a body of mass m near the surface of the earth, the gravitational attraction F on the body is specified by Eq. 1/2. We usually denote the magnitude of this gravitational force or weight as W, where:</p>
+<div class="formula-card">
+  <div class="formula-label">Weight near Earth's Surface</div>
+  <div class="formula-body">W = mg</div>
+</div>
+</div>
+</div>
+
+<!-- 1/7 ACCURACY, LIMITS, AND APPROXIMATIONS -->
+<div id="ch1-s7" class="subsection">
+<h2 class="section-title"><span class="section-num">1/7</span> Accuracy, Limits, and Approximations</h2>
+<p>The number of significant figures in an answer should never exceed the number of significant figures in the given data. Calculated results are only as accurate as the input data.</p>
+<p>In engineering problems, the data are seldom known to more than three significant figures. Answers should then be rounded to three significant figures when accuracy is the primary concern.</p>
+<p>The order of magnitude of an answer should always be checked by an approximate mental calculation. Engineers should develop the ability to quickly estimate the correct order of magnitude of an answer.</p>
+<p><strong>Small-angle approximations:</strong> When a small angle &theta; is expressed in radians, we have:</p>
+<div class="formula-card">
+  <div class="formula-label">Small Angle Approximations (in radians)</div>
+  <div class="formula-body">
+    sin&theta; &approx; &theta; &nbsp;&nbsp;&nbsp; tan&theta; &approx; &theta; &nbsp;&nbsp;&nbsp; cos&theta; &approx; 1 &nbsp;&nbsp; (for small &theta;)
+  </div>
+</div>
+</div>
+
+<!-- 1/8 PROBLEM SOLVING IN STATICS -->
+<div id="ch1-s8" class="subsection">
+<h2 class="section-title"><span class="section-num">1/8</span> Problem Solving in Statics</h2>
+<p>The development of a good problem-solving approach is critical to success in mechanics. The following general procedure should be adopted:</p>
+<ol class="step-list">
+  <li><strong>Identify clearly the quantities which are known and unknown.</strong></li>
+  <li><strong>Draw a free-body diagram</strong> of the body or system of connected bodies. Label all known and unknown forces, moments, and couples.</li>
+  <li><strong>Assign coordinate axes.</strong> Choose convenient reference axes to simplify the equations. When possible, choose axes to eliminate as many unknowns as possible from each equation.</li>
+  <li><strong>State the governing equilibrium or force-moment equations.</strong></li>
+  <li><strong>Match unknowns to equations.</strong> Verify that the number of independent equations equals the number of unknowns.</li>
+  <li><strong>Carry out the solution and check results.</strong> Verify reasonableness by comparing with estimates.</li>
+</ol>
+</div>
+
+<!-- CHAPTER 1 REVIEW -->
+<div id="ch1-review" class="subsection">
+<h2 class="section-title">Chapter 1 — Key Formulas Quick Reference</h2>
+<div class="revision-grid">
+  <div class="revision-card"><h4>Vector Sum</h4><p><strong>V</strong> = <strong>V</strong><sub>1</sub> + <strong>V</strong><sub>2</sub></p></div>
+  <div class="revision-card"><h4>Unit Vector</h4><p><strong>V</strong> = V<strong>n</strong></p></div>
+  <div class="revision-card"><h4>3D Components</h4><p><strong>V</strong> = V<sub>x</sub><strong>i</strong> + V<sub>y</sub><strong>j</strong> + V<sub>z</sub><strong>k</strong></p></div>
+  <div class="revision-card"><h4>Magnitude</h4><p>V<sup>2</sup> = V<sub>x</sub><sup>2</sup> + V<sub>y</sub><sup>2</sup> + V<sub>z</sub><sup>2</sup></p></div>
+  <div class="revision-card"><h4>Newton's 2nd Law</h4><p><strong>F</strong> = m<strong>a</strong></p></div>
+  <div class="revision-card"><h4>Gravitation</h4><p>F = G m<sub>1</sub>m<sub>2</sub>/r<sup>2</sup></p></div>
+  <div class="revision-card"><h4>Weight</h4><p>W = mg</p></div>
+  <div class="revision-card"><h4>Newton (SI)</h4><p>1 N = kg&middot;m/s<sup>2</sup></p></div>
+  <div class="revision-card"><h4>Slug (U.S.)</h4><p>1 slug = lb&middot;sec<sup>2</sup>/ft</p></div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- CHAPTER 2: FORCE SYSTEMS -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="ch2" class="section" data-chapter="2">
+<div class="chapter-header">
+  <div class="chapter-num">Chapter 2</div>
+  <h1 class="chapter-title">Force Systems</h1>
+  <p class="chapter-intro">Two- and three-dimensional force systems: rectangular components, moment, couple, and resultants.</p>
+</div>
+
+<!-- 2/1 INTRODUCTION -->
+<div id="ch2-s1" class="subsection">
+<h2 class="section-title"><span class="section-num">2/1</span> Introduction</h2>
+<p>In this and the following chapters, we study the effects of forces which act on engineering structures and mechanisms. The experience gained here will help you in the study of mechanics and in other subjects such as stress analysis, design of structures and machines, and fluid flow. This chapter lays the foundation for a basic understanding not only of statics but also of the entire subject of mechanics, and you should master this material thoroughly.</p>
+</div>
+
+<!-- 2/2 FORCE -->
+<div id="ch2-s2" class="subsection">
+<h2 class="section-title"><span class="section-num">2/2</span> Force</h2>
+<p>Before dealing with a group or <em>system</em> of forces, it is necessary to examine the properties of a single force in some detail. A force has been defined in Chapter 1 as an action of one body on another. In dynamics we will see that a force is defined as an action which tends to cause acceleration of a body. A force is a <em>vector quantity</em>, because its effect depends on the direction as well as on the magnitude of the action. Thus, forces may be combined according to the parallelogram law of vector addition.</p>
+<p>The complete specification of the action of a force must include its <em>magnitude</em>, <em>direction</em>, and <em>point of application</em>, and therefore we must treat it as a fixed vector.</p>
+
+<div class="subsection">
+<h3 class="subsection-title">External and Internal Effects</h3>
+<p>We can separate the action of a force on a body into two effects, <em>external</em> and <em>internal</em>. Forces external to a body can be either <em>applied</em> forces or <em>reactive</em> forces. The effects of P internal to a bracket are the resulting internal forces and deformations distributed throughout the material of the bracket. The relation between internal forces and internal deformations depends on the material properties of the body and is studied in strength of materials, elasticity, and plasticity.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Principle of Transmissibility</h3>
+<div class="note-box key">
+<div class="note-box-title">Principle of Transmissibility</div>
+<p>A force may be applied at any point on its given line of action without altering the resultant effects of the force <em>external</em> to the <em>rigid</em> body on which it acts.</p>
+</div>
+<p>When dealing with the mechanics of a rigid body, we ignore deformations in the body and concern ourselves with only the net external effects of external forces. Thus, whenever we are interested in only the resultant external effects of a force, the force may be treated as a <em>sliding</em> vector, and we need specify only the <em>magnitude</em>, <em>direction</em>, and <em>line of action</em> of the force, and not its <em>point of application</em>.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Force Classification</h3>
+<p>Forces are classified as either <em>contact</em> or <em>body</em> forces. A contact force is produced by direct physical contact; an example is the force exerted on a body by a supporting surface. On the other hand, a body force is generated by virtue of the position of a body within a force field such as a gravitational, electric, or magnetic field. An example of a body force is your weight.</p>
+<p>Forces may be further classified as either <em>concentrated</em> or <em>distributed</em>. Every contact force is actually applied over a finite area and is therefore really a distributed force. However, when the dimensions of the area are very small compared with the other dimensions of the body, we may consider the force to be concentrated at a point with negligible loss of accuracy. Force can be distributed over an <em>area</em>, as in the case of mechanical contact, over a <em>volume</em> when a body force such as weight is acting, or over a <em>line</em>, as in the case of the weight of a suspended cable.</p>
+<p>The <em>weight</em> of a body is the force of gravitational attraction distributed over its volume and may be taken as a concentrated force acting through the center of gravity.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Action and Reaction</h3>
+<p>According to Newton's third law, the <em>action</em> of a force is always accompanied by an <em>equal</em> and <em>opposite reaction</em>. It is essential to distinguish between the action and the reaction in a pair of forces. To do so, we first <em>isolate</em> the body in question and then identify the force exerted <em>on</em> that body (not the force exerted <em>by</em> the body). It is very easy to mistakenly use the wrong force of the pair unless we distinguish carefully between action and reaction.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Concurrent Forces</h3>
+<p>Two or more forces are said to be <em>concurrent at a point</em> if their lines of action intersect at that point. Such concurrent forces can be added using the parallelogram law in their common plane to obtain their sum or <em>resultant</em> <strong>R</strong>. The resultant lies in the same plane as <strong>F</strong><sub>1</sub> and <strong>F</strong><sub>2</sub>.</p>
+<div class="formula-card">
+  <div class="formula-label">Resultant of Two Forces</div>
+  <div class="formula-body"><strong>R</strong> = <strong>F</strong><sub>1</sub> + <strong>F</strong><sub>2</sub></div>
+</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Vector Components</h3>
+<p>In addition to combining forces to obtain their resultant, we often need to replace a force by its <em>vector components</em> in directions which are convenient for a given application. The vector sum of the components must equal the original vector. The relationship between a force and its vector components along given axes must not be confused with the relationship between a force and its perpendicular (orthogonal) projections onto the same axes. The components and projections of <strong>R</strong> are equal only when the axes a and b are perpendicular.</p>
+</div>
+</div>
+
+<!-- SECTION A: TWO-DIMENSIONAL FORCE SYSTEMS -->
+<h2 class="section-title" style="background:var(--accent);color:#fff;padding:10px 16px;border-radius:var(--radius);margin:28px 0 16px">Section A — Two-Dimensional Force Systems</h2>
+
+<!-- 2/3 RECTANGULAR COMPONENTS -->
+<div id="ch2-s3" class="subsection">
+<h2 class="section-title"><span class="section-num">2/3</span> Rectangular Components</h2>
+<p>The most common two-dimensional resolution of a force vector is into rectangular components. It follows from the parallelogram rule that the vector <strong>F</strong> may be written as:</p>
+<div class="formula-card">
+  <div class="formula-label">2D Force Decomposition</div>
+  <div class="formula-body">
+    <strong>F</strong> = <strong>F</strong><sub>x</sub> + <strong>F</strong><sub>y</sub> = F<sub>x</sub><strong>i</strong> + F<sub>y</sub><strong>j</strong> <span class="eq-num">(2/1), (2/2)</span>
+  </div>
+</div>
+<p>where the scalars F<sub>x</sub> and F<sub>y</sub> are the x and y scalar components of the vector <strong>F</strong>.</p>
+<div class="formula-card">
+  <div class="formula-label">Scalar Components and Magnitude (standard orientation)</div>
+  <div class="formula-body">
+    F<sub>x</sub> = F cos&theta; &nbsp;&nbsp;&nbsp; F = &radic;(F<sub>x</sub><sup>2</sup> + F<sub>y</sub><sup>2</sup>)<br>
+    F<sub>y</sub> = F sin&theta; &nbsp;&nbsp;&nbsp; &theta; = tan<sup>&minus;1</sup>(F<sub>y</sub>/F<sub>x</sub>) <span class="eq-num">(2/3)</span>
+  </div>
+</div>
+<p>The scalar components can be positive or negative, depending on the quadrant into which <strong>F</strong> points.</p>
+
+<div class="note-box">
+<div class="note-box-title">Conventions for Describing Vector Components</div>
+<p>We express the magnitude of a vector with lightface italic type in print; that is, |<strong>F</strong>| is indicated by F, a quantity which is always nonnegative. However, the scalar components, also denoted by lightface italic type, will include sign information. When both a force and its vector components appear in a diagram, it is desirable to show the vector components of the force with dashed lines, and show the force with a solid line, or vice versa.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Resultant of Concurrent Forces (Rectangular Method)</h3>
+<p>Rectangular components are convenient for finding the sum or resultant <strong>R</strong> of two forces which are concurrent. Consider two forces <strong>F</strong><sub>1</sub> and <strong>F</strong><sub>2</sub> which are originally concurrent at a point O. In adding the force vectors:</p>
+<div class="formula-card">
+  <div class="formula-label">Resultant Components</div>
+  <div class="formula-body">
+    R<sub>x</sub> = F<sub>1x</sub> + F<sub>2x</sub> = &Sigma;F<sub>x</sub><br>
+    R<sub>y</sub> = F<sub>1y</sub> + F<sub>2y</sub> = &Sigma;F<sub>y</sub> <span class="eq-num">(2/4)</span>
+  </div>
+</div>
+<p>The term &Sigma;F<sub>x</sub> means "the algebraic sum of the x scalar components".</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Determining Components — Various Orientations</h3>
+<p>Dimensions are not always given in horizontal and vertical directions, angles need not be measured counterclockwise from the x-axis, and the origin of coordinates need not be on the line of action of a force. A neatly drawn sketch always helps to clarify the geometry and avoid error. The following table summarizes component expressions for common force orientations:</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Force Orientation (angle &beta; from reference)</th><th>F<sub>x</sub></th><th>F<sub>y</sub></th></tr></thead>
+<tbody>
+<tr><td>Force at angle &beta; above positive x (standard)</td><td>F cos&beta;</td><td>F sin&beta;</td></tr>
+<tr><td>Force in second quadrant (at &beta; from +y toward &minus;x)</td><td>&minus;F cos&beta;</td><td>&minus;F sin&beta;</td></tr>
+<tr><td>Force at angle (&pi; &minus; &beta;) from +x</td><td>F sin(&pi;&minus;&beta;)</td><td>&minus;F cos(&pi;&minus;&beta;)</td></tr>
+<tr><td>Force at angle (&beta; &minus; &alpha;) from reference</td><td>F cos(&beta;&minus;&alpha;)</td><td>F sin(&beta;&minus;&alpha;)</td></tr>
+</tbody>
+</table>
+</div>
+<p>Memorization of Eqs. 2/3 is not a substitute for understanding the parallelogram law and for correctly projecting a vector onto a reference axis.</p>
+</div>
+</div>
+
+<!-- 2/4 MOMENT -->
+<div id="ch2-s4" class="subsection">
+<h2 class="section-title"><span class="section-num">2/4</span> Moment</h2>
+<p>In addition to the tendency to move a body in the direction of its application, a force can also tend to rotate a body about an axis. The axis may be any line which neither intersects nor is parallel to the line of action of the force. This rotational tendency is known as the <strong>moment M</strong> of the force. Moment is also referred to as <em>torque</em>.</p>
+
+<div class="note-box key">
+<div class="note-box-title">Moment of a Force about a Point</div>
+<p>The magnitude of the moment or tendency of the force to rotate the body about the axis O-O perpendicular to the plane of the body is proportional both to the magnitude of the force and to the <em>moment arm d</em>, which is the perpendicular distance from the axis to the line of action of the force.</p>
+</div>
+
+<div class="formula-card">
+  <div class="formula-label">Moment Magnitude</div>
+  <div class="formula-body">M = Fd <span class="eq-num">(2/5)</span></div>
+</div>
+<p>The moment is a vector <strong>M</strong> perpendicular to the plane of the body. The sense of <strong>M</strong> depends on the direction in which <strong>F</strong> tends to rotate the body. The right-hand rule is used to identify this sense. We represent the moment of <strong>F</strong> about O-O as a vector pointing in the direction of the thumb, with the fingers curled in the direction of the rotational tendency.</p>
+<p>The moment <strong>M</strong> obeys all the rules of vector combination and may be considered a sliding vector with a line of action coinciding with the moment axis. The basic units of moment in SI units are newton-meters (N·m), and in the U.S. customary system are pound-feet (lb-ft).</p>
+<p>Moment directions may be accounted for by using a stated sign convention, such as a plus sign (+) for counterclockwise moments and a minus sign (&minus;) for clockwise moments, or vice versa. Sign consistency within a given problem is essential.</p>
+
+<div class="subsection">
+<h3 class="subsection-title">The Cross Product</h3>
+<p>In some two-dimensional and many of the three-dimensional problems to follow, it is convenient to use a vector approach for moment calculations. The moment of <strong>F</strong> about point A may be represented by the cross-product expression:</p>
+<div class="formula-card">
+  <div class="formula-label">Cross-Product Moment</div>
+  <div class="formula-body"><strong>M</strong> = <strong>r</strong> &times; <strong>F</strong> <span class="eq-num">(2/6)</span></div>
+</div>
+<p>where <strong>r</strong> is a position vector which runs from the moment reference point A to <em>any</em> point on the line of action of <strong>F</strong>. The magnitude of this expression is given by:</p>
+<div class="formula-card">
+  <div class="formula-label">Cross-Product Magnitude</div>
+  <div class="formula-body">M = Fr sin&alpha; = Fd <span class="eq-num">(2/7)</span></div>
+</div>
+<p>which agrees with the moment magnitude as given by Eq. 2/5. Note that the moment arm d = r sin&alpha; does not depend on the particular point on the line of action of <strong>F</strong> to which the vector <strong>r</strong> is directed. We establish the direction and sense of <strong>M</strong> by applying the right-hand rule to the sequence <strong>r</strong> &times; <strong>F</strong>. If the fingers of the right hand are curled in the direction of rotation from the positive sense of <strong>r</strong> to the positive sense of <strong>F</strong>, then the thumb points in the positive sense of <strong>M</strong>.</p>
+<p>We must maintain the sequence <strong>r</strong> &times; <strong>F</strong>, because the sequence <strong>F</strong> &times; <strong>r</strong> would produce a vector with a sense opposite to that of the correct moment.</p>
+<p>When we evaluate the moment of a force about a given point, the choice between using the vector cross product or the scalar expression depends on how the geometry of the problem is specified. If we know or can easily determine the perpendicular distance between the line of action of the force and the moment center, then the scalar approach is generally simpler. If, however, <strong>F</strong> and <strong>r</strong> are not perpendicular and are easily expressible in vector notation, then the cross-product expression is often preferable.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Varignon's Theorem</h3>
+<div class="note-box key">
+<div class="note-box-title">Varignon's Theorem</div>
+<p>The moment of a force about any point is equal to the sum of the moments of the components of the force about the same point.</p>
+</div>
+<p>To prove this theorem, consider the force <strong>R</strong> acting in the plane of the body. The forces <strong>P</strong> and <strong>Q</strong> represent any two nonrectangular components of <strong>R</strong>. The moment of <strong>R</strong> about point O is:</p>
+<div class="formula-card">
+  <div class="formula-label">Varignon's Theorem (Proof)</div>
+  <div class="formula-body">
+    <strong>M</strong><sub>O</sub> = <strong>r</strong> &times; <strong>R</strong> = <strong>r</strong> &times; (<strong>P</strong> + <strong>Q</strong>) = <strong>r</strong> &times; <strong>P</strong> + <strong>r</strong> &times; <strong>Q</strong> <span class="eq-num">(2/8)</span>
+  </div>
+</div>
+<p>which says that the moment of <strong>R</strong> about O equals the sum of the moments about O of its components <strong>P</strong> and <strong>Q</strong>. This proves the theorem. Varignon's theorem need not be restricted to the case of two components, but it applies equally well to three or more.</p>
+<p>Varignon's theorem is very useful: when the moment arm d of the resultant <strong>R</strong> is more difficult to determine than p and q (the moment arms of components <strong>P</strong> and <strong>Q</strong>), we can compute the moment as M<sub>O</sub> = Rd = &minus;pP + qQ.</p>
+</div>
+</div>
+
+<!-- 2/5 COUPLE -->
+<div id="ch2-s5" class="subsection">
+<h2 class="section-title"><span class="section-num">2/5</span> Couple</h2>
+<p>The moment produced by two equal, opposite, and noncollinear forces is called a <strong>couple</strong>. Couples have certain unique properties and have important applications in mechanics.</p>
+<p>Consider the action of two equal and opposite forces <strong>F</strong> and &minus;<strong>F</strong> a distance d apart. These two forces cannot be combined into a single force because their sum in every direction is zero. Their only effect is to produce a tendency of rotation. The combined moment of the two forces about an axis normal to their plane and passing through any point such as O in their plane is the couple <strong>M</strong>. This couple has a magnitude:</p>
+<div class="formula-card">
+  <div class="formula-label">Couple Magnitude</div>
+  <div class="formula-body">
+    M = F(a + d) &minus; Fa<br>
+    M = Fd
+  </div>
+</div>
+<p>Note especially that the magnitude of the couple is <em>independent</em> of the distance a which locates the forces with respect to the moment center O. It follows that the moment of a couple has the same value for all moment centers.</p>
+
+<div class="subsection">
+<h3 class="subsection-title">Vector Algebra Method</h3>
+<p>We may also express the moment of a couple by using vector algebra. The combined moment about point O of the forces forming the couple is:</p>
+<div class="formula-card">
+  <div class="formula-label">Couple — Vector Form</div>
+  <div class="formula-body">
+    <strong>M</strong> = <strong>r</strong><sub>A</sub> &times; <strong>F</strong> + <strong>r</strong><sub>B</sub> &times; (&minus;<strong>F</strong>) = (<strong>r</strong><sub>A</sub> &minus; <strong>r</strong><sub>B</sub>) &times; <strong>F</strong><br>
+    Since <strong>r</strong><sub>A</sub> &minus; <strong>r</strong><sub>B</sub> = <strong>r</strong>: &nbsp;&nbsp;&nbsp; <strong>M</strong> = <strong>r</strong> &times; <strong>F</strong>
+  </div>
+</div>
+<p>Here again, the moment expression contains no reference to the moment center O and, therefore, is the same for all moment centers. Thus, we may represent <strong>M</strong> by a <em>free vector</em>, where the direction of <strong>M</strong> is normal to the plane of the couple and the sense of <strong>M</strong> is established by the right-hand rule.</p>
+<p>Because the couple vector <strong>M</strong> is always perpendicular to the plane of the forces which constitute the couple, in two-dimensional analysis we can represent the sense of a couple vector as clockwise or counterclockwise.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Equivalent Couples</h3>
+<p>Changing the values of F and d does not change a given couple as long as the product Fd remains the same. Likewise, a couple is not affected if the forces act in a different but parallel plane. Four different configurations of the same couple M represent equivalent couples — described by the same free vector which represents the identical tendencies to rotate the bodies.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Force–Couple Systems</h3>
+<p>The effect of a force acting on a body is the tendency to push or pull the body in the direction of the force and to rotate the body about any fixed axis which does not intersect the line of the force. We can represent this dual effect more easily by replacing the given force by an equal parallel force and a couple to compensate for the change in the moment of the force.</p>
+<p>The replacement of a force by a force and a couple is illustrated by: the given force <strong>F</strong> acting at point A is replaced by an equal force <strong>F</strong> at some point B and the counterclockwise couple M = Fd. This combination of the force and couple is referred to as a <strong>force–couple system</strong>.</p>
+<p>By reversing this process, we can combine a given couple and a force which lies in the plane of the couple (normal to the couple vector) to produce a single, equivalent force. Replacement of a force by an equivalent force–couple system, and the reverse procedure, have many applications in mechanics and should be mastered.</p>
+</div>
+</div>
+
+<!-- 2/6 RESULTANTS -->
+<div id="ch2-s6" class="subsection">
+<h2 class="section-title"><span class="section-num">2/6</span> Resultants</h2>
+<p>The properties of force, moment, and couple were developed in the previous four articles. Now we are ready to describe the resultant action of a group or <em>system</em> of forces. Most problems in mechanics deal with a system of forces, and it is usually necessary to reduce the system to its simplest form to describe its action. The <strong>resultant</strong> of a system of forces is the simplest force combination which can replace the original forces without altering the external effect on the rigid body to which the forces are applied.</p>
+<p><strong>Equilibrium</strong> of a body is the condition in which the resultant of all forces acting on the body is zero. This condition is studied in statics. When the resultant of all forces on a body is not zero, the acceleration of the body is obtained by equating the force resultant to the product of the mass and acceleration of the body (dynamics). Thus, the determination of resultants is basic to both statics and dynamics.</p>
+
+<p>For any system of coplanar forces we may write:</p>
+<div class="formula-card">
+  <div class="formula-label">Resultant of Coplanar Forces</div>
+  <div class="formula-body">
+    <strong>R</strong> = <strong>F</strong><sub>1</sub> + <strong>F</strong><sub>2</sub> + <strong>F</strong><sub>3</sub> + &ctdot; = &Sigma;<strong>F</strong><br>
+    R<sub>x</sub> = &Sigma;F<sub>x</sub> &nbsp;&nbsp;&nbsp; R<sub>y</sub> = &Sigma;F<sub>y</sub><br>
+    R = &radic;[(&Sigma;F<sub>x</sub>)<sup>2</sup> + (&Sigma;F<sub>y</sub>)<sup>2</sup>]<br>
+    &theta; = tan<sup>&minus;1</sup>(R<sub>y</sub>/R<sub>x</sub>) = tan<sup>&minus;1</sup>(&Sigma;F<sub>y</sub>/&Sigma;F<sub>x</sub>) <span class="eq-num">(2/9)</span>
+  </div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Algebraic Method for Finding Resultant Line of Action</h3>
+<ol class="step-list">
+  <li>Choose a convenient reference point and move all forces to that point, creating couples M<sub>1</sub>, M<sub>2</sub>, M<sub>3</sub> from the transfers of forces F<sub>1</sub>, F<sub>2</sub>, F<sub>3</sub> from their respective original lines of action to lines of action through point O.</li>
+  <li>Add all forces at O to form the resultant force <strong>R</strong>, and add all couples to form the resultant couple M<sub>O</sub>. We now have the single force–couple system.</li>
+  <li>Find the line of action of <strong>R</strong> by requiring <strong>R</strong> to have a moment of M<sub>O</sub> about point O.</li>
+</ol>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Principle of Moments</h3>
+<p>This process is summarized in equation form by:</p>
+<div class="formula-card">
+  <div class="formula-label">Principle of Moments</div>
+  <div class="formula-body">
+    <strong>R</strong> = &Sigma;<strong>F</strong><br>
+    M<sub>O</sub> = &Sigma;M = &Sigma;(Fd)<br>
+    Rd = M<sub>O</sub> &nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp; d = M<sub>O</sub>/R <span class="eq-num">(2/10)</span>
+  </div>
+</div>
+<p>The first two of Eqs. 2/10 reduce a given system of forces to a force–couple system at an arbitrarily chosen but convenient point O. The last equation specifies the distance d from point O to the line of action of <strong>R</strong>, and states that the moment of the resultant force about any point O equals the sum of the moments of the original forces of the system about the same point. This extends Varignon's theorem to the case of nonconcurrent force systems; we call this extension the <em>principle of moments</em>.</p>
+<p>For a concurrent system of forces where the lines of action of all forces pass through a common point O, the moment sum &Sigma;M<sub>O</sub> about that point is zero. Thus, the line of action of the resultant <strong>R</strong> = &Sigma;<strong>F</strong> passes through point O.</p>
+<p>If the resultant force <strong>R</strong> for a given force system is zero, the resultant of the system need not be zero because the resultant may be a couple.</p>
+</div>
+</div>
+
+<!-- SECTION B: THREE-DIMENSIONAL FORCE SYSTEMS -->
+<h2 class="section-title" style="background:var(--accent);color:#fff;padding:10px 16px;border-radius:var(--radius);margin:28px 0 16px">Section B — Three-Dimensional Force Systems</h2>
+
+<!-- 2/7 RECTANGULAR COMPONENTS (3D) -->
+<div id="ch2-s7" class="subsection">
+<h2 class="section-title"><span class="section-num">2/7</span> Rectangular Components (3D)</h2>
+<p>Many problems in mechanics require analysis in three dimensions. In three-dimensional problems, a force <strong>F</strong> acting at the origin O of a right-handed coordinate system x-y-z may be written in vector form as:</p>
+<div class="formula-card">
+  <div class="formula-label">3D Force in Component Form</div>
+  <div class="formula-body"><strong>F</strong> = F<sub>x</sub><strong>i</strong> + F<sub>y</sub><strong>j</strong> + F<sub>z</sub><strong>k</strong></div>
+</div>
+<p>The scalar components are found from the direction cosines or from the geometry of the problem. A unit vector <strong>n</strong> along the direction of the force is given by:</p>
+<div class="formula-card">
+  <div class="formula-label">Unit Vector from Geometry</div>
+  <div class="formula-body">
+    <strong>n</strong> = (x<sub>B</sub>&minus;x<sub>A</sub>)<strong>i</strong> + (y<sub>B</sub>&minus;y<sub>A</sub>)<strong>j</strong> + (z<sub>B</sub>&minus;z<sub>A</sub>)<strong>k</strong>) / |AB|<br>
+    where |AB| = &radic;[&Delta;x<sup>2</sup> + &Delta;y<sup>2</sup> + &Delta;z<sup>2</sup>]
+  </div>
+</div>
+</div>
+
+<!-- 2/8 MOMENT AND COUPLE (3D) -->
+<div id="ch2-s8" class="subsection">
+<h2 class="section-title"><span class="section-num">2/8</span> Moment and Couple (3D)</h2>
+<p>In two dimensions, we need to find only the magnitude of the moment and its sense (CW or CCW). In three dimensions we must find the complete vector expression for the moment.</p>
+<div class="formula-card">
+  <div class="formula-label">Moment Vector (Cross Product)</div>
+  <div class="formula-body">
+    <strong>M</strong><sub>O</sub> = <strong>r</strong> &times; <strong>F</strong><br><br>
+    Expanding the determinant:<br>
+    <strong>M</strong><sub>O</sub> = (r<sub>y</sub>F<sub>z</sub> &minus; r<sub>z</sub>F<sub>y</sub>)<strong>i</strong> + (r<sub>z</sub>F<sub>x</sub> &minus; r<sub>x</sub>F<sub>z</sub>)<strong>j</strong> + (r<sub>x</sub>F<sub>y</sub> &minus; r<sub>y</sub>F<sub>x</sub>)<strong>k</strong>
+  </div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Moment about an Arbitrary Axis</h3>
+<p>The moment of a force <strong>F</strong> about an axis &lambda; with unit vector <strong>n</strong><sub>&lambda;</sub> passing through point O is:</p>
+<div class="formula-card">
+  <div class="formula-label">Moment about an Axis</div>
+  <div class="formula-body">M<sub>&lambda;</sub> = <strong>n</strong><sub>&lambda;</sub> &middot; (<strong>r</strong> &times; <strong>F</strong>)</div>
+</div>
+<p>This is a scalar triple product. If M<sub>&lambda;</sub> &gt; 0, the sense of the moment is in the direction of <strong>n</strong><sub>&lambda;</sub>.</p>
+</div>
+</div>
+
+<!-- 2/9 RESULTANTS (3D) -->
+<div id="ch2-s9" class="subsection">
+<h2 class="section-title"><span class="section-num">2/9</span> Resultants (3D)</h2>
+<p>In three dimensions, the resultant of a force system is determined by following the same Principle of Moments as in 2D:</p>
+<div class="formula-card">
+  <div class="formula-label">3D Resultant</div>
+  <div class="formula-body">
+    <strong>R</strong> = &Sigma;<strong>F</strong><br>
+    <strong>M</strong><sub>O</sub> = &Sigma;(<strong>r</strong> &times; <strong>F</strong>) = &Sigma;<strong>M</strong><sub>O</sub>
+  </div>
+</div>
+<p>In general, a force system in three dimensions reduces to a resultant force <strong>R</strong> and a resultant couple <strong>M</strong><sub>O</sub>, neither of which need be zero. This system can in some cases be further simplified to a single force or a single couple, depending on the nature of the system.</p>
+<p>A <strong>wrench</strong> is the simplest resultant of a general three-dimensional force system; it consists of a force <strong>R</strong> and a couple vector <strong>M</strong> collinear with <strong>R</strong>.</p>
+</div>
+
+<!-- CHAPTER 2 REVIEW -->
+<div id="ch2-review" class="subsection">
+<h2 class="section-title">Chapter 2 — Key Formulas Quick Reference</h2>
+<div class="revision-grid">
+  <div class="revision-card"><h4>2D Scalar Components</h4><p>F<sub>x</sub>=F cos&theta;, F<sub>y</sub>=F sin&theta;</p></div>
+  <div class="revision-card"><h4>Force Magnitude</h4><p>F = &radic;(F<sub>x</sub><sup>2</sup>+F<sub>y</sub><sup>2</sup>)</p></div>
+  <div class="revision-card"><h4>Moment</h4><p>M = Fd = Fr sin&alpha;</p></div>
+  <div class="revision-card"><h4>Cross Product Moment</h4><p><strong>M</strong> = <strong>r</strong>&times;<strong>F</strong></p></div>
+  <div class="revision-card"><h4>Couple</h4><p>M = Fd (free vector)</p></div>
+  <div class="revision-card"><h4>Varignon's Theorem</h4><p>M<sub>O</sub> = r&times;R = r&times;P + r&times;Q</p></div>
+  <div class="revision-card"><h4>Resultant</h4><p>R = &Sigma;F, M<sub>O</sub>=&Sigma;(Fd), Rd=M<sub>O</sub></p></div>
+  <div class="revision-card"><h4>R Magnitude</h4><p>R = &radic;[(&Sigma;F<sub>x</sub>)<sup>2</sup>+(&Sigma;F<sub>y</sub>)<sup>2</sup>]</p></div>
+  <div class="revision-card"><h4>Moment about Axis</h4><p>M<sub>&lambda;</sub>=<strong>n</strong>&middot;(<strong>r</strong>&times;<strong>F</strong>)</p></div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- CHAPTER 3: EQUILIBRIUM -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="ch3" class="section" data-chapter="3">
+<div class="chapter-header">
+  <div class="chapter-num">Chapter 3</div>
+  <h1 class="chapter-title">Equilibrium</h1>
+  <p class="chapter-intro">Conditions for equilibrium of rigid bodies in two and three dimensions, free-body diagrams, constraints, and statical determinacy.</p>
+</div>
+
+<!-- 3/1 INTRODUCTION -->
+<div id="ch3-s1" class="subsection">
+<h2 class="section-title"><span class="section-num">3/1</span> Introduction</h2>
+<p>Statics deals primarily with the description of the force conditions necessary and sufficient to maintain the equilibrium of engineering structures. This chapter on equilibrium, therefore, constitutes the most important part of statics, and the procedures developed here form the basis for solving problems in both statics and dynamics. We will make continual use of the concepts developed in Chapter 2 involving forces, moments, couples, and resultants as we apply the principles of equilibrium.</p>
+<p>When a body is in equilibrium, the resultant of <em>all</em> forces acting on it is zero. Thus, the resultant force <strong>R</strong> and the resultant couple <strong>M</strong> are both zero, and we have the equilibrium equations:</p>
+<div class="formula-card">
+  <div class="formula-label">General Equilibrium Equations</div>
+  <div class="formula-body"><strong>R</strong> = &Sigma;<strong>F</strong> = <strong>0</strong> &nbsp;&nbsp;&nbsp;&nbsp; <strong>M</strong> = &Sigma;<strong>M</strong> = <strong>0</strong> <span class="eq-num">(3/1)</span></div>
+</div>
+<p>These requirements are both necessary and sufficient conditions for equilibrium.</p>
+<p>All physical bodies are three-dimensional, but we can treat many of them as two-dimensional when the forces to which they are subjected act in a single plane or can be projected onto a single plane.</p>
+</div>
+
+<!-- SECTION A: EQUILIBRIUM IN TWO DIMENSIONS -->
+<h2 class="section-title" style="background:var(--accent);color:#fff;padding:10px 16px;border-radius:var(--radius);margin:28px 0 16px">Section A — Equilibrium in Two Dimensions</h2>
+
+<!-- 3/2 SYSTEM ISOLATION AND THE FREE-BODY DIAGRAM -->
+<div id="ch3-s2" class="subsection">
+<h2 class="section-title"><span class="section-num">3/2</span> System Isolation and the Free-Body Diagram</h2>
+<p>Before we apply Eqs. 3/1, we must define unambiguously the particular body or mechanical system to be analyzed and represent clearly and completely <em>all</em> forces acting <em>on</em> the body. Omission of a force which acts on the body in question, or inclusion of a force which does not act on the body, will give erroneous results.</p>
+<p>A <strong>mechanical system</strong> is defined as a body or group of bodies which can be conceptually isolated from all other bodies. A system may be a single body or a combination of connected bodies. The bodies may be rigid or nonrigid.</p>
+<p>Once we decide which body or combination of bodies to analyze, we then treat this body or combination as a single body isolated from all surrounding bodies. This isolation is accomplished by means of the <strong>free-body diagram</strong>, which is a diagrammatic representation of the isolated system treated as a single body. The diagram shows all forces applied to the system by mechanical contact with other bodies, which are imagined to be removed.</p>
+
+<div class="note-box important">
+<div class="note-box-title">Most Important Step in Statics</div>
+<p><strong>The free-body diagram is the most important single step in the solution of problems in mechanics.</strong></p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Modeling the Action of Forces</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Type of Contact / Force Origin</th><th>Action on Isolated Body</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>1. Flexible cable, belt, chain, or rope</strong></td>
+  <td>Force exerted by a flexible cable is always a tension away from the body in the direction of the cable.</td>
+</tr>
+<tr>
+  <td><strong>2. Smooth surfaces</strong></td>
+  <td>Contact force is compressive and is normal to the surface. Force = N (perpendicular to tangent).</td>
+</tr>
+<tr>
+  <td><strong>3. Rough surfaces</strong></td>
+  <td>Rough surfaces are capable of supporting a tangential component F (frictional force) as well as a normal component N of the resultant contact force R.</td>
+</tr>
+<tr>
+  <td><strong>4. Roller support</strong></td>
+  <td>Roller, rocker, or ball support transmits a compressive force normal to the supporting surface.</td>
+</tr>
+<tr>
+  <td><strong>5. Freely sliding guide</strong></td>
+  <td>Collar or slider free to move along smooth guides; can support force normal to guide only.</td>
+</tr>
+<tr>
+  <td><strong>6. Pin connection</strong></td>
+  <td>A freely hinged pin connection is capable of supporting a force in any direction in the plane normal to the pin axis. We may show either two components R<sub>x</sub> and R<sub>y</sub> or a magnitude R and direction &theta;. A pin not free to turn also supports a couple M.</td>
+</tr>
+<tr>
+  <td><strong>7. Built-in or fixed support</strong></td>
+  <td>A built-in or fixed support is capable of supporting an axial force F, a transverse force V (shear force), and a couple M (bending moment) to prevent rotation.</td>
+</tr>
+<tr>
+  <td><strong>8. Gravitational attraction</strong></td>
+  <td>The resultant of gravitational attraction on all elements of a body of mass m is the weight W = mg and acts toward the center of the earth through the center of gravity G.</td>
+</tr>
+<tr>
+  <td><strong>9. Spring action (linear)</strong></td>
+  <td>Spring force is tensile if the spring is stretched and compressive if compressed. For a linearly elastic spring the stiffness k is the force required to deform the spring a unit distance: F = kx.</td>
+</tr>
+<tr>
+  <td><strong>10. Torsional spring action</strong></td>
+  <td>For a linear torsional spring, the applied moment M is proportional to the angular deflection &theta; from the neutral position: M = k<sub>T</sub>&theta;. The stiffness k<sub>T</sub> is the moment required to deform the spring one radian.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Construction of Free-Body Diagrams</h3>
+<div class="note-box key">
+<div class="note-box-title">Four Steps for Drawing Free-Body Diagrams</div>
+<ol class="step-list" style="margin-top:8px">
+  <li><strong>Step 1:</strong> Decide which system to isolate. The system chosen should usually involve one or more of the desired unknown quantities.</li>
+  <li><strong>Step 2:</strong> Next isolate the chosen system by drawing a diagram which represents its <em>complete external boundary</em>. This boundary defines the isolation of the system from all other attracting or contacting bodies, which are considered removed. This step is often the most crucial of all. Make certain that you have <em>completely isolated</em> the system before proceeding.</li>
+  <li><strong>Step 3:</strong> Identify all forces which act <em>on</em> the isolated system as applied by the removed contacting and attracting bodies, and represent them in their proper positions on the diagram. Make a systematic traverse of the entire boundary to identify all contact forces. Include body forces such as weights, where appreciable. Represent all known forces by vector arrows, each with its proper magnitude, direction, and sense indicated. Each unknown force should be represented by a vector arrow with the unknown magnitude or direction indicated by symbol.</li>
+  <li><strong>Step 4:</strong> Show the choice of coordinate axes directly on the diagram. Pertinent dimensions may also be represented for convenience. Note, however, that the free-body diagram serves the purpose of focusing attention on the action of the external forces, and therefore the diagram should not be cluttered with excessive extraneous information.</li>
+</ol>
+</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Examples of Free-Body Diagrams</h3>
+<div class="expand-section">
+<button class="expand-header">Example 1: Plane Truss <span class="expand-arrow">&#9660;</span></button>
+<div class="expand-body">
+<p>The entire truss is removed from its supporting foundation and treated as a single rigid body. In addition to the applied external load P, the free-body diagram must include the reactions on the truss at A and B. The rocker at B can support a vertical force only. The pin connection at A is capable of supplying both a horizontal and a vertical force component to the truss. If the total weight of the truss members is appreciable compared with P and the forces at A and B, then the weights of the members must be included on the free-body diagram as external forces.</p>
+</div>
+</div>
+<div class="expand-section">
+<button class="expand-header">Example 2: Cantilever Beam <span class="expand-arrow">&#9660;</span></button>
+<div class="expand-body">
+<p>The cantilever beam is secured to the wall and subjected to three applied loads. When we isolate the part of the beam to the right of the section at A, we must include the reactive forces applied to the beam by the wall. A vertical force V to counteract the excess of downward applied force is shown, and a tension F to balance the excess of applied force to the right must also be included. A counterclockwise couple M is also required. The weight mg of the beam must be represented through the mass center. The free-body diagram shows the beam in equilibrium under the action of six forces and one couple.</p>
+</div>
+</div>
+<div class="expand-section">
+<button class="expand-header">Example 3: Beam with Smooth Corner Contact and Pin <span class="expand-arrow">&#9660;</span></button>
+<div class="expand-body">
+<p>The weight W = mg is shown acting through the center of mass of the beam. The force exerted by the corner A on the beam is normal to the smooth surface of the beam. In addition to the applied force P and couple M, there is the pin connection at B, which exerts both an x- and a y-component of force on the beam. The positive senses of these components are assigned arbitrarily.</p>
+</div>
+</div>
+<div class="expand-section">
+<button class="expand-header">Example 4: Rigid System of Interconnected Bodies <span class="expand-arrow">&#9660;</span></button>
+<div class="expand-body">
+<p>The free-body diagram of the entire isolated mechanism contains three unknown forces if the loads mg and P are known. This example illustrates that the forces internal to a rigid assembly of members do not influence the values of the external reactions. The free-body diagram reveals the unknown reactions regardless of the internal configuration.</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 3/3 EQUILIBRIUM CONDITIONS (2D) -->
+<div id="ch3-s3" class="subsection">
+<h2 class="section-title"><span class="section-num">3/3</span> Equilibrium Conditions (2D)</h2>
+<p>In Art. 3/1 we defined equilibrium as the condition in which the resultant of all forces and moments acting on a body is zero. Stated in another way, a body is in equilibrium if all forces and moments applied to it are in balance. These requirements are contained in the vector equations of equilibrium, Eqs. 3/1, which in two dimensions may be written in scalar form as:</p>
+<div class="formula-card">
+  <div class="formula-label">2D Equilibrium Equations</div>
+  <div class="formula-body">
+    &Sigma;F<sub>x</sub> = 0 &nbsp;&nbsp;&nbsp; &Sigma;F<sub>y</sub> = 0 &nbsp;&nbsp;&nbsp; &Sigma;M<sub>O</sub> = 0 <span class="eq-num">(3/2)</span>
+  </div>
+</div>
+<p>The third equation represents the zero sum of the moments of all forces about any point O on or off the body. Equations 3/2 are the necessary and sufficient conditions for complete equilibrium in two dimensions.</p>
+<p>For complete equilibrium in two dimensions, all three of Eqs. 3/2 must hold. However, these conditions are independent requirements, and one may hold without another.</p>
+
+<div class="subsection">
+<h3 class="subsection-title">Categories of Equilibrium in Two Dimensions</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Category</th><th>Force System</th><th>Independent Equations</th></tr></thead>
+<tbody>
+<tr><td><strong>1. Collinear</strong></td><td>Forces lie along a single line (x-direction)</td><td>&Sigma;F<sub>x</sub> = 0</td></tr>
+<tr><td><strong>2. Concurrent at a point</strong></td><td>All lines of action intersect at point O</td><td>&Sigma;F<sub>x</sub> = 0 and &Sigma;F<sub>y</sub> = 0</td></tr>
+<tr><td><strong>3. Parallel</strong></td><td>All forces parallel (x-direction)</td><td>&Sigma;F<sub>x</sub> = 0 and &Sigma;M<sub>z</sub> = 0</td></tr>
+<tr><td><strong>4. General</strong></td><td>Forces in x-y plane with couples</td><td>&Sigma;F<sub>x</sub> = 0, &Sigma;F<sub>y</sub> = 0, and &Sigma;M<sub>z</sub> = 0</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Two- and Three-Force Members</h3>
+<div class="definition-card">
+  <div class="def-term">Two-Force Member</div>
+  <div class="def-body">A body under the action of two forces only. For such a two-force member to be in equilibrium, the forces must be <em>equal, opposite, and collinear</em>. The shape of the member does not affect this simple requirement.</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">Three-Force Member</div>
+  <div class="def-body">A body under the action of three forces. Equilibrium requires the lines of action of the three forces to be <em>concurrent</em>. If they were not concurrent, then one of the forces would exert a resultant moment about the point of intersection of the other two, which would violate the requirement of zero moment about every point. The only exception occurs when the three forces are parallel (point of concurrency at infinity).</div>
+</div>
+<p>The principle of the concurrency of three forces in equilibrium is of considerable use in carrying out a graphical solution of the force equations. The polygon of forces is drawn and made to close. Frequently, a body in equilibrium under the action of more than three forces may be reduced to a three-force member by a combination of two or more of the known forces.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Alternative Equilibrium Equations</h3>
+<p>In addition to Eqs. 3/2, there are two other ways to express the general conditions for the equilibrium of forces in two dimensions:</p>
+<p><strong>Alternative set 1:</strong></p>
+<div class="formula-card">
+  <div class="formula-label">Alternative Equilibrium Equations (Set 1)</div>
+  <div class="formula-body">
+    &Sigma;F<sub>x</sub> = 0 &nbsp;&nbsp;&nbsp; &Sigma;M<sub>A</sub> = 0 &nbsp;&nbsp;&nbsp; &Sigma;M<sub>B</sub> = 0<br>
+    (where A and B must not lie on a line perpendicular to the x-direction)
+  </div>
+</div>
+<p><strong>Alternative set 2 (three moment equations):</strong></p>
+<div class="formula-card">
+  <div class="formula-label">Alternative Equilibrium Equations (Set 2)</div>
+  <div class="formula-body">
+    &Sigma;M<sub>A</sub> = 0 &nbsp;&nbsp;&nbsp; &Sigma;M<sub>B</sub> = 0 &nbsp;&nbsp;&nbsp; &Sigma;M<sub>C</sub> = 0<br>
+    (where A, B, and C are any three points not on the same straight line)
+  </div>
+</div>
+<p>When equilibrium equations are written which are not independent, redundant information is obtained, and a correct solution of the equations will yield 0 = 0.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Constraints and Statical Determinacy</h3>
+<div class="definition-card">
+  <div class="def-term">Constraint</div>
+  <div class="def-body">By constraint we mean the restriction of movement. The nature of the constraints determines whether the equilibrium equations are adequate to determine all the unknowns.</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">Statically Indeterminate Body</div>
+  <div class="def-body">A rigid body, or rigid combination of elements treated as a single body, which possesses more external supports or constraints than are necessary to maintain an equilibrium position is called statically indeterminate. Supports which can be removed without destroying the equilibrium condition of the body are said to be redundant. The number of redundant supporting elements present corresponds to the <em>degree of statical indeterminacy</em> and equals the total number of unknown external forces, minus the number of available independent equations of equilibrium.</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">Statically Determinate Body</div>
+  <div class="def-body">Bodies which are supported by the minimum number of constraints necessary to ensure an equilibrium configuration are called statically determinate, and for such bodies the equilibrium equations are sufficient to determine the unknown external forces.</div>
+</div>
+<div class="subsection">
+<h3 class="subsection-title">Adequacy of Constraints</h3>
+<p>The existence of three constraints for a two-dimensional problem does not always guarantee a stable equilibrium configuration. Four different types of constraints are possible:</p>
+<ul style="margin-left:20px;margin-bottom:12px">
+  <li><strong>(a) Complete fixity / Adequate (proper) constraints:</strong> Point A of the rigid body is fixed by two links and cannot move, and the third link prevents any rotation about A. This body is <em>completely fixed</em> with three adequate (proper) constraints.</li>
+  <li><strong>(b) Incomplete fixity / Partial (improper) constraints:</strong> The third link is positioned so that the force transmitted by it passes through point A where the other two constraint forces act. This configuration can offer no initial resistance to rotation about A.</li>
+  <li><strong>(c) Incomplete fixity / Partial constraints:</strong> Three parallel links could offer no initial resistance to a small vertical movement of the body.</li>
+  <li><strong>(d) Excessive fixity / Redundant constraint:</strong> A fourth constraint which is unnecessary to maintain a fixed position. The body is statically indeterminate.</li>
+</ul>
+</div>
+
+<div class="note-box key">
+<div class="note-box-title">Approach to Solving Problems</div>
+<ol class="step-list" style="margin-top:8px">
+  <li>Identify clearly the quantities which are known and unknown.</li>
+  <li>Make an unambiguous choice of the body to be isolated and draw its complete free-body diagram, labeling all external known and unknown but identifiable forces and couples.</li>
+  <li>Choose a convenient set of reference axes, always using right-handed axes when vector cross products are employed. Choose moment centers with a view to simplifying the calculations. Generally the best choice is one through which as many unknown forces pass as possible.</li>
+  <li>Identify and state the applicable force and moment principles or equations which govern the equilibrium conditions.</li>
+  <li>Match the number of independent equations with the number of unknowns in each problem.</li>
+  <li>Carry out the solution and check the results. In many problems engineering judgment can be developed by first making a reasonable guess or estimate of the result prior to the calculation and then comparing the estimate with the calculated value.</li>
+</ol>
+</div>
+</div>
+</div>
+
+<!-- SECTION B: EQUILIBRIUM IN THREE DIMENSIONS -->
+<h2 class="section-title" style="background:var(--accent);color:#fff;padding:10px 16px;border-radius:var(--radius);margin:28px 0 16px">Section B — Equilibrium in Three Dimensions</h2>
+
+<!-- 3/4 EQUILIBRIUM CONDITIONS (3D) -->
+<div id="ch3-s4" class="subsection">
+<h2 class="section-title"><span class="section-num">3/4</span> Equilibrium Conditions (3D)</h2>
+<p>The conditions for three-dimensional equilibrium require that both the resultant force and the resultant couple of a force system acting on a body equal zero:</p>
+<div class="formula-card">
+  <div class="formula-label">3D Equilibrium Equations (6 scalar equations)</div>
+  <div class="formula-body">
+    &Sigma;F<sub>x</sub> = 0 &nbsp;&nbsp;&nbsp; &Sigma;F<sub>y</sub> = 0 &nbsp;&nbsp;&nbsp; &Sigma;F<sub>z</sub> = 0<br>
+    &Sigma;M<sub>x</sub> = 0 &nbsp;&nbsp;&nbsp; &Sigma;M<sub>y</sub> = 0 &nbsp;&nbsp;&nbsp; &Sigma;M<sub>z</sub> = 0
+  </div>
+</div>
+<p>The six scalar equilibrium equations are necessary and sufficient for the complete equilibrium of a rigid body in three dimensions. Because the six equations represent independent conditions, a body in three-dimensional equilibrium with 6 or fewer unknowns can generally be solved.</p>
+
+<div class="subsection">
+<h3 class="subsection-title">Modeling Supports in 3D</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Support Type</th><th>Reactions Supported</th><th>Unknowns</th></tr></thead>
+<tbody>
+<tr><td>Ball on smooth surface</td><td>Compressive force normal to surface</td><td>1 (magnitude of normal)</td></tr>
+<tr><td>Ball-and-socket joint</td><td>Force in any direction</td><td>3 (F<sub>x</sub>, F<sub>y</sub>, F<sub>z</sub>)</td></tr>
+<tr><td>Single journal bearing</td><td>Force normal to shaft axis</td><td>2 (force components)</td></tr>
+<tr><td>Journal bearing with collar</td><td>Force normal to shaft axis + axial force</td><td>3</td></tr>
+<tr><td>Fixed (built-in) support</td><td>Force in any direction + couple in any direction</td><td>6 (3 force + 3 couple)</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- CHAPTER 3 REVIEW -->
+<div id="ch3-review" class="subsection">
+<h2 class="section-title">Chapter 3 — Key Formulas Quick Reference</h2>
+<div class="revision-grid">
+  <div class="revision-card"><h4>2D Equilibrium</h4><p>&Sigma;F<sub>x</sub>=0, &Sigma;F<sub>y</sub>=0, &Sigma;M<sub>O</sub>=0</p></div>
+  <div class="revision-card"><h4>3D Equilibrium</h4><p>&Sigma;F<sub>x</sub>=&Sigma;F<sub>y</sub>=&Sigma;F<sub>z</sub>=0 and &Sigma;M<sub>x</sub>=&Sigma;M<sub>y</sub>=&Sigma;M<sub>z</sub>=0</p></div>
+  <div class="revision-card"><h4>Two-Force Member</h4><p>Forces must be equal, opposite, collinear</p></div>
+  <div class="revision-card"><h4>Three-Force Member</h4><p>Lines of action must be concurrent</p></div>
+  <div class="revision-card"><h4>Spring Force</h4><p>F = kx (linear spring)</p></div>
+  <div class="revision-card"><h4>Torsional Spring</h4><p>M = k<sub>T</sub>&theta;</p></div>
+  <div class="revision-card"><h4>Weight</h4><p>W = mg acts through center of gravity G</p></div>
+  <div class="revision-card"><h4>Statical Determinacy</h4><p>Unknowns = Independent equations</p></div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- CHAPTER 4: STRUCTURES -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="ch4" class="section" data-chapter="4">
+<div class="chapter-header">
+  <div class="chapter-num">Chapter 4</div>
+  <h1 class="chapter-title">Structures</h1>
+  <p class="chapter-intro">Analysis of internal forces in trusses (method of joints, method of sections), space trusses, frames, and machines.</p>
+</div>
+
+<!-- 4/1 INTRODUCTION -->
+<div id="ch4-s1" class="subsection">
+<h2 class="section-title"><span class="section-num">4/1</span> Introduction</h2>
+<p>In Chapter 3 we studied the equilibrium of a single rigid body or a system of connected members treated as a single rigid body. In Chapter 4 we focus on the determination of the forces <em>internal</em> to a structure — that is, forces of action and reaction between the connected members. An engineering structure is any connected system of members built to support or transfer forces and to safely withstand the loads applied to it. To determine the forces internal to an engineering structure, we must dismember the structure and analyze separate free-body diagrams of individual members or combinations of members. This analysis requires careful application of Newton's third law, which states that each action is accompanied by an equal and opposite reaction.</p>
+<p>In Chapter 4 we analyze the internal forces acting in several types of structures — namely, trusses, frames, and machines. In this treatment we consider only <em>statically determinate</em> structures, which do not have more supporting constraints than are necessary to maintain an equilibrium configuration. Thus, as we have already seen, the equations of equilibrium are adequate to determine all unknown reactions.</p>
+</div>
+
+<!-- 4/2 PLANE TRUSSES -->
+<div id="ch4-s2" class="subsection">
+<h2 class="section-title"><span class="section-num">4/2</span> Plane Trusses</h2>
+<p>A framework composed of members joined at their ends to form a rigid structure is called a <strong>truss</strong>. Bridges, roof supports, derricks, and other such structures are common examples of trusses. Structural members commonly used are I-beams, channels, angles, bars, and special shapes which are fastened together at their ends by welding, riveted connections, or large bolts or pins. When the members of the truss lie essentially in a single plane, the truss is called a <em>plane truss</em>.</p>
+<p>For bridges and similar structures, plane trusses are commonly utilized in pairs with one truss assembly placed on each side of the structure.</p>
+
+<div class="subsection">
+<h3 class="subsection-title">Common Truss Types</h3>
+<p><strong>Bridge Trusses:</strong> Pratt, Howe, Warren, K-truss, Baltimore</p>
+<p><strong>Roof Trusses:</strong> Fink, Pratt, Howe, Warren</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Simple Trusses</h3>
+<p>The basic element of a plane truss is the triangle. Three bars joined by pins at their ends constitute a rigid frame. The term <em>rigid</em> is used to mean noncollapsible and also to mean that deformation of the members due to induced internal strains is negligible. Four or more bars pin-jointed to form a polygon constitute a nonrigid frame. We can make the nonrigid frame rigid by adding a diagonal bar and thereby forming two triangles.</p>
+<p>Structures built from a basic triangle in the manner described are known as <strong>simple trusses</strong>. When more members are present than are needed to prevent collapse, the truss is statically indeterminate. Additional members or supports which are not necessary for maintaining the equilibrium configuration are called <em>redundant</em>.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Assumptions for Simple Truss Analysis</h3>
+<ol style="margin-left:20px;margin-bottom:12px">
+  <li>We assume all members to be <strong>two-force members</strong>. Each member of a truss is normally a straight link joining the two points of application of force. The two forces are applied at the ends of the member and are necessarily equal, opposite, and collinear for equilibrium.</li>
+  <li>The member may be in <strong>tension (T)</strong> or <strong>compression (C)</strong>. When we represent the equilibrium of a portion of a two-force member, the tension T or compression C acting on the cut section is the same for all sections. We assume here that the weight of the member is small compared with the force it supports.</li>
+  <li>We also assume in the analysis of simple trusses that all <strong>external forces are applied at the pin connections</strong>. This condition is satisfied in most trusses.</li>
+</ol>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Internal and External Redundancy</h3>
+<p>If a plane truss has more external supports than are necessary to ensure a stable equilibrium configuration, the truss as a whole is statically indeterminate, and the extra supports constitute external redundancy.</p>
+<p>For a truss which is statically determinate externally, there is a definite relation between the number of its members and the number of its joints necessary for internal stability without redundancy. The equation is:</p>
+<div class="formula-card">
+  <div class="formula-label">Truss Stability Criterion</div>
+  <div class="formula-body">
+    m + 3 = 2j<br><br>
+    where:<br>
+    m = number of two-force members<br>
+    j = number of joints<br><br>
+    If m + 3 &gt; 2j: statically indeterminate internally (redundant members)<br>
+    If m + 3 &lt; 2j: unstable (deficiency of internal members)
+  </div>
+</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Special Conditions for Zero-Force Members</h3>
+<p>Three important special conditions arise:</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Condition (Figure)</th><th>Conclusion</th></tr></thead>
+<tbody>
+<tr><td>Two collinear members + one non-collinear third member at a joint (no external load)</td><td>&Sigma;F<sub>y</sub> = 0 requires F<sub>3</sub> = 0; &Sigma;F<sub>x</sub> = 0 requires F<sub>1</sub> = F<sub>2</sub></td></tr>
+<tr><td>Two noncollinear members joined at a joint with no external load</td><td>Forces in both members must be zero</td></tr>
+<tr><td>Two pairs of collinear members joined at a joint</td><td>Forces in each pair must be equal and opposite</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- 4/3 METHOD OF JOINTS -->
+<div id="ch4-s3" class="subsection">
+<h2 class="section-title"><span class="section-num">4/3</span> Method of Joints</h2>
+<p>This method for finding the forces in the members of a truss consists of satisfying the conditions of equilibrium for the forces acting on the connecting pin of each joint. The method therefore deals with the equilibrium of concurrent forces, and only two independent equilibrium equations are involved:</p>
+<div class="formula-card">
+  <div class="formula-label">Equilibrium at Each Joint</div>
+  <div class="formula-body">&Sigma;F<sub>x</sub> = 0 &nbsp;&nbsp;&nbsp; &Sigma;F<sub>y</sub> = 0</div>
+</div>
+
+<div class="note-box key">
+<div class="note-box-title">Procedure for Method of Joints</div>
+<ol class="step-list" style="margin-top:8px">
+  <li>Find the external reactions by applying the equilibrium equations to the truss as a whole.</li>
+  <li>Begin the analysis with any joint where at least one known load exists and where not more than two unknown forces are present.</li>
+  <li>Draw the free-body diagram of the pin at the selected joint, showing all member forces and external forces at that joint.</li>
+  <li>Apply &Sigma;F<sub>x</sub> = 0 and &Sigma;F<sub>y</sub> = 0 to solve for the two unknowns. Arrow away from pin indicates tension; arrow toward pin indicates compression.</li>
+  <li>Proceed to the next joint which now has no more than two unknowns.</li>
+  <li>Continue until all member forces are determined. The last joint provides a check on the calculations.</li>
+</ol>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Sign Convention and Notation</h3>
+<p>With the joints indicated by letters, we usually designate the force in each member by the two letters defining the ends of the member. If we consistently draw the force arrows on the same side of the pin as the member, then tension (such as AB) will always be indicated by an arrow <em>away from</em> the pin, and compression will always be indicated by an arrow <em>toward</em> the pin.</p>
+<p>It is often convenient to indicate the tension T and compression C of the various members directly on the original truss diagram by drawing arrows away from the pins for tension and toward the pins for compression.</p>
+<p>Sometimes we cannot initially assign the correct direction of one or both of the unknown forces acting on a given pin. If so, we may make an arbitrary assignment. A <em>negative</em> computed force value indicates that the initially assumed direction is incorrect.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Cross-Braced Truss Panels</h3>
+<p>Truss panels are frequently cross-braced. Such a panel is statically indeterminate if each brace can support either tension or compression. However, when the braces are flexible members incapable of supporting compression, as are cables, then only the tension member acts and we can disregard the other member. It is usually evident from the asymmetry of the loading how the panel will deflect. The assumed tension member is retained; if the assumed tension turns out to be negative, the opposite member must be retained and the calculation redone.</p>
+</div>
+</div>
+
+<!-- 4/4 METHOD OF SECTIONS -->
+<div id="ch4-s4" class="subsection">
+<h2 class="section-title"><span class="section-num">4/4</span> Method of Sections</h2>
+<p>The method of sections is based on the principle that if a body is in equilibrium, then any part of the body is also in equilibrium. To use this method, we imagine a section or cut through the truss so that the section passes through no more than three members whose forces are unknown (since we can write only three independent equilibrium equations for the free body of a portion of the truss).</p>
+
+<div class="note-box key">
+<div class="note-box-title">Procedure for Method of Sections</div>
+<ol class="step-list" style="margin-top:8px">
+  <li>Determine the external reactions for the entire truss.</li>
+  <li>Pass a cutting plane through the truss, cutting no more than three members of unknown force. Select the cutting plane so that it intersects the members whose forces you wish to find.</li>
+  <li>Isolate either portion of the truss and draw its free-body diagram, showing all forces acting on the cut members.</li>
+  <li>Apply the three equilibrium equations (&Sigma;F<sub>x</sub> = 0, &Sigma;F<sub>y</sub> = 0, &Sigma;M<sub>O</sub> = 0) to solve for the three unknowns. Choose the moment center O at the intersection of two unknown forces to simplify calculation.</li>
+</ol>
+</div>
+
+<div class="note-box">
+<div class="note-box-title">When to Use Method of Sections vs. Method of Joints</div>
+<p><strong>Method of Joints:</strong> Best used when all member forces are required, or when beginning with a joint that has only two unknown members.</p>
+<p><strong>Method of Sections:</strong> Best used when the forces in only a few specific members are required, especially in the middle of a large truss, without analyzing all other members.</p>
+</div>
+</div>
+
+<!-- 4/5 SPACE TRUSSES -->
+<div id="ch4-s5" class="subsection">
+<h2 class="section-title"><span class="section-num">4/5</span> Space Trusses</h2>
+<p>A space truss is the three-dimensional counterpart of the plane truss. The simplest space truss is a tetrahedron — four joints connected by six members. We may build up a simple space truss from a basic tetrahedron by adding three new members and one new joint at a time.</p>
+<p>The relation between the number of members m and the number of joints j for a statically determinate space truss is:</p>
+<div class="formula-card">
+  <div class="formula-label">Space Truss Determinacy</div>
+  <div class="formula-body">m + 6 = 3j</div>
+</div>
+<p>For the space truss, the method of joints gives three scalar equilibrium equations (&Sigma;F<sub>x</sub> = 0, &Sigma;F<sub>y</sub> = 0, &Sigma;F<sub>z</sub> = 0) at each joint, with no more than three unknowns being solved at each joint. The method of sections for space trusses involves passing a cutting plane through the truss that cuts no more than six members of unknown force.</p>
+</div>
+
+<!-- 4/6 FRAMES AND MACHINES -->
+<div id="ch4-s6" class="subsection">
+<h2 class="section-title"><span class="section-num">4/6</span> Frames and Machines</h2>
+<div class="definition-card">
+  <div class="def-term">Frame</div>
+  <div class="def-body">A structure designed to support applied loads, usually stationary, that contains at least one multi-force member (a member acted on by three or more forces). Unlike a truss, the members are not limited to being two-force members.</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">Machine</div>
+  <div class="def-body">A structure designed to transmit and modify forces, that contains moving parts and at least one multi-force member. The purpose of a machine is to transmit input forces to output forces, often changing their magnitude or direction.</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Analysis Approach for Frames and Machines</h3>
+<ol class="step-list">
+  <li><strong>Identify multi-force members.</strong> Unlike trusses, you cannot assume all members are two-force members. A member with loads or reactions at more than two points, or with intermediate forces, is a multi-force member.</li>
+  <li><strong>Draw the free-body diagram of the entire frame or machine.</strong> Determine the external reactions using the equilibrium equations. This step is often independent of the internal analysis.</li>
+  <li><strong>Dismember the structure.</strong> Separate connected members and draw free-body diagrams of each member. Show all forces at the connections according to Newton's third law — equal and opposite at each connection.</li>
+  <li><strong>Apply equilibrium equations to each isolated member.</strong> Solve for the unknown forces. The internal pin reactions, shown equal and opposite on adjacent members, must be consistent.</li>
+</ol>
+</div>
+
+<div class="note-box important">
+<div class="note-box-title">Newton's Third Law at Connections</div>
+<p>When you dismember a structure, Newton's third law must be carefully observed. The force which member A exerts on member B is equal in magnitude and opposite in direction to the force which member B exerts on member A. If A pushes B to the right with force P, then B pushes A to the left with force P. Failure to correctly apply this principle is a common source of error.</p>
+</div>
+</div>
+
+<!-- CHAPTER 4 REVIEW -->
+<div id="ch4-review" class="subsection">
+<h2 class="section-title">Chapter 4 — Key Formulas Quick Reference</h2>
+<div class="revision-grid">
+  <div class="revision-card"><h4>Plane Truss Determinacy</h4><p>m + 3 = 2j (statically determinate)</p></div>
+  <div class="revision-card"><h4>Space Truss Determinacy</h4><p>m + 6 = 3j (statically determinate)</p></div>
+  <div class="revision-card"><h4>Method of Joints</h4><p>&Sigma;F<sub>x</sub>=0, &Sigma;F<sub>y</sub>=0 at each pin</p></div>
+  <div class="revision-card"><h4>Method of Sections</h4><p>Cut &le; 3 members; use &Sigma;F and &Sigma;M</p></div>
+  <div class="revision-card"><h4>Tension/Compression</h4><p>T: arrow away from pin; C: arrow toward pin</p></div>
+  <div class="revision-card"><h4>Zero-Force Members</h4><p>Check for collinear and isolated joint conditions</p></div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- CHAPTER 5: DISTRIBUTED FORCES -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="ch5" class="section" data-chapter="5">
+<div class="chapter-header">
+  <div class="chapter-num">Chapter 5</div>
+  <h1 class="chapter-title">Distributed Forces</h1>
+  <p class="chapter-intro">Centers of mass, centroids of lines, areas and volumes, composite bodies, Pappus theorems, beams, flexible cables, and fluid statics.</p>
+</div>
+
+<!-- 5/1 INTRODUCTION -->
+<div id="ch5-s1" class="subsection">
+<h2 class="section-title"><span class="section-num">5/1</span> Introduction</h2>
+<p>In the previous chapters we treated all forces as concentrated along their lines of action and at their points of application. Actually, "concentrated" forces do not exist in the exact sense, since every external force applied mechanically to a body is distributed over a finite contact area, however small.</p>
+<p>When forces are applied over a region whose dimensions are not negligible compared with other pertinent dimensions, then we must account for the actual manner in which the force is distributed. We do this by summing the effects of the distributed force over the entire region using mathematical integration. There are three categories of such problems:</p>
+<div class="definition-card">
+  <div class="def-term">(1) Line Distribution</div>
+  <div class="def-body">When a force is distributed along a line, as in the continuous vertical load supported by a suspended cable, the intensity w of the loading is expressed as force per unit length of line (N/m or lb/ft).</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">(2) Area Distribution</div>
+  <div class="def-body">When a force is distributed over an area, as with the hydraulic pressure of water against the inner face of a section of dam, the intensity is expressed as force per unit area. This intensity is called <em>pressure</em> for the action of fluid forces and <em>stress</em> for the internal distribution of forces in solids. Basic SI unit: pascal (Pa = N/m<sup>2</sup>). Note: 1 kPa = 10<sup>3</sup> Pa, 1 MPa = 10<sup>6</sup> Pa.</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">(3) Volume Distribution</div>
+  <div class="def-body">A force which is distributed over the volume of a body is called a <em>body force</em>. The most common body force is the force of gravitational attraction. The intensity of gravitational force is the <em>specific weight</em> &rho;g, where &rho; is the density (mass per unit volume) and g is the acceleration due to gravity.</div>
+</div>
+</div>
+
+<!-- SECTION A: CENTERS OF MASS AND CENTROIDS -->
+<h2 class="section-title" style="background:var(--accent);color:#fff;padding:10px 16px;border-radius:var(--radius);margin:28px 0 16px">Section A — Centers of Mass and Centroids</h2>
+
+<!-- 5/2 CENTER OF MASS -->
+<div id="ch5-s2" class="subsection">
+<h2 class="section-title"><span class="section-num">5/2</span> Center of Mass</h2>
+<p>Consider a three-dimensional body of any size and shape, having a mass m. If we suspend the body from any point such as A, the body will be in equilibrium under the action of the tension in the cord and the resultant W of the gravitational forces acting on all particles of the body. For all practical purposes these lines of action will be concurrent at a single point G, which is called the <strong>center of gravity</strong> of the body.</p>
+<p>To determine mathematically the location of the center of gravity of any body, we apply the <em>principle of moments</em> to the parallel system of gravitational forces:</p>
+<div class="formula-card">
+  <div class="formula-label">Center of Gravity Coordinates</div>
+  <div class="formula-body">
+    x&#772; = &int;x dW / W &nbsp;&nbsp;&nbsp; y&#772; = &int;y dW / W &nbsp;&nbsp;&nbsp; z&#772; = &int;z dW / W <span class="eq-num">(5/1a)</span>
+  </div>
+</div>
+<p>With the substitution of W = mg and dW = g dm, the expressions for the coordinates of the center of gravity become:</p>
+<div class="formula-card">
+  <div class="formula-label">Center of Mass Coordinates</div>
+  <div class="formula-body">
+    x&#772; = &int;x dm / m &nbsp;&nbsp;&nbsp; y&#772; = &int;y dm / m &nbsp;&nbsp;&nbsp; z&#772; = &int;z dm / m <span class="eq-num">(5/1b)</span>
+  </div>
+</div>
+<p>In vector form:</p>
+<div class="formula-card">
+  <div class="formula-label">Center of Mass Vector Form</div>
+  <div class="formula-body">
+    <strong>r&#772;</strong> = &int;<strong>r</strong> dm / m <span class="eq-num">(5/2)</span>
+  </div>
+</div>
+<p>The density &rho; of a body is its mass per unit volume. Thus, the mass of a differential element of volume dV becomes dm = &rho; dV. If &rho; is not constant throughout the body but can be expressed as a function of the coordinates of the body, we must account for this variation when calculating the numerators and denominators of Eqs. 5/1b:</p>
+<div class="formula-card">
+  <div class="formula-label">Center of Mass (Variable Density)</div>
+  <div class="formula-body">
+    x&#772; = &int;x&rho; dV / &int;&rho; dV &nbsp;&nbsp;&nbsp; y&#772; = &int;y&rho; dV / &int;&rho; dV &nbsp;&nbsp;&nbsp; z&#772; = &int;z&rho; dV / &int;&rho; dV <span class="eq-num">(5/3)</span>
+  </div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Center of Mass versus Center of Gravity</h3>
+<p>Equations 5/1b, 5/2, and 5/3 are independent of gravitational effects since g no longer appears. They therefore define a unique point in the body which is a function solely of the distribution of mass. This point is called the <strong>center of mass</strong>, and clearly it coincides with the center of gravity as long as the gravity field is treated as uniform and parallel.</p>
+<p>It is meaningless to speak of the center of gravity of a body which is removed from the gravitational field of the earth, since no gravitational forces would act on it. The body would, however, still have its unique center of mass.</p>
+<p>Another important clue may be taken from considerations of symmetry. Whenever there exists a line or plane of symmetry in a homogeneous body, a coordinate axis or plane should be chosen to coincide with this line or plane. The center of mass will always lie on such a line or plane, since the moments due to symmetrically located elements will always cancel.</p>
+</div>
+</div>
+
+<!-- 5/3 CENTROIDS OF LINES, AREAS, AND VOLUMES -->
+<div id="ch5-s3" class="subsection">
+<h2 class="section-title"><span class="section-num">5/3</span> Centroids of Lines, Areas, and Volumes</h2>
+<p>When the density &rho; of a body is uniform throughout, it will be a constant factor in both the numerators and denominators of Eqs. 5/3 and will therefore cancel. The remaining expressions define a purely geometrical property of the body, since any reference to its mass properties has disappeared. The term <strong>centroid</strong> is used when the calculation concerns a geometrical shape only.</p>
+
+<div class="definition-card">
+  <div class="def-term">Centroid vs. Center of Mass</div>
+  <div class="def-body">When speaking of an actual physical body, we use the term <em>center of mass</em>. If the density is uniform throughout the body, the positions of the centroid and center of mass are identical, whereas if the density varies, these two points will, in general, not coincide.</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">(1) Centroids of Lines</h3>
+<p>For a slender rod or wire of length L, cross-sectional area A, and density &rho;, the body approximates a line segment, and dm = &rho;A dL. If &rho; and A are constant over the length of the rod, the coordinates of the centroid C of the line segment are:</p>
+<div class="formula-card">
+  <div class="formula-label">Centroid of a Line</div>
+  <div class="formula-body">
+    x&#772; = &int;x dL / L &nbsp;&nbsp;&nbsp; y&#772; = &int;y dL / L &nbsp;&nbsp;&nbsp; z&#772; = &int;z dL / L <span class="eq-num">(5/4)</span>
+  </div>
+</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">(2) Centroids of Areas</h3>
+<p>When a body of density &rho; has a small but constant thickness t, we can model it as a surface area A. The mass of an element becomes dm = &rho;t dA. If &rho; and t are constant over the entire area, the coordinates of the centroid C of the surface area are:</p>
+<div class="formula-card">
+  <div class="formula-label">Centroid of an Area</div>
+  <div class="formula-body">
+    x&#772; = &int;x dA / A &nbsp;&nbsp;&nbsp; y&#772; = &int;y dA / A &nbsp;&nbsp;&nbsp; z&#772; = &int;z dA / A <span class="eq-num">(5/5)</span>
+  </div>
+</div>
+<p>The numerators in Eqs. 5/5 are called the <em>first moments of area</em>.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">(3) Centroids of Volumes</h3>
+<p>For a general body of volume V and density &rho;, the element has a mass dm = &rho; dV. The density &rho; cancels if it is constant over the entire volume, and the coordinates of the centroid C of the body are:</p>
+<div class="formula-card">
+  <div class="formula-label">Centroid of a Volume</div>
+  <div class="formula-body">
+    x&#772; = &int;x dV / V &nbsp;&nbsp;&nbsp; y&#772; = &int;y dV / V &nbsp;&nbsp;&nbsp; z&#772; = &int;z dV / V <span class="eq-num">(5/6)</span>
+  </div>
+</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Choice of Element for Integration</h3>
+<div class="note-box key">
+<div class="note-box-title">Five Guidelines for Choosing the Differential Element</div>
+<ol style="margin-left:20px;margin-top:8px">
+  <li><strong>Order of Element:</strong> Whenever possible, a first-order differential element should be selected in preference to a higher-order element so that only one integration will be required to cover the entire figure.</li>
+  <li><strong>Continuity:</strong> Whenever possible, we choose an element which can be integrated in one continuous operation to cover the figure.</li>
+  <li><strong>Discarding Higher-Order Terms:</strong> Higher-order terms may always be dropped compared with lower-order terms.</li>
+  <li><strong>Choice of Coordinates:</strong> As a general rule, we choose the coordinate system which best matches the boundaries of the figure (rectangular vs. polar).</li>
+  <li><strong>Centroidal Coordinate of Element:</strong> When a first- or second-order differential element is chosen, it is essential to use the coordinate of the <em>centroid of the element</em> for the moment arm in expressing the moment of the differential element (x<sub>c</sub>, y<sub>c</sub>, z<sub>c</sub>).</li>
+</ol>
+</div>
+<div class="formula-card">
+  <div class="formula-label">Centroid Using Centroidal Coordinate of Element</div>
+  <div class="formula-body">
+    x&#772; = &int;x<sub>c</sub> dA / A &nbsp;&nbsp;&nbsp; y&#772; = &int;y<sub>c</sub> dA / A &nbsp;&nbsp;&nbsp; z&#772; = &int;z<sub>c</sub> dA / A <span class="eq-num">(5/5a)</span><br><br>
+    x&#772; = &int;x<sub>c</sub> dV / V &nbsp;&nbsp;&nbsp; y&#772; = &int;y<sub>c</sub> dV / V &nbsp;&nbsp;&nbsp; z&#772; = &int;z<sub>c</sub> dV / V <span class="eq-num">(5/6a)</span>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- 5/4 COMPOSITE BODIES AND FIGURES -->
+<div id="ch5-s4" class="subsection">
+<h2 class="section-title"><span class="section-num">5/4</span> Composite Bodies and Figures; Approximations</h2>
+<p>When a body or figure can be conveniently divided into several parts whose mass centers are easily determined, we use the principle of moments and treat each part as a finite element of the whole. We generalize, for a body of any number of parts, and express the sums in condensed form to obtain the mass-center coordinates:</p>
+<div class="formula-card">
+  <div class="formula-label">Composite Body — Mass Center</div>
+  <div class="formula-body">
+    X&#773; = &Sigma;mx&#772; / &Sigma;m &nbsp;&nbsp;&nbsp; Y&#773; = &Sigma;my&#772; / &Sigma;m &nbsp;&nbsp;&nbsp; Z&#773; = &Sigma;mz&#772; / &Sigma;m <span class="eq-num">(5/7)</span>
+  </div>
+</div>
+<p>Analogous relations hold for composite lines, areas, and volumes, where the m's are replaced by L's, A's, and V's, respectively.</p>
+<div class="note-box important">
+<div class="note-box-title">Holes and Cavities</div>
+<p>Note that if a hole or cavity is considered one of the component parts of a composite body or figure, the corresponding mass represented by the cavity or hole is treated as a <strong>negative quantity</strong>.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Approximation Method for Irregular Areas</h3>
+<p>In practice, the boundaries of an area or volume might not be expressible in terms of simple geometrical shapes. For such cases we resort to approximation. We divide the area into strips of width &Delta;x and variable height h. The area A of each strip is h &Delta;x and is multiplied by the coordinates x<sub>c</sub> and y<sub>c</sub> of its centroid. The sum of the moments for all strips divided by the total area gives the corresponding centroidal coordinate:</p>
+<div class="formula-card">
+  <div class="formula-label">Approximation Method</div>
+  <div class="formula-body">
+    x&#772; = &Sigma;Ax<sub>c</sub> / &Sigma;A &nbsp;&nbsp;&nbsp; y&#772; = &Sigma;Ay<sub>c</sub> / &Sigma;A
+  </div>
+</div>
+</div>
+</div>
+
+<!-- 5/5 THEOREMS OF PAPPUS -->
+<div id="ch5-s5" class="subsection">
+<h2 class="section-title"><span class="section-num">5/5</span> Theorems of Pappus</h2>
+<p>A very useful theorem, known as the <strong>Theorem of Pappus</strong> (Pappus of Alexandria, 4th century A.D.), relates the generation of a surface or a solid of revolution to the centroid of the generating line or area:</p>
+<div class="note-box key">
+<div class="note-box-title">Theorem of Pappus — Surface of Revolution</div>
+<p>The area A of a surface of revolution generated by rotating a curve of length L about an axis in the plane of the curve is equal to the product of the length of the curve and the distance traveled by the centroid of the curve:</p>
+<div class="formula-card" style="margin-top:8px">
+  <div class="formula-body">A = 2&pi;y&#772;L</div>
+</div>
+<p>where y&#772; is the perpendicular distance from the centroid of the line to the axis of revolution.</p>
+</div>
+<div class="note-box key">
+<div class="note-box-title">Theorem of Pappus — Volume of Revolution</div>
+<p>The volume V of a solid of revolution generated by rotating a plane area A about an axis in the plane of the area (not crossing the area) is equal to the product of the area and the distance traveled by the centroid of the area:</p>
+<div class="formula-card" style="margin-top:8px">
+  <div class="formula-body">V = 2&pi;y&#772;A</div>
+</div>
+<p>where y&#772; is the perpendicular distance from the centroid of the area to the axis of revolution.</p>
+</div>
+<p>These theorems provide a convenient way to determine the surface area and volume of a body of revolution, or conversely to find the centroid of a curve or area if the surface area or volume is known.</p>
+</div>
+
+<!-- SECTION B: SPECIAL TOPICS -->
+<h2 class="section-title" style="background:var(--accent);color:#fff;padding:10px 16px;border-radius:var(--radius);margin:28px 0 16px">Section B — Special Topics</h2>
+
+<!-- 5/6 BEAMS — EXTERNAL EFFECTS -->
+<div id="ch5-s6" class="subsection">
+<h2 class="section-title"><span class="section-num">5/6</span> Beams — External Effects</h2>
+<p><strong>Beams</strong> are structural members which offer resistance to bending due to applied loads. Most beams are long prismatic bars, and the loads are usually applied normal to the axes of the bars. This article is concerned with the <em>external</em> loading and reactions acting on a beam.</p>
+
+<div class="subsection">
+<h3 class="subsection-title">Types of Beams</h3>
+<p><strong>Statically Determinate Beams:</strong> Beams supported so that their external support reactions can be calculated by the methods of statics alone. Include: simple, cantilever, and combination beams.</p>
+<p><strong>Statically Indeterminate Beams:</strong> A beam which has more supports than needed to provide equilibrium. Include: continuous, end-supported cantilever, and fixed beams. To determine the support reactions for such a beam we must consider its load-deformation properties in addition to the equations of static equilibrium.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Distributed Loads</h3>
+<p>Loading intensities which are constant or which vary linearly are easily handled. The resultant load R is represented by the area formed by the intensity w (force per unit length of beam) and the length L over which the force is distributed. The resultant passes through the centroid of this area.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Load Type</th><th>Resultant R</th><th>Location of R</th></tr></thead>
+<tbody>
+<tr><td>Uniform (w = constant)</td><td>R = wL</td><td>At midspan (L/2 from either end)</td></tr>
+<tr><td>Triangular (w from 0 to w<sub>max</sub>)</td><td>R = w<sub>max</sub>L/2</td><td>At L/3 from the larger end</td></tr>
+<tr><td>Trapezoidal (w<sub>1</sub> to w<sub>2</sub>)</td><td>R<sub>1</sub> = w<sub>1</sub>L; R<sub>2</sub> = (w<sub>2</sub>&minus;w<sub>1</sub>)L/2</td><td>R<sub>1</sub> at L/2; R<sub>2</sub> at 2L/3 from small end</td></tr>
+</tbody>
+</table>
+</div>
+<p>For a more general load distribution, we must start with a differential increment of force dR = w dx. The total load R is then the sum of the differential forces:</p>
+<div class="formula-card">
+  <div class="formula-label">General Distributed Load</div>
+  <div class="formula-body">
+    R = &int;w dx<br><br>
+    x&#772; = &int;xw dx / R &nbsp;&nbsp; (location of resultant)
+  </div>
+</div>
+</div>
+</div>
+
+<!-- 5/7 BEAMS — INTERNAL EFFECTS -->
+<div id="ch5-s7" class="subsection">
+<h2 class="section-title"><span class="section-num">5/7</span> Beams — Internal Effects</h2>
+<p>The previous article treated the reduction of a distributed force to one or more equivalent concentrated forces and the subsequent determination of the external reactions acting on the beam. In this article we introduce internal beam effects and apply principles of statics to calculate the internal shear force and bending moment as functions of location along the beam.</p>
+
+<div class="subsection">
+<h3 class="subsection-title">Shear, Bending, and Torsion</h3>
+<p>In addition to supporting tension or compression, a beam can resist shear, bending, and torsion. The force V is called the <strong>shear force</strong>, the couple M is called the <strong>bending moment</strong>, and the couple T is called a <strong>torsional moment</strong>.</p>
+<div class="note-box">
+<div class="note-box-title">Sign Convention for Shear V and Bending Moment M</div>
+<p>Positive shear V acts upward on the left face and downward on the right face of a beam element. Positive bending moment M causes concavity upward (hogging). From the principle of action and reaction, the directions of V and M are reversed on the two sections of a cut element.</p>
+</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Shear-Force and Bending-Moment Diagrams</h3>
+<p>The variation of shear force V and bending moment M over the length of a beam provides information necessary for the design analysis of the beam. In particular, the maximum magnitude of the bending moment is usually the primary consideration in the design or selection of a beam.</p>
+<p><strong>Procedure:</strong></p>
+<ol style="margin-left:20px;margin-bottom:12px">
+  <li>Establish the values of all external reactions on the beam by applying the equations of equilibrium to a free-body diagram of the beam as a whole.</li>
+  <li>Isolate a portion of the beam (either to the right or left of an arbitrary transverse section) with a free-body diagram, and apply the equations of equilibrium to this isolated portion. These equations yield expressions for the shear force V and bending moment M.</li>
+  <li>Plot V and M as functions of position x along the beam.</li>
+</ol>
+<p>We should avoid using a transverse section which coincides with the location of a concentrated load or couple, as such a position represents a point of discontinuity in the variation of shear or bending moment.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">General Loading, Shear, and Moment Relationships</h3>
+<p>For any beam with distributed loads, the following general relationships aid greatly in the determination of the shear and moment distributions:</p>
+<div class="formula-card">
+  <div class="formula-label">Load-Shear Relationship</div>
+  <div class="formula-body">w = &minus;dV/dx <span class="eq-num">(5/10)</span></div>
+</div>
+<p>We see from Eq. 5/10 that the slope of the shear diagram must everywhere be equal to the negative of the value of the applied loading. Equation 5/10 holds on either side of a concentrated load but not at the concentrated load itself.</p>
+<div class="formula-card">
+  <div class="formula-label">Integrated Load-Shear Relationship</div>
+  <div class="formula-body">V = V<sub>0</sub> + (the negative of the area under the loading curve from x<sub>0</sub> to x)</div>
+</div>
+<div class="formula-card">
+  <div class="formula-label">Shear-Moment Relationship</div>
+  <div class="formula-body">V = dM/dx <span class="eq-num">(5/11)</span></div>
+</div>
+<p>This expresses the fact that the shear everywhere is equal to the slope of the moment curve. Equation 5/11 holds on either side of a concentrated couple but not at the concentrated couple itself.</p>
+<div class="formula-card">
+  <div class="formula-label">Integrated Shear-Moment Relationship</div>
+  <div class="formula-body">M = M<sub>0</sub> + (area under the shear diagram from x<sub>0</sub> to x)</div>
+</div>
+<p>Summing the area under the shear diagram is usually the simplest way to construct the moment diagram.</p>
+<div class="formula-card">
+  <div class="formula-label">Combined Load-Moment Relationship</div>
+  <div class="formula-body">d<sup>2</sup>M/dx<sup>2</sup> = &minus;w <span class="eq-num">(5/12)</span></div>
+</div>
+<p>Thus, if w is a known function of x, the moment M can be obtained by two integrations. When V passes through zero and is a continuous function of x with dV/dx &ne; 0, the bending moment M will be a maximum or a minimum, since dM/dx = 0 at such a point. Critical values of M also occur when V crosses the zero axis discontinuously, which occurs for beams under concentrated loads.</p>
+<p>We observe from Eqs. 5/10 and 5/11 that the degree of V in x is one higher than that of w. Also, M is of one higher degree in x than is V. Consequently, M is two degrees higher in x than w.</p>
+</div>
+</div>
+
+<!-- CHAPTER 5 REVIEW -->
+<div id="ch5-review" class="subsection">
+<h2 class="section-title">Chapter 5 — Key Formulas Quick Reference</h2>
+<div class="revision-grid">
+  <div class="revision-card"><h4>Center of Mass</h4><p>x&#772;=&int;x dm/m, y&#772;=&int;y dm/m</p></div>
+  <div class="revision-card"><h4>Centroid of Area</h4><p>x&#772;=&int;x dA/A, y&#772;=&int;y dA/A</p></div>
+  <div class="revision-card"><h4>Centroid of Volume</h4><p>x&#772;=&int;x dV/V</p></div>
+  <div class="revision-card"><h4>Composite Body</h4><p>X&#773;=&Sigma;mx&#772;/&Sigma;m (holes are negative)</p></div>
+  <div class="revision-card"><h4>Pappus (Surface)</h4><p>A = 2&pi;y&#772;L</p></div>
+  <div class="revision-card"><h4>Pappus (Volume)</h4><p>V = 2&pi;y&#772;A</p></div>
+  <div class="revision-card"><h4>Distributed Load Resultant</h4><p>R=&int;w dx, located at centroid of w-diagram</p></div>
+  <div class="revision-card"><h4>Load-Shear</h4><p>w = &minus;dV/dx</p></div>
+  <div class="revision-card"><h4>Shear-Moment</h4><p>V = dM/dx</p></div>
+  <div class="revision-card"><h4>Load-Moment</h4><p>d<sup>2</sup>M/dx<sup>2</sup> = &minus;w</p></div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- CHAPTER 6: FRICTION -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="ch6" class="section" data-chapter="6">
+<div class="chapter-header">
+  <div class="chapter-num">Chapter 6</div>
+  <h1 class="chapter-title">Friction</h1>
+  <p class="chapter-intro">Types of friction, dry friction mechanism, friction coefficients, wedges, screws, journal bearings, thrust bearings, flexible belts, and rolling resistance.</p>
+</div>
+
+<!-- 6/1 INTRODUCTION -->
+<div id="ch6-s1" class="subsection">
+<h2 class="section-title"><span class="section-num">6/1</span> Introduction</h2>
+<p>In the preceding chapters we have usually assumed that the forces of action and reaction between contacting surfaces act normal to the surfaces. This assumption characterizes the interaction between smooth surfaces. Although this ideal assumption often involves only a relatively small error, there are many problems in which we must consider the ability of contacting surfaces to support tangential as well as normal forces. Tangential forces generated between contacting surfaces are called <strong>friction forces</strong> and occur to some degree in the interaction between all real surfaces. Whenever a tendency exists for one contacting surface to slide along another surface, the friction forces developed are always in a direction to oppose this tendency.</p>
+<p>In some types of machines and processes we want to minimize the retarding effect of friction forces. Examples are bearings of all types, power screws, gears, the flow of fluids in pipes, and the propulsion of aircraft and missiles through the atmosphere. In other situations we wish to maximize the effects of friction, as in brakes, clutches, belt drives, and wedges. Wheeled vehicles depend on friction for both starting and stopping.</p>
+<p>Friction forces are present throughout nature and exist in all machines no matter how accurately constructed or carefully lubricated. A machine or process in which friction is small enough to be neglected is said to be <em>ideal</em>. When friction must be taken into account, the machine or process is termed <em>real</em>. In all cases where there is sliding motion between parts, the friction forces result in a loss of energy which is dissipated in the form of heat. Wear is another effect of friction.</p>
+</div>
+
+<!-- SECTION A: FRICTIONAL PHENOMENA -->
+<h2 class="section-title" style="background:var(--accent);color:#fff;padding:10px 16px;border-radius:var(--radius);margin:28px 0 16px">Section A — Frictional Phenomena</h2>
+
+<!-- 6/2 TYPES OF FRICTION -->
+<div id="ch6-s2" class="subsection">
+<h2 class="section-title"><span class="section-num">6/2</span> Types of Friction</h2>
+
+<div class="definition-card">
+  <div class="def-term">(a) Dry Friction (Coulomb Friction)</div>
+  <div class="def-body">Dry friction occurs when the unlubricated surfaces of two solids are in contact under a condition of sliding or a tendency to slide. A friction force tangent to the surfaces of contact occurs both during the interval leading up to impending slippage and while slippage takes place. The direction of this friction force always opposes the motion or impending motion. The principles of dry or Coulomb friction were developed largely from the experiments of Coulomb in 1781 and from the work of Morin from 1831 to 1834.</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">(b) Fluid Friction</div>
+  <div class="def-body">Fluid friction occurs when adjacent layers in a fluid (liquid or gas) are moving at different velocities. This motion causes frictional forces between fluid elements, and these forces depend on the relative velocity between layers. When there is no relative velocity, there is no fluid friction. Fluid friction depends not only on the velocity gradients within the fluid but also on the viscosity of the fluid. Fluid friction is treated in the study of fluid mechanics.</div>
+</div>
+<div class="definition-card">
+  <div class="def-term">(c) Internal Friction</div>
+  <div class="def-body">Internal friction occurs in all solid materials which are subjected to cyclical loading. For highly elastic materials the recovery from deformation occurs with very little loss of energy due to internal friction. For materials which undergo appreciable plastic deformation during loading, a considerable amount of internal friction may accompany this deformation. The mechanism of internal friction is associated with the action of shear deformation.</div>
+</div>
+</div>
+
+<!-- 6/3 DRY FRICTION -->
+<div id="ch6-s3" class="subsection">
+<h2 class="section-title"><span class="section-num">6/3</span> Dry Friction</h2>
+<p>The remainder of this chapter describes the effects of dry friction acting on the exterior surfaces of rigid bodies. Consider a solid block of mass m resting on a horizontal surface. The experiment involves the application of a horizontal force P which continuously increases from zero to a value sufficient to move the block and give it an appreciable velocity. The free-body diagram of the block shows the tangential friction force exerted by the plane on the block labeled F. This friction force acting on the body will <em>always</em> be in a direction to oppose motion or the tendency toward motion of the body. There is also a normal force N which in this case equals mg, and the total force R exerted by the supporting surface on the block is the resultant of N and F.</p>
+
+<div class="subsection">
+<h3 class="subsection-title">Static Friction</h3>
+<p>The region up to the point of slippage or impending motion is called the range of <em>static friction</em>, and in this range the value of the friction force is determined by the <em>equations of equilibrium</em>. This friction force may have any value from zero up to and including the maximum value. For a given pair of mating surfaces the experiment shows that this maximum value of static friction F<sub>max</sub> is proportional to the normal force N. Thus, we may write:</p>
+<div class="formula-card">
+  <div class="formula-label">Maximum Static Friction Force</div>
+  <div class="formula-body">F<sub>max</sub> = &mu;<sub>s</sub>N <span class="eq-num">(6/1)</span></div>
+</div>
+<p>where &mu;<sub>s</sub> is the proportionality constant, called the <strong>coefficient of static friction</strong>.</p>
+<div class="note-box important">
+<div class="note-box-title">Important: Eq. 6/1 Is for Impending Motion Only</div>
+<p>Be aware that Eq. 6/1 describes only the <em>limiting</em> or <em>maximum</em> value of the static friction force and <em>not</em> any lesser value. Thus, the equation applies only to cases where motion is impending with the friction force at its peak value. For a condition of static equilibrium when motion is <em>not</em> impending, the static friction force is:</p>
+<p style="text-align:center;font-family:'Courier New',monospace;font-size:1rem;margin:8px 0">F &lt; &mu;<sub>s</sub>N</p>
+</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Kinetic Friction</h3>
+<p>After slippage occurs, a condition of <em>kinetic friction</em> accompanies the ensuing motion. Kinetic friction force is usually somewhat less than the maximum static friction force. The kinetic friction force F<sub>k</sub> is also proportional to the normal force. Thus:</p>
+<div class="formula-card">
+  <div class="formula-label">Kinetic Friction Force</div>
+  <div class="formula-body">F<sub>k</sub> = &mu;<sub>k</sub>N <span class="eq-num">(6/2)</span></div>
+</div>
+<p>where &mu;<sub>k</sub> is the <strong>coefficient of kinetic friction</strong>. It follows that &mu;<sub>k</sub> is generally less than &mu;<sub>s</sub>. As the velocity of the block increases, the kinetic friction decreases somewhat, and at high velocities, this decrease may be significant.</p>
+<p>Coefficients of friction depend greatly on the exact condition of the surfaces, as well as on the relative velocity, and are subject to considerable uncertainty.</p>
+<p>In the engineering literature we frequently find expressions for maximum static friction and for kinetic friction written simply as F = &mu;N. It is understood from the problem at hand whether maximum static friction or kinetic friction is described.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Friction Angles</h3>
+<p>The direction of the resultant R in Fig. 6/1b measured from the direction of N is specified by tan&alpha; = F/N. When the friction force reaches its limiting static value F<sub>max</sub>, the angle &alpha; reaches a maximum value &phi;<sub>s</sub>. Thus:</p>
+<div class="formula-card">
+  <div class="formula-label">Friction Angles</div>
+  <div class="formula-body">
+    tan&phi;<sub>s</sub> = &mu;<sub>s</sub> &nbsp;&nbsp;&nbsp; (angle of static friction)<br>
+    tan&phi;<sub>k</sub> = &mu;<sub>k</sub> &nbsp;&nbsp;&nbsp; (angle of kinetic friction)
+  </div>
+</div>
+<p>When slippage is occurring, the angle &alpha; has a value &phi;<sub>k</sub> corresponding to the kinetic friction force.</p>
+<p>The angle &phi;<sub>s</sub> is called the <strong>angle of static friction</strong>, and the angle &phi;<sub>k</sub> is called the <strong>angle of kinetic friction</strong>. The friction angle for each case clearly defines the limiting direction of the total reaction R between two contacting surfaces. If motion is impending, R must be one element of a right-circular <strong>cone of static friction</strong> of vertex angle 2&phi;<sub>s</sub>. This cone of vertex angle 2&phi;<sub>s</sub> represents the locus of possible directions for the reaction R at impending motion.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Factors Affecting Friction</h3>
+<p>Further experiment shows that the friction force is essentially independent of the apparent or projected area of contact. The true contact area is much smaller than the projected value, since only the peaks of the contacting surface irregularities support the load. Even relatively small normal loads result in high stresses at these contact points. As the normal force increases, the true contact area also increases as the material undergoes yielding, crushing, or tearing at the points of contact.</p>
+<p>Other factors which influence dry friction are: the generation of high local temperatures and adhesion at contact points, relative hardness of mating surfaces, and the presence of thin surface films of oxide, oil, dirt, or other substances.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Types of Friction Problems</h3>
+<div class="note-box key">
+<div class="note-box-title">Three Types of Dry Friction Problems</div>
+<ol style="margin-left:20px;margin-top:8px">
+  <li><strong>Type 1 — Impending Motion Known:</strong> The condition of impending motion is known to exist. Here a body which is in equilibrium is on the verge of slipping, and the friction force equals the limiting static friction F<sub>max</sub> = &mu;<sub>s</sub>N. The equations of equilibrium also hold.</li>
+  <li><strong>Type 2 — Motion Status Unknown:</strong> Neither the condition of impending motion nor the condition of motion is known. To determine the actual friction conditions, first assume static equilibrium and then solve for the friction force F necessary for equilibrium. Three outcomes:<br>
+    &emsp;(a) F &lt; (F<sub>max</sub> = &mu;<sub>s</sub>N): Static equilibrium as assumed.<br>
+    &emsp;(b) F = (F<sub>max</sub> = &mu;<sub>s</sub>N): Motion impends; equilibrium is on the verge of being violated.<br>
+    &emsp;(c) F &gt; (F<sub>max</sub> = &mu;<sub>s</sub>N): Impossible — motion occurs. F = &mu;<sub>k</sub>N.</li>
+  <li><strong>Type 3 — Motion Known to Exist:</strong> Relative motion is known to exist between the contacting surfaces, and thus the kinetic coefficient of friction applies. Eq. 6/2 always gives the kinetic friction force directly.</li>
+</ol>
+</div>
+</div>
+</div>
+
+<!-- SECTION B: APPLICATIONS OF FRICTION IN MACHINES -->
+<h2 class="section-title" style="background:var(--accent);color:#fff;padding:10px 16px;border-radius:var(--radius);margin:28px 0 16px">Section B — Applications of Friction in Machines</h2>
+
+<!-- 6/4 WEDGES -->
+<div id="ch6-s4" class="subsection">
+<h2 class="section-title"><span class="section-num">6/4</span> Wedges</h2>
+<p><strong>Wedges</strong> are simple machines used to raise heavy loads or to apply large forces. Wedges may be used to lift a body by forcing the wedge underneath the body. The wedge converts a small applied force P into a large lifting force W.</p>
+<p>The analysis of a wedge problem involves applying the equations of equilibrium to free-body diagrams of the wedge and of the block being lifted, accounting for the friction forces on all contact surfaces.</p>
+<div class="note-box">
+<div class="note-box-title">Analysis Approach for Wedge Problems</div>
+<p>Draw separate free-body diagrams of the wedge and of the body being lifted. At each surface of contact, include the normal force N and the friction force F = &mu;N (for impending motion). Apply the three equilibrium equations to each free body. The friction forces all oppose the impending motion direction.</p>
+</div>
+<div class="note-box key">
+<div class="note-box-title">Self-Locking Condition for Wedges</div>
+<p>A wedge is self-locking (will not slip back when the applied force P is removed) when the wedge angle &alpha; is less than or equal to the friction angle &phi;:</p>
+<div class="formula-card" style="margin-top:6px">
+  <div class="formula-body">Self-locking condition: &alpha; &le; &phi; (i.e., &alpha; &le; tan<sup>&minus;1</sup>&mu;)</div>
+</div>
+</div>
+</div>
+
+<!-- 6/5 SCREWS -->
+<div id="ch6-s5" class="subsection">
+<h2 class="section-title"><span class="section-num">6/5</span> Screws</h2>
+<p>Screws are used as fasteners and also as mechanisms to transmit power or motion. A square-threaded screw jack is a common example. The relationship between the axial force W and the turning moment M is derived by "unrolling" one complete turn of the screw thread into an inclined plane of lead angle &lambda; (also called helix angle).</p>
+<div class="formula-card">
+  <div class="formula-label">Screw — Lead Angle</div>
+  <div class="formula-body">
+    tan&lambda; = l / (2&pi;r)<br><br>
+    where l = lead (advance per revolution), r = mean thread radius
+  </div>
+</div>
+<div class="formula-card">
+  <div class="formula-label">Moment to Raise Load (square thread)</div>
+  <div class="formula-body">M = Wr tan(&lambda; + &phi;)</div>
+</div>
+<div class="formula-card">
+  <div class="formula-label">Moment to Lower Load (square thread)</div>
+  <div class="formula-body">
+    If &lambda; &gt; &phi; (not self-locking): &nbsp; M = Wr tan(&lambda; &minus; &phi;)<br>
+    If &lambda; &le; &phi; (self-locking): &nbsp;&nbsp;&nbsp;&nbsp; M = Wr tan(&phi; &minus; &lambda;) to lower
+  </div>
+</div>
+<div class="note-box key">
+<div class="note-box-title">Self-Locking Condition for Screws</div>
+<p>A square-threaded screw is self-locking when the lead angle &lambda; is less than or equal to the friction angle &phi;, i.e., when &lambda; &le; &phi;. Under this condition the screw will not unwind under the load alone without an additional applied moment.</p>
+</div>
+<div class="note-box">
+<div class="note-box-title">Efficiency of a Screw Jack</div>
+<p>The efficiency e of the screw jack (ratio of useful work output to total work input per revolution) is:</p>
+<div class="formula-card" style="margin-top:6px">
+  <div class="formula-body">e = Wl / (2&pi;M) = tan&lambda; / tan(&lambda; + &phi;)</div>
+</div>
+</div>
+</div>
+
+<!-- 6/6 JOURNAL BEARINGS -->
+<div id="ch6-s6" class="subsection">
+<h2 class="section-title"><span class="section-num">6/6</span> Journal Bearings</h2>
+<p>A <strong>journal bearing</strong> is used to support a rotating shaft under a radial load. The shaft (journal) rests on the bearing surface with a thin film of lubricant between them. For a dry (unlubricated) journal bearing, the friction force creates a frictional moment that resists the rotation of the shaft.</p>
+<p>For a journal bearing of radius r, the friction moment M<sub>f</sub> for a journal on the verge of rotating (or actually rotating) under a radial load W is:</p>
+<div class="formula-card">
+  <div class="formula-label">Journal Bearing Friction Moment</div>
+  <div class="formula-body">M<sub>f</sub> = &mu;Wr = Wr sin&phi;<br><br>
+  where &phi; = friction angle = tan<sup>&minus;1</sup>&mu;</div>
+</div>
+<p>Geometrically, the line of action of the resultant force R at the bearing surface is tangent to a circle of radius r sin&phi; (the <strong>friction circle</strong>) centered at the center of the shaft. For small &phi;: r sin&phi; &asymp; r tan&phi; = r&mu;, so M<sub>f</sub> &asymp; &mu;Wr.</p>
+</div>
+
+<!-- 6/7 THRUST BEARINGS; DISK FRICTION -->
+<div id="ch6-s7" class="subsection">
+<h2 class="section-title"><span class="section-num">6/7</span> Thrust Bearings; Disk Friction</h2>
+<p>A <strong>thrust bearing</strong> is used to support a shaft under an axial (thrust) load. The friction moment for a disk of uniform pressure p between a solid disk of radius R and a flat surface is:</p>
+<div class="formula-card">
+  <div class="formula-label">Disk Friction Moment — New Bearing (Uniform Pressure)</div>
+  <div class="formula-body">M = (2/3)&mu;PR<br><br>where P = total axial load</div>
+</div>
+<p>For a worn-in bearing where uniform wear prevails (pressure × radius = constant), the friction moment is:</p>
+<div class="formula-card">
+  <div class="formula-label">Disk Friction Moment — Worn Bearing (Uniform Wear)</div>
+  <div class="formula-body">M = (1/2)&mu;PR</div>
+</div>
+<p>For a hollow disk with inner radius R<sub>1</sub> and outer radius R<sub>2</sub>, the corresponding formulas involve integrating over the annular area. For an annular disk under uniform pressure:</p>
+<div class="formula-card">
+  <div class="formula-label">Annular Disk — Uniform Pressure</div>
+  <div class="formula-body">M = (2/3)&mu;P[(R<sub>2</sub><sup>3</sup> &minus; R<sub>1</sub><sup>3</sup>) / (R<sub>2</sub><sup>2</sup> &minus; R<sub>1</sub><sup>2</sup>)]</div>
+</div>
+</div>
+
+<!-- 6/8 FLEXIBLE BELTS -->
+<div id="ch6-s8" class="subsection">
+<h2 class="section-title"><span class="section-num">6/8</span> Flexible Belts</h2>
+<p>The friction developed between a flexible belt, rope, or cable and a rough drum or cylinder is important in the design of belt drives, band brakes, and similar devices.</p>
+<div class="formula-card">
+  <div class="formula-label">Belt Friction Equation (Impending Slippage)</div>
+  <div class="formula-body">
+    T<sub>2</sub> / T<sub>1</sub> = e<sup>&mu;&beta;</sup><br><br>
+    where:<br>
+    T<sub>2</sub> = tension on high-tension side<br>
+    T<sub>1</sub> = tension on low-tension side<br>
+    &mu; = coefficient of friction<br>
+    &beta; = total angle of wrap (in radians)<br>
+    e = base of natural logarithms = 2.718...
+  </div>
+</div>
+<p>This equation holds at the condition of impending slippage. The above relationship shows that a small tension T<sub>1</sub> on the slack side can support a much larger tension T<sub>2</sub> on the tight side by wrapping the belt around a drum through a large angle &beta;.</p>
+<div class="note-box">
+<div class="note-box-title">Important Note on Belt Friction</div>
+<p>The belt friction equation T<sub>2</sub>/T<sub>1</sub> = e<sup>&mu;&beta;</sup> applies at the condition of impending slippage, not for any lesser tension ratio. If T<sub>2</sub>/T<sub>1</sub> &lt; e<sup>&mu;&beta;</sup>, the belt is not about to slip.</p>
+</div>
+</div>
+
+<!-- 6/9 ROLLING RESISTANCE -->
+<div id="ch6-s9" class="subsection">
+<h2 class="section-title"><span class="section-num">6/9</span> Rolling Resistance</h2>
+<p>The resistance to rolling of a wheel or cylinder over a flat surface is caused primarily by the deformation (flattening) of the contact zone. This resistance is not true friction (it does not depend on the coefficient of friction between the surfaces), but it causes a retarding moment that must be overcome to maintain rolling.</p>
+<div class="formula-card">
+  <div class="formula-label">Rolling Resistance</div>
+  <div class="formula-body">
+    M<sub>r</sub> = aW<br><br>
+    where:<br>
+    M<sub>r</sub> = moment of rolling resistance<br>
+    a = coefficient of rolling resistance (units of length)<br>
+    W = total load on the wheel<br><br>
+    Effective friction force: F = aW/r<br>
+    where r = radius of wheel
+  </div>
+</div>
+<p>The coefficient of rolling resistance a has units of length (meters or inches), not dimensionless like a friction coefficient. Typical values of a for steel on steel are about 0.5 mm (0.02 in). Rolling resistance is much smaller than sliding friction for hard materials.</p>
+</div>
+
+<!-- CHAPTER 6 REVIEW -->
+<div id="ch6-review" class="subsection">
+<h2 class="section-title">Chapter 6 — Key Formulas Quick Reference</h2>
+<div class="revision-grid">
+  <div class="revision-card"><h4>Max Static Friction</h4><p>F<sub>max</sub> = &mu;<sub>s</sub>N (impending motion)</p></div>
+  <div class="revision-card"><h4>Kinetic Friction</h4><p>F<sub>k</sub> = &mu;<sub>k</sub>N (during sliding)</p></div>
+  <div class="revision-card"><h4>Friction Angle</h4><p>tan&phi;<sub>s</sub>=&mu;<sub>s</sub>, tan&phi;<sub>k</sub>=&mu;<sub>k</sub></p></div>
+  <div class="revision-card"><h4>Wedge Self-Lock</h4><p>&alpha; &le; &phi; = tan<sup>-1</sup>&mu;</p></div>
+  <div class="revision-card"><h4>Screw (Raise)</h4><p>M = Wr tan(&lambda;+&phi;)</p></div>
+  <div class="revision-card"><h4>Screw Self-Lock</h4><p>&lambda; &le; &phi;</p></div>
+  <div class="revision-card"><h4>Journal Bearing</h4><p>M<sub>f</sub> = &mu;Wr</p></div>
+  <div class="revision-card"><h4>Disk Friction (new)</h4><p>M = (2/3)&mu;PR</p></div>
+  <div class="revision-card"><h4>Disk Friction (worn)</h4><p>M = (1/2)&mu;PR</p></div>
+  <div class="revision-card"><h4>Belt Friction</h4><p>T<sub>2</sub>/T<sub>1</sub> = e<sup>&mu;&beta;</sup></p></div>
+  <div class="revision-card"><h4>Rolling Resistance</h4><p>F = aW/r</p></div>
+</div>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- APPENDIX A: AREA MOMENTS OF INERTIA -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<section id="appa" class="section" data-chapter="A">
+<div class="chapter-header">
+  <div class="chapter-num">Appendix A</div>
+  <h1 class="chapter-title">Area Moments of Inertia</h1>
+  <p class="chapter-intro">Definitions, rectangular and polar moments of inertia, radius of gyration, parallel-axis theorem, composite areas, and properties of plane figures.</p>
+</div>
+
+<!-- A/1 INTRODUCTION -->
+<div id="appa-s1" class="subsection">
+<h2 class="section-title"><span class="section-num">A/1</span> Introduction</h2>
+<p>When forces are distributed continuously over an area on which they act, it is often necessary to calculate the moment of these forces about some axis either in or perpendicular to the plane of the area. Frequently the intensity of the force (pressure or stress) is proportional to the distance of the line of action of the force from the moment axis. The elemental force acting on an element of area is proportional to distance times differential area, and the elemental moment is proportional to distance squared times differential area. We see, therefore, that the total moment involves an integral of form &int;(distance)<sup>2</sup> d(area).</p>
+<p>This integral is called the <strong>moment of inertia</strong> or the <strong>second moment</strong> of the area. The integral is a function of the geometry of the area and occurs frequently in the applications of mechanics. Thus it is useful to develop its properties in some detail and to have these properties available for ready use when the integral arises.</p>
+<p>The word <em>inertia</em> appears in the terminology by reason of the similarity between the mathematical form of the integrals for second moments of areas and those for the resultant moments of the inertia forces in the case of rotating bodies. The moment of inertia of an area is a purely mathematical property of the area and in itself has no physical significance.</p>
+</div>
+
+<!-- A/2 DEFINITIONS -->
+<div id="appa-s2" class="subsection">
+<h2 class="section-title"><span class="section-num">A/2</span> Definitions</h2>
+
+<div class="subsection">
+<h3 class="subsection-title">Rectangular and Polar Moments of Inertia</h3>
+<p>Consider the area A in the x-y plane. The moments of inertia of the element dA about the x- and y-axes are, by definition, dI<sub>x</sub> = y<sup>2</sup> dA and dI<sub>y</sub> = x<sup>2</sup> dA, respectively. The moments of inertia of A about the same axes are therefore:</p>
+<div class="formula-card">
+  <div class="formula-label">Rectangular Moments of Inertia</div>
+  <div class="formula-body">
+    I<sub>x</sub> = &int;y<sup>2</sup> dA<br>
+    I<sub>y</sub> = &int;x<sup>2</sup> dA <span class="eq-num">(A/1)</span>
+  </div>
+</div>
+<p>The moment of inertia of dA about the pole O (z-axis) is, by similar definition, dI<sub>z</sub> = r<sup>2</sup> dA. The moment of inertia of the entire area about O is:</p>
+<div class="formula-card">
+  <div class="formula-label">Polar Moment of Inertia</div>
+  <div class="formula-body">I<sub>z</sub> = &int;r<sup>2</sup> dA <span class="eq-num">(A/2)</span></div>
+</div>
+<p>The expressions defined by Eqs. A/1 are called <em>rectangular</em> moments of inertia, whereas the expression of Eq. A/2 is called the <em>polar</em> moment of inertia (also denoted J). Because x<sup>2</sup> + y<sup>2</sup> = r<sup>2</sup>, it is clear that:</p>
+<div class="formula-card">
+  <div class="formula-label">Relationship Between Moments</div>
+  <div class="formula-body">I<sub>z</sub> = I<sub>x</sub> + I<sub>y</sub> <span class="eq-num">(A/3)</span></div>
+</div>
+<p>The dimensions of moments of inertia of areas are clearly L<sup>4</sup>, where L stands for the dimension of length. Thus, the SI units for area moments of inertia are expressed as quartic meters (m<sup>4</sup>) or quartic millimeters (mm<sup>4</sup>). The U.S. customary units for area moments of inertia are quartic feet (ft<sup>4</sup>) or quartic inches (in.<sup>4</sup>).</p>
+<p>The moment of inertia of an element involves the square of the distance from the inertia axis to the element. Thus an element whose coordinate is negative contributes as much to the moment of inertia as does an equal element with a positive coordinate of the same magnitude. Consequently the area moment of inertia about any axis is always a positive quantity.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Radius of Gyration</h3>
+<p>Consider an area A which has rectangular moments of inertia I<sub>x</sub> and I<sub>y</sub> and a polar moment of inertia I<sub>z</sub> about O. We now visualize this area as concentrated into a long narrow strip of area A a distance k<sub>x</sub> from the x-axis. By definition the moment of inertia of the strip about the x-axis will be the same as that of the original area if k<sub>x</sub><sup>2</sup>A = I<sub>x</sub>. The distance k<sub>x</sub> is called the <strong>radius of gyration</strong> of the area about the x-axis. In summary:</p>
+<div class="formula-card">
+  <div class="formula-label">Radii of Gyration</div>
+  <div class="formula-body">
+    I<sub>x</sub> = k<sub>x</sub><sup>2</sup>A &nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp; k<sub>x</sub> = &radic;(I<sub>x</sub>/A)<br>
+    I<sub>y</sub> = k<sub>y</sub><sup>2</sup>A &nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp; k<sub>y</sub> = &radic;(I<sub>y</sub>/A)<br>
+    I<sub>z</sub> = k<sub>z</sub><sup>2</sup>A &nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp; k<sub>z</sub> = &radic;(I<sub>z</sub>/A) <span class="eq-num">(A/4)</span>
+  </div>
+</div>
+<p>The radius of gyration, then, is a measure of the distribution of the area from the axis in question. When we substitute Eqs. A/4 into Eq. A/3, we have:</p>
+<div class="formula-card">
+  <div class="formula-label">Polar Radius of Gyration</div>
+  <div class="formula-body">k<sub>z</sub><sup>2</sup> = k<sub>x</sub><sup>2</sup> + k<sub>y</sub><sup>2</sup> <span class="eq-num">(A/5)</span></div>
+</div>
+<p>Thus, the square of the radius of gyration about a polar axis equals the sum of the squares of the radii of gyration about the two corresponding rectangular axes.</p>
+<div class="note-box important">
+<div class="note-box-title">Do Not Confuse Centroid with Radius of Gyration</div>
+<p>In Fig. A/3a the square of the centroidal distance from the x-axis is y&#772;<sup>2</sup>, which is the square of the <em>mean</em> value of the distances from the elements of the area to the x-axis. The quantity k<sub>x</sub><sup>2</sup>, on the other hand, is the <em>mean of the squares</em> of these distances. The moment of inertia is <em>not</em> equal to Ay&#772;<sup>2</sup>, since the square of the mean is less than the mean of the squares.</p>
+</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Transfer of Axes (Parallel-Axis Theorem)</h3>
+<p>The moment of inertia of an area about a noncentroidal axis may be easily expressed in terms of the moment of inertia about a parallel centroidal axis. Let the x<sub>0</sub>-y<sub>0</sub> axes pass through the centroid C of the area. The moment of inertia of the element dA about the x-axis is dI<sub>x</sub> = (y<sub>0</sub> + d<sub>x</sub>)<sup>2</sup> dA. Expanding and integrating:</p>
+<div class="formula-card">
+  <div class="formula-label">Parallel-Axis Theorem (Transfer of Axes)</div>
+  <div class="formula-body">
+    I<sub>x</sub> = I&#772;<sub>x</sub> + Ad<sub>x</sub><sup>2</sup><br>
+    I<sub>y</sub> = I&#772;<sub>y</sub> + Ad<sub>y</sub><sup>2</sup> <span class="eq-num">(A/6)</span>
+  </div>
+</div>
+<p>By Eq. A/3 the sum of these two equations gives:</p>
+<div class="formula-card">
+  <div class="formula-label">Parallel-Axis for Polar Moment</div>
+  <div class="formula-body">I<sub>z</sub> = I&#772;<sub>z</sub> + Ad<sup>2</sup> <span class="eq-num">(A/6a)</span></div>
+</div>
+<p>Equations A/6 and A/6a are the so-called <strong>parallel-axis theorems</strong>. Two points in particular should be noted. First, the axes between which the transfer is made must be <em>parallel</em>, and second, <em>one of the axes must pass through the centroid of the area</em>.</p>
+<p>If a transfer is desired between two parallel axes neither of which passes through the centroid, it is first necessary to transfer from one axis to the parallel centroidal axis and then to transfer from the centroidal axis to the second axis.</p>
+<p>The parallel-axis theorems also hold for radii of gyration. With substitution of the definition of k into Eqs. A/6, the transfer relation becomes:</p>
+<div class="formula-card">
+  <div class="formula-label">Transfer of Radius of Gyration</div>
+  <div class="formula-body">k<sup>2</sup> = k&#772;<sup>2</sup> + d<sup>2</sup> <span class="eq-num">(A/6b)</span></div>
+</div>
+<p>where k&#772; is the radius of gyration about a centroidal axis parallel to the axis about which k applies and d is the distance between the two axes.</p>
+</div>
+</div>
+
+<!-- A/3 COMPOSITE AREAS -->
+<div id="appa-s3" class="subsection">
+<h2 class="section-title"><span class="section-num">A/3</span> Composite Areas</h2>
+<p>It is frequently necessary to calculate the moment of inertia of an area composed of a number of distinct parts of simple and calculable geometric shape. The moment of inertia of a composite area about a particular axis is therefore simply the <em>sum</em> of the moments of inertia of its component parts about the same axis. If a hole or cavity is considered one of the component parts, the corresponding moment of inertia is treated as a negative quantity.</p>
+<p>When a composite area is composed of a large number of parts, it is convenient to tabulate the results for each of the parts:</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Part</th><th>Area, A</th><th>d<sub>x</sub></th><th>d<sub>y</sub></th><th>Ad<sub>x</sub><sup>2</sup></th><th>Ad<sub>y</sub><sup>2</sup></th><th>I&#772;<sub>x</sub></th><th>I&#772;<sub>y</sub></th></tr></thead>
+<tbody>
+<tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><strong>Sums</strong></td><td>&Sigma;A</td><td></td><td></td><td>&Sigma;Ad<sub>x</sub><sup>2</sup></td><td>&Sigma;Ad<sub>y</sub><sup>2</sup></td><td>&Sigma;I&#772;<sub>x</sub></td><td>&Sigma;I&#772;<sub>y</sub></td></tr>
+</tbody>
+</table>
+</div>
+<p>From the sums of the four columns, the moments of inertia for the composite area about the x- and y-axes become:</p>
+<div class="formula-card">
+  <div class="formula-label">Composite Area — Total Moments of Inertia</div>
+  <div class="formula-body">
+    I<sub>x</sub> = &Sigma;I&#772;<sub>x</sub> + &Sigma;Ad<sub>x</sub><sup>2</sup><br>
+    I<sub>y</sub> = &Sigma;I&#772;<sub>y</sub> + &Sigma;Ad<sub>y</sub><sup>2</sup>
+  </div>
+</div>
+<p>Although we may add the moments of inertia of the individual parts of a composite area about a given axis, we may <em>not</em> add their radii of gyration. The radius of gyration for the composite area about the axis in question is given by k = &radic;(I/A), where I is the total moment of inertia and A is the total area of the composite figure.</p>
+</div>
+
+<!-- A/4 PRODUCTS OF INERTIA AND ROTATION OF AXES -->
+<div id="appa-s4" class="subsection">
+<h2 class="section-title"><span class="section-num">A/4</span> Products of Inertia and Rotation of Axes</h2>
+<p>The <strong>product of inertia</strong> of an area A with respect to x-y axes is defined as:</p>
+<div class="formula-card">
+  <div class="formula-label">Product of Inertia</div>
+  <div class="formula-body">I<sub>xy</sub> = &int;xy dA</div>
+</div>
+<p>The product of inertia may be positive, negative, or zero. It equals zero when either the x- or y-axis is an axis of symmetry for the area.</p>
+
+<div class="subsection">
+<h3 class="subsection-title">Parallel-Axis Theorem for Product of Inertia</h3>
+<div class="formula-card">
+  <div class="formula-label">Transfer of Product of Inertia</div>
+  <div class="formula-body">I<sub>xy</sub> = I&#772;<sub>xy</sub> + Ad<sub>x</sub>d<sub>y</sub></div>
+</div>
+<p>where I&#772;<sub>xy</sub> is the product of inertia about centroidal x<sub>0</sub>-y<sub>0</sub> axes, and d<sub>x</sub> and d<sub>y</sub> are the distances from the centroid to the x- and y-axes, respectively.</p>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Rotation of Axes — Transformation Equations</h3>
+<p>The moments and product of inertia for an area with respect to axes x', y' inclined at angle &theta; to the original x-y axes are:</p>
+<div class="formula-card">
+  <div class="formula-label">Moments of Inertia about Rotated Axes</div>
+  <div class="formula-body">
+    I<sub>x'</sub> = (I<sub>x</sub> + I<sub>y</sub>)/2 + (I<sub>x</sub> &minus; I<sub>y</sub>)/2 &middot; cos2&theta; &minus; I<sub>xy</sub> sin2&theta;<br>
+    I<sub>y'</sub> = (I<sub>x</sub> + I<sub>y</sub>)/2 &minus; (I<sub>x</sub> &minus; I<sub>y</sub>)/2 &middot; cos2&theta; + I<sub>xy</sub> sin2&theta;<br>
+    I<sub>x'y'</sub> = (I<sub>x</sub> &minus; I<sub>y</sub>)/2 &middot; sin2&theta; + I<sub>xy</sub> cos2&theta;
+  </div>
+</div>
+</div>
+
+<div class="subsection">
+<h3 class="subsection-title">Principal Axes and Principal Moments of Inertia</h3>
+<p>The axes about which the moments of inertia are maximum and minimum are called <strong>principal axes</strong> of inertia. For a principal axis, the product of inertia is zero. The angle &theta;<sub>0</sub> defining the principal axes is:</p>
+<div class="formula-card">
+  <div class="formula-label">Principal Axes Angle</div>
+  <div class="formula-body">tan2&theta;<sub>0</sub> = &minus;2I<sub>xy</sub> / (I<sub>x</sub> &minus; I<sub>y</sub>)</div>
+</div>
+<p>The corresponding principal moments of inertia are:</p>
+<div class="formula-card">
+  <div class="formula-label">Principal Moments of Inertia</div>
+  <div class="formula-body">
+    I<sub>max,min</sub> = (I<sub>x</sub> + I<sub>y</sub>)/2 &plusmn; &radic;{[(I<sub>x</sub> &minus; I<sub>y</sub>)/2]<sup>2</sup> + I<sub>xy</sub><sup>2</sup>}
+  </div>
+</div>
+</div>
+</div>
+
+<!-- TABLE D/3: PROPERTIES OF PLANE FIGURES -->
+<div id="appa-tables" class="subsection">
+<h2 class="section-title">Table D/3 — Properties of Plane Figures</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Figure</th><th>Centroid</th><th>Area Moments of Inertia</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Arc Segment</strong> (radius r, half-angle &alpha;)</td>
+  <td>r&#772; = r sin&alpha; / &alpha;</td>
+  <td>—</td>
+</tr>
+<tr>
+  <td><strong>Quarter and Semicircular Arcs</strong></td>
+  <td>y&#772; = 2r/&pi;</td>
+  <td>—</td>
+</tr>
+<tr>
+  <td><strong>Circular Area</strong> (radius r)</td>
+  <td>At center</td>
+  <td>I<sub>x</sub> = I<sub>y</sub> = &pi;r<sup>4</sup>/4; &nbsp; I<sub>z</sub> = &pi;r<sup>4</sup>/2</td>
+</tr>
+<tr>
+  <td><strong>Semicircular Area</strong> (radius r)</td>
+  <td>y&#772; = 4r/(3&pi;)</td>
+  <td>I<sub>x</sub> = I<sub>y</sub> = &pi;r<sup>4</sup>/8; &nbsp; I&#772;<sub>x</sub> = (&pi;/8 &minus; 8/(9&pi;))r<sup>4</sup>; &nbsp; I<sub>z</sub> = &pi;r<sup>4</sup>/4</td>
+</tr>
+<tr>
+  <td><strong>Quarter-Circular Area</strong> (radius r)</td>
+  <td>x&#772; = y&#772; = 4r/(3&pi;)</td>
+  <td>I<sub>x</sub> = I<sub>y</sub> = &pi;r<sup>4</sup>/16; &nbsp; I&#772;<sub>x</sub> = I&#772;<sub>y</sub> = (&pi;/16 &minus; 4/(9&pi;))r<sup>4</sup>; &nbsp; I<sub>z</sub> = &pi;r<sup>4</sup>/8</td>
+</tr>
+<tr>
+  <td><strong>Area of Circular Sector</strong> (radius r, half-angle &alpha;)</td>
+  <td>x&#772; = (2/3)(r sin&alpha;/&alpha;)</td>
+  <td>I<sub>x</sub> = r<sup>4</sup>/4(&alpha; &minus; &frac12;sin2&alpha;); &nbsp; I<sub>y</sub> = r<sup>4</sup>/4(&alpha; + &frac12;sin2&alpha;); &nbsp; I<sub>z</sub> = &frac12;r<sup>4</sup>&alpha;</td>
+</tr>
+<tr>
+  <td><strong>Rectangular Area</strong> (b&times;h)</td>
+  <td>At center</td>
+  <td>I<sub>x</sub> = bh<sup>3</sup>/3; &nbsp; I&#772;<sub>x</sub> = bh<sup>3</sup>/12; &nbsp; I&#772;<sub>z</sub> = bh(b<sup>2</sup>+h<sup>2</sup>)/12</td>
+</tr>
+<tr>
+  <td><strong>Triangular Area</strong> (base b, height h)</td>
+  <td>x&#772; = (a+b)/3; &nbsp; y&#772; = h/3</td>
+  <td>I<sub>x</sub> = bh<sup>3</sup>/12; &nbsp; I&#772;<sub>x</sub> = bh<sup>3</sup>/36; &nbsp; I<sub>x1</sub> = bh<sup>3</sup>/4</td>
+</tr>
+<tr>
+  <td><strong>Area of Elliptical Quadrant</strong> (semiaxes a, b)</td>
+  <td>x&#772; = 4a/(3&pi;); &nbsp; y&#772; = 4b/(3&pi;)</td>
+  <td>I<sub>x</sub> = &pi;ab<sup>3</sup>/16; &nbsp; I&#772;<sub>x</sub> = (&pi;/16 &minus; 4/(9&pi;))ab<sup>3</sup>; &nbsp; I<sub>z</sub> = &pi;ab(a<sup>2</sup>+b<sup>2</sup>)/16</td>
+</tr>
+<tr>
+  <td><strong>Subparabolic Area</strong> (y=kx<sup>2</sup>=b/a<sup>2</sup>x<sup>2</sup>; A=ab/3)</td>
+  <td>x&#772; = 3a/4; &nbsp; y&#772; = 3b/10</td>
+  <td>I<sub>x</sub> = ab<sup>3</sup>/21; &nbsp; I<sub>y</sub> = a<sup>3</sup>b/5; &nbsp; I<sub>z</sub> = ab(a<sup>2</sup>/5 + b<sup>2</sup>/21)</td>
+</tr>
+<tr>
+  <td><strong>Parabolic Area</strong> (y=kx<sup>2</sup>; A=2ab/3)</td>
+  <td>x&#772; = 3a/8; &nbsp; y&#772; = 3b/5</td>
+  <td>I<sub>x</sub> = 2ab<sup>3</sup>/7; &nbsp; I<sub>y</sub> = 2a<sup>3</sup>b/15; &nbsp; I<sub>z</sub> = 2ab(a<sup>2</sup>/15 + b<sup>2</sup>/7)</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- TABLE D/4 (partial): PROPERTIES OF HOMOGENEOUS SOLIDS -->
+<h2 class="section-title" style="margin-top:32px">Table D/4 — Properties of Homogeneous Solids (m = mass of body shown)</h2>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Body</th><th>Mass Center</th><th>Mass Moments of Inertia</th></tr></thead>
+<tbody>
+<tr>
+  <td><strong>Circular Cylindrical Shell</strong> (r, l)</td>
+  <td>At midplane</td>
+  <td>I<sub>xx</sub> = &frac12;mr<sup>2</sup> + &frac{1}{12}ml<sup>2</sup>; &nbsp; I<sub>x1x1</sub> = &frac12;mr<sup>2</sup> + &frac13;ml<sup>2</sup>; &nbsp; I<sub>zz</sub> = mr<sup>2</sup></td>
+</tr>
+<tr>
+  <td><strong>Circular Cylinder</strong> (r, l)</td>
+  <td>At midplane</td>
+  <td>I<sub>xx</sub> = &frac14;mr<sup>2</sup> + &frac{1}{12}ml<sup>2</sup>; &nbsp; I<sub>x1x1</sub> = &frac14;mr<sup>2</sup> + &frac13;ml<sup>2</sup>; &nbsp; I<sub>zz</sub> = &frac12;mr<sup>2</sup></td>
+</tr>
+<tr>
+  <td><strong>Rectangular Parallelepiped</strong> (a, b, l)</td>
+  <td>At center</td>
+  <td>I<sub>xx</sub> = &frac{1}{12}m(a<sup>2</sup>+l<sup>2</sup>); &nbsp; I<sub>yy</sub> = &frac{1}{12}m(b<sup>2</sup>+l<sup>2</sup>); &nbsp; I<sub>zz</sub> = &frac{1}{12}m(a<sup>2</sup>+b<sup>2</sup>)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<!-- APPENDIX A REVIEW -->
+<div id="appa-review" class="subsection">
+<h2 class="section-title">Appendix A — Key Formulas Quick Reference</h2>
+<div class="revision-grid">
+  <div class="revision-card"><h4>Rectangular MOI</h4><p>I<sub>x</sub>=&int;y<sup>2</sup>dA, I<sub>y</sub>=&int;x<sup>2</sup>dA</p></div>
+  <div class="revision-card"><h4>Polar MOI</h4><p>I<sub>z</sub>=&int;r<sup>2</sup>dA = I<sub>x</sub>+I<sub>y</sub></p></div>
+  <div class="revision-card"><h4>Radius of Gyration</h4><p>k<sub>x</sub>=&radic;(I<sub>x</sub>/A)</p></div>
+  <div class="revision-card"><h4>Parallel-Axis Theorem</h4><p>I = I&#772; + Ad<sup>2</sup></p></div>
+  <div class="revision-card"><h4>Circle</h4><p>I<sub>x</sub>=I<sub>y</sub>=&pi;r<sup>4</sup>/4, I<sub>z</sub>=&pi;r<sup>4</sup>/2</p></div>
+  <div class="revision-card"><h4>Rectangle</h4><p>I<sub>x</sub>=bh<sup>3</sup>/3, I&#772;<sub>x</sub>=bh<sup>3</sup>/12</p></div>
+  <div class="revision-card"><h4>Triangle</h4><p>I<sub>x</sub>=bh<sup>3</sup>/12, I&#772;<sub>x</sub>=bh<sup>3</sup>/36</p></div>
+  <div class="revision-card"><h4>Product of Inertia</h4><p>I<sub>xy</sub>=&int;xy dA = I&#772;<sub>xy</sub>+Ad<sub>x</sub>d<sub>y</sub></p></div>
+  <div class="revision-card"><h4>Polar Gyration</h4><p>k<sub>z</sub><sup>2</sup>=k<sub>x</sub><sup>2</sup>+k<sub>y</sub><sup>2</sup></p></div>
+</div>
+</div>
+</section>
+
+</div><!-- end #content -->
+</main>
+</div><!-- end #layout -->
+
+<button id="back-to-top" aria-label="Back to top">&#8679;</button>
+
+<script>
+// ─── SIDEBAR DATA ───────────────────────────────────────────
+const chapters = [
+  { id:'ch1', title:'Ch 1: Introduction to Statics', topics:[
+    {id:'ch1-s1',label:'1/1 Mechanics'},
+    {id:'ch1-s2',label:'1/2 Basic Concepts'},
+    {id:'ch1-s3',label:'1/3 Scalars and Vectors'},
+    {id:'ch1-s4',label:'1/4 Newton\'s Laws'},
+    {id:'ch1-s5',label:'1/5 Units'},
+    {id:'ch1-s6',label:'1/6 Law of Gravitation'},
+    {id:'ch1-s7',label:'1/7 Accuracy & Approximations'},
+    {id:'ch1-s8',label:'1/8 Problem Solving'},
+    {id:'ch1-review',label:'Chapter Review'},
+  ]},
+  { id:'ch2', title:'Ch 2: Force Systems', topics:[
+    {id:'ch2-s1',label:'2/1 Introduction'},
+    {id:'ch2-s2',label:'2/2 Force'},
+    {id:'ch2-s3',label:'2/3 Rectangular Components'},
+    {id:'ch2-s4',label:'2/4 Moment'},
+    {id:'ch2-s5',label:'2/5 Couple'},
+    {id:'ch2-s6',label:'2/6 Resultants (2D)'},
+    {id:'ch2-s7',label:'2/7 Rect. Components (3D)'},
+    {id:'ch2-s8',label:'2/8 Moment & Couple (3D)'},
+    {id:'ch2-s9',label:'2/9 Resultants (3D)'},
+    {id:'ch2-review',label:'Chapter Review'},
+  ]},
+  { id:'ch3', title:'Ch 3: Equilibrium', topics:[
+    {id:'ch3-s1',label:'3/1 Introduction'},
+    {id:'ch3-s2',label:'3/2 Free-Body Diagram'},
+    {id:'ch3-s3',label:'3/3 Equilibrium Conditions (2D)'},
+    {id:'ch3-s4',label:'3/4 Equilibrium Conditions (3D)'},
+    {id:'ch3-review',label:'Chapter Review'},
+  ]},
+  { id:'ch4', title:'Ch 4: Structures', topics:[
+    {id:'ch4-s1',label:'4/1 Introduction'},
+    {id:'ch4-s2',label:'4/2 Plane Trusses'},
+    {id:'ch4-s3',label:'4/3 Method of Joints'},
+    {id:'ch4-s4',label:'4/4 Method of Sections'},
+    {id:'ch4-s5',label:'4/5 Space Trusses'},
+    {id:'ch4-s6',label:'4/6 Frames and Machines'},
+    {id:'ch4-review',label:'Chapter Review'},
+  ]},
+  { id:'ch5', title:'Ch 5: Distributed Forces', topics:[
+    {id:'ch5-s1',label:'5/1 Introduction'},
+    {id:'ch5-s2',label:'5/2 Center of Mass'},
+    {id:'ch5-s3',label:'5/3 Centroids'},
+    {id:'ch5-s4',label:'5/4 Composite Bodies'},
+    {id:'ch5-s5',label:'5/5 Theorems of Pappus'},
+    {id:'ch5-s6',label:'5/6 Beams – External Effects'},
+    {id:'ch5-s7',label:'5/7 Beams – Internal Effects'},
+    {id:'ch5-review',label:'Chapter Review'},
+  ]},
+  { id:'ch6', title:'Ch 6: Friction', topics:[
+    {id:'ch6-s1',label:'6/1 Introduction'},
+    {id:'ch6-s2',label:'6/2 Types of Friction'},
+    {id:'ch6-s3',label:'6/3 Dry Friction'},
+    {id:'ch6-s4',label:'6/4 Wedges'},
+    {id:'ch6-s5',label:'6/5 Screws'},
+    {id:'ch6-s6',label:'6/6 Journal Bearings'},
+    {id:'ch6-s7',label:'6/7 Thrust Bearings & Disk Friction'},
+    {id:'ch6-s8',label:'6/8 Flexible Belts'},
+    {id:'ch6-s9',label:'6/9 Rolling Resistance'},
+    {id:'ch6-review',label:'Chapter Review'},
+  ]},
+  { id:'appa', title:'Appendix A: Area MOI', topics:[
+    {id:'appa-s1',label:'A/1 Introduction'},
+    {id:'appa-s2',label:'A/2 Definitions'},
+    {id:'appa-s3',label:'A/3 Composite Areas'},
+    {id:'appa-s4',label:'A/4 Products of Inertia'},
+    {id:'appa-tables',label:'Tables D/3 & D/4'},
+    {id:'appa-review',label:'Appendix Review'},
+  ]},
+];
+
+// ─── BUILD SIDEBAR ────────────────────────────────────────────
+function buildSidebar() {
+  const nav = document.getElementById('sidebar-nav');
+  nav.innerHTML = '';
+  chapters.forEach(ch => {
+    const sec = document.createElement('div');
+    sec.className = 'sidebar-section';
+    const btn = document.createElement('button');
+    btn.className = 'sidebar-chapter';
+    btn.setAttribute('data-target', ch.id);
+    btn.innerHTML = `${ch.title} <span class="sidebar-arrow">&#9654;</span>`;
+    const ul = document.createElement('ul');
+    ul.className = 'sidebar-topics';
+    ch.topics.forEach(t => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#' + t.id;
+      a.textContent = t.label;
+      a.setAttribute('data-id', t.id);
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const el = document.getElementById(t.id);
+        if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+        // On mobile close sidebar
+        if(window.innerWidth <= 768) sidebar.classList.remove('mobile-open');
+      });
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+    btn.addEventListener('click', () => {
+      const isOpen = btn.classList.contains('open');
+      // close all
+      document.querySelectorAll('.sidebar-chapter.open').forEach(b=>b.classList.remove('open'));
+      if(!isOpen) btn.classList.add('open');
+    });
+    sec.appendChild(btn);
+    sec.appendChild(ul);
+    nav.appendChild(sec);
+  });
+}
+
+// ─── THEME ────────────────────────────────────────────────────
+const themeToggle = document.getElementById('theme-toggle');
+const sunIcon = document.getElementById('theme-icon-sun');
+const moonIcon = document.getElementById('theme-icon-moon');
+let currentTheme = localStorage.getItem('theme') || 'light';
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  currentTheme = t;
+  localStorage.setItem('theme', t);
+  if(t === 'dark') { sunIcon.style.display='inline'; moonIcon.style.display='none'; }
+  else { sunIcon.style.display='none'; moonIcon.style.display='inline'; }
+}
+applyTheme(currentTheme);
+themeToggle.addEventListener('click', () => applyTheme(currentTheme==='dark'?'light':'dark'));
+
+// ─── SIDEBAR TOGGLE ───────────────────────────────────────────
+const sidebar = document.getElementById('sidebar');
+const mainEl = document.getElementById('main');
+let sidebarOpen = localStorage.getItem('sidebar') !== 'closed';
+function updateSidebar() {
+  if(window.innerWidth <= 768) return;
+  if(sidebarOpen) { sidebar.classList.remove('collapsed'); mainEl.classList.remove('sidebar-collapsed'); }
+  else { sidebar.classList.add('collapsed'); mainEl.classList.add('sidebar-collapsed'); }
+  localStorage.setItem('sidebar', sidebarOpen ? 'open' : 'closed');
+}
+document.getElementById('sidebar-toggle').addEventListener('click', () => {
+  if(window.innerWidth <= 768) { sidebar.classList.toggle('mobile-open'); }
+  else { sidebarOpen = !sidebarOpen; updateSidebar(); }
+});
+updateSidebar();
+
+// ─── PROGRESS BAR ─────────────────────────────────────────────
+const progressBar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const d = document.documentElement;
+  const pct = d.scrollTop / (d.scrollHeight - d.clientHeight) * 100;
+  progressBar.style.width = pct + '%';
+});
+
+// ─── BACK TO TOP ──────────────────────────────────────────────
+const backToTop = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  backToTop.style.display = window.scrollY > 400 ? 'flex' : 'none';
+});
+backToTop.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+
+// ─── SEARCH ───────────────────────────────────────────────────
+const searchInput = document.getElementById('search-input');
+const searchClear = document.getElementById('search-clear');
+const searchCount = document.getElementById('search-results-count');
+
+function removeHighlights() {
+  document.querySelectorAll('.highlight').forEach(el => {
+    const parent = el.parentNode;
+    parent.replaceChild(document.createTextNode(el.textContent), el);
+    parent.normalize();
+  });
+}
+
+function highlightText(node, regex) {
+  if(node.nodeType === 3) {
+    const match = regex.exec(node.textContent);
+    if(!match) return 0;
+    const span = document.createElement('mark');
+    span.className = 'highlight';
+    const parts = node.textContent.split(regex);
+    const frag = document.createDocumentFragment();
+    parts.forEach((p, i) => {
+      frag.appendChild(document.createTextNode(p));
+      if(i < parts.length-1) {
+        const m = document.createElement('mark');
+        m.className = 'highlight';
+        m.textContent = node.textContent.match(regex)[0];
+        frag.appendChild(m);
+      }
+    });
+    node.parentNode.replaceChild(frag, node);
+    return 1;
+  } else if(node.nodeType === 1 && !['SCRIPT','STYLE','MARK','BUTTON','INPUT'].includes(node.tagName)) {
+    let count = 0;
+    Array.from(node.childNodes).forEach(child => { count += highlightText(child, regex); });
+    return count;
+  }
+  return 0;
+}
+
+function doSearch(q) {
+  removeHighlights();
+  if(!q || q.length < 2) { searchCount.textContent=''; searchClear.style.display='none'; return; }
+  searchClear.style.display='block';
+  const regex = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi');
+  const content = document.getElementById('content');
+  let count = highlightText(content, regex);
+  searchCount.textContent = count ? `${count} matches` : 'No matches';
+  const first = content.querySelector('.highlight');
+  if(first) first.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+let searchTimer;
+searchInput.addEventListener('input', e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => doSearch(e.target.value.trim()), 300);
+});
+searchClear.addEventListener('click', () => { searchInput.value=''; doSearch(''); searchInput.focus(); });
+document.addEventListener('keydown', e => {
+  if((e.ctrlKey||e.metaKey) && e.key==='k') { e.preventDefault(); searchInput.focus(); searchInput.select(); }
+});
+
+// ─── SIDEBAR SEARCH ───────────────────────────────────────────
+document.getElementById('sidebar-search').addEventListener('input', e => {
+  const q = e.target.value.toLowerCase();
+  document.querySelectorAll('.sidebar-chapter').forEach(btn => {
+    const ul = btn.nextElementSibling;
+    if(!q) { btn.style.display=''; ul.querySelectorAll('li').forEach(li=>li.style.display=''); return; }
+    let anyVisible = false;
+    ul.querySelectorAll('li').forEach(li => {
+      const match = li.textContent.toLowerCase().includes(q);
+      li.style.display = match ? '' : 'none';
+      if(match) anyVisible = true;
+    });
+    btn.style.display = anyVisible || btn.textContent.toLowerCase().includes(q) ? '' : 'none';
+    if(anyVisible) btn.classList.add('open');
+  });
+});
+
+// ─── EXPANDABLE SECTIONS ──────────────────────────────────────
+document.querySelectorAll('.expand-header').forEach(btn => {
+  btn.addEventListener('click', () => btn.parentElement.classList.toggle('open'));
+});
+
+// ─── SCROLLSPY ────────────────────────────────────────────────
+const allSectionIds = chapters.flatMap(ch => ch.topics.map(t=>t.id));
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting) {
+      const id = entry.target.id;
+      document.querySelectorAll('.sidebar-topics li a').forEach(a=>{
+        a.classList.toggle('active', a.getAttribute('data-id')===id);
+      });
+    }
+  });
+}, {rootMargin:'-60px 0px -70% 0px'});
+allSectionIds.forEach(id => {
+  const el = document.getElementById(id);
+  if(el) observer.observe(el);
+});
+
+// ─── INIT ─────────────────────────────────────────────────────
+buildSidebar();
+</script>
+</body>
+</html>

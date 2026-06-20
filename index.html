@@ -81,6 +81,200 @@
       <div class="skeleton-card"></div>
       <div class="skeleton-card"></div>
     </div>
+
+    <!-- ─── RESOURCES ─── -->
+    <div class="section-head" style="margin-top: 40px;">
+  <h2>Resources</h2>
+</div>
+<div class="unit-grid">
+  <!-- Textbook Link (unchanged) -->
+  <a href="tb.html" class="unit-card" aria-label="Open Textbook">
+    <div class="unit-card-number">Textbook</div>
+    <div class="unit-card-name">Engineering Statics Reference Book</div>
+    <div class="unit-card-meta">
+      <div class="unit-card-count">
+        <strong>Read</strong>
+        online HTML textbook
+      </div>
+      <div class="unit-card-arrow">→</div>
+    </div>
+  </a>
+  
+  <!-- PDF Button with Modal -->
+  <a href="#" class="unit-card" onclick="openPDFModal(event)" aria-label="Open PDF">
+    <div class="unit-card-number">Reference PDF</div>
+    <div class="unit-card-name">PESU TB PDF Notes</div>
+    <div class="unit-card-meta">
+      <div class="unit-card-count">
+        <strong>View</strong>
+        full course notes PDF
+      </div>
+      <div class="unit-card-arrow">→</div>
+    </div>
+  </a>
+</div>
+
+<!-- PDF Modal -->
+<div id="pdfModal" class="pdf-modal">
+  <div class="pdf-modal-content">
+    <button class="close-modal" onclick="closePDFModal()">✕</button>
+    <h3 style="margin-top: 0; margin-bottom: 15px; color: #333;">PESU TB PDF Notes</h3>
+    <iframe id="pdfViewer" src="" width="100%" height="100%" style="border: none; border-radius: 8px;"></iframe>
+  </div>
+</div>
+
+<style>
+  /* Modal styles */
+  .pdf-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    animation: fadeIn 0.3s ease;
+    backdrop-filter: blur(5px);
+  }
+
+  .pdf-modal-content {
+    background-color: #fff;
+    margin: 30px auto;
+    padding: 25px;
+    width: 92%;
+    max-width: 1100px;
+    height: 85vh;
+    border-radius: 16px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pdf-modal-content iframe {
+    flex: 1;
+    border: none;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+  }
+
+  .close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #666;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0 10px;
+    transition: color 0.2s;
+    z-index: 10;
+  }
+
+  .close-modal:hover {
+    color: #e74c3c;
+    transform: scale(1.1);
+  }
+
+  .pdf-modal-content h3 {
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+    font-size: 20px;
+    padding-right: 40px;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .pdf-modal-content {
+      margin: 10px auto;
+      padding: 15px;
+      width: 96%;
+      height: 90vh;
+      border-radius: 12px;
+    }
+    
+    .pdf-modal-content h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    
+    .close-modal {
+      font-size: 24px;
+      top: 10px;
+      right: 15px;
+    }
+  }
+</style>
+
+<script>
+function openPDFModal(event) {
+  event.preventDefault(); // Prevent page jump
+  
+  const modal = document.getElementById('pdfModal');
+  const iframe = document.getElementById('pdfViewer');
+  
+  // Load the PDF
+  iframe.src = 'Textbook.pdf';
+  
+  // Show modal
+  modal.style.display = 'block';
+  
+  // Prevent scrolling behind modal
+  document.body.style.overflow = 'hidden';
+}
+
+function closePDFModal() {
+  const modal = document.getElementById('pdfModal');
+  const iframe = document.getElementById('pdfViewer');
+  
+  // Hide modal
+  modal.style.display = 'none';
+  
+  // Unload PDF to save memory
+  iframe.src = '';
+  
+  // Restore scrolling
+  document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside the content
+document.getElementById('pdfModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closePDFModal();
+  }
+});
+
+// Close modal with ESC key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    closePDFModal();
+  }
+});
+
+// Close modal with Ctrl+W (optional)
+document.addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'w') {
+    if (document.getElementById('pdfModal').style.display === 'block') {
+      e.preventDefault();
+      closePDFModal();
+    }
+  }
+});
+</script>
   </main>
 
   <!-- ─── FOOTER ─── -->
