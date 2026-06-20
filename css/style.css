@@ -781,7 +781,10 @@ button {
 }
 
 .q-image-wrap img {
-  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
   border-radius: 8px;
   border: 1px solid var(--border);
   background: #fff;
@@ -839,16 +842,18 @@ button {
 
 /* Solution panel */
 .solution-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .35s cubic-bezier(.4, 0, .2, 1);
   overflow: hidden;
-  max-height: 0;
-  transition: max-height .35s cubic-bezier(.4, 0, .2, 1);
 }
 
 .solution-panel.open {
-  max-height: 2000px;
+  grid-template-rows: 1fr;
 }
 
 .solution-inner {
+  min-height: 0;
   padding: 20px;
   background: var(--answer-bg);
   border-top: 1px solid var(--answer-border);
@@ -864,7 +869,10 @@ button {
 }
 
 .solution-inner img {
-  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
   border-radius: 8px;
   border: 1px solid var(--answer-border);
   background: #fff;
@@ -1022,7 +1030,8 @@ button {
   }
 
   .solution-panel {
-    max-height: none !important;
+    display: block !important;
+    grid-template-rows: none !important;
   }
 
   .q-card {
