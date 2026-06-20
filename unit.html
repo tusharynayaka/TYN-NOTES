@@ -1,48 +1,44 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Unit – Mechanical Statics Notes</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body class="unit-page">
 
   <!-- ─── TOP NAV ─── -->
   <header class="topbar">
     <div class="topbar-inner">
+
       <div class="brand">
-        <!-- Mobile sidebar toggle button -->
-        <button id="mobileSidebarToggle" class="mobile-toggle" aria-label="Toggle sidebar">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <!-- Back to home -->
         <a href="index.html" class="back-btn" title="Home">←</a>
+        <!-- Mobile: hamburger to open sidebar -->
+        <button id="mobileSidebarToggle" class="icon-btn mobile-sidebar-btn" title="All Questions"
+          aria-label="Toggle question list">☰</button>
         <span class="brand-icon">⚙</span>
         <div>
           <span class="brand-title" id="unitPageTitle">Loading…</span>
           <span class="brand-sub" id="unitPageSub">Mechanical Statics</span>
         </div>
       </div>
+
       <div class="topbar-actions">
-        <div class="search-wrap">
-          <input
-            id="unitSearch"
-            type="search"
-            placeholder="Search…"
-            autocomplete="off"
-            spellcheck="false"
-          />
-          <span class="search-icon">⌕</span>
-        </div>
         <button id="themeToggle" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">
           <span class="theme-icon">◑</span>
         </button>
       </div>
+
     </div>
     <div id="progressBar" class="progress-bar"></div>
   </header>
+
+  <!-- Mobile sidebar overlay -->
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
   <!-- ─── MAIN LAYOUT WITH GRID ON SIDE ─── -->
   <div class="unit-layout">
@@ -58,7 +54,7 @@
       </div>
       <div class="q-grid-footer">
         <!-- Review counter at bottom -->
-        <button id="reviewBadge" class="review-badge-bottom" onclick="showReviewed()" title="View reviewed questions">
+        <button id="reviewBadge" class="review-badge-bottom" title="View reviewed questions">
           <span class="review-icon">📋</span>
           <span class="review-count" id="reviewCountDisplay">0</span>
           <span class="review-label">for review</span>
@@ -87,4 +83,5 @@
     }
   </script>
 </body>
+
 </html>

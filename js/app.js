@@ -42,7 +42,7 @@ function saveReviewedQuestions(reviewed) {
 function toggleReview(unitId, questionId) {
   const reviewed = getReviewedQuestions();
   const key = `${unitId}-${questionId}`;
-  
+
   if (reviewed[key]) {
     delete reviewed[key];
     saveReviewedQuestions(reviewed);
@@ -109,59 +109,15 @@ async function initHome() {
   initGlobalSearch(results);
 }
 
-/* ─── MOBILE SIDEBAR TOGGLE ─── */
-function initMobileSidebar() {
-  const toggleBtn = document.getElementById('mobileSidebarToggle');
-  const sidebar = document.getElementById('qGridSidebar');
-  
-  if (!toggleBtn || !sidebar) return;
-
-  // Create overlay
-  let overlay = document.getElementById('sidebarOverlay');
-  if (!overlay) {
-    overlay = document.createElement('div');
-    overlay.className = 'sidebar-overlay';
-    overlay.id = 'sidebarOverlay';
-    document.body.appendChild(overlay);
-  }
-
-  // Toggle sidebar
-  function toggleSidebar() {
-    sidebar.classList.toggle('mobile-open');
-    overlay.classList.toggle('active');
-    toggleBtn.classList.toggle('active');
-    document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : '';
-  }
-
-  toggleBtn.addEventListener('click', toggleSidebar);
-
-  // Close on overlay click
-  overlay.addEventListener('click', toggleSidebar);
-
-  // Close on escape key
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && sidebar.classList.contains('mobile-open')) {
-      toggleSidebar();
-    }
-  });
-
-  // Close when a question is clicked (optional)
-  sidebar.addEventListener('click', (e) => {
-    if (e.target.closest('.q-grid-btn') && sidebar.classList.contains('mobile-open')) {
-      toggleSidebar();
-    }
-  });
-}
-
 
 function renderHeroStats(results) {
   let total = 0;
   results.forEach(r => { if (r.data) total += r.data.length; });
-  
+
   const qEl = document.getElementById('totalQ');
   const uEl = document.getElementById('totalU');
   const rEl = document.getElementById('totalR');
-  
+
   if (qEl) animateCount(qEl, total);
   if (uEl) animateCount(uEl, UNITS_CONFIG.length);
   if (rEl) animateCount(rEl, getReviewCount());
@@ -193,7 +149,7 @@ function renderUnitCards(results) {
   results.forEach(({ unit, data }) => {
     const count = data ? data.length : 0;
     const unitReviewed = data ? data.filter(q => reviewed[`${unit.id}-${q.id}`]).length : 0;
-    
+
     const card = document.createElement('a');
     card.href = `unit.html?unit=${unit.id}`;
     card.className = 'unit-card';
@@ -217,10 +173,13 @@ function renderUnitCards(results) {
 
 function updateReviewBadge() {
   const badge = document.getElementById('reviewBadge');
+  const count = getReviewCount();
   if (badge) {
-    const count = getReviewCount();
     badge.textContent = count > 0 ? `📋 ${count}` : '📋 0';
   }
+  // Also refresh the sidebar footer count display
+  const countEl = document.getElementById('reviewCountDisplay');
+  if (countEl) countEl.textContent = count;
 }
 
 /* ─── GLOBAL SEARCH ─── */
@@ -337,7 +296,76 @@ async function initUnit() {
   initUnitSearch(questions);
   initProgressBar();
   initBackToTop();
-  initMobileSidebar(); // ← ADD THIS LINE
+  initGridToggle();
+  initReviewBadge();
+  initMobileSidebar();
+}
+
+/* ─── MOBILE SIDEBAR TOGGLE ─── */
+function initMobileSidebar() {
+  const hamburger = document.getElementById('mobileSidebarToggle');
+  const sidebar = document.getElementById('qGridSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  if (!hamburger || !sidebar || !overlay) return;
+
+  function openSidebar() {
+    sidebar.classList.add('mobile-open');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSidebar() {
+    sidebar.classList.remove('mobile-open');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', () => {
+    if (sidebar.classList.contains('mobile-open')) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  });
+
+  overlay.addEventListener('click', closeSidebar);
+
+  // Close sidebar when a question is selected on mobile
+  sidebar.addEventListener('click', (e) => {
+    if (e.target.classList.contains('q-grid-btn') && window.innerWidth <= 768) {
+      closeSidebar();
+    }
+  });
+}
+
+
+/* ─── GRID SIDEBAR TOGGLE ─── */
+function initGridToggle() {
+  const toggleBtn = document.getElementById('gridToggle');
+  const sidebar = document.getElementById('qGridSidebar');
+  if (!toggleBtn || !sidebar) return;
+
+  // Restore collapsed state
+  const collapsed = localStorage.getItem('grid-sidebar-collapsed') === 'true';
+  if (collapsed) sidebar.classList.add('collapsed');
+
+  toggleBtn.addEventListener('click', () => {
+    const isCollapsed = sidebar.classList.toggle('collapsed');
+    localStorage.setItem('grid-sidebar-collapsed', isCollapsed);
+  });
+}
+
+/* ─── REVIEW BADGE BUTTON ─── */
+function initReviewBadge() {
+  const badge = document.getElementById('reviewBadge');
+  if (!badge) return;
+
+  // Update the display count
+  const countEl = document.getElementById('reviewCountDisplay');
+  if (countEl) countEl.textContent = getReviewCount();
+
+  // Click opens the review list modal
+  badge.addEventListener('click', showReviewed);
 }
 
 function getUnitIdFromURL() {
@@ -459,14 +487,14 @@ function renderQuestions(questions, unitCfg, unitId, currentQId) {
   // Review toggle
   const reviewBtn = document.getElementById('reviewToggle');
   if (reviewBtn) {
-    reviewBtn.addEventListener('click', function() {
+    reviewBtn.addEventListener('click', function () {
       const unitId = parseInt(this.dataset.unit);
       const qId = parseInt(this.dataset.q);
       const reviewed = toggleReview(unitId, qId);
-      
+
       const icon = this.querySelector('.review-icon');
       const label = this.querySelector('.review-label');
-      
+
       if (reviewed) {
         this.classList.add('active');
         icon.textContent = '✓';
@@ -476,7 +504,7 @@ function renderQuestions(questions, unitCfg, unitId, currentQId) {
         icon.textContent = '○';
         label.textContent = 'Mark for Review';
       }
-      
+
       updateReviewBadge();
       updateGridReviewStatus(unitId, qId);
     });
@@ -571,15 +599,15 @@ function buildQuestionGrid(questions, currentQId) {
   questions.forEach((q, idx) => {
     const btn = document.createElement('button');
     const reviewed = isQuestionReviewed(currentUnitId, q.id);
-    
+
     btn.className = `q-grid-btn ${q.id === currentQId ? 'active' : ''} ${reviewed ? 'reviewed' : ''}`;
     btn.textContent = idx + 1;
     btn.title = `${q.title || `Question ${q.id}`}${reviewed ? ' ✓' : ''}`;
-    
+
     btn.addEventListener('click', () => {
       window.location.href = `unit.html?unit=${currentUnitId}&q=${q.id}`;
     });
-    
+
     grid.appendChild(btn);
   });
 
@@ -595,12 +623,12 @@ function updateGridReviewStatus(unitId, qId) {
 /* ─── REVIEW LIST MODAL ─── */
 function showReviewed() {
   const reviewed = getReviewedList();
-  
+
   if (reviewed.length === 0) {
     alert('No questions marked for review.\n\nClick "Mark for Review" on any question to add it here.');
     return;
   }
-  
+
   const modal = document.createElement('div');
   modal.className = 'review-modal';
   modal.innerHTML = `
@@ -632,7 +660,7 @@ function showReviewed() {
       </div>
     </div>
   `;
-  
+
   document.body.appendChild(modal);
   modal.addEventListener('click', (e) => {
     if (e.target === modal) modal.remove();
@@ -645,7 +673,7 @@ function removeReview(unitId, questionId) {
   delete reviewed[key];
   saveReviewedQuestions(reviewed);
   updateReviewBadge();
-  
+
   // Refresh modal
   showReviewed();
   if (currentQuestions) {
