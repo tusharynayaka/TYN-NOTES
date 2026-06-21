@@ -561,12 +561,12 @@ function createQuestionCard(q, displayNum) {
       <div class="img-error-msg">Question will be uploaded soon</div>
     </div>
 
-    <button class="solution-toggle" aria-expanded="false" aria-controls="sol-${q.id}">
-      <span class="toggle-arrow">▶</span>
-      Show Solution / FBD
-    </button>
+<button class="solution-toggle" aria-expanded="true" aria-controls="sol-${q.id}">
+  <span class="toggle-arrow" style="transform:rotate(90deg)">▶</span>
+  Hide Solution
+</button>
 
-    <div class="solution-panel" id="sol-${q.id}" role="region">
+<div class="solution-panel open" id="sol-${q.id}" role="region">
       <div class="solution-inner">
         <div class="solution-label">Free Body Diagram · Solution</div>
         <img
